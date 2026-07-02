@@ -905,6 +905,7 @@ ul, ol { list-style: none; }
   padding: 20px;
 }
 .welcome-card {
+  position: relative;
   background: var(--bg-paper);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
@@ -923,12 +924,15 @@ ul, ol { list-style: none; }
   margin: 0 auto 20px;
   box-shadow: var(--shadow-md);
 }
-.welcome-title { font-size: 24px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
-.welcome-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; }
+.welcome-title { font-size: 28px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; text-align: center; letter-spacing: -0.5px; }
+.welcome-subtitle { font-size: 15px; font-weight: 600; color: var(--accent-terracotta); margin-bottom: 14px; text-align: center; }
+.welcome-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; text-align: center; }
 .welcome-identity { margin-bottom: 20px; text-align: left; }
-.welcome-identity label { font-size: 13px; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 8px; }
+.welcome-identity label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 .welcome-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-.welcome-hint { font-size: 11px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; }
+.welcome-hint { font-size: 11px; color: var(--text-muted); margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-subtle); line-height: 1.6; text-align: center; opacity: 0.8; }
+.welcome-badge { position: absolute; top: 14px; right: 14px; font-size: 10px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border-subtle); padding: 3px 9px; border-radius: 20px; font-weight: 500; letter-spacing: 0.3px; }
+.sidebar-version-badge { font-size: 10px; color: var(--text-muted); text-align: center; padding: 6px 8px; border-top: 1px solid var(--border-subtle); margin-top: 4px; opacity: 0.7; }
 
 /* ========== Bottom Tab (mobile) ========== */
 .bottom-tab { display: none; }
@@ -1250,6 +1254,59 @@ ul, ol { list-style: none; }
   background: var(--bg-paper);
   transition: all 0.2s;
 }
+.upload-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.upload-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.upload-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+.upload-row .upload-zone {
+  margin-bottom: 0;
+  padding: 16px 12px;
+  border-radius: var(--radius-md);
+}
+.upload-status {
+  margin-top: 8px;
+}
+.upload-status-ok {
+  font-size: 12px;
+  color: var(--accent-moss);
+  background: rgba(125,143,117,0.1);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  line-height: 1.5;
+}
+.upload-status-warn {
+  font-size: 12px;
+  color: var(--accent-amber);
+  background: rgba(217,119,6,0.08);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  line-height: 1.5;
+}
+.inbox-list-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px 4px;
+}
+@media (max-width: 720px) {
+  .upload-row { flex-direction: column; }
+}
 
 /* Mobile specific polish */
 @media (max-width: 900px) {
@@ -1297,11 +1354,7 @@ ul, ol { list-style: none; }
     </div>
     <nav class="nav-list" id="navList"></nav>
     <div class="sidebar-footer">
-      <div style="font-size:10px;color:var(--accent-amber);margin-bottom:4px;">Web/PWA Demo</div>
-      <div>本地规则 + AI 流程模拟</div>
-      <div class="sidebar-honest">
-        当前 Web Demo 使用本地规则 + 示例 AI 流程模拟，正式版可接入大模型增强复杂文档理解。
-      </div>
+      <div class="sidebar-version-badge">Web/PWA 初赛体验版</div>
     </div>
   </aside>
 
@@ -1349,23 +1402,26 @@ ul, ol { list-style: none; }
 <!-- Welcome Overlay -->
 <div class="welcome-overlay" id="welcomeOverlay" style="display:none;">
   <div class="welcome-card">
+    <div class="welcome-badge">Web/PWA 初赛体验版</div>
     <div class="welcome-logo">M</div>
-    <div class="welcome-title">欢迎使用 Memorial day</div>
-    <div class="welcome-desc">语音说一句话、上传通知文件、粘贴通知文本，自动提取与你有关的提醒。</div>
+    <div class="welcome-title">Memorial day</div>
+    <div class="welcome-subtitle">AI 时间整理 Agent</div>
+    <div class="welcome-desc">把辅导员通知、班级安排和一句话计划，自动整理成你的提醒计划。</div>
     <div class="welcome-identity">
-      <label>设置你的身份（用于筛选与你相关的通知）：</label>
-      <input type="text" class="input" id="welcomeIdentityInput" placeholder="如：3班、智能网联2301、A组" value="3班">
+      <label>当前身份</label>
+      <input type="text" class="input" id="welcomeIdentityInput" placeholder="如：3班、智能网联2301、A组" value="智能网联2301 · 3班">
       <div class="welcome-presets">
         <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='3班'">3班</button>
         <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='智能网联2301'">智能网联2301</button>
+        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='智能网联2301 · 3班'">智能网联2301·3班</button>
         <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='A组'">A组</button>
         <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='全体'">全体学生</button>
       </div>
     </div>
-    <button class="btn btn-primary w-full" onclick="finishWelcome()">开始使用</button>
-    <button class="btn btn-ghost w-full mt-8" onclick="loadSamplePackAndStart()">📦 加载示例通知包开始体验</button>
+    <button class="btn btn-primary w-full" onclick="startGuidedFromWelcome()">▶️ 体验 60 秒流程</button>
+    <button class="btn btn-ghost w-full" style="margin-top:8px;" onclick="finishWelcome()">查看提醒工作台</button>
     <div class="welcome-hint">
-      ⚠️ 当前 Web Demo 使用本地规则 + 示例 AI 流程模拟。TXT 文件读取真实可体验；PDF/DOCX 深度解析将在复赛完善。
+      当前使用本地规则 + 示例 AI 流程模拟；TXT 文件真实读取，PDF/DOCX 复赛完善。
     </div>
   </div>
 </div>
@@ -1461,6 +1517,24 @@ function defaultState() {
     onboarded: false,
     cardTheme: 'exam'
   };
+}
+function seedDemoDataIfNeeded() {
+  // If there are no reminders yet (first visit / after reset), preload sample data
+  // so dashboard doesn't look empty on first impression. User can reset to clear.
+  if (appState.reminders.length > 0) return;
+  appState.identity = '智能网联2301 · 3班';
+  var sampleReminders = extractReminders(SAMPLE_NOTICES.map(n=>n.body).join('\n'), appState.identity, '初始演示数据');
+  // Birthday reminder
+  var bd = new Date(); bd.setDate(bd.getDate()+20);
+  sampleReminders.push({
+    id:uid(),title:'妈妈生日',date:bd.getFullYear()+'-'+pad(bd.getMonth()+1)+'-'+pad(bd.getDate()),time:'',targetGroup:'家人',category:'生日',riskLevel:'low',reminderSuggestion:'提前准备礼物',preparation:'建议提前一周准备礼物和祝福。',source:'个人',sourceText:'妈妈生日还有20天',confidence:0.9
+  });
+  for (var i=0;i<sampleReminders.length;i++) {
+    if (sampleReminders[i].relevant !== false) appState.reminders.push(sampleReminders[i]);
+  }
+  // Welcome chat message
+  appState.chatMessages = [{role:'agent',text:'你好！我是 Memorial day AI 时间整理 Agent。\n\n你可以：\n• 直接告诉我事项，如"明天下午3点开班会"\n• 粘贴通知文本让我提取与你有关的提醒\n• 上传 TXT 文件解析\n\n当前身份：'+appState.identity}];
+  activeInboxId = appState.inbox.length>0 ? appState.inbox[0].id : null;
 }
 function loadState() {
   try {
@@ -1933,38 +2007,110 @@ function saveChatDraft(msgIdx) {
 function scrollChatToBottom() {
   var el = document.getElementById('chatMessages'); if (el) el.scrollTop = el.scrollHeight;
 }
+function resetVoiceState() {
+  voiceListening = false;
+  var btn = document.getElementById('chatMicBtn');
+  if (btn) { btn.classList.remove('listening'); btn.disabled = false; }
+}
 function toggleChatVoice(e) {
-  var btn = e.currentTarget;
+  if (e) e.preventDefault();
   if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
     showToast('⚠️','当前浏览器不支持语音识别，请使用 Chrome/Edge 或直接文字输入');
+    resetVoiceState();
     return;
   }
+  var btn = document.getElementById('chatMicBtn');
+  if (!btn) return;
   if (!voiceRecognition) {
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    voiceRecognition = new SR();
-    voiceRecognition.lang = 'zh-CN';
-    voiceRecognition.continuous = false; voiceRecognition.interimResults = false;
-    voiceRecognition.onresult = function(ev) {
-      var text = ev.results[0][0].transcript;
-      var inp = document.getElementById('chatInput'); if (inp) inp.value = text;
-    };
-    voiceRecognition.onend = function() {
-      voiceListening = false; btn.classList.remove('listening');
-    };
-    voiceRecognition.onerror = function() { voiceListening=false; btn.classList.remove('listening'); };
+    try {
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      voiceRecognition = new SR();
+      voiceRecognition.lang = 'zh-CN';
+      voiceRecognition.continuous = false;
+      voiceRecognition.interimResults = false;
+      voiceRecognition.onresult = function(ev) {
+        try {
+          var text = ev.results[0][0].transcript;
+          var inp = document.getElementById('chatInput');
+          if (inp) { inp.value = text; inp.focus(); autoResizeChat(inp); }
+        } catch(err) {}
+      };
+      voiceRecognition.onend = function() { resetVoiceState(); };
+      voiceRecognition.onerror = function(ev) {
+        resetVoiceState();
+        var errMsg = '语音识别未启动';
+        if (ev && ev.error) {
+          if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') errMsg = '麦克风权限被拒绝，请使用文字输入';
+          else if (ev.error === 'no-speech') errMsg = '未检测到语音，请靠近麦克风再试';
+          else if (ev.error === 'network') errMsg = '语音服务网络不可用，请使用文字输入';
+        }
+        showToast('🎤', errMsg);
+      };
+    } catch(err) {
+      resetVoiceState();
+      showToast('⚠️','语音初始化失败，请使用文字输入');
+      return;
+    }
   }
-  if (voiceListening) { voiceRecognition.stop(); }
-  else { try{ voiceRecognition.start(); voiceListening=true; btn.classList.add('listening'); }catch(e){} }
+  if (voiceListening) {
+    try { voiceRecognition.stop(); } catch(err) {}
+    resetVoiceState();
+  } else {
+    try {
+      voiceRecognition.start();
+      voiceListening = true;
+      btn.classList.add('listening');
+    } catch(err) {
+      // If start fails because recognition is already started, stop then restart
+      try { voiceRecognition.stop(); } catch(e) {}
+      resetVoiceState();
+      setTimeout(function(){
+        try {
+          voiceRecognition.start();
+          voiceListening = true;
+          var b2 = document.getElementById('chatMicBtn');
+          if (b2) b2.classList.add('listening');
+        } catch(e2) { resetVoiceState(); }
+      }, 200);
+    }
+  }
 }
 
 // ---------- Inbox ----------
 function renderInbox() {
   var active = appState.activeView==='inbox'?' active':'';
   var html = '<div class="view'+active+'" id="view-inbox">';
-  html += '<div class="view-header"><div class="view-title">通知收件箱</div><div class="view-subtitle">查看通知、选择身份、AI 提取与你相关的提醒</div></div>';
+  html += '<div class="view-header"><div class="view-title">通知收件箱</div><div class="view-subtitle">上传通知或粘贴文本，AI 自动提取与你相关的提醒</div></div>';
+  // Upload / Parse card (always visible at top, before the two-column layout)
+  html += '<div class="upload-card">';
+  html += '<div class="upload-card-title">📎 上传通知文件 / 粘贴文本</div>';
+  html += '<div class="upload-row">';
+  html += '<div class="upload-zone" id="uploadZone" onclick="document.getElementById(\'fileInputEl\').click()" style="flex:1;min-width:180px;">';
+  html += '<div style="font-size:22px;margin-bottom:4px;">📄</div>';
+  html += '<div style="font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:2px;">选择 TXT 通知文件</div>';
+  html += '<div style="font-size:10px;color:var(--text-muted);">或拖拽 TXT 文件到这里</div>';
+  html += '<input type="file" id="fileInputEl" class="file-input-hidden" accept=".txt,text/plain,.pdf,.docx" style="display:none;">';
+  html += '</div>';
+  html += '<div style="flex:2;min-width:240px;display:flex;flex-direction:column;gap:8px;">';
+  html += '<textarea class="textarea" id="inboxPasteText" placeholder="粘贴辅导员通知 / 班级通知文本..." style="min-height:68px;font-size:12px;resize:vertical;"></textarea>';
+  html += '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">';
+  html += '<span style="font-size:12px;color:var(--text-secondary);white-space:nowrap;">我是：</span>';
+  html += '<input type="text" class="input" id="inboxIdentityInput2" value="'+esc(appState.identity||'智能网联2301 · 3班')+'" placeholder="如：3班" style="flex:1;min-width:100px;font-size:12px;padding:6px 10px;">';
+  html += '<button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="parsePastedText(true)">解析与我相关的提醒</button>';
+  html += '</div>';
+  html += '<div style="font-size:10px;color:var(--accent-amber);line-height:1.5;">TXT 文件真实读取；当前初赛版本建议复制文本或上传 TXT，PDF/DOCX 深度解析将在复赛完善。</div>';
+  html += '</div>';
+  html += '</div>';
+  // File name display / parse result will be injected
+  html += '<div id="uploadStatus" class="upload-status"></div>';
+  // Paste parse drafts result
+  html += '<div id="pasteDraftsContainer"></div>';
+  html += '</div>';
+  // Two-column layout
   html += '<div class="inbox-layout">';
   // list
   html += '<div class="inbox-list">';
+  html += '<div class="inbox-list-title">通知列表（'+appState.inbox.length+'）</div>';
   for (var i=0;i<appState.inbox.length;i++) {
     var n = appState.inbox[i];
     var cls = activeInboxId===n.id?' active':'';
@@ -1974,8 +2120,6 @@ function renderInbox() {
     html += '<div class="inbox-item-meta"><span class="inbox-status-dot '+dotCls+'"></span><span>'+esc(n.source)+'</span><span class="tag tag-mock">'+n.fileType+'</span></div>';
     html += '</div>';
   }
-  // Upload
-  html += '<div style="padding:12px;"><div class="upload-zone" id="uploadZone" onclick="document.getElementById(\'fileInputEl\').click()"><div style="font-size:28px;margin-bottom:6px;">📎</div><div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">上传TXT文件</div><div style="font-size:11px;color:var(--text-muted);">或拖拽到此处</div><input type="file" id="fileInputEl" class="file-input-hidden" accept=".txt,text/plain" style="display:none;"></div><div style="font-size:10px;color:var(--accent-amber);text-align:center;line-height:1.5;">PDF/DOCX 解析将在复赛完善</div></div>';
   html += '</div>';
   // detail
   html += '<div class="inbox-detail" id="inboxDetail">';
@@ -1983,7 +2127,7 @@ function renderInbox() {
     var notice = appState.inbox.find(function(x){return x.id===activeInboxId;});
     if (notice) html += renderInboxDetail(notice);
   } else {
-    html += '<div class="empty-state"><div class="empty-icon">📥</div><div class="empty-text">从左侧选择一份通知查看详情，或上传TXT文件解析。</div><button class="btn btn-primary" onclick="loadSamplePack()">📦 加载示例通知包</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">📥</div><div class="empty-text">从左侧选择一份通知查看详情，或在上方上传 TXT / 粘贴文本解析。</div><button class="btn btn-primary" onclick="loadSamplePack()">📦 加载示例通知包</button></div>';
   }
   html += '</div></div></div>';
   return html;
@@ -2037,21 +2181,40 @@ function bindFileUpload() {
 }
 function readFileNotice(file) {
   var ext = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
-  if (ext==='.txt' || file.type==='text/plain') {
+  if (ext==='.txt' || file.type==='text/plain' || ext==='') {
     var reader = new FileReader();
     reader.onload = function(e) {
+      var text = e.target.result;
+      // Put text into paste textarea
+      var ta = document.getElementById('inboxPasteText');
+      if (ta) ta.value = text;
+      // Show upload status
+      var us = document.getElementById('uploadStatus');
+      if (us) us.innerHTML = '<div class="upload-status-ok">✅ 已读取 TXT 文件：'+esc(file.name)+'（'+text.length+' 字），点击"解析与我相关的提醒"开始解析。</div>';
       var newNotice = {
         id: uid(), title: file.name, source: '本地上传', publishTime: new Date().toLocaleString('zh-CN'),
-        fileType: 'TXT', status: 'unread', body: e.target.result, targetGroup: []
+        fileType: 'TXT', status: 'unread', body: text, targetGroup: []
       };
       appState.inbox.unshift(newNotice);
       activeInboxId = newNotice.id;
       showToast('✅','TXT 文件已读取：'+file.name);
       renderApp();
+      // After render, scroll to top of view to show parse button area
+      setTimeout(function(){
+        var viewInbox = document.getElementById('view-inbox');
+        if (viewInbox) viewInbox.scrollTop = 0;
+        var ta2 = document.getElementById('inboxPasteText');
+        if (ta2) ta2.focus();
+      }, 100);
+    };
+    reader.onerror = function() {
+      showToast('❌','文件读取失败，请重试');
     };
     reader.readAsText(file,'UTF-8');
   } else {
-    showToast('⚠️','当前 Demo 建议上传 TXT 文件，PDF/DOCX 解析将在复赛完善');
+    showToast('⚠️','当前初赛 Demo 建议复制文本或上传 TXT，PDF/DOCX 深度解析将在复赛完善。');
+    var us = document.getElementById('uploadStatus');
+    if (us) us.innerHTML = '<div class="upload-status-warn">⚠️ PDF/DOCX 深度解析将在复赛完善，建议上传 TXT 或复制文本到下方文本框。</div>';
   }
 }
 function parseInboxNotice() {
@@ -2066,17 +2229,25 @@ function parseInboxNotice() {
   showToast('🤖','提取了 '+drafts.length+' 条，与你相关：'+drafts.filter(d=>d.relevant).length+'条');
   renderApp();
 }
-function parsePastedText() {
+function parsePastedText(fromTopCard) {
   var ta = document.getElementById('inboxPasteText'); if (!ta) return;
-  var text = ta.value.trim(); if (!text) { showToast('⚠️','请先粘贴文本'); return; }
-  var idInput = document.getElementById('inboxIdentityInput');
-  var identity = idInput ? idInput.value.trim() : appState.identity;
+  var text = ta.value.trim(); if (!text) { showToast('⚠️','请先粘贴文本或上传 TXT 文件'); return; }
+  var idInput = document.getElementById(fromTopCard ? 'inboxIdentityInput2' : 'inboxIdentityInput');
+  var identity = (idInput && idInput.value.trim()) ? idInput.value.trim() : appState.identity;
   var newNotice = { id:uid(), title:'粘贴文本通知', source:'文本粘贴', publishTime:new Date().toLocaleString('zh-CN'), fileType:'TXT', status:'parsed', body:text, targetGroup:[] };
   appState.inbox.unshift(newNotice); activeInboxId = newNotice.id;
   var drafts = extractReminders(text, identity, '文本粘贴'); drafts._noticeId = newNotice.id;
   inboxDrafts = drafts;
   if (identity) appState.identity = identity;
+  showToast('🤖','提取了 '+drafts.length+' 条，与你相关：'+drafts.filter(d=>d.relevant).length+'条');
+  // Clear upload status & paste textarea
+  var us = document.getElementById('uploadStatus'); if (us) us.innerHTML = '';
   renderApp();
+  // Scroll to the draft area in detail panel
+  setTimeout(function(){
+    var detail = document.getElementById('inboxDetail');
+    if (detail) detail.scrollTop = 0;
+  }, 100);
 }
 function toggleInboxDraft(id, checked) {
   for (var i=0;i<inboxDrafts.length;i++) if (inboxDrafts[i].id===id) { inboxDrafts[i].selected=checked; break; }
@@ -2418,15 +2589,25 @@ function showWelcome() { document.getElementById('welcomeOverlay').style.display
 function hideWelcome() { document.getElementById('welcomeOverlay').style.display='none'; }
 function finishWelcome() {
   var inp = document.getElementById('welcomeIdentityInput');
-  appState.identity = inp ? inp.value.trim() : '3班';
+  appState.identity = (inp && inp.value.trim()) ? inp.value.trim() : '智能网联2301 · 3班';
   appState.onboarded = true;
+  seedDemoDataIfNeeded();
+  // If identity changed from default, update existing items relevance
   hideWelcome(); renderApp();
   showToast('👤','身份已设置为：'+appState.identity);
+}
+function startGuidedFromWelcome() {
+  var inp = document.getElementById('welcomeIdentityInput');
+  appState.identity = (inp && inp.value.trim()) ? inp.value.trim() : '智能网联2301 · 3班';
+  appState.onboarded = true;
+  seedDemoDataIfNeeded();
+  hideWelcome();
+  startGuidedTour();
 }
 function loadSamplePackAndStart() {
   loadSamplePack();
   var inp = document.getElementById('welcomeIdentityInput');
-  appState.identity = inp ? inp.value.trim() : '3班';
+  appState.identity = (inp && inp.value.trim()) ? inp.value.trim() : '智能网联2301 · 3班';
   appState.onboarded = true;
   hideWelcome();
   switchView('inbox');
