@@ -1,5 +1,5 @@
-/* Memorial day PWA Service Worker - v3.0 */
-const CACHE_VERSION = 'memorial-day-preliminary-v3-0';
+/* Memorial day PWA Service Worker - v4.0 */
+const CACHE_VERSION = 'memorial-day-preliminary-v4-0';
 const CACHE_NAME = CACHE_VERSION;
 
 const STATIC_ASSETS = [
@@ -42,7 +42,7 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-// Fetch strategy
+// Fetch strategy - network-first for HTML (navigate), cache-first with network update for others
 self.addEventListener('fetch', function(event) {
   var request = event.request;
   if (request.method !== 'GET') return;

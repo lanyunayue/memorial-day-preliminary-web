@@ -24,7 +24,7 @@ python -m http.server 8080
 
 ---
 
-## 当前公网部署方式（V3.0）
+## 当前公网部署方式（V4.0）
 
 公网版本通过 GitHub 仓库持续部署自动发布：
 
@@ -42,19 +42,19 @@ python -m http.server 8080
 - **目标用户**：学生、班级干部、教师/辅导员、社团/项目负责人、实习生、个人日程管理
 - **形态**：静态 Web / PWA 应用（单页应用，可安装到主屏）
 - **技术栈**：纯 HTML + CSS + JavaScript，零外部依赖、零 CDN、零构建步骤
-- **PWA 支持**：带 `manifest.json` 和 `sw.js`（v3.0，network-first for HTML），可添加到主屏，支持离线缓存
-- **版本**：V3.0 · GitHub Auto Deploy
+- **PWA 支持**：带 `manifest.json` 和 `sw.js`（v4.0，network-first for HTML），可添加到主屏，支持离线缓存
+- **版本**：V4.0 · GitHub Auto Deploy
 
 ### 核心功能
-1. **工作台**：首屏聚焦三件事——今天要做什么、哪些快截止、Agent 能帮我整理什么
-2. **Agent 任务助手**：自然语言/语音/快捷短语输入，Agent 识别事项/时间/地点/风险，一键保存为提醒
-3. **通知导入**：内置多场景示例通知，支持 TXT 文件真实上传和文本粘贴解析，按场景提取相关提醒草稿
-4. **多场景支持**：学生 / 班级干部 / 教师 / 社团 / 实习 / 个人六大使用场景
-5. **我的提醒**：按时间排序、筛选搜索、标记完成、风险等级标签
-6. **待处理优先级（风险中心）**：自动识别逾期/今日/未来3天/高风险/缺时间/同日多事项
-7. **日程视图**：今日/本周/本月时间轴视图
-8. **Detail Drawer**：右侧抽屉详情、大字号倒计时、Agent 解读
-9. **TimeCard 时光卡片工坊**：6 套主题实时预览
+1. **今天**（默认首页）：快速添加输入框、今天事项、快截止事项、Agent 建议
+2. **快速添加**：输入一句安排自动识别日期/时间/地点/优先级，生成可编辑草稿，确认后保存
+3. **收集箱**：粘贴通知 / 上传 TXT / 解析与我有关的提醒 / 批量保存草稿
+4. **日历视图**：今天/明天/本周/未来时间线视图
+5. **清单管理**：全部/未完成/已完成/高优先级筛选、搜索、标记完成
+6. **多场景支持**：学生 / 班级干部 / 教师 / 社团 / 实习 / 个人六大使用场景
+7. **语音输入**：Web Speech API（Chrome/Edge + HTTPS），不支持时明确降级
+8. **Detail Drawer**：右侧抽屉详情、倒计时、Agent 解读
+9. **我的**：场景设置、数据管理（导出/导入/重置）、诚实说明、版本信息
 10. **本地持久化**：所有数据保存在 localStorage，刷新不丢失
 
 ---
@@ -78,7 +78,7 @@ python -m http.server 8080
 |---|---|
 | `index.html` | **主文件**（全部 CSS/JS/HTML 内联） |
 | `manifest.json` | PWA 应用清单 |
-| `sw.js` | Service Worker（v3.0，network-first for HTML） |
+| `sw.js` | Service Worker（v4.0，network-first for HTML） |
 | `README.md` | 本说明文件 |
 | `PRELIMINARY_SUBMISSION_README.md` | 初赛提交详细说明 |
 | `.nojekyll` | GitHub Pages 必需 |
