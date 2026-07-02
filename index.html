@@ -3,47 +3,53 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#C4704E">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#4F46E5">
 <meta name="description" content="Memorial day - AI 时间整理 Agent，语音/文件/文本多模态输入，自动从通知中提取与你有关的提醒">
 <link rel="manifest" href="manifest.json">
 <title>Memorial day · AI 时间整理 Agent</title>
 <style>
 /* ========== Design Tokens ========== */
 :root {
-  --bg: #FBF6EF;
-  --bg-cream: #F7F0E5;
-  --bg-paper: #FDFAF4;
-  --bg-elevated: rgba(255,255,255,0.75);
-  --text-primary: #2C241E;
-  --text-secondary: #6B5D50;
-  --text-muted: #A89989;
+  --bg: #FAFAFA;
+  --bg-cream: #F5F5F7;
+  --bg-paper: #FFFFFF;
+  --bg-elevated: rgba(255,255,255,0.85);
+  --text-primary: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-muted: #AEAEB2;
   --text-inverse: #FFFFFF;
-  --accent-terracotta: #C4704E;
-  --accent-terracotta-deep: #A8583A;
-  --accent-moss: #7D8F75;
-  --accent-moss-deep: #5D6E55;
-  --accent-amber: #D97706;
-  --accent-red: #DC2626;
-  --accent-blue: #2563EB;
-  --accent-purple: #7C3AED;
+  --accent-primary: #4F46E5;
+  --accent-primary-deep: #4338CA;
+  --accent-primary-soft: rgba(79,70,229,0.08);
+  --accent-green: #10B981;
+  --accent-green-deep: #059669;
+  --accent-amber: #F59E0B;
+  --accent-red: #EF4444;
+  --accent-blue: #3B82F6;
+  --accent-purple: #8B5CF6;
   --accent-pink: #EC4899;
-  --accent-cyan: #0891B2;
-  --border-subtle: rgba(107,93,80,0.12);
-  --border-strong: rgba(107,93,80,0.22);
-  --shadow-sm: 0 1px 3px rgba(44,36,30,0.06);
-  --shadow-md: 0 4px 12px rgba(44,36,30,0.08);
-  --shadow-lg: 0 12px 40px rgba(44,36,30,0.12);
-  --shadow-glass: 0 8px 32px rgba(44,36,30,0.08);
+  --accent-cyan: #06B6D4;
+  /* legacy aliases for backward compat */
+  --accent-terracotta: #4F46E5;
+  --accent-terracotta-deep: #4338CA;
+  --accent-moss: #10B981;
+  --accent-moss-deep: #059669;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-strong: rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-glass: 0 4px 16px rgba(0,0,0,0.06);
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-pill: 999px;
-  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --sidebar-w: 220px;
-  --statusbar-h: 48px;
-  --bottomtab-h: 60px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --sidebar-w: 200px;
+  --statusbar-h: 44px;
+  --bottomtab-h: 56px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -53,10 +59,11 @@ html, body {
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   font-size: 14px;
+  max-width: 100vw;
 }
 button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
@@ -75,42 +82,40 @@ ul, ol { list-style: none; }
 /* Sidebar (desktop) */
 .sidebar {
   width: var(--sidebar-w);
-  background: var(--bg-elevated);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--bg-paper);
   border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0; left: 0; bottom: 0;
   z-index: 50;
-  padding: 16px 12px;
+  padding: 14px 10px;
   transition: transform 0.3s ease;
 }
 .sidebar-brand {
-  padding: 8px 12px 20px;
+  padding: 6px 10px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .sidebar-logo {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--accent-terracotta), var(--accent-moss));
-  border-radius: 10px;
+  width: 32px; height: 32px;
+  background: var(--accent-primary);
+  border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 18px; font-weight: 700;
-  box-shadow: var(--shadow-md);
+  color: #fff; font-size: 16px; font-weight: 700;
+  box-shadow: var(--shadow-sm);
 }
-.sidebar-title { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
-.sidebar-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.nav-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+.sidebar-title { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+.sidebar-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.nav-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1px; }
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 9px;
+  padding: 8px 10px;
   border-radius: var(--radius-md);
   font-size: 13px;
   color: var(--text-secondary);
@@ -119,40 +124,41 @@ ul, ol { list-style: none; }
   cursor: pointer;
   white-space: nowrap;
 }
-.nav-item:hover { background: rgba(196,112,78,0.08); color: var(--text-primary); }
+.nav-item:hover { background: var(--accent-primary-soft); color: var(--text-primary); }
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(196,112,78,0.15), rgba(125,143,117,0.12));
-  color: var(--accent-terracotta-deep);
+  background: var(--accent-primary-soft);
+  color: var(--accent-primary-deep);
   font-weight: 600;
 }
-.nav-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+.nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
 .nav-badge {
   margin-left: auto;
   background: var(--accent-red);
   color: #fff;
   font-size: 10px;
   font-weight: 700;
-  padding: 1px 7px;
+  padding: 1px 6px;
   border-radius: var(--radius-pill);
-  min-width: 18px;
+  min-width: 16px;
   text-align: center;
 }
 .sidebar-footer {
-  padding-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--border-subtle);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   text-align: center;
   line-height: 1.5;
 }
 .sidebar-honest {
   font-size: 10px;
-  color: var(--accent-amber);
+  color: var(--text-muted);
   margin-top: 6px;
   padding: 6px 8px;
-  background: rgba(217,119,6,0.06);
+  background: var(--bg-cream);
   border-radius: var(--radius-sm);
-  line-height: 1.4;
+  line-height: 1.5;
+  text-align: left;
 }
 
 /* Main content area */
@@ -205,7 +211,7 @@ ul, ol { list-style: none; }
   font-weight: 600;
 }
 .status-chip.risk { background: rgba(220,38,38,0.1); color: var(--accent-red); }
-.status-chip.identity { background: rgba(196,112,78,0.12); color: var(--accent-terracotta-deep); }
+.status-chip.identity { background: rgba(79,70,229,0.10); color: var(--accent-terracotta-deep); }
 .status-btn {
   font-size: 12px;
   padding: 5px 12px;
@@ -274,14 +280,14 @@ ul, ol { list-style: none; }
   white-space: nowrap;
   min-height: 40px;
 }
-.btn-primary { background: var(--accent-terracotta); color: #fff; box-shadow: 0 2px 8px rgba(196,112,78,0.25); }
-.btn-primary:hover { background: var(--accent-terracotta-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(196,112,78,0.3); }
+.btn-primary { background: var(--accent-terracotta); color: #fff; box-shadow: 0 2px 8px rgba(79,70,229,0.20); }
+.btn-primary:hover { background: var(--accent-terracotta-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
 .btn-secondary { background: var(--bg-paper); color: var(--text-primary); border: 1px solid var(--border-subtle); }
 .btn-secondary:hover { border-color: var(--accent-terracotta); color: var(--accent-terracotta); }
 .btn-moss { background: var(--accent-moss); color: #fff; }
 .btn-moss:hover { background: var(--accent-moss-deep); }
 .btn-ghost { background: transparent; color: var(--text-secondary); padding: 8px 12px; }
-.btn-ghost:hover { color: var(--accent-terracotta); background: rgba(196,112,78,0.06); }
+.btn-ghost:hover { color: var(--accent-terracotta); background: rgba(79,70,229,0.05); }
 .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; }
 .btn-icon { width: 36px; height: 36px; padding: 0; border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; }
 .btn-danger { color: var(--accent-red); }
@@ -478,9 +484,15 @@ ul, ol { list-style: none; }
   display: flex; align-items: center; justify-content: center;
   font-size: 16px;
   transition: all 0.2s;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  color: var(--text-secondary);
 }
-.mic-btn:hover { background: rgba(196,112,78,0.15); }
+.mic-btn:hover { background: rgba(79,70,229,0.1); }
 .mic-btn.listening { background: var(--accent-red); color: #fff; animation: pulse-dot 1s infinite; }
+.mic-btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: auto; }
+.voice-interim { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 12px; white-space: nowrap; margin-bottom: 6px; pointer-events: none; z-index: 10; }
 .send-btn {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -523,8 +535,8 @@ ul, ol { list-style: none; }
   cursor: pointer;
   transition: all 0.15s;
 }
-.inbox-item:hover { background: rgba(196,112,78,0.04); }
-.inbox-item.active { background: rgba(196,112,78,0.08); border-left: 3px solid var(--accent-terracotta); }
+.inbox-item:hover { background: rgba(79,70,229,0.03); }
+.inbox-item.active { background: rgba(79,70,229,0.06); border-left: 3px solid var(--accent-terracotta); }
 .inbox-item-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; line-height: 1.4; }
 .inbox-item-meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; align-items: center; }
 .inbox-status-dot { width: 6px; height: 6px; border-radius: 50%; }
@@ -559,7 +571,7 @@ ul, ol { list-style: none; }
   transition: all 0.2s;
   margin-bottom: 14px;
 }
-.upload-zone:hover, .upload-zone.dragover { border-color: var(--accent-terracotta); background: rgba(196,112,78,0.04); }
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--accent-terracotta); background: rgba(79,70,229,0.03); }
 .identity-bar {
   display: flex;
   gap: 10px;
@@ -902,36 +914,58 @@ ul, ol { list-style: none; }
   position: fixed; inset: 0; z-index: 300;
   background: var(--bg);
   display: flex; align-items: center; justify-content: center;
-  padding: 20px;
+  padding: 16px;
 }
 .welcome-card {
   position: relative;
   background: var(--bg-paper);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 36px 32px;
-  max-width: 440px;
+  padding: 32px 28px;
+  max-width: 420px;
   width: 100%;
   box-shadow: var(--shadow-lg);
   text-align: center;
+  animation: welcomeIn 0.4s cubic-bezier(0.16,1,0.3,1);
 }
+@keyframes welcomeIn { from{opacity:0;transform:translateY(16px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);} }
 .welcome-logo {
-  width: 64px; height: 64px;
-  background: linear-gradient(135deg, var(--accent-terracotta), var(--accent-moss));
-  border-radius: 18px;
+  width: 56px; height: 56px;
+  background: var(--accent-primary);
+  border-radius: 16px;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 28px; font-weight: 800;
-  margin: 0 auto 20px;
-  box-shadow: var(--shadow-md);
+  color: #fff; font-size: 24px; font-weight: 800;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 12px rgba(79,70,229,0.2);
 }
-.welcome-title { font-size: 28px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; text-align: center; letter-spacing: -0.5px; }
-.welcome-subtitle { font-size: 15px; font-weight: 600; color: var(--accent-terracotta); margin-bottom: 14px; text-align: center; }
-.welcome-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; text-align: center; }
-.welcome-identity { margin-bottom: 20px; text-align: left; }
-.welcome-identity label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-.welcome-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-.welcome-hint { font-size: 11px; color: var(--text-muted); margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-subtle); line-height: 1.6; text-align: center; opacity: 0.8; }
-.welcome-badge { position: absolute; top: 14px; right: 14px; font-size: 10px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border-subtle); padding: 3px 9px; border-radius: 20px; font-weight: 500; letter-spacing: 0.3px; }
+.welcome-title { font-size: 24px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; text-align: center; letter-spacing: -0.5px; }
+.welcome-subtitle { font-size: 14px; font-weight: 600; color: var(--accent-primary); margin-bottom: 12px; text-align: center; }
+.welcome-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; text-align: center; }
+.welcome-scenarios { margin-bottom: 16px; text-align: left; }
+.welcome-scenarios-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px; }
+.scenario-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.scenario-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 10px; background: var(--bg-cream);
+  border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 500; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.15s; text-align: left;
+}
+.scenario-chip:hover { border-color: var(--accent-primary); }
+.scenario-chip.active {
+  background: var(--accent-primary-soft); border-color: var(--accent-primary);
+  color: var(--accent-primary-deep); font-weight: 600;
+}
+.scenario-chip .s-icon { font-size: 16px; flex-shrink: 0; }
+.scenario-chip .s-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.scenario-chip .s-title { font-size: 12px; font-weight: inherit; line-height: 1.2; }
+.scenario-chip .s-desc { font-size: 10px; color: var(--text-muted); margin-top: 1px; font-weight: 400; line-height: 1.2; }
+.welcome-identity-extra { margin-bottom: 16px; text-align: left; }
+.welcome-identity-extra label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px; }
+.welcome-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.welcome-buttons { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.welcome-hint { font-size: 11px; color: var(--text-muted); padding-top: 12px; border-top: 1px solid var(--border-subtle); line-height: 1.6; text-align: center; opacity: 0.8; }
+.welcome-badge { position: absolute; top: 12px; right: 12px; font-size: 10px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border-subtle); padding: 2px 8px; border-radius: 20px; font-weight: 500; }
 .sidebar-version-badge { font-size: 10px; color: var(--text-muted); text-align: center; padding: 6px 8px; border-top: 1px solid var(--border-subtle); margin-top: 4px; opacity: 0.7; }
 
 /* ========== Bottom Tab (mobile) ========== */
@@ -940,37 +974,73 @@ ul, ol { list-style: none; }
 /* ========== Mobile menu button (hidden on desktop) ========== */
 .menu-btn { display: none; }
 
-/* ========== Guided Tour (60s flow) ========== */
+/* deprecated - guided tour removed in v3.0 */
 .tour-highlight { position: relative; z-index: 150; }
-.tour-pulse { animation: tourPulse 1.5s ease-in-out infinite; box-shadow: 0 0 0 4px rgba(196,112,78,0.3) !important; }
-@keyframes tourPulse {
-  0%,100%{box-shadow:0 0 0 4px rgba(196,112,78,0.3);}
-  50%{box-shadow:0 0 0 10px rgba(196,112,78,0.15);}
+.tour-pulse { animation: none; }
+.tour-tooltip { display: none; }
+.tour-next { display: none; }
+.tour-skip { display: none; }
+
+
+/* Dashboard three-card layout */
+.dash-greeting { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; font-weight: 500; }
+.dash-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+.dash-card {
+  background: var(--bg-paper); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-sm);
 }
-.tour-tooltip {
-  position: fixed;
-  background: var(--text-primary);
-  color: #fff;
-  padding: 14px 18px;
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  max-width: 280px;
-  z-index: 160;
-  box-shadow: var(--shadow-lg);
-  line-height: 1.6;
+.dash-card-title {
+  font-size: 12px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 6px;
 }
-.tour-tooltip::after {
-  content: '';
-  position: absolute;
-  border: 8px solid transparent;
+.dash-card-list { display: flex; flex-direction: column; gap: 8px; }
+.dash-card-item {
+  font-size: 13px; color: var(--text-primary); padding: 8px 10px;
+  background: var(--bg-cream); border-radius: var(--radius-sm);
+  display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.15s;
 }
-.tour-tooltip-bottom::after { top: -16px; left: 24px; border-bottom-color: var(--text-primary); }
-.tour-tooltip-top::after { bottom: -16px; left: 24px; border-top-color: var(--text-primary); }
-.tour-next { margin-top: 10px; padding: 6px 14px; background: var(--accent-terracotta); color: #fff; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; }
-.tour-skip { margin-top: 10px; margin-left: 8px; padding: 6px 12px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border-radius: var(--radius-sm); font-size: 12px; }
+.dash-card-item:hover { background: var(--accent-primary-soft); }
+.dash-card-empty { font-size: 12px; color: var(--text-muted); padding: 12px; text-align: center; font-style: italic; }
+.dash-quick-actions { display: flex; flex-direction: column; gap: 8px; }
+.dash-quick-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: var(--bg-cream);
+  border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 500; color: var(--text-primary);
+  cursor: pointer; transition: all 0.15s; text-align: left;
+}
+.dash-quick-btn:hover { border-color: var(--accent-primary); background: var(--accent-primary-soft); color: var(--accent-primary-deep); }
+.dash-quick-btn .q-icon { font-size: 18px; width: 24px; text-align: center; }
+.first-hint {
+  background: var(--bg-cream); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 20px; text-align: center; margin-bottom: 20px;
+}
+.first-hint-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+.first-hint-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.6; }
+.first-hint-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.chat-intro {
+  font-size: 12px; color: var(--text-secondary); background: var(--bg-cream);
+  padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 12px; line-height: 1.6;
+}
+/* Upload card compact */
+.upload-card {
+  background: var(--bg-paper); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 14px; margin-bottom: 12px;
+}
+.upload-card-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+.upload-row { display: flex; gap: 10px; align-items: stretch; }
+.upload-row .upload-zone { margin-bottom: 0; padding: 14px 10px; border-radius: var(--radius-md); flex:1; min-width:160px; }
+.upload-status { margin-top: 6px; }
+.upload-status-ok { font-size: 12px; color: var(--accent-green-deep); background: rgba(16,185,129,0.06); padding: 6px 10px; border-radius: var(--radius-md); line-height: 1.5; }
+.upload-status-warn { font-size: 12px; color: var(--accent-amber); background: rgba(245,158,11,0.06); padding: 6px 10px; border-radius: var(--radius-md); line-height: 1.5; }
+.inbox-list-title { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px 4px; }
+.file-input-hidden { display: none; }
+.draft-actions { position: sticky; bottom: 0; background: var(--bg-paper); padding: 8px 0; z-index: 5; }
+.about-honest { font-size: 11px; color: var(--text-muted); background: var(--bg-cream); padding: 12px 14px; border-radius: var(--radius-md); line-height: 1.7; margin-top: 14px; }
 
 /* ========== Skeleton loading ========== */
-.skeleton { background: linear-gradient(90deg, var(--bg-cream) 25%, rgba(196,112,78,0.06) 50%, var(--bg-cream) 75%); background-size: 200% 100%; animation: skeleton 1.4s infinite; border-radius: var(--radius-sm); }
+.skeleton { background: linear-gradient(90deg, var(--bg-cream) 25%, rgba(79,70,229,0.05) 50%, var(--bg-cream) 75%); background-size: 200% 100%; animation: skeleton 1.4s infinite; border-radius: var(--radius-sm); }
 @keyframes skeleton { 0%{background-position:200% 0;}100%{background-position:-200% 0;} }
 
 /* ========== Mobile Responsive ========== */
@@ -1019,7 +1089,7 @@ ul, ol { list-style: none; }
     font-weight: 500;
     transition: color 0.15s;
   }
-  .tab-item.active { color: var(--accent-terracotta); }
+  .tab-item.active { color: var(--accent-primary); font-weight: 600; }
   .tab-icon { font-size: 20px; }
   .view-container { padding: 16px; padding-bottom: calc(var(--bottomtab-h) + var(--safe-bottom) + 16px); }
   .view-title { font-size: 22px; }
@@ -1043,9 +1113,57 @@ ul, ol { list-style: none; }
   .filter-chip { padding: 5px 10px; font-size: 11px; }
 }
 @media (max-width: 480px) {
-  .view-container { padding: 12px; padding-bottom: calc(var(--bottomtab-h) + var(--safe-bottom) + 12px); }
-  .card, .card-glass { padding: 14px; }
-  .welcome-card { padding: 24px 20px; }
+  html, body { max-width: 100vw; overflow-x: hidden; }
+  .app-shell { width: 100%; max-width: 100vw; overflow-x: hidden; }
+  .view-container { padding: 12px; padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .card, .card-glass { padding: 12px; }
+  .welcome-card { width: calc(100vw - 32px); max-width: calc(100vw - 32px); padding: 24px 18px; }
+  .welcome-title { font-size: 22px; }
+  .welcome-subtitle { font-size: 13px; margin-bottom: 8px; }
+  .welcome-desc { font-size: 12px; margin-bottom: 16px; line-height: 1.6; }
+  .welcome-logo { width: 48px; height: 48px; font-size: 20px; margin-bottom: 12px; border-radius: 12px; }
+  .welcome-scenarios { margin-bottom: 12px; }
+  .welcome-hint { font-size: 10px; margin-top: 10px; padding-top: 10px; }
+  .welcome-badge { top: 8px; right: 8px; font-size: 9px; padding: 2px 6px; }
+  .welcome-buttons { width: 100%; }
+  .welcome-buttons .btn { width: 100%; }
+  .scenario-grid { grid-template-columns: 1fr; }
+  .bottom-tab { padding-bottom: env(safe-area-inset-bottom, 0px); height: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  .chat-layout { display: flex; flex-direction: column; height: calc(100vh - var(--statusbar-h) - var(--bottomtab-h) - var(--safe-bottom) - 40px); }
+  .chat-messages { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+  .chat-input-bar { position: sticky; bottom: 0; margin-top: 8px; padding: 10px; border-radius: var(--radius-md); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .chat-input { font-size: 14px; }
+  .upload-card { padding: 12px; margin-bottom: 10px; }
+  .upload-card-title { font-size: 12px; margin-bottom: 8px; }
+  .upload-row { gap: 6px; }
+  .upload-row .upload-zone { padding: 12px 10px; min-width: 0 !important; }
+  .upload-row .textarea { min-height: 60px !important; font-size: 14px !important; }
+  .upload-row .input { font-size: 13px !important; padding: 5px 8px !important; }
+  .upload-row .btn { font-size: 12px; padding: 6px 10px; white-space: nowrap; min-height: 44px; }
+  .paste-drafts { margin-top: 10px; }
+  .paste-drafts .draft-actions { position: sticky; bottom: calc(var(--bottomtab-h) + var(--safe-bottom) + 8px); background: var(--bg-paper); padding: 8px 0; z-index: 5; }
+  .drawer { width: 100vw !important; right: 0 !important; border-radius: 0; top: 0; bottom: 0; height: 100vh; }
+  .drawer.open { transform: translateX(0); }
+  .toast-container { top: auto; bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 8px); left: 12px; right: 12px; }
+  .toast { max-width: none; }
+  .btn { white-space: nowrap; min-height: 44px; font-size: 14px; }
+  .btn-primary, .btn-secondary { min-height: 44px; }
+  .btn-sm { min-height: 32px; font-size: 12px; }
+  body { font-size: 13px; }
+  .dash-three { flex-direction: column; display: flex; }
+  .dash-three > .dash-card { width: 100%; }
+  .first-hint-actions { flex-direction: column; }
+  .first-hint-actions .btn { width: 100%; }
+  .inbox-layout { flex-direction: column; }
+  .inbox-list, .inbox-detail { width: 100%; min-width: 0; border-right: none; }
+  .platform-grid { grid-template-columns: 1fr; }
+  .reminder-filters { flex-wrap: wrap; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .quick-chips { flex-wrap: wrap; }
+  .quick-chip { font-size: 12px; padding: 5px 10px; }
+  .chat-quick-chips { flex-wrap: wrap; }
+  .view-title { font-size: 18px; }
+  .view-subtitle { font-size: 12px; }
 }
 
 /* ========== Premium Polish Overrides ========== */
@@ -1056,7 +1174,7 @@ ul, ol { list-style: none; }
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   font-size: 22px;
-  background: linear-gradient(135deg, rgba(196,112,78,0.1), rgba(125,143,117,0.1));
+  background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(16,185,129,0.08));
   transition: transform 0.25s;
 }
 .quick-action:hover .quick-icon { transform: scale(1.08) rotate(-3deg); }
@@ -1070,7 +1188,7 @@ ul, ol { list-style: none; }
   transition: background 0.15s;
 }
 .nav-item.active .nav-icon {
-  background: rgba(196,112,78,0.15);
+  background: rgba(79,70,229,0.12);
 }
 
 /* Tab icons: rounded bg when active */
@@ -1082,8 +1200,7 @@ ul, ol { list-style: none; }
   transition: all 0.2s;
 }
 .tab-item.active .tab-icon {
-  background: rgba(196,112,78,0.12);
-  transform: translateY(-2px);
+  background: var(--accent-primary-soft);
 }
 .tab-item { padding: 4px 0 6px; }
 .tab-item.active { font-weight: 600; }
@@ -1098,7 +1215,7 @@ ul, ol { list-style: none; }
 .toast-icon {
   width: 28px; height: 28px;
   border-radius: 50%;
-  background: rgba(196,112,78,0.25);
+  background: rgba(79,70,229,0.20);
   display: flex; align-items: center; justify-content: center;
   font-size: 14px;
 }
@@ -1108,7 +1225,7 @@ ul, ol { list-style: none; }
   width: 72px; height: 72px;
   margin: 0 auto 16px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(196,112,78,0.08), rgba(125,143,117,0.08));
+  background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(125,143,117,0.08));
   display: flex; align-items: center; justify-content: center;
   font-size: 32px;
   opacity: 1;
@@ -1154,7 +1271,7 @@ ul, ol { list-style: none; }
 
 /* Reminder date column: richer */
 .reminder-date-col {
-  background: linear-gradient(135deg, var(--bg-cream), rgba(196,112,78,0.08));
+  background: linear-gradient(135deg, var(--bg-cream), rgba(79,70,229,0.06));
   border-radius: var(--radius-md);
 }
 
@@ -1167,7 +1284,7 @@ ul, ol { list-style: none; }
   width: 72px; height: 72px;
   border-radius: 22px;
   font-size: 32px;
-  box-shadow: 0 8px 24px rgba(196,112,78,0.25);
+  box-shadow: 0 8px 24px rgba(79,70,229,0.20);
   position: relative;
 }
 .welcome-logo::after {
@@ -1175,7 +1292,7 @@ ul, ol { list-style: none; }
   position: absolute;
   inset: -8px;
   border-radius: 28px;
-  background: linear-gradient(135deg, rgba(196,112,78,0.15), rgba(125,143,117,0.15));
+  background: linear-gradient(135deg, rgba(79,70,229,0.12), rgba(125,143,117,0.15));
   z-index: -1;
   filter: blur(12px);
 }
@@ -1202,7 +1319,7 @@ ul, ol { list-style: none; }
 
 /* Drawer: subtle entrance, richer head */
 .drawer-head {
-  background: linear-gradient(180deg, rgba(196,112,78,0.04), transparent);
+  background: linear-gradient(180deg, rgba(79,70,229,0.03), transparent);
 }
 
 /* Timecard preview: stronger floating feel */
@@ -1231,7 +1348,7 @@ ul, ol { list-style: none; }
 
 /* Filter chip active: subtle shadow */
 .filter-chip.active {
-  box-shadow: 0 2px 8px rgba(196,112,78,0.25);
+  box-shadow: 0 2px 8px rgba(79,70,229,0.20);
 }
 
 /* Buttons: press feedback */
@@ -1283,7 +1400,7 @@ ul, ol { list-style: none; }
 .upload-status-ok {
   font-size: 12px;
   color: var(--accent-moss);
-  background: rgba(125,143,117,0.1);
+  background: rgba(16,185,129,0.08);
   padding: 8px 12px;
   border-radius: var(--radius-md);
   line-height: 1.5;
@@ -1354,7 +1471,7 @@ ul, ol { list-style: none; }
     </div>
     <nav class="nav-list" id="navList"></nav>
     <div class="sidebar-footer">
-      <div class="sidebar-version-badge">Web/PWA 初赛体验版</div>
+      <div class="sidebar-version-badge">Web/PWA · V3.0</div>
     </div>
   </aside>
 
@@ -1365,20 +1482,19 @@ ul, ol { list-style: none; }
       <button class="menu-btn" onclick="toggleSidebar(true)" aria-label="菜单">☰</button>
       <div class="status-item">
         <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Agent 已就绪</span>
+        <span id="statusText">已就绪</span>
       </div>
       <div class="status-item">
-        <span class="status-chip identity" id="statusIdentity">👤 未设置身份</span>
+        <span class="status-chip identity" id="statusIdentity">👤 学生</span>
       </div>
       <div class="status-spacer"></div>
       <div class="status-item">
         <span class="status-chip" id="statusToday">📅 今日 0</span>
       </div>
       <div class="status-item">
-        <span class="status-chip risk" id="statusRisk">⚠️ 高风险 0</span>
+        <span class="status-chip risk" id="statusRisk">⚠️ 待处理 0</span>
       </div>
-      <button class="status-btn" onclick="simulateNotification()">🔔 模拟提醒</button>
-      <button class="status-btn" onclick="showWelcome()">⚙️ 身份</button>
+      <button class="status-btn" onclick="showWelcome()">⚙️</button>
     </header>
 
     <!-- Views Container -->
@@ -1402,43 +1518,72 @@ ul, ol { list-style: none; }
 <!-- Welcome Overlay -->
 <div class="welcome-overlay" id="welcomeOverlay" style="display:none;">
   <div class="welcome-card">
-    <div class="welcome-badge">Web/PWA 初赛体验版</div>
+    <div class="welcome-badge">Web/PWA · V3.0</div>
     <div class="welcome-logo">M</div>
     <div class="welcome-title">Memorial day</div>
-    <div class="welcome-subtitle">AI 时间整理 Agent</div>
-    <div class="welcome-desc">把辅导员通知、班级安排和一句话计划，自动整理成你的提醒计划。</div>
-    <div class="welcome-identity">
-      <label>当前身份</label>
-      <input type="text" class="input" id="welcomeIdentityInput" placeholder="如：3班、智能网联2301、A组" value="智能网联2301 · 3班">
-      <div class="welcome-presets">
-        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='3班'">3班</button>
-        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='智能网联2301'">智能网联2301</button>
-        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='智能网联2301 · 3班'">智能网联2301·3班</button>
-        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='A组'">A组</button>
-        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='全体'">全体学生</button>
+    <div class="welcome-subtitle">任务处理助手</div>
+    <div class="welcome-desc">把通知、安排和想法，自动整理成你的提醒计划。</div>
+    <div class="welcome-scenarios">
+      <label class="welcome-scenarios-label">选择你的使用场景</label>
+      <div class="scenario-grid" id="scenarioGrid">
+        <button class="scenario-chip active" data-scenario="student" onclick="selectScenario('student')">
+          <span class="s-icon">🎓</span>
+          <span class="s-text"><span class="s-title">学生</span><span class="s-desc">课程/通知/截止时间</span></span>
+        </button>
+        <button class="scenario-chip" data-scenario="cadre" onclick="selectScenario('cadre')">
+          <span class="s-icon">📋</span>
+          <span class="s-text"><span class="s-title">班级干部</span><span class="s-desc">事务/转发/活动</span></span>
+        </button>
+        <button class="scenario-chip" data-scenario="teacher" onclick="selectScenario('teacher')">
+          <span class="s-icon">👨‍🏫</span>
+          <span class="s-text"><span class="s-title">教师/辅导员</span><span class="s-desc">教学/会议/学生</span></span>
+        </button>
+        <button class="scenario-chip" data-scenario="club" onclick="selectScenario('club')">
+          <span class="s-icon">🎯</span>
+          <span class="s-text"><span class="s-title">社团/项目</span><span class="s-desc">活动/会议/截止</span></span>
+        </button>
+        <button class="scenario-chip" data-scenario="work" onclick="selectScenario('work')">
+          <span class="s-icon">💼</span>
+          <span class="s-text"><span class="s-title">实习/工作</span><span class="s-desc">任务/会议/截止</span></span>
+        </button>
+        <button class="scenario-chip" data-scenario="personal" onclick="selectScenario('personal')">
+          <span class="s-icon">🏡</span>
+          <span class="s-text"><span class="s-title">个人日程</span><span class="s-desc">生日/纪念日</span></span>
+        </button>
       </div>
     </div>
-    <button class="btn btn-primary w-full" onclick="startGuidedFromWelcome()">▶️ 体验 60 秒流程</button>
-    <button class="btn btn-ghost w-full" style="margin-top:8px;" onclick="finishWelcome()">查看提醒工作台</button>
+    <div class="welcome-identity-extra">
+      <label>补充你的班级/组别（选填）</label>
+      <input type="text" class="input" id="welcomeIdentityInput" placeholder="如：3班、产品组、A组（选填）">
+      <div class="welcome-presets">
+        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='全体学生'">全体学生</button>
+        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='产品组'">产品组</button>
+        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='A组'">A组</button>
+        <button class="quick-chip" onclick="document.getElementById('welcomeIdentityInput').value='我的小组'">我的小组</button>
+      </div>
+    </div>
+    <div class="welcome-buttons">
+      <button class="btn btn-primary w-full" onclick="enterWorkbench()">进入工作台</button>
+      <button class="btn btn-secondary w-full" onclick="importNotices()">导入通知</button>
+      <button class="btn btn-ghost w-full" onclick="loadSamplePackAndStart()">查看示例</button>
+    </div>
     <div class="welcome-hint">
-      当前使用本地规则 + 示例 AI 流程模拟；TXT 文件真实读取，PDF/DOCX 复赛完善。
+      本地规则解析 · TXT 文件真实读取 · PDF/DOCX 复赛完善<br>
+      <span style="opacity:0.6;">V3.0 · GitHub Auto Deploy</span>
     </div>
   </div>
 </div>
 
 <script>
 // ========== App State ==========
-const STORAGE_KEY = 'memorial_day_app_state_v2';
+const STORAGE_KEY = 'memorial_day_app_state_v3';
 const NAV_ITEMS = [
-  { id: 'dashboard', icon: '🏠', label: '首页工作台', tab: '工作台' },
-  { id: 'chat', icon: '💬', label: 'Agent 对话', tab: 'Agent' },
-  { id: 'inbox', icon: '📥', label: '通知收件箱', tab: '收件箱' },
-  { id: 'reminders', icon: '📋', label: '我的提醒', tab: '日程' },
-  { id: 'schedule', icon: '📅', label: '日程视图', tab: '日程' },
-  { id: 'risk', icon: '⚠️', label: '风险中心', tab: '我的' },
-  { id: 'timecard', icon: '🎨', label: '时光卡片', tab: '我的' },
-  { id: 'platform', icon: '📱', label: '跨平台说明', tab: '我的' },
-  { id: 'trae', icon: '🛠️', label: 'TRAE 创作过程', tab: '我的' }
+  { id: 'dashboard', icon: '🏠', label: '工作台', tab: '工作台' },
+  { id: 'chat', icon: '💬', label: 'Agent', tab: 'Agent' },
+  { id: 'inbox', icon: '📥', label: '收件箱', tab: '收件箱' },
+  { id: 'schedule', icon: '📅', label: '日程', tab: '日程' },
+  { id: 'reminders', icon: '📋', label: '我的', tab: '我的' },
+  { id: 'about', icon: 'ℹ️', label: '关于', tab: '我的' }
 ];
 const BOTTOM_TABS = [
   { id: 'dashboard', icon: '🏠', label: '工作台' },
@@ -1446,6 +1591,28 @@ const BOTTOM_TABS = [
   { id: 'inbox', icon: '📥', label: '收件箱' },
   { id: 'schedule', icon: '📅', label: '日程' },
   { id: 'reminders', icon: '👤', label: '我的' }
+];
+
+const SCENARIOS = [
+  { id: 'student', name: '学生' },
+  { id: 'cadre', name: '班级干部' },
+  { id: 'teacher', name: '教师/辅导员' },
+  { id: 'club', name: '社团/项目负责人' },
+  { id: 'work', name: '实习/工作' },
+  { id: 'personal', name: '个人日程管理' }
+];
+
+let selectedScenario = 'student';
+let voiceSupported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+// V3.0 parser regression test samples. Used for manual QA; not auto-run on page load.
+// Each sample must produce a short, natural reminder title (no "月8日下午3点..."残缺).
+const PARSER_TEST_SAMPLES = [
+  '7月8日下午3点在B205开班会，全体同学准时参加。',
+  '明天下午4点在A301提交项目材料。',
+  '周五晚上8点线上腾讯会议参加班会。',
+  '6月30日前提交实训报告。',
+  '今天下午2点到实验室领取材料。'
 ];
 
 const SAMPLE_NOTICES = [
@@ -1478,11 +1645,23 @@ const SAMPLE_NOTICES = [
     fileType: 'TXT', status: 'unread',
     body: '讲座通知：\n7月6日（本周四）晚上7点在图书馆报告厅举办"人工智能前沿与职业发展"讲座，欢迎全体同学参加。\n\n报名提醒：\n1. 计算机竞赛报名截止7月15日，3班和智能网联2301班均可报名\n2. 志愿者活动报名截止7月10日\n\n欢迎同学们积极参与！',
     targetGroup: ['全体', '3班', '智能网联2301']
+  },
+  {
+    id: 'n6', title: '【社团】暑期社会实践招新', source: '社团联合会', publishTime: '2026-07-01 10:00',
+    fileType: 'TXT', status: 'unread',
+    body: '各位同学：\n\n产品组暑期社会实践招新开始啦！\n1. 报名截止：7月15日\n2. 面试时间：7月18日下午2点，在学生活动中心302\n3. 需要准备1分钟自我介绍\n\n欢迎产品组、A组和我的小组的同学报名参加。',
+    targetGroup: ['产品组', 'A组', '我的小组']
+  },
+  {
+    id: 'n7', title: '【实习】本周工作汇报提醒', source: '实习导师', publishTime: '2026-07-01 18:00',
+    fileType: 'TXT', status: 'unread',
+    body: '各位实习生：\n\n1. 本周工作总结请于7月3日（周五）下午6点前提交至OA系统\n2. 7月4日（周六）上午10点开项目周会，腾讯会议\n3. 项目deadline提前到7月20日，请合理安排进度',
+    targetGroup: ['实习生']
   }
 ];
 
 const THEMES = [
-  { code: 'exam', name: '考试蓝', cls: 'tc-theme-exam', color: '#3B5998', accent: '#93C5FD' },
+  { code: 'exam', name: '靛蓝', cls: 'tc-theme-exam', color: '#4F46E5', accent: '#C7D2FE' },
   { code: 'birthday', name: '生日粉', cls: 'tc-theme-birthday', color: '#EC4899', accent: '#FBCFE8' },
   { code: 'finance', name: '财务紫', cls: 'tc-theme-finance', color: '#7C3AED', accent: '#DDD6FE' },
   { code: 'health', name: '健康绿', cls: 'tc-theme-health', color: '#059669', accent: '#A7F3D0' },
@@ -1507,7 +1686,7 @@ let tourState = null;
 
 function defaultState() {
   return {
-    identity: '',
+    identity: '学生',
     reminders: [],
     inbox: SAMPLE_NOTICES.map(n => ({ ...n, status: 'unread', parsedDrafts: [] })),
     activeView: 'dashboard',
@@ -1515,15 +1694,14 @@ function defaultState() {
     chatMessages: [],
     completedIds: [],
     onboarded: false,
-    cardTheme: 'exam'
+    cardTheme: 'exam',
+    scenario: 'student'
   };
 }
 function seedDemoDataIfNeeded() {
-  // If there are no reminders yet (first visit / after reset), preload sample data
-  // so dashboard doesn't look empty on first impression. User can reset to clear.
   if (appState.reminders.length > 0) return;
-  appState.identity = '智能网联2301 · 3班';
-  var sampleReminders = extractReminders(SAMPLE_NOTICES.map(n=>n.body).join('\n'), appState.identity, '初始演示数据');
+  if (!appState.identity) appState.identity = '学生';
+  var sampleReminders = extractReminders(SAMPLE_NOTICES.slice(0,5).map(n=>n.body).join('\n'), appState.identity, '初始演示数据');
   // Birthday reminder
   var bd = new Date(); bd.setDate(bd.getDate()+20);
   sampleReminders.push({
@@ -1572,6 +1750,7 @@ function formatTime(period, hour, minute) {
   return pad(h)+':'+pad(minute);
 }
 var DATE_PATTERNS = [
+  { regex: /(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*[日号]/, h: function(m){ return {year:+m[1],month:+m[2],day:+m[3]}; } },
   { regex: /(\d{1,2})月(\d{1,2})[日号]/, h: function(m){ return {month:+m[1],day:+m[2]}; } },
   { regex: /(\d{4})-(\d{1,2})-(\d{1,2})/, h: function(m){ return {year:+m[1],month:+m[2],day:+m[3]}; } },
   { regex: /明天/, h: function(){ var d=new Date(); d.setDate(d.getDate()+1); return {year:d.getFullYear(),month:d.getMonth()+1,day:d.getDate()}; } },
@@ -1604,10 +1783,12 @@ var ACTION_KW = [
   { kw:'生日', cat:'生日', risk:'low' },
   { kw:'房租', cat:'缴费', risk:'high' },
   { kw:'跑完', cat:'任务', risk:'mid' },
-  { kw:'训练', cat:'训练', risk:'low' }
+  { kw:'训练', cat:'训练', risk:'low' },
+  { kw:'汇报', cat:'工作汇报', risk:'mid' },
+  { kw:'面试', cat:'面试', risk:'mid' }
 ];
-var GROUP_KW = ['全体','全班','所有同学','各班'];
-var CLASS_RE = /([\u4e00-\u9fa5A-Za-z0-9]+?\d{2,4}[班]?|[\u4e00-\u9fa5]+?\d+班|[A-Z]组|\d+班|[\u4e00-\u9fa5]+专业)/g;
+var GROUP_KW = ['全体','全班','所有同学','各班','产品组','A组','我的小组','实习生'];
+var CLASS_RE = /([\u4e00-\u9fa5A-Za-z0-9]+?\d{2,4}[班]?|[\u4e00-\u9fa5]+?\d+班|[A-Z]组|\d+班|[\u4e00-\u9fa5]+专业|产品组|我的小组)/g;
 var PREP_MAP = {
   high: '建议提前 3 天准备，前一天确认材料，当天提前 15 分钟到场。',
   mid: '建议提前 1 天准备，当天准时参加。',
@@ -1637,7 +1818,19 @@ function parseGroups(text) {
 function parseAction(text) {
   for (var i=0;i<ACTION_KW.length;i++) if (text.indexOf(ACTION_KW[i].kw)!==-1) return ACTION_KW[i];
   var trimmed = text.replace(/^[\d\.\s、\-\*]+/,'').trim();
-  return { kw: trimmed.substring(0,6), cat: trimmed.substring(0,10)||'事项', risk:'mid' };
+  // Try to extract a short verb+noun chunk for fallback
+  // Remove leading date/time/location so fallback kw doesn't start with a date
+  var shortCore = trimmed
+    .replace(/^\s*(?:\d{1,3}\s*[.、．\)）]\s*|[\-\*·•]\s*)/, '')
+    .replace(/\d{1,2}\s*月\s*\d{1,2}\s*[日号]?\s*/, '')
+    .replace(/(今天|明天|后天|下周[一二三四五六日天]?|本周[一二三四五六日天]?|周[一二三四五六日天]|下个?月底|\d+天后)/g, '')
+    .replace(/(上午|早上|凌晨|中午|下午|晚上|深夜)?\s*\d{1,2}\s*[点时](?:\d{1,2}\s*分?)?(?:前)?\s*/g, '')
+    .replace(/(在|于)\s*[A-Za-z0-9\u4e00-\u9fa5]{0,15}(室|厅|馆|楼|办|地点|地方|会议室|教室|实验室)\s*/g, '')
+    .replace(/(在|于)\s*[A-Za-z]?\d{2,4}(室|厅|馆|楼|会议室|教室|实验室|办)?(?=$|[，,。；;！!？?\s在到于了开举参加至])\s*/g, '')
+    .replace(/[，,。；;！!？?].*$/, '')
+    .trim();
+  var kw = shortCore.length > 0 ? shortCore.substring(0, Math.min(6, shortCore.length)) : trimmed.substring(0,6);
+  return { kw: kw, cat: '事项', risk:'mid' };
 }
 function matchIdentity(groups, identity) {
   if (!identity) return true;
@@ -1654,15 +1847,27 @@ function extractReminders(text, identity, source) {
   var lines = text.split(/\n|；|;|。\s*/);
   for (var i=0;i<lines.length;i++) {
     var line = lines[i].trim(); if (line.length<4) continue;
-    var clean = line.replace(/^[\d\.\s、\-\*]+/,'').trim(); if (clean.length<4) continue;
-    var date = parseDate(clean), time = parseTime(clean), groups = parseGroups(clean), action = parseAction(clean);
+    var clean = stripListMarker(line); if (clean.length<4) continue;
+    // Skip pure greeting/section-title lines that aren't actionable reminders
+    if (/^(各位|各位同学|各班级|同学们|全体同学|老师|通知|讲座通知|报名提醒|注意事项|体检安排|考试安排|安全教育|缴费提醒|联系人|电子版命名|材料需|欢迎同学们|请同学们带好)[：:]?\s*$/.test(clean)) continue;
+    // Skip lines that end with "：" / ":" and are short titles with no verb/date
+    if (/[：:]\s*$/.test(clean) && clean.length < 12 && !parseDate(clean)) continue;
+    var date = parseDate(clean), time = parseTime(clean), groups = parseGroups(clean), action = parseAction(clean), loc = parseLocation(clean);
     if (!date && !action.kw) continue;
-    var title = buildTitle(clean, action);
+    // Skip pure date lines (e.g. letterhead/footers like "2026年7月1日")
+    if (/^\s*\d{4}\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*[日号]?\s*$/.test(clean)) continue;
+    // Skip low-confidence drafts that are just placeholders (no real action word matched and no date+time)
+    if (!date && action.kw.length >= 5 && !/提交|截止|开会|班会|考试|测验|讲座|体检|缴费|报名|材料|答辩|培训|活动|生日|训练/.test(clean)) continue;
+    // Skip section-title-like lines that don't have time/location and end with notice words
+    if (!time && !loc && /^(考试安排|体检安排|安全教育|报名提醒|讲座通知|注意事项|缴费提醒|工作安排|会议安排)$/.test(clean)) continue;
+    var title = buildTitle(clean, action, date, time, loc);
+    // Skip titles that are just punctuation/empty after cleaning
+    if (!title || title.length < 2 || /^[，,。；;：:（）()\s]+$/.test(title)) continue;
     var relevant = matchIdentity(groups, identity);
     var confidence = date ? (time ? 0.85 : 0.72) : 0.45;
     if (!relevant) confidence *= 0.4;
     drafts.push({
-      id: uid(), title: title, date: date||'待确认', time: time||'待确认',
+      id: uid(), title: title, date: date||'待确认', time: time||'待确认', location: loc||'',
       targetGroup: groups.length?groups.join('、'):'未明确', sourceText: clean, category: action.cat,
       riskLevel: action.risk, reminderSuggestion: date?('提前 '+(action.risk==='high'?'3天':action.risk==='mid'?'1天':'当天')+'提醒'):'建议手动设置日期',
       preparation: PREP_MAP[action.risk]||PREP_MAP.mid, confidence: confidence, relevant: relevant, selected: relevant,
@@ -1671,41 +1876,127 @@ function extractReminders(text, identity, source) {
   }
   return drafts;
 }
-function buildTitle(clean, action) {
-  // Remove leading list markers
-  var s = clean.replace(/^[\d\.\s、\-\*]+/,'').trim();
-  // Try to build a natural title around the action keyword
-  var kwIdx = s.indexOf(action.kw);
-  if (kwIdx>=0) {
-    var before = s.substring(0, kwIdx).replace(/[，,。、；;]$/,'').trim();
-    var after = s.substring(kwIdx+action.kw.length);
-    // Remove location/result clauses from "after" to keep title short
-    var cleanedAfter = after
-      .replace(/^[至到在了的于给把]/,'')
-      .replace(/(在|于)[A-Z0-9\u4e00-\u9fa5]{0,12}(室|厅|馆|楼|办|地点|地方).*$/,'')
-      .replace(/[，,。；;].*$/,'')
-      .replace(/请.*$/,'')
-      .replace(/务必.*$/,'')
-      .replace(/准时参加.*$/,'')
-      .replace(/参加.*$/,'')
-      .trim();
-    if (before.length>0 && cleanedAfter.length>0 && cleanedAfter.length<15) {
-      return before + action.kw + cleanedAfter;
-    }
-    if (cleanedAfter.length>0 && cleanedAfter.length<15) {
-      return action.kw + cleanedAfter;
-    }
-    if (before.length>0 && before.length<15) {
-      return before + action.kw;
+// Strip leading list markers like "1. " "2、" "3)" "- " "* " "① " etc., without eating date-leading digits.
+function stripListMarker(s) {
+  // Pattern: starts with optional whitespace, then 1-3 digits, then a list separator (.、．)）) followed by whitespace or end
+  // Or starts with bullet markers (- * · ①-⑳ 一-九)
+  return s
+    .replace(/^\s*(?:\d{1,3}\s*[.、．\)）]\s*|[\-\*·•]\s*|[①-⑳]\s*|[一二三四五六七八九十]+[、．.]\s*)/, '')
+    .trim();
+}
+// Parse location: e.g. "B205", "A301", "C201教室", "腾讯会议", "实验室", "图书馆"
+function parseLocation(text) {
+  // Pattern 1: 在/于 + [A-Za-z]?[A-Z]?\d{2,4}(室|厅|楼|会议室|教室|实验室|馆|办)?
+  var m = text.match(/(?:在|于)\s*([A-Za-z]?\d{2,4}(?:室|厅|楼|会议室|教室|实验室|馆|办)?)/);
+  if (m) return m[1];
+  // Pattern 2: 地点 XXX
+  m = text.match(/地点[:：\s]*([A-Za-z0-9\u4e00-\u9fa5]{2,12})/);
+  if (m) return m[1];
+  // Pattern 3: 线上腾讯会议 / 腾讯会议
+  if (/腾讯会议|线上会议|Zoom|Teams|钉钉会议/.test(text)) {
+    var mm = text.match(/(腾讯会议|Zoom会议|Teams会议|钉钉会议|线上会议)/);
+    if (mm) return mm[1];
+  }
+  // Pattern 4: 到/去 + XX(实验室/馆/操场/教室)
+  m = text.match(/(?:到|去)\s*([\u4e00-\u9fa5]{2,8}(?:实验室|馆|操场|教室|楼|办公室|礼堂))/);
+  if (m) return m[1];
+  return '';
+}
+function buildTitle(clean, action, date, time, loc) {
+  var s = stripListMarker(clean);
+  // Prefer short, natural title: if we have action keyword, build around it
+  var kw = action && action.kw ? action.kw : '';
+  if (kw) {
+    var kwIdx = s.indexOf(kw);
+    if (kwIdx >= 0) {
+      var before = s.substring(0, kwIdx);
+      var after = s.substring(kwIdx + kw.length);
+      // Strip trailing instruction clauses from after
+      var cleanedAfter = after
+        .replace(/^(?:至|到|了|在|的|于|给|把|开|举行|举办|召开|参加|参与|去)/, '')
+        .replace(/(在|于)[A-Z0-9\u4e00-\u9fa5]{0,15}(室|厅|馆|楼|办|地点|地方|会议室|教室|实验室).*$/, '')
+        .replace(/[\u4e00-\u9fa5]{0,8}办\d{3}室.*$/, '')  // strip office room like 学工办203室
+        .replace(/[，,。；;！!？?].*$/, '')
+        .replace(/请.*$/, '')
+        .replace(/务必.*$/, '')
+        .replace(/准时.*$/, '')
+        .replace(/不得.*$/, '')
+        .replace(/参加.*$/, '')
+        .trim();
+
+      // Strip date/time/location/address prefixes from "before" to keep title short
+      var cleanedBefore = before
+        .replace(/[（(][^）)]{0,8}[）)]/g, '') // remove parenthesized notes like （周日）
+        .replace(/\d{4}\s*年/g, '')  // remove "2026年"
+        .replace(/\d{1,2}\s*月\s*\d{1,2}\s*[日号]?/g, '')  // remove "7月8日"
+        .replace(/(今天|明天|后天|下周[一二三四五六日天]?|本周[一二三四五六日天]?|周[一二三四五六日天]|下个?月底|\d+天后)/g, '')
+        .replace(/(上午|早上|凌晨|中午|下午|晚上|深夜)?\s*\d{1,2}\s*[点时](?:\d{1,2}\s*分?)?(?:前)?/g, '')  // remove "下午3点"
+        .replace(/\d{1,2}:\d{2}/g, '')  // remove "15:00"
+        .replace(/(在|于)\s*[A-Za-z0-9\u4e00-\u9fa5]{0,15}(室|厅|馆|楼|办|地点|地方|会议室|教室|实验室)/g, '')  // remove "在B205教室"
+        .replace(/(在|于)\s*[A-Za-z]?\d{2,4}(室|厅|馆|楼|会议室|教室|实验室|办)?(?=$|[，,。；;！!？?\s在到于了开举参加至])/g, '')  // remove "在B205" room codes
+        .replace(/(到|去)\s*[\u4e00-\u9fa5]{2,8}(?:实验室|馆|操场|教室|楼|办公室|礼堂)/g, '') // remove "到实验室"
+        .replace(/(线上|线下)/g, '')
+        .replace(/(开|举?行|举办|召开|参加)/g, '') // remove trailing verbs before kw
+        .replace(/^[，,。；;\s]+/, '')
+        .replace(/[，,。；;\s]+$/, '')
+        .trim();
+
+      // Decision logic: prefer natural short titles
+      // 1) If there's a short cleanedAfter (<=6 chars), use kw + cleanedAfter (e.g. "提交项目材料", "参加班会" but strip "参加")
+      // 2) If cleanedBefore is short (<=6 chars), use cleanedBefore + kw (e.g. "项目提交")
+      // 3) If loc is short (<=6 chars) and action is a meeting/activity, try "loc + kw" (e.g. "B205 班会")
+      // 4) If we have date, try "M月D日 kw" (e.g. "7月8日 班会")
+      // 5) Otherwise just use kw itself as the short title
+
+      var candidate = null;
+
+      if (cleanedAfter && cleanedAfter.length > 0 && cleanedAfter.length <= 8) {
+        // e.g. "提交项目材料" — kw=提交, cleanedAfter=项目材料
+        candidate = kw + cleanedAfter;
+      }
+      if (!candidate && cleanedBefore && cleanedBefore.length > 0 && cleanedBefore.length <= 8) {
+        // Add a space if cleanedBefore ends with ASCII/digit (e.g. "B205") or looks like a place/meeting name
+        var needsSpace = /[A-Za-z0-9]$/.test(cleanedBefore) || cleanedBefore.length <= 4;
+        candidate = cleanedBefore + (needsSpace ? ' ' : '') + kw;
+      }
+      // Location-based short title for meetings/classes
+      if (!candidate && loc && loc.length <= 8 && /会议|班会|讲座|培训|答辩|体检|考试|测验/.test(kw + (cleanedAfter||''))) {
+        candidate = loc + ' ' + kw;
+      }
+      // Date-based short title when kw alone is meaningful
+      if (!candidate && date) {
+        var dm = date.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        if (dm) {
+          var m = parseInt(dm[2],10), d = parseInt(dm[3],10);
+          var today = new Date(); today.setHours(0,0,0,0);
+          var target = new Date(parseInt(dm[1],10), m-1, d);
+          var diff = Math.round((target - today)/86400000);
+          var dateLabel;
+          if (diff === 0) dateLabel = '今天';
+          else if (diff === 1) dateLabel = '明天';
+          else if (diff === 2) dateLabel = '后天';
+          else dateLabel = m+'月'+d+'日';
+          candidate = dateLabel + ' ' + kw;
+        }
+      }
+      // Last fallback: just the action keyword itself
+      if (!candidate) candidate = kw;
+      return candidate;
     }
   }
-  // Fallback: strip location markers and trailing punctuation, take up to 18 chars
+  // Fallback: strip list markers, date/time/location from start, punctuation from end, take short head
   var title = s
-    .replace(/[，,。；;！!？?].*$/,'')
-    .replace(/(在|于)[A-Z][0-9]{3}.*$/,'')
-    .replace(/请.*$/,'')
-    .substring(0,18);
-  return title;
+    .replace(/^\s*(?:\d{1,3}\s*[.、．\)）]\s*|[\-\*·•]\s*|[①-⑳]\s*|[一二三四五六七八九十]+[、．.]\s*)/, '')
+    .replace(/\d{1,2}\s*月\s*\d{1,2}\s*[日号]?\s*/, '')
+    .replace(/(今天|明天|后天|下周[一二三四五六日天]?|本周[一二三四五六日天]?|周[一二三四五六日天]|下个?月底|\d+天后)/g, '')
+    .replace(/(上午|早上|凌晨|中午|下午|晚上|深夜)?\s*\d{1,2}\s*[点时](?:\d{1,2}\s*分?)?(?:前)?\s*/g, '')
+    .replace(/(在|于)[A-Z0-9\u4e00-\u9fa5]{0,12}(室|厅|馆|楼|办|地点|地方|会议室|教室|实验室)\s*/, '')
+    .replace(/(在|于)\s*[A-Za-z]?\d{2,4}(室|厅|馆|楼|会议室|教室|实验室|办)?(?=$|[，,。；;！!？?\s在到于了开举参加至])\s*/, '')
+    .replace(/[，,。；;！!？?].*$/, '')
+    .replace(/请.*$/, '')
+    .trim();
+  if (title.length > 14) title = title.substring(0, 14);
+  return title || (kw || '事项');
 }
 function daysUntil(dateStr) {
   if (!dateStr || dateStr==='待确认') return 999;
@@ -1725,8 +2016,8 @@ function daysUntilLabel(dateStr) {
 
 // ========== Chat Agent Response Logic ==========
 function agentReply(userText) {
-  var date = parseDate(userText), time = parseTime(userText), action = parseAction(userText), groups = parseGroups(userText);
-  var title = buildTitle(userText, action);
+  var date = parseDate(userText), time = parseTime(userText), action = parseAction(userText), groups = parseGroups(userText), loc = parseLocation(userText);
+  var title = buildTitle(userText, action, date, time, loc);
   var reply = { text: '', parsed: null, canSave: false };
   if (date || action.kw) {
     reply.canSave = true;
@@ -1751,11 +2042,11 @@ function agentReply(userText) {
     // General conversation
     var greetings = /你好|您好|hi|hello|在吗/i;
     if (greetings.test(userText)) {
-      reply.text = '你好！我是 Memorial day AI 时间整理 Agent。\n\n你可以：\n• 直接告诉我事项，如"明天下午3点开班会"\n• 粘贴通知文本让我提取与你有关的提醒\n• 上传TXT文件解析\n\n当前身份：' + (appState.identity||'未设置（点击右上角⚙️设置）');
+      reply.text = '你好！我是你的任务处理助手。\n\n你可以：\n• 直接告诉我事项，如"明天下午3点开班会"\n• 粘贴通知文本让我提取提醒\n• 上传TXT文件解析\n\n当前身份：' + (appState.identity||'未设置');
     } else if (/重置|清空|清除/.test(userText)) {
       reply.text = '如果要重置所有数据，请在左侧导航底部找到"重置 Demo"按钮。这会清空所有提醒和对话记录。';
     } else if (/你是谁|你能做什么|功能/.test(userText)) {
-      reply.text = '我是 AI 时间整理 Agent，可以帮你：\n1. 语音/文字输入快速创建提醒\n2. 解析通知文本，筛选与你有关的事项\n3. 生成提醒草稿、准备清单、风险评级\n4. 管理你的日程和时光卡片\n\n当前为 Web/PWA Demo，使用本地规则 + 示例 AI 流程模拟。';
+      reply.text = '我是任务处理助手，可以帮你：\n1. 语音/文字输入快速创建提醒\n2. 解析通知文本，筛选与你有关的事项\n3. 管理日程和待处理优先级\n\n当前为 Web/PWA 版本，使用本地规则解析。';
     } else {
       reply.text = '我暂时没能识别出明确的时间事项。你可以试试说：\n• "明天下午三点开班会"\n• "下周三交创新创业材料"\n• "7月5日考试"\n• "妈妈生日还有20天"\n\n也可以去"通知收件箱"加载示例通知包体验批量解析。';
     }
@@ -1786,10 +2077,9 @@ function renderNav() {
     if (item.id==='risk' && highRiskCount>0) badge = '<span class="nav-badge">'+highRiskCount+'</span>';
     html += '<div class="nav-item'+active+'" onclick="switchView(\''+item.id+'\')"><span class="nav-icon">'+item.icon+'</span><span>'+item.label+'</span>'+badge+'</div>';
   }
-  html += '<div style="margin-top:auto;padding:8px 12px;display:flex;flex-direction:column;gap:6px;">';
-  html += '<button class="btn btn-sm btn-secondary w-full" onclick="loadSamplePack()">📦 加载示例通知包</button>';
-  html += '<button class="btn btn-sm btn-ghost w-full" onclick="startGuidedTour()">▶️ 体验60秒流程</button>';
-  html += '<button class="btn btn-sm btn-ghost w-full" style="color:var(--accent-red);" onclick="resetDemo()">🔄 重置 Demo</button>';
+  html += '<div style="margin-top:auto;padding:8px 10px;display:flex;flex-direction:column;gap:4px;">';
+  html += '<button class="btn btn-sm btn-secondary w-full" onclick="loadSamplePack()" style="font-size:11px;min-height:30px;padding:5px 8px;">📦 加载示例</button>';
+  html += '<button class="btn btn-sm btn-ghost w-full" style="color:var(--accent-red);font-size:11px;min-height:30px;padding:5px 8px;" onclick="resetDemo()">🔄 重置</button>';
   html += '</div>';
   nav.innerHTML = html;
 }
@@ -1806,17 +2096,17 @@ function renderBottomTab() {
   tab.innerHTML = html;
 }
 function isTabActive(viewId) {
-  if (viewId==='reminders') return ['reminders','risk','timecard','platform','trae'].indexOf(appState.activeView)!==-1;
+  if (viewId==='reminders') return ['reminders','timecard','about'].indexOf(appState.activeView)!==-1;
   return appState.activeView===viewId;
 }
 
 function renderStatusBar() {
   var el;
-  el = document.getElementById('statusIdentity'); if (el) el.textContent = '👤 '+(appState.identity||'未设置身份');
+  el = document.getElementById('statusIdentity'); if (el) el.textContent = '👤 '+(appState.identity||'学生');
   var todayCount = appState.reminders.filter(function(r){return !appState.completedIds.includes(r.id) && daysUntil(r.date)===0;}).length;
   el = document.getElementById('statusToday'); if (el) el.textContent = '📅 今日 '+todayCount;
   var highCount = computeRisks().high.length;
-  el = document.getElementById('statusRisk'); if (el) el.textContent = '⚠️ 高风险 '+highCount;
+  el = document.getElementById('statusRisk'); if (el) el.textContent = '⚠️ 待处理 '+highCount;
 }
 
 function renderViews() {
@@ -1829,13 +2119,12 @@ function renderViews() {
   html += renderSchedule();
   html += renderRisk();
   html += renderTimeCard();
-  html += renderPlatform();
-  html += renderTrae();
+  html += renderAbout();
   container.innerHTML = html;
-  // Hook up chat input events
   bindChatEvents();
   bindInboxEvents();
   bindFileUpload();
+  setupMicButton();
 }
 
 function switchView(id) {
@@ -1848,45 +2137,116 @@ function switchView(id) {
 }
 
 // ---------- Dashboard ----------
+function getGreeting() {
+  var now = new Date();
+  var hour = now.getHours();
+  var weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  var wd = weekdays[now.getDay()];
+  var period;
+  if (hour < 6) period = '凌晨好';
+  else if (hour < 9) period = '早上好';
+  else if (hour < 12) period = '上午好';
+  else if (hour < 14) period = '中午好';
+  else if (hour < 18) period = '下午好';
+  else period = '晚上好';
+  return wd + period;
+}
 function renderDashboard() {
   var all = appState.reminders.filter(function(r){return !appState.completedIds.includes(r.id);});
   var today = all.filter(function(r){return daysUntil(r.date)===0;});
-  var upcoming = all.filter(function(r){var d=daysUntil(r.date);return d>0&&d<=7;});
   var overdue = all.filter(function(r){return daysUntil(r.date)<0;});
-  var high = all.filter(function(r){return r.riskLevel==='high';});
+  var urgent = all.filter(function(r){var d=daysUntil(r.date);return d>=0&&d<=3&&r.riskLevel==='high';});
+  var near = overdue.concat(urgent).slice(0,3);
   var active = appState.activeView==='dashboard' ? ' active' : '';
+  var hasData = all.length > 0;
   var html = '<div class="view'+active+'" id="view-dashboard">';
-  html += '<div class="view-header"><div class="view-title">工作台</div><div class="view-subtitle">'+(appState.identity?'当前身份：'+appState.identity+' · ':'')+'AI 时间整理 Agent 已就绪</div></div>';
-  html += '<div class="dash-stats">';
-  html += '<div class="stat-card primary"><div class="stat-num">'+all.length+'</div><div class="stat-label">全部提醒</div><div class="stat-trend">已保存</div></div>';
-  html += '<div class="stat-card warning"><div class="stat-num">'+today.length+'</div><div class="stat-label">今日事项</div><div class="stat-trend">'+(today.length?'需要关注':'今日空闲')+'</div></div>';
-  html += '<div class="stat-card danger"><div class="stat-num">'+overdue.length+'</div><div class="stat-label">已逾期</div><div class="stat-trend">'+(overdue.length?'请尽快处理':'无逾期')+'</div></div>';
-  html += '<div class="stat-card success"><div class="stat-num">'+upcoming.length+'</div><div class="stat-label">未来7天</div><div class="stat-trend">规划中</div></div>';
+  html += '<div class="dash-greeting">'+getGreeting()+'，'+esc(appState.identity||'用户')+'</div>';
+  if (!hasData) {
+    html += '<div class="first-hint">';
+    html += '<div class="first-hint-title">开始使用</div>';
+    html += '<div class="first-hint-desc">选择一种方式开始整理你的事项</div>';
+    html += '<div class="first-hint-actions">';
+    html += '<button class="btn btn-primary" onclick="switchView(\'inbox\')">📥 导入通知文本</button>';
+    html += '<button class="btn btn-secondary" onclick="switchView(\'chat\')">💬 让 Agent 帮我整理</button>';
+    html += '<button class="btn btn-ghost" onclick="addQuickReminder()">✚ 手动添加一条提醒</button>';
+    html += '</div></div>';
+  }
+  html += '<div class="dash-three">';
+  html += '<div class="dash-card"><div class="dash-card-title">📌 今天要做什么</div><div class="dash-card-list">';
+  var todaySlice = today.slice(0,3);
+  if (todaySlice.length===0) {
+    html += '<div class="dash-card-empty">今天没有安排，享受专注</div>';
+  } else {
+    for (var i=0;i<todaySlice.length;i++) {
+      var r = todaySlice[i];
+      html += '<div class="dash-card-item" onclick="openDrawer(\''+r.id+'\')">';
+      html += (r.time&&r.time!=='待确认'?'<span style="font-weight:600;color:var(--accent-primary);min-width:40px;">'+esc(r.time)+'</span>':'<span style="min-width:40px;"></span>');
+      html += '<span style="flex:1;">'+esc(r.title)+'</span>';
+      html += '</div>';
+    }
+  }
+  html += '</div></div>';
+  html += '<div class="dash-card"><div class="dash-card-title">⏰ 哪些快截止</div><div class="dash-card-list">';
+  if (near.length===0) {
+    html += '<div class="dash-card-empty">暂无紧急事项</div>';
+  } else {
+    for (var j=0;j<Math.min(near.length,3);j++) {
+      var u = near[j];
+      var d = daysUntil(u.date);
+      var label = d<0?'已逾期':(d===0?'今天':d+'天后');
+      var color = d<0?'var(--accent-red)':(d===0?'var(--accent-amber)':'var(--accent-blue)');
+      html += '<div class="dash-card-item" onclick="openDrawer(\''+u.id+'\')">';
+      html += '<span style="font-weight:600;color:'+color+';min-width:48px;font-size:12px;">'+label+'</span>';
+      html += '<span style="flex:1;font-size:12px;">'+esc(u.title)+'</span>';
+      html += '</div>';
+    }
+  }
+  html += '</div></div>';
+  html += '<div class="dash-card"><div class="dash-card-title">✦ Agent 能帮你整理</div><div class="dash-quick-actions">';
+  html += '<button class="dash-quick-btn" onclick="switchView(\'inbox\')"><span class="q-icon">📥</span><span>导入通知</span></button>';
+  html += '<button class="dash-quick-btn" onclick="organizeMyDay()"><span class="q-icon">✨</span><span>整理你的一天</span></button>';
+  html += '<button class="dash-quick-btn" onclick="addQuickReminder()"><span class="q-icon">✚</span><span>添加一条提醒</span></button>';
+  html += '</div></div>';
   html += '</div>';
-  html += '<div class="quick-actions">';
-  html += '<div class="quick-action" onclick="switchView(\'chat\')"><div class="quick-icon">💬</div><div class="quick-title">和 Agent 对话</div><div class="quick-desc">语音/文字创建提醒</div></div>';
-  html += '<div class="quick-action" onclick="switchView(\'inbox\')"><div class="quick-icon">📥</div><div class="quick-title">解析通知</div><div class="quick-desc">'+(appState.inbox.filter(n=>n.status==='unread').length)+' 份未读通知</div></div>';
-  html += '<div class="quick-action" onclick="loadSamplePack()"><div class="quick-icon">📦</div><div class="quick-title">加载示例</div><div class="quick-desc">一键体验完整流程</div></div>';
-  html += '</div>';
-  // Recent reminders
   html += '<div class="recent-section"><div class="section-head"><h3>最近提醒</h3><button class="btn btn-ghost btn-sm" onclick="switchView(\'reminders\')">查看全部 →</button></div>';
   var recent = all.slice(0,4);
   if (recent.length===0) {
-    html += '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">还没有提醒，去"Agent 对话"创建第一条，或加载示例通知包。</div><button class="btn btn-primary" onclick="loadSamplePack()">📦 加载示例通知包</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">还没有提醒</div><div style="display:flex;gap:8px;justify-content:center;"><button class="btn btn-primary" onclick="switchView(\'inbox\')">📥 导入通知</button><button class="btn btn-secondary" onclick="loadSamplePack()">📦 查看示例</button></div></div>';
   } else {
     html += '<div class="reminder-list">';
-    for (var i=0;i<recent.length;i++) html += renderReminderItem(recent[i]);
+    for (var k=0;k<recent.length;k++) html += renderReminderItem(recent[k]);
     html += '</div>';
   }
   html += '</div>';
-  // Risk preview
+  var high = all.filter(function(r){return r.riskLevel==='high' && daysUntil(r.date)<=3;});
   if (high.length>0) {
-    html += '<div class="recent-section mt-24"><div class="section-head"><h3>⚠️ 高风险事项</h3><button class="btn btn-ghost btn-sm" onclick="switchView(\'risk\')">风险中心 →</button></div><div class="reminder-list">';
-    for (var j=0;j<Math.min(high.length,3);j++) html += renderReminderItem(high[j]);
+    html += '<div class="recent-section mt-24"><div class="section-head"><h3>⚠️ 待处理优先级</h3><button class="btn btn-ghost btn-sm" onclick="switchView(\'reminders\')">查看全部 →</button></div><div class="reminder-list">';
+    for (var m=0;m<Math.min(high.length,3);m++) html += renderReminderItem(high[m]);
     html += '</div></div>';
   }
   html += '</div>';
   return html;
+}
+function addQuickReminder() {
+  switchView('chat');
+  setTimeout(function(){
+    var inp = document.getElementById('chatInput');
+    if (inp) { inp.focus(); inp.placeholder = '输入事项，如"明天下午3点开班会"'; }
+  }, 100);
+}
+function organizeMyDay() {
+  var all = appState.reminders.filter(function(r){return !appState.completedIds.includes(r.id);});
+  var today = all.filter(function(r){return daysUntil(r.date)===0;});
+  var overdue = all.filter(function(r){return daysUntil(r.date)<0;});
+  var upcoming = all.filter(function(r){var d=daysUntil(r.date);return d>0&&d<=3;});
+  var msg = '我来帮你整理一下：\n\n';
+  if (overdue.length>0) msg += '🚨 已逾期 '+overdue.length+' 项，请尽快处理\n';
+  if (today.length>0) msg += '📌 今天有 '+today.length+' 项安排\n';
+  if (upcoming.length>0) msg += '⏰ 未来3天有 '+upcoming.length+' 项\n';
+  if (all.length===0) msg += '目前没有提醒，可以导入通知或添加新事项。';
+  else msg += '\n切换到"日程"查看详细时间线。';
+  appState.chatMessages.push({role:'agent',text:msg});
+  switchView('chat');
 }
 
 function renderReminderItem(r) {
@@ -1923,13 +2283,14 @@ function renderChat() {
   var active = appState.activeView==='chat'?' active':'';
   var msgs = appState.chatMessages;
   var html = '<div class="view'+active+'" id="view-chat">';
-  html += '<div class="view-header"><div class="view-title">和 Agent 对话</div><div class="view-subtitle">语音或文字描述事项，Agent 自动识别时间、场景并生成提醒草稿</div></div>';
-  html += '<div class="card-glass chat-layout"><div class="chat-messages" id="chatMessages">';
+  html += '<div class="view-header"><div class="view-title">任务处理助手</div></div>';
+  html += '<div class="card-glass chat-layout">';
+  html += '<div class="chat-intro">告诉我你的事项，我会帮你整理成提醒。支持自然语言，例如：明天下午3点在B205开班会。</div>';
+  html += '<div class="chat-messages" id="chatMessages">';
   if (msgs.length===0) {
     html += '<div class="msg agent"><div class="msg-avatar">✦</div><div class="msg-bubble">';
-    html += '你好！我是 Memorial day AI 时间整理 Agent 👋<br><br>试着对我说：<br>';
-    html += '• 明天下午三点开班会<br>• 下周三交创新创业材料<br>• 7月5日考试<br>• 妈妈生日还有20天<br><br>';
-    html += '或者点击下方快捷短语试试。';
+    html += '你好！告诉我你要处理的事项吧。<br><br>例如：<br>';
+    html += '• 明天下午3点开班会<br>• 下周三交项目材料<br>• 7月10日考试<br>• 妈妈生日还有20天';
     html += '</div></div>';
   } else {
     for (var i=0;i<msgs.length;i++) {
@@ -1953,12 +2314,16 @@ function renderChat() {
   }
   html += '</div>';
   html += '<div class="chat-quick">';
-  var quickPhrases = ['明天下午三点开班会','下周三交材料','7月5日考试','妈妈生日还有20天','下个月底还房租'];
-  for (var q=0;q<quickPhrases.length;q++) html += '<button class="quick-chip" onclick="sendChatText(\''+quickPhrases[q]+'\')">'+quickPhrases[q]+'</button>';
-  html += '<button class="quick-chip" onclick="clearChat()">🗑 清空对话</button>';
+  html += '<button class="quick-chip" onclick="organizeMyDay()">整理今天安排</button>';
+  html += '<button class="quick-chip" onclick="addQuickReminder()">添加一条提醒</button>';
+  html += '<button class="quick-chip" onclick="switchView(\'inbox\')">导入通知</button>';
+  html += '<button class="quick-chip" onclick="sendChatText(\'查看即将截止\')">查看即将截止</button>';
+  html += '<button class="quick-chip" onclick="clearChat()">🗑 清空</button>';
   html += '</div>';
-  html += '<div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="告诉 Agent 你的事项..." rows="1" oninput="autoResizeChat(this)"></textarea><div class="chat-tools"><button class="mic-btn" id="chatMicBtn" onclick="toggleChatVoice(event)" title="语音输入">🎤</button><button class="send-btn" onclick="sendChat()">➤</button></div></div>';
-  html += '<div class="chat-hint">本地规则 + AI 流程模拟 · 语音识别依赖浏览器 Web Speech API</div>';
+  var micTitle = voiceSupported ? '语音输入（需要麦克风权限，推荐 Chrome/Edge + HTTPS）' : '当前浏览器暂不支持语音识别，请使用文字输入（推荐 Chrome/Edge 并使用 HTTPS）';
+  var micCls = voiceSupported ? '' : ' disabled';
+  html += '<div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="输入事项..." rows="1" oninput="autoResizeChat(this)"></textarea><div class="chat-tools"><button class="mic-btn'+micCls+'" id="chatMicBtn" onclick="toggleChatVoice(event)" title="'+micTitle+'" aria-label="语音输入">🎤</button><button class="send-btn" onclick="sendChat()" title="发送">➤</button></div></div>';
+  html += '<div class="chat-hint">本地规则解析 · 语音依赖浏览器 Web Speech API（推荐 Chrome/Edge + HTTPS）</div>';
   html += '</div></div>';
   return html;
 }
@@ -1984,11 +2349,11 @@ function sendChat() {
     source:'Agent 对话', sourceText:reply.parsed.sourceText
   } : null };
   appState.chatMessages.push(msg);
-  setStatus('busy','Agent 正在思考...');
+  setStatus('busy','处理中...');
   setTimeout(function(){
     renderApp();
     scrollChatToBottom();
-    setStatus('ready','Agent 已就绪');
+    setStatus('ready','已就绪');
   }, 400);
 }
 function clearChat() {
@@ -2007,44 +2372,100 @@ function saveChatDraft(msgIdx) {
 function scrollChatToBottom() {
   var el = document.getElementById('chatMessages'); if (el) el.scrollTop = el.scrollHeight;
 }
+function setupMicButton() {
+  var btn = document.getElementById('chatMicBtn');
+  if (!btn) return;
+  if (!voiceSupported) {
+    btn.classList.add('disabled');
+    btn.disabled = true;
+    btn.title = '当前浏览器暂不支持语音识别，请使用文字输入（推荐 Chrome/Edge 并使用 HTTPS）';
+  } else {
+    btn.classList.remove('disabled');
+    btn.disabled = false;
+  }
+}
 function resetVoiceState() {
   voiceListening = false;
   var btn = document.getElementById('chatMicBtn');
-  if (btn) { btn.classList.remove('listening'); btn.disabled = false; }
+  if (btn) {
+    btn.classList.remove('listening');
+    btn.disabled = !voiceSupported;
+    if (!voiceSupported) btn.classList.add('disabled');
+    else btn.classList.remove('disabled');
+    btn.setAttribute('aria-label', '语音输入');
+    var existing = btn.querySelector('.voice-interim');
+    if (existing) existing.remove();
+  }
+  var inp = document.getElementById('chatInput');
+  if (inp) inp.placeholder = '输入事项...';
 }
 function toggleChatVoice(e) {
   if (e) e.preventDefault();
-  if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-    showToast('⚠️','当前浏览器不支持语音识别，请使用 Chrome/Edge 或直接文字输入');
-    resetVoiceState();
+  if (!voiceSupported) {
+    showToast('⚠️','当前浏览器暂不支持语音识别，请使用文字输入。推荐使用 Chrome/Edge 并通过 HTTPS 访问（公网链接已支持 HTTPS）。');
     return;
   }
   var btn = document.getElementById('chatMicBtn');
   if (!btn) return;
+  if (voiceListening) {
+    try { voiceRecognition.stop(); } catch(err) {}
+    resetVoiceState();
+    return;
+  }
   if (!voiceRecognition) {
     try {
       var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       voiceRecognition = new SR();
       voiceRecognition.lang = 'zh-CN';
       voiceRecognition.continuous = false;
-      voiceRecognition.interimResults = false;
+      voiceRecognition.interimResults = true;
+      voiceRecognition.onstart = function() {
+        voiceListening = true;
+        var b = document.getElementById('chatMicBtn');
+        if (b) { b.classList.add('listening'); b.setAttribute('aria-label','正在聆听...'); }
+        var inp = document.getElementById('chatInput');
+        if (inp) inp.placeholder = '正在聆听，请说话...';
+      };
       voiceRecognition.onresult = function(ev) {
-        try {
-          var text = ev.results[0][0].transcript;
-          var inp = document.getElementById('chatInput');
-          if (inp) { inp.value = text; inp.focus(); autoResizeChat(inp); }
-        } catch(err) {}
+        var finalTranscript = '';
+        var interimTranscript = '';
+        for (var i = ev.resultIndex; i < ev.results.length; i++) {
+          if (ev.results[i].isFinal) {
+            finalTranscript += ev.results[i][0].transcript;
+          } else {
+            interimTranscript += ev.results[i][0].transcript;
+          }
+        }
+        var inp = document.getElementById('chatInput');
+        if (inp && finalTranscript) {
+          var cur = inp.value;
+          inp.value = (cur ? cur + ' ' : '') + finalTranscript;
+          inp.focus();
+          autoResizeChat(inp);
+        }
+        var b = document.getElementById('chatMicBtn');
+        if (b) {
+          var oldInterim = b.querySelector('.voice-interim');
+          if (oldInterim) oldInterim.remove();
+          if (interimTranscript) {
+            var inter = document.createElement('span');
+            inter.className = 'voice-interim';
+            inter.textContent = interimTranscript;
+            b.appendChild(inter);
+          }
+        }
       };
       voiceRecognition.onend = function() { resetVoiceState(); };
       voiceRecognition.onerror = function(ev) {
         resetVoiceState();
-        var errMsg = '语音识别未启动';
+        var errMsg = '语音识别出错';
         if (ev && ev.error) {
-          if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') errMsg = '麦克风权限被拒绝，请使用文字输入';
-          else if (ev.error === 'no-speech') errMsg = '未检测到语音，请靠近麦克风再试';
-          else if (ev.error === 'network') errMsg = '语音服务网络不可用，请使用文字输入';
+          if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') errMsg = '麦克风权限未开启，请允许浏览器访问麦克风，或改用文字输入。';
+          else if (ev.error === 'no-speech') errMsg = '未检测到语音，请靠近麦克风再试。';
+          else if (ev.error === 'network') errMsg = '语音识别需要网络连接，请检查网络。';
+          else errMsg = '语音识别出错：' + ev.error;
         }
-        showToast('🎤', errMsg);
+        showToast('⚠️', errMsg);
       };
     } catch(err) {
       resetVoiceState();
@@ -2052,27 +2473,24 @@ function toggleChatVoice(e) {
       return;
     }
   }
-  if (voiceListening) {
-    try { voiceRecognition.stop(); } catch(err) {}
+  try {
+    voiceRecognition.start();
+    voiceListening = true;
+    btn.classList.add('listening');
+    btn.setAttribute('aria-label','正在聆听...');
+    var inp = document.getElementById('chatInput');
+    if (inp) inp.placeholder = '正在聆听，请说话...';
+  } catch(err) {
+    try { voiceRecognition.stop(); } catch(e) {}
     resetVoiceState();
-  } else {
-    try {
-      voiceRecognition.start();
-      voiceListening = true;
-      btn.classList.add('listening');
-    } catch(err) {
-      // If start fails because recognition is already started, stop then restart
-      try { voiceRecognition.stop(); } catch(e) {}
-      resetVoiceState();
-      setTimeout(function(){
-        try {
-          voiceRecognition.start();
-          voiceListening = true;
-          var b2 = document.getElementById('chatMicBtn');
-          if (b2) b2.classList.add('listening');
-        } catch(e2) { resetVoiceState(); }
-      }, 200);
-    }
+    setTimeout(function(){
+      try {
+        voiceRecognition.start();
+        voiceListening = true;
+        var b2 = document.getElementById('chatMicBtn');
+        if (b2) { b2.classList.add('listening'); b2.setAttribute('aria-label','正在聆听...'); }
+      } catch(e2) { resetVoiceState(); }
+    }, 200);
   }
 }
 
@@ -2095,8 +2513,8 @@ function renderInbox() {
   html += '<textarea class="textarea" id="inboxPasteText" placeholder="粘贴辅导员通知 / 班级通知文本..." style="min-height:68px;font-size:12px;resize:vertical;"></textarea>';
   html += '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">';
   html += '<span style="font-size:12px;color:var(--text-secondary);white-space:nowrap;">我是：</span>';
-  html += '<input type="text" class="input" id="inboxIdentityInput2" value="'+esc(appState.identity||'智能网联2301 · 3班')+'" placeholder="如：3班" style="flex:1;min-width:100px;font-size:12px;padding:6px 10px;">';
-  html += '<button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="parsePastedText(true)">解析与我相关的提醒</button>';
+  html += '<input type="text" class="input" id="inboxIdentityInput2" value="'+esc(appState.identity||'学生')+'" placeholder="如：学生、3班" style="flex:1;min-width:100px;font-size:12px;padding:6px 10px;">';
+  html += '<button class="btn btn-primary" style="white-space:nowrap;" onclick="parsePastedText(true)">解析与我相关的提醒</button>';
   html += '</div>';
   html += '<div style="font-size:10px;color:var(--accent-amber);line-height:1.5;">TXT 文件真实读取；当前初赛版本建议复制文本或上传 TXT，PDF/DOCX 深度解析将在复赛完善。</div>';
   html += '</div>';
@@ -2142,7 +2560,7 @@ function renderInboxDetail(n) {
   html += '</div></div>';
   html += '<div class="inbox-detail-body">'+esc(n.body)+'</div>';
   // Identity bar
-  html += '<div class="identity-bar"><label>我是：</label><input type="text" class="input" id="inboxIdentityInput" value="'+esc(appState.identity||'3班')+'" placeholder="如：3班、智能网联2301、A组" style="max-width:180px;"><button class="btn btn-primary btn-sm" onclick="parseInboxNotice()">AI 提取我的提醒</button></div>';
+  html += '<div class="identity-bar"><label>我是：</label><input type="text" class="input" id="inboxIdentityInput" value="'+esc(appState.identity||'学生')+'" placeholder="如：学生、3班、A组" style="max-width:180px;"><button class="btn btn-primary btn-sm" onclick="parseInboxNotice()">AI 提取我的提醒</button></div>';
   // Upload / paste zone
   html += '<details style="margin-bottom:14px;"><summary style="cursor:pointer;font-size:12px;color:var(--text-secondary);font-weight:600;">或粘贴通知文本解析 ▾</summary><div style="margin-top:8px;"><textarea class="textarea" id="inboxPasteText" placeholder="粘贴通知文本..." style="min-height:80px;"></textarea><button class="btn btn-secondary btn-sm mt-8" onclick="parsePastedText()">解析粘贴文本</button></div></details>';
   // Drafts
@@ -2159,7 +2577,7 @@ function renderInboxDetail(n) {
     html += '</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">';
     html += '<button class="btn btn-sm btn-secondary" onclick="selectAllInboxDrafts(true)">全选相关</button>';
     html += '<button class="btn btn-sm btn-secondary" onclick="selectAllInboxDrafts(false)">取消全选</button>';
-    html += '<button class="btn btn-sm btn-moss" onclick="saveInboxDrafts(\''+n.id+'\')">✓ 加入我的提醒</button>';
+    html += '<button class="btn btn-moss" onclick="saveInboxDrafts(\''+n.id+'\')" style="flex:1;min-height:40px;">✓ 加入我的提醒</button>';
     html += '<button class="btn btn-sm btn-ghost" onclick="copyInboxDraftsJson()">📋 复制JSON</button>';
     html += '</div></div>';
   }
@@ -2348,8 +2766,11 @@ function renderSchedule() {
       var key = keys[k];
       var label = key;
       var dd = daysUntil(key);
-      if (dd===0) label += ' (今天)'; else if (dd===1) label += ' (明天)'; else if (dd>=0) label += ' ('+dd+'天后)';
-      html += '<div class="timeline-group"><div class="timeline-date">'+esc(label)+'</div>';
+      var tagHtml = '';
+      if (dd===0) tagHtml = '<span class="timeline-date-tag">今天</span>';
+      else if (dd===1) tagHtml = '<span class="timeline-date-tag">明天</span>';
+      else if (dd>=0 && dd<=7) tagHtml = '<span class="timeline-date-tag">'+dd+'天后</span>';
+      html += '<div class="timeline-group"><div class="timeline-date">'+esc(key)+tagHtml+'</div>';
       for (var m=0;m<groups[key].length;m++) {
         var r = groups[key][m];
         var riskCls = r.riskLevel==='high'?'border-left:3px solid var(--accent-red);':r.riskLevel==='mid'?'border-left:3px solid var(--accent-amber);':'border-left:3px solid var(--accent-blue);';
@@ -2395,7 +2816,7 @@ function renderRisk() {
   var active = appState.activeView==='risk'?' active':'';
   var risks = computeRisks();
   var html = '<div class="view'+active+'" id="view-risk">';
-  html += '<div class="view-header"><div class="view-title">风险中心</div><div class="view-subtitle">Agent 自动分析你的提醒风险</div></div>';
+  html += '<div class="view-header"><div class="view-title">待处理优先级</div><div class="view-subtitle">按优先级排列待处理事项</div></div>';
   html += '<div class="risk-overview">';
   html += '<div class="stat-card danger"><div class="stat-num">'+risks.overdue.length+'</div><div class="stat-label">已逾期</div></div>';
   html += '<div class="stat-card warning"><div class="stat-num">'+risks.today.length+'</div><div class="stat-label">今天事项</div></div>';
@@ -2473,42 +2894,35 @@ function renderTimeCard() {
   return html;
 }
 
-// ---------- Platform ----------
-function renderPlatform() {
-  var active = appState.activeView==='platform'?' active':'';
-  var html = '<div class="view'+active+'" id="view-platform">';
-  html += '<div class="view-header"><div class="view-title">跨平台使用说明</div><div class="view-subtitle">清楚说明各平台可用能力，不夸大跨端能力</div></div>';
+// ---------- About ----------
+function renderAbout() {
+  var active = appState.activeView==='about'?' active':'';
+  var html = '<div class="view'+active+'" id="view-about">';
+  html += '<div class="view-header"><div class="view-title">关于</div><div class="view-subtitle">Memorial day · 任务处理助手</div></div>';
+  html += '<div class="card"><h3 style="font-size:14px;font-weight:700;margin-bottom:10px;">📱 跨平台使用</h3>';
   html += '<div class="platform-grid">';
-  html += '<div class="platform-card"><h3>📱 华为 / 鸿蒙手机 <span class="platform-badge badge-native">原生App</span></h3><ul><li>可运行 HarmonyOS 原生 App（ArkTS/ArkUI 开发）</li><li>可使用桌面 Widget 卡片和系统提醒能力</li><li>支持分布式数据同步等 HarmonyOS 原生能力</li><li>Web/PWA 也可作为轻量体验入口</li></ul></div>';
-  html += '<div class="platform-card"><h3>🍎 苹果手机 iPhone <span class="platform-badge badge-pwa">PWA</span> <span class="platform-badge badge-limit">限制说明</span></h3><ul><li>不能直接运行 HarmonyOS HAP 安装包</li><li>可通过 Safari 浏览器打开 Web/PWA 版本体验</li><li>可"添加到主屏幕"获得类 App 图标</li><li>原生 iOS App 不在初赛范围内</li></ul></div>';
-  html += '<div class="platform-card"><h3>💻 安卓手机 / 电脑 <span class="platform-badge badge-pwa">Web/PWA</span></h3><ul><li>通过 Chrome/Edge 等现代浏览器打开 Web Demo</li><li>可部署为静态网页，任意静态服务器即可托管</li><li>支持 PWA 体验（添加到桌面、离线可用）</li><li>推荐桌面端 Chrome、移动端 Chrome/Edge</li></ul></div>';
-  html += '<div class="platform-card"><h3>⌚ Watch / 手表 <span class="platform-badge badge-mock">Mock 展示</span></h3><ul><li>当前 Web Demo 中 Watch 为形态 Mock 展示</li><li>不是原生 Watch App</li><li>Watch 原生适配在后续规划中，不在初赛交付范围</li></ul></div>';
-  html += '</div>';
-  html += '<div class="card mt-24" style="background:rgba(217,119,6,0.06);border-color:rgba(217,119,6,0.2);"><div style="font-size:12px;color:var(--accent-amber);line-height:1.8;font-weight:600;margin-bottom:6px;">⚠️ 诚实声明</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">当前 Web Demo 使用本地规则 + 示例 AI 流程模拟，正式版可接入大模型增强复杂文档理解。TXT 文件读取真实可体验；PDF/DOCX 深度解析将在复赛完善。Watch 为 Mock 展示；iPhone 通过 Web/PWA 体验，不能直接运行 HAP。</div></div>';
-  html += '</div>';
-  return html;
-}
-
-// ---------- TRAE ----------
-function renderTrae() {
-  var active = appState.activeView==='trae'?' active':'';
-  var html = '<div class="view'+active+'" id="view-trae">';
-  html += '<div class="view-header"><div class="view-title">TRAE 创作过程</div><div class="view-subtitle">本作品由 TRAE AI IDE 从0到1辅助完成</div></div>';
-  html += '<div class="card"><p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">Memorial day 从 HarmonyOS 原生 App、Widget、本地 Agent、备份工具到 Web Demo，均由 TRAE 辅助完成。以下 Session ID 需在发布前据实补充：</p>';
-  html += '<div class="trae-session-list">';
-  html += '<div class="trae-session-item">需求分析 Session ID：[待补充]</div>';
-  html += '<div class="trae-session-item">HarmonyOS 原生开发 Session ID：[待补充]</div>';
-  html += '<div class="trae-session-item">Web Demo 开发 Session ID：[待补充]</div>';
-  html += '<div class="trae-session-item">AI 交互升级 Session ID：[待补充]</div>';
-  html += '<div class="trae-session-item">UI 打磨 Session ID：[待补充]</div>';
-  html += '<div class="trae-session-item">QA 验证 Session ID：[待补充]</div>';
+  html += '<div class="platform-card"><h3>💻 桌面/安卓 <span class="platform-badge badge-pwa">Web/PWA</span></h3><ul><li>Chrome/Edge 浏览器最佳体验</li><li>支持 PWA 添加到桌面、离线可用</li><li>语音识别需 HTTPS</li></ul></div>';
+  html += '<div class="platform-card"><h3>🍎 iPhone <span class="platform-badge badge-pwa">PWA</span><span class="platform-badge badge-limit">限制</span></h3><ul><li>通过 Safari 打开 Web/PWA 版本</li><li>可"添加到主屏幕"</li><li>原生 iOS App 不在本次范围</li></ul></div>';
+  html += '<div class="platform-card"><h3>⌚ Watch <span class="platform-badge badge-mock">规划中</span></h3><ul><li>Watch 端为后续规划</li><li>当前版本不包含原生 Watch App</li></ul></div>';
+  html += '<div class="platform-card"><h3>📱 HarmonyOS <span class="platform-badge badge-native">原生</span></h3><ul><li>可运行 HarmonyOS 原生 App</li><li>支持桌面卡片和系统提醒</li><li>Web/PWA 可作为轻量入口</li></ul></div>';
   html += '</div></div>';
-  html += '<div class="mt-24" style="display:flex;gap:10px;flex-wrap:wrap;">';
-  html += '<button class="btn btn-secondary" onclick="loadSamplePack()">📦 加载示例通知包</button>';
-  html += '<button class="btn btn-secondary" onclick="startGuidedTour()">▶️ 体验60秒流程</button>';
-  html += '<button class="btn btn-secondary" onclick="simulateNotification()">🔔 模拟到点提醒</button>';
-  html += '<button class="btn" style="background:var(--accent-red);color:#fff;" onclick="resetDemo()">🔄 重置 Demo</button>';
+  html += '<div class="card mt-16"><h3 style="font-size:14px;font-weight:700;margin-bottom:10px;">🛠️ 开发说明</h3>';
+  html += '<p style="font-size:12px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">Memorial day 从 HarmonyOS 原生 App、Widget、本地 Agent 到 Web Demo，均由 TRAE AI IDE 辅助开发。</p>';
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">';
+  html += '<button class="btn btn-secondary btn-sm" onclick="loadSamplePack()">📦 加载示例</button>';
+  html += '<button class="btn btn-secondary btn-sm" onclick="simulateNotification()">🔔 模拟提醒</button>';
+  html += '<button class="btn btn-sm" style="background:var(--accent-red);color:#fff;" onclick="resetDemo()">🔄 重置</button>';
   html += '</div></div>';
+  html += '<div class="about-honest">';
+  html += '<b>诚实说明：</b><br>';
+  html += '• 当前版本使用本地规则解析，未接入真实大模型 API<br>';
+  html += '• TXT 文件真实读取；PDF/DOCX 深度解析将在后续完善<br>';
+  html += '• 无真实用户数据，所有数据存储在浏览器 localStorage<br>';
+  html += '• 语音识别依赖浏览器 Web Speech API（推荐 Chrome/Edge + HTTPS）<br>';
+  html += '• Watch/原生 iOS 不在本次交付范围内<br>';
+  html += '• V3.0 · GitHub Auto Deploy';
+  html += '</div>';
+  html += '</div>';
   return html;
 }
 
@@ -2587,36 +3001,66 @@ function simulateNotification() {
 // ========== Welcome / Onboarding ==========
 function showWelcome() { document.getElementById('welcomeOverlay').style.display='flex'; }
 function hideWelcome() { document.getElementById('welcomeOverlay').style.display='none'; }
-function finishWelcome() {
+function getSelectedScenarioName() {
+  var s = selectedScenario || 'student';
+  var found = SCENARIOS.find(function(sc){return sc.id===s;});
+  var extra = '';
   var inp = document.getElementById('welcomeIdentityInput');
-  appState.identity = (inp && inp.value.trim()) ? inp.value.trim() : '智能网联2301 · 3班';
-  appState.onboarded = true;
-  seedDemoDataIfNeeded();
-  // If identity changed from default, update existing items relevance
-  hideWelcome(); renderApp();
-  showToast('👤','身份已设置为：'+appState.identity);
+  if (inp && inp.value.trim()) extra = ' · ' + inp.value.trim();
+  return (found ? found.name : '学生') + extra;
 }
-function startGuidedFromWelcome() {
-  var inp = document.getElementById('welcomeIdentityInput');
-  appState.identity = (inp && inp.value.trim()) ? inp.value.trim() : '智能网联2301 · 3班';
+function selectScenario(id) {
+  selectedScenario = id;
+  var chips = document.querySelectorAll('.scenario-chip');
+  for (var i=0;i<chips.length;i++) {
+    if (chips[i].getAttribute('data-scenario')===id) chips[i].classList.add('active');
+    else chips[i].classList.remove('active');
+  }
+}
+function enterWorkbench() {
+  appState.identity = getSelectedScenarioName();
+  appState.scenario = selectedScenario;
   appState.onboarded = true;
   seedDemoDataIfNeeded();
   hideWelcome();
-  startGuidedTour();
+  appState.activeView = 'dashboard';
+  saveState();
+  renderApp();
+  showToast('👤','身份：'+appState.identity);
+}
+function importNotices() {
+  appState.identity = getSelectedScenarioName();
+  appState.scenario = selectedScenario;
+  appState.onboarded = true;
+  seedDemoDataIfNeeded();
+  hideWelcome();
+  appState.activeView = 'inbox';
+  saveState();
+  renderApp();
+  setTimeout(function(){
+    var ta = document.getElementById('inboxPasteText');
+    if (ta) ta.focus();
+  }, 200);
+}
+function finishWelcome() {
+  enterWorkbench();
 }
 function loadSamplePackAndStart() {
-  loadSamplePack();
-  var inp = document.getElementById('welcomeIdentityInput');
-  appState.identity = (inp && inp.value.trim()) ? inp.value.trim() : '智能网联2301 · 3班';
+  appState.identity = getSelectedScenarioName();
+  appState.scenario = selectedScenario;
   appState.onboarded = true;
+  loadSamplePack();
   hideWelcome();
-  switchView('inbox');
+  appState.activeView = 'dashboard';
+  saveState();
+  renderApp();
+  showToast('📦','已加载示例数据');
 }
 
 // ========== Sample Pack & Reset ==========
 function loadSamplePack() {
   appState.inbox = SAMPLE_NOTICES.map(function(n){return {...n,status:'unread',parsedDrafts:[]};});
-  var sampleReminders = extractReminders(SAMPLE_NOTICES.map(n=>n.body).join('\n'), appState.identity||'3班', '示例通知包');
+  var sampleReminders = extractReminders(SAMPLE_NOTICES.map(n=>n.body).join('\n'), appState.identity||'学生', '示例通知包');
   // Add some sample personal reminders
   sampleReminders.push({
     id:uid(),title:'妈妈生日',date:(function(){var d=new Date();d.setDate(d.getDate()+20);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());})(),time:'',targetGroup:'家人',category:'生日',riskLevel:'low',reminderSuggestion:'提前准备礼物',preparation:'建议提前一周准备礼物和祝福。',source:'个人',sourceText:'妈妈生日还有20天',confidence:0.9
@@ -2627,7 +3071,7 @@ function loadSamplePack() {
   for (var j=0;j<appState.inbox.length;j++) appState.inbox[j].status='unread';
   activeInboxId = appState.inbox[0].id; inboxDrafts=[];
   setStatus('busy','正在加载示例...');
-  setTimeout(function(){ setStatus('ready','已加载示例通知包'); showToast('📦','已加载 '+appState.inbox.length+' 份示例通知和示例提醒'); renderApp(); },500);
+  setTimeout(function(){ setStatus('ready','已加载示例通知包'); showToast('📦','已加载示例数据'); renderApp(); },500);
 }
 function resetDemo() {
   if (!confirm('确定重置 Demo？这会清空所有提醒、对话和身份设置。')) return;
@@ -2639,14 +3083,22 @@ function resetDemo() {
   renderApp();
 }
 
-// ========== Guided Tour (60s flow) ==========
+// deprecated - guided tour removed in v3.0
 function startGuidedTour() {
-  if (!appState.identity) appState.identity='3班';
-  loadSamplePack();
-  switchView('dashboard');
-  showToast('▶️','60秒流程开始：先看工作台，然后会引导你依次体验');
-  // For simplicity, just give a hint
-  setTimeout(function(){ showToast('💡','打开"通知收件箱"查看示例通知，点击"AI 提取我的提醒"体验筛选'); },1500);
+  showToast('💡','可通过"导入通知"开始使用');
+}
+function applyTheme(theme) {
+  if (!theme) theme = (appState && appState.cardTheme) || 'exam';
+  appState.cardTheme = theme;
+  saveState();
+  renderApp();
+}
+function applyTimeCardTheme(theme) {
+  applyTheme(theme);
+}
+function renderWelcome() {
+  showWelcome();
+  return '';
 }
 
 // ========== Helpers ==========

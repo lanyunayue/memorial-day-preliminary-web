@@ -1,11 +1,12 @@
-/* Memorial day PWA Service Worker - v1 */
-const CACHE_VERSION = 'memorial-day-v1';
-const CACHE_NAME = CACHE_VERSION + '-' + Date.now();
+/* Memorial day PWA Service Worker - v3.0 */
+const CACHE_VERSION = 'memorial-day-preliminary-v3-0';
+const CACHE_NAME = CACHE_VERSION;
 
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './sw.js'
 ];
 
 // Install: cache core static assets
@@ -24,7 +25,7 @@ self.addEventListener('install', function(event) {
 
 // Activate: clean old caches
 self.addEventListener('activate', function(event) {
-  console.log('[SW] Activating');
+  console.log('[SW] Activating, claiming clients');
   event.waitUntil(
     caches.keys().then(function(keys) {
       return Promise.all(
@@ -41,54 +42,50 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-// Fetch: cache-first for same-origin GET requests only
+// Fetch strategy
 self.addEventListener('fetch', function(event) {
   var request = event.request;
-
-  // Only handle GET requests
   if (request.method !== 'GET') return;
-
-  // Only handle same-origin requests (no cross-origin)
   var url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-
-  // Skip browser-extension and non-http(s) requests
   if (!url.protocol.startsWith('http')) return;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).then(function(networkResponse) {
+        if (networkResponse && networkResponse.status === 200) {
+          var copy = networkResponse.clone();
+          caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(request, copy);
+          });
+          return networkResponse;
+        }
+        return caches.match(request).then(function(cached) {
+          return cached || networkResponse;
+        });
+      }).catch(function() {
+        return caches.match(request).then(function(cached) {
+          return cached || caches.match('./index.html');
+        });
+      })
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(request).then(function(cachedResponse) {
-      if (cachedResponse) {
-        // Return cached response, update cache in background
-        fetch(request).then(function(networkResponse) {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then(function(cache) {
-              cache.put(request, networkResponse.clone());
-            });
-          }
-        }).catch(function() {
-          // Offline, keep using cache
-        });
-        return cachedResponse;
-      }
-
-      // Not in cache, fetch from network
-      return fetch(request).then(function(networkResponse) {
-        if (!networkResponse || networkResponse.status !== 200) {
-          return networkResponse;
+      var fetchPromise = fetch(request).then(function(networkResponse) {
+        if (networkResponse && networkResponse.status === 200) {
+          var copy = networkResponse.clone();
+          caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(request, copy);
+          });
         }
-        // Cache the fresh response
-        var responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then(function(cache) {
-          cache.put(request, responseToCache);
-        });
         return networkResponse;
       }).catch(function() {
-        // Offline and not cached - return a basic fallback for navigation
-        if (request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-        return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+        return cachedResponse;
       });
+      return cachedResponse || fetchPromise;
     })
   );
 });

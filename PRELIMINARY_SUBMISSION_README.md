@@ -18,6 +18,8 @@
 - `manifest.json`
 - `sw.js`
 - `README.md`（可选）
+- `.nojekyll`（GitHub Pages 需要）
+- `PRELIMINARY_SUBMISSION_README.md`（可选）
 
 支持的托管平台包括但不限于：
 - GitHub Pages
@@ -25,6 +27,8 @@
 - Netlify
 - Nginx
 - 阿里云 OSS / 腾讯云 COS 等对象存储
+
+> **当前公网部署方式**：公网体验链接 https://memorialdaylan.netlify.app/ 通过 GitHub 持续部署自动更新。源码仓库：`github.com/lanyunayue/memorial-day-preliminary-web`。本地修改后同步到 `dist/memorial-day-preliminary-web/`，通过 GitHub Desktop Commit + Push origin，Netlify 自动部署。Zip 包仅作为比赛附件/离线备份使用。
 
 > 注意：部署时请确保 `manifest.json` 和 `sw.js` 与 `index.html` 位于同一目录，或正确配置 PWA 相关路径。
 
