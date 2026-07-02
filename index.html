@@ -120,7 +120,7 @@ ul, ol { list-style: none; }
   color: var(--accent-deep);
   font-weight: 600;
 }
-.nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-icon { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; font-weight: 700; opacity: 0.7; }
 .nav-badge {
   margin-left: auto;
   background: var(--danger);
@@ -204,6 +204,21 @@ ul, ol { list-style: none; }
   white-space: nowrap;
 }
 .topbar-action:hover { border-color: var(--accent); color: var(--accent); }
+.topbar-action-icon {
+  width: 30px; height: 30px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: all 0.12s;
+}
+.topbar-action-icon:hover { background: var(--bg-hover); color: var(--accent); }
+.topbar-version-dot {
+  font-size: 10px;
+  color: var(--text-muted);
+  opacity: 0.6;
+  padding: 0 2px;
+}
 .topbar-chip {
   font-size: 11px;
   padding: 3px 10px;
@@ -392,6 +407,28 @@ ul, ol { list-style: none; }
 .quick-add-btn.mic:hover { background: var(--accent-soft); color: var(--accent); }
 .quick-add-btn.mic.listening { background: var(--danger); color: #fff; animation: pulseMic 1.2s infinite; }
 .quick-add-btn.mic.disabled { opacity: 0.4; cursor: not-allowed; }
+.voice-listening-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--danger);
+  margin-left: 4px;
+}
+.voice-pulse-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: pulseDot 1s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+.upload-btn-label.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
 @keyframes pulseMic { 0%,100%{opacity:1;}50%{opacity:0.6;} }
 .quick-add-btn.import {
   background: transparent;
@@ -681,6 +718,8 @@ ul, ol { list-style: none; }
   background: var(--bg);
   outline: none;
   color: var(--text-secondary);
+  flex: 1 1 60px;
+  min-width: 0;
 }
 .inbox-draft-actions-sticky {
   position: sticky;
@@ -697,6 +736,13 @@ ul, ol { list-style: none; }
 .upload-status { margin-top: 8px; font-size: 12px; padding: 8px 12px; border-radius: var(--radius-md); line-height: 1.5; }
 .upload-status.ok { color: var(--success); background: var(--success-soft); }
 .upload-status.warn { color: var(--warning); background: var(--warning-soft); }
+.inbox-hint-text {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
 
 /* Inbox history (collapsed) */
 .inbox-history {
@@ -853,6 +899,9 @@ ul, ol { list-style: none; }
 .me-section {
   margin-bottom: 20px;
 }
+.me-advanced summary::-webkit-details-marker { display: none; }
+.me-advanced-summary { user-select: none; }
+.me-advanced-summary:hover { color: var(--text-secondary); }
 .me-section-title {
   font-size: 11px;
   font-weight: 700;
@@ -1194,7 +1243,7 @@ ul, ol { list-style: none; }
     background: none;
   }
   .tab-item.active { color: var(--accent); font-weight: 600; }
-  .tab-icon { font-size: 20px; line-height: 1; }
+  .tab-icon { font-size: 15px; line-height: 1; font-weight: 700; opacity: 0.8; }
   .view-container { padding: 16px; padding-bottom: calc(var(--bottomtab-h) + var(--safe-bottom) + 20px); }
   .drawer { width: 100%; max-width: 100%; }
   .toast-container { top: 56px; right: 12px; left: 12px; }
@@ -1222,36 +1271,89 @@ ul, ol { list-style: none; }
     padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   }
   .quick-add { padding: 10px; }
-  .quick-add-row { flex-wrap: wrap; }
-  .quick-add-input { width: 100%; flex: 1 1 100%; height: 44px; }
-  .quick-add-actions { width: 100%; justify-content: stretch; }
-  .quick-add-btn { flex: 1; justify-content: center; }
-  .quick-add-btn.mic { flex: 0 0 44px; }
+  .quick-add-row { flex-wrap: wrap; gap: 6px; }
+  .quick-add-input { width: 100%; flex: 1 1 100%; height: 42px; font-size: 14px; }
+  .quick-add-actions { width: 100%; justify-content: stretch; gap: 6px; }
+  .quick-add-btn { flex: 1; justify-content: center; padding: 0 8px; font-size: 13px; min-height: 36px; }
+  .quick-add-btn.mic { flex: 0 0 40px; font-size: 16px; }
+  .quick-add-btn.import { flex: 0 0 auto; padding: 0 12px; }
   .toast-container {
     bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 8px);
     top: auto;
     left: 12px; right: 12px;
   }
   .drawer { width: 100vw !important; max-width: 100vw; right: 0; }
-  .btn { min-height: 44px; white-space: nowrap; font-size: 14px; }
+  .btn { min-height: 40px; white-space: nowrap; font-size: 14px; }
   .btn-sm { min-height: 32px; font-size: 12px; }
-  .topbar { padding: 0 12px; gap: 8px; }
+  .topbar { padding: 0 12px; gap: 6px; }
   .topbar-chip { display: none; }
+  .topbar-action-icon { width: 28px; height: 28px; font-size: 13px; }
   .task-item { padding: 10px; min-height: 44px; }
   .inbox-draft-actions-sticky { flex-direction: column; }
   .inbox-draft-actions-sticky .btn { width: 100%; }
-  .paste-actions { flex-direction: column; align-items: stretch; }
+  .inbox-draft-meta { flex-wrap: wrap; }
+  .inbox-draft-meta input, .inbox-draft-meta select { flex: 1 1 calc(50% - 6px); min-width: 0; }
+  .paste-actions { flex-direction: column; align-items: stretch; gap: 6px; }
   .paste-actions .btn, .paste-actions .upload-btn-label { justify-content: center; width: 100%; }
-  .welcome-card { width: calc(100vw - 24px); max-width: calc(100vw - 24px); padding: 22px 18px; }
+  .welcome-card { width: calc(100vw - 24px); max-width: calc(100vw - 24px); padding: 20px 16px; }
   .welcome-title { font-size: 20px; }
-  .scenario-chips { grid-template-columns: repeat(2, 1fr); }
+  .scenario-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .scenario-chip { flex: 1 1 calc(33% - 6px); font-size: 12px; padding: 8px 4px; }
   .filter-bar { gap: 4px; }
   .filter-chip { padding: 5px 10px; font-size: 11px; }
-  .cal-tabs { width: 100%; overflow-x: auto; }
-  body { font-size: 13px; }
+  .cal-tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cal-tabs::-webkit-scrollbar { display: none; }
+  .cal-tab { white-space: nowrap; padding: 6px 12px; font-size: 12px; }
+  body { font-size: 14px; }
+}
+
+/* ========== Responsive: Small mobile (<=380px) ========== */
+@media (max-width: 380px) {
+  .view-container { padding: 10px; padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
+  .quick-add { padding: 8px; }
+  .quick-add-btn { font-size: 12px; padding: 0 6px; min-height: 34px; }
+  .quick-add-btn.import { padding: 0 8px; }
+  .quick-add-btn.mic { flex: 0 0 36px; }
+  .welcome-card { padding: 18px 14px; }
+  .welcome-title { font-size: 18px; }
+  .scenario-chip { flex: 1 1 calc(50% - 6px); font-size: 12px; }
+  .greeting { font-size: 12px; }
+  .section-title { font-size: 13px; }
+  .task-item { padding: 8px; }
+  .cal-tab { padding: 5px 10px; font-size: 11px; }
+  .inbox-draft-meta input, .inbox-draft-meta select { flex: 1 1 100%; font-size: 12px; }
+  .tab-item { font-size: 9px; }
+  .tab-icon { font-size: 18px; }
 }
 
 ::selection { background: var(--accent-soft); }
+
+/* ========== Custom Confirm Modal ========== */
+.confirm-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.15s ease;
+}
+.confirm-box {
+  background: var(--bg-paper);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  animation: welcomeIn 0.2s cubic-bezier(0.16,1,0.3,1);
+}
+.confirm-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.confirm-msg { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 18px; }
+.confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.confirm-actions .btn { min-height: 36px; padding: 0 16px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -1286,7 +1388,8 @@ ul, ol { list-style: none; }
       <div class="topbar-spacer"></div>
       <div class="topbar-chip" id="topbarScenario">学生</div>
       <div class="topbar-chip" id="topbarCount" style="background:var(--success-soft);color:var(--success);">0</div>
-      <button class="topbar-action" onclick="simulateNotification()" title="模拟页面内提醒">模拟提醒</button>
+      <button class="topbar-action-icon" onclick="simulateNotification()" title="测试通知">🔔</button>
+      <span class="topbar-version-dot">v4.0</span>
     </header>
 
     <!-- Views Container -->
@@ -1327,7 +1430,7 @@ ul, ol { list-style: none; }
       <input type="text" class="input" id="welcomeExtraInput" placeholder="如：3班、产品组（选填）">
     </div>
     <button class="welcome-btn" onclick="finishOnboarding()">开始使用</button>
-    <div class="welcome-footer">V4.0 · GitHub Auto Deploy<br>本地规则解析 · TXT 真实读取</div>
+    <div class="welcome-footer">V4.0<br>本地规则解析 · TXT 真实读取</div>
   </div>
 </div>
 
@@ -1335,18 +1438,18 @@ ul, ol { list-style: none; }
 // ========== App State ==========
 const STORAGE_KEY = 'memorial_day_app_state_v4';
 const NAV_ITEMS = [
-  { id: 'today', icon: '•', label: '今天' },
-  { id: 'inbox', icon: '⤓', label: '收集箱' },
-  { id: 'calendar', icon: '▦', label: '日历' },
-  { id: 'list', icon: '☰', label: '清单' },
-  { id: 'me', icon: '◉', label: '我的' }
+  { id: 'today', icon: '今', label: '今天' },
+  { id: 'inbox', icon: '箱', label: '收集箱' },
+  { id: 'calendar', icon: '历', label: '日历' },
+  { id: 'list', icon: '单', label: '清单' },
+  { id: 'me', icon: '我', label: '我的' }
 ];
 const BOTTOM_TABS = [
-  { id: 'today', icon: '•', label: '今天' },
-  { id: 'inbox', icon: '⤓', label: '收集箱' },
-  { id: 'calendar', icon: '▦', label: '日历' },
-  { id: 'list', icon: '☰', label: '清单' },
-  { id: 'me', icon: '◉', label: '我的' }
+  { id: 'today', icon: '今', label: '今天' },
+  { id: 'inbox', icon: '箱', label: '收集箱' },
+  { id: 'calendar', icon: '历', label: '日历' },
+  { id: 'list', icon: '单', label: '清单' },
+  { id: 'me', icon: '我', label: '我的' }
 ];
 
 const SCENARIOS = [
@@ -1413,7 +1516,7 @@ function defaultState() {
     identity: '学生',
     scenario: 'student',
     reminders: [],
-    inbox: SAMPLE_NOTICES.map(n => ({ ...n, status: 'unread' })),
+    inbox: [],
     activeView: 'today',
     selectedReminderId: null,
     completedIds: [],
@@ -1422,26 +1525,9 @@ function defaultState() {
 }
 
 function seedDemoDataIfNeeded() {
-  if (appState.reminders.length > 0) return;
-  var identity = appState.identity || '学生';
-  var sampleReminders = extractReminders(SAMPLE_NOTICES.slice(0,4).map(n=>n.body).join('\n'), identity, '示例数据');
-  // Birthday reminder
-  var bd = new Date(); bd.setDate(bd.getDate()+20);
-  sampleReminders.push({
-    id:uid(), title:'妈妈生日',
-    date:bd.getFullYear()+'-'+pad(bd.getMonth()+1)+'-'+pad(bd.getDate()),
-    time:'', targetGroup:'家人', category:'生日', riskLevel:'low',
-    reminderSuggestion:'提前准备礼物',
-    preparation:'建议提前一周准备礼物和祝福。',
-    source:'个人', sourceText:'妈妈生日还有20天', confidence:0.9
-  });
-  for (var i=0;i<sampleReminders.length;i++) {
-    if (sampleReminders[i].relevant !== false) {
-      var r = Object.assign({}, sampleReminders[i]);
-      delete r.relevant; delete r.selected;
-      appState.reminders.push(r);
-    }
-  }
+  // Deprecated: no longer auto-seed on first launch.
+  // Sample data is only loaded when user explicitly clicks "加载示例数据" (loadSamplePack).
+  return;
 }
 
 function loadState() {
@@ -1450,9 +1536,7 @@ function loadState() {
     if (raw) {
       var parsed = JSON.parse(raw);
       var merged = Object.assign(defaultState(), parsed);
-      if (!parsed.inbox || !parsed.inbox.length) {
-        merged.inbox = SAMPLE_NOTICES.map(n => ({...n, status:'unread'}));
-      }
+      if (!merged.inbox) merged.inbox = [];
       return merged;
     }
   } catch(e) {}
@@ -1769,9 +1853,6 @@ function renderNav() {
     }
     html += '<div class="nav-item'+active+'" onclick="switchView(\''+item.id+'\')"><span class="nav-icon">'+item.icon+'</span><span>'+item.label+'</span>'+badge+'</div>';
   }
-  html += '<div style="margin-top:auto;padding:6px 4px;display:flex;flex-direction:column;gap:4px;">';
-  html += '<button class="btn btn-sm btn-ghost w-full" onclick="loadSamplePack()" style="font-size:11px;min-height:28px;padding:4px 8px;color:var(--text-muted);">加载示例</button>';
-  html += '</div>';
   nav.innerHTML = html;
 }
 
@@ -1827,6 +1908,14 @@ function switchView(id) {
   var container = document.getElementById('viewContainer'); if (container) container.scrollTop = 0;
 }
 
+function switchViewAndFocus(id) {
+  switchView(id);
+  setTimeout(function(){
+    var inp = document.getElementById('quickAddInput');
+    if (inp) { inp.focus(); }
+  }, 100);
+}
+
 // ========== Today View ==========
 function getGreeting() {
   var now = new Date();
@@ -1870,6 +1959,7 @@ function renderToday() {
   html += '<div class="quick-add-actions">';
   var micCls = voiceSupported ? '' : ' disabled';
   var micTitle = voiceSupported ? '语音输入' : '当前浏览器不支持语音识别';
+  html += '<span class="voice-listening-hint" id="voiceListeningHint" style="display:none;"><span class="voice-pulse-dot"></span>聆听中</span>';
   html += '<button class="quick-add-btn mic'+micCls+'" id="quickMicBtn" onclick="toggleQuickVoice(event)" title="'+micTitle+'">🎤</button>';
   html += '<button class="quick-add-btn import" onclick="switchView(\'inbox\')">导入通知</button>';
   html += '<button class="quick-add-btn" style="background:var(--accent);color:#fff;" onclick="quickAddParse()">+ 添加</button>';
@@ -1886,7 +1976,7 @@ function renderToday() {
   var todayAll = overdue.concat(todayItems);
   html += '<div class="section-head"><div class="section-title">今天事项<span class="section-count">'+todayAll.length+'</span></div></div>';
   if (todayAll.length === 0) {
-    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天没有安排，在上方输入框快速添加一条吧</div></div>';
+    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天没有安排，在上方输入框添加第一条提醒</div><button class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:4px;">+ 快速添加</button></div>';
   } else {
     html += '<div class="task-list">';
     // Sort overdue by date (oldest first), then today by time
@@ -2128,6 +2218,10 @@ function resetVoiceState() {
     if (!voiceSupported) btn.classList.add('disabled');
     else btn.classList.remove('disabled');
   }
+  var hint = document.getElementById('voiceListeningHint');
+  if (hint) hint.style.display = 'none';
+  var inp = document.getElementById('quickAddInput');
+  if (inp) inp.placeholder = '把一句安排、通知内容或截止时间丢给我，例如：明天下午3点在B205开班会';
 }
 function toggleQuickVoice(e) {
   if (e) e.preventDefault();
@@ -2153,8 +2247,10 @@ function toggleQuickVoice(e) {
         voiceListening = true;
         var b = document.getElementById('quickMicBtn');
         if (b) b.classList.add('listening');
+        var hint = document.getElementById('voiceListeningHint');
+        if (hint) hint.style.display = 'inline-flex';
         var inp = document.getElementById('quickAddInput');
-        if (inp) inp.placeholder = '正在聆听...';
+        if (inp) inp.placeholder = '正在聆听...请说话';
       };
       voiceRecognition.onresult = function(ev) {
         var finalTranscript = '';
@@ -2202,14 +2298,11 @@ function renderInbox() {
   var active = appState.activeView==='inbox'?' active':'';
   var html = '<div class="view'+active+'" id="view-inbox">';
 
-  // Scenario selector
+  // Scenario indicator (read-only, uses global identity; change in Me page)
+  var scInbox = SCENARIOS.find(function(x){return x.id===appState.scenario;});
+  var scInboxName = scInbox ? scInbox.name : appState.identity;
   html += '<div class="inbox-scenario">';
-  html += '<span>我是：</span>';
-  html += '<select id="inboxScenarioSelect" onchange="changeInboxScenario(this.value)">';
-  for (var i=0;i<SCENARIOS.length;i++) {
-    html += '<option value="'+SCENARIOS[i].id+'"'+(appState.scenario===SCENARIOS[i].id?' selected':'')+'>'+SCENARIOS[i].name+'</option>';
-  }
-  html += '</select>';
+  html += '<span style="color:var(--text-muted);font-size:12px;">当前身份：<b style="color:var(--text-secondary);font-weight:500;">'+esc(scInboxName)+'</b>（可在「我的」页修改）</span>';
   html += '</div>';
 
   // Paste zone
@@ -2220,6 +2313,9 @@ function renderInbox() {
   html += '<button class="btn btn-primary" onclick="parseInboxText()" style="flex:1;justify-content:center;">解析与我有关的提醒</button>';
   html += '</div>';
   html += '<div id="inboxUploadStatus"></div>';
+  if (inboxDrafts.length === 0 && !inboxPastedText) {
+    html += '<div class="inbox-hint-text">粘贴通知文本或上传TXT文件，点击解析按钮提取提醒</div>';
+  }
   html += '</div>';
 
   // Drafts results
@@ -2266,10 +2362,10 @@ function renderInboxDraftItem(d, idx) {
   html += '<div class="inbox-draft-body">';
   html += '<input type="text" class="inbox-draft-title" value="'+esc(d.title)+'" onchange="inboxDrafts['+idx+'].title=this.value">';
   html += '<div class="inbox-draft-meta">';
-  html += '<input type="text" value="'+esc(d.date||'待设定')+'" placeholder="日期" onchange="inboxDrafts['+idx+'].date=this.value" style="width:90px;">';
-  html += '<input type="text" value="'+esc(d.time||'')+'" placeholder="时间" onchange="inboxDrafts['+idx+'].time=this.value" style="width:70px;">';
-  html += '<input type="text" value="'+esc(d.location||'')+'" placeholder="地点" onchange="inboxDrafts['+idx+'].location=this.value" style="width:70px;">';
-  html += '<select onchange="inboxDrafts['+idx+'].riskLevel=this.value" style="width:60px;">';
+  html += '<input type="text" value="'+esc(d.date||'待设定')+'" placeholder="日期" onchange="inboxDrafts['+idx+'].date=this.value">';
+  html += '<input type="text" value="'+esc(d.time||'')+'" placeholder="时间" onchange="inboxDrafts['+idx+'].time=this.value">';
+  html += '<input type="text" value="'+esc(d.location||'')+'" placeholder="地点" onchange="inboxDrafts['+idx+'].location=this.value">';
+  html += '<select onchange="inboxDrafts['+idx+'].riskLevel=this.value">';
   html += '<option value="high"'+(d.riskLevel==='high'?' selected':'')+'>高</option>';
   html += '<option value="mid"'+(d.riskLevel==='mid'?' selected':'')+'>中</option>';
   html += '<option value="low"'+(d.riskLevel==='low'?' selected':'')+'>普通</option>';
@@ -2382,6 +2478,18 @@ function bindFileUpload() {
 function readInboxFile(file) {
   var ext = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
   if (ext === '.txt' || file.type === 'text/plain' || ext === '') {
+    // Show loading state on upload label
+    var uploadLabels = document.querySelectorAll('.upload-btn-label');
+    var loadingLabel = null;
+    for (var li=0; li<uploadLabels.length; li++) {
+      if (uploadLabels[li].querySelector('input[type="file"]')) {
+        loadingLabel = uploadLabels[li];
+        loadingLabel.classList.add('loading');
+        loadingLabel.setAttribute('data-orig-text', loadingLabel.innerHTML);
+        loadingLabel.innerHTML = '⏳ 读取中...<input type="file" id="inboxFileInput" class="file-input-hidden" accept=".txt,text/plain">';
+        break;
+      }
+    }
     var reader = new FileReader();
     reader.onload = function(e) {
       var text = e.target.result;
@@ -2390,8 +2498,21 @@ function readInboxFile(file) {
       var us = document.getElementById('inboxUploadStatus');
       if (us) us.innerHTML = '<div class="upload-status ok">已读取 TXT：'+esc(file.name)+'（'+text.length+' 字），点击"解析与我有关的提醒"。</div>';
       showToast('✓','TXT 已读取：'+file.name);
+      // Restore label
+      if (loadingLabel) {
+        loadingLabel.classList.remove('loading');
+        loadingLabel.innerHTML = '📄 上传 TXT<input type="file" id="inboxFileInput" class="file-input-hidden" accept=".txt,text/plain">';
+        bindFileUpload();
+      }
     };
-    reader.onerror = function() { showToast('✗','文件读取失败'); };
+    reader.onerror = function() {
+      showToast('✗','文件读取失败');
+      if (loadingLabel) {
+        loadingLabel.classList.remove('loading');
+        loadingLabel.innerHTML = '📄 上传 TXT<input type="file" id="inboxFileInput" class="file-input-hidden" accept=".txt,text/plain">';
+        bindFileUpload();
+      }
+    };
     reader.readAsText(file, 'UTF-8');
   } else {
     var us = document.getElementById('inboxUploadStatus');
@@ -2438,7 +2559,7 @@ function renderCalendar() {
   });
 
   if (keys.length===0) {
-    html += '<div class="empty-state"><div class="empty-icon">▦</div><div class="empty-text">当前视图没有事项</div></div>';
+    html += '<div class="empty-state"><div class="empty-icon">▦</div><div class="empty-text">当前视图没有事项</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">去添加</button></div>';
   } else {
     html += '<div class="timeline">';
     for (var k=0;k<keys.length;k++) {
@@ -2510,7 +2631,7 @@ function renderList() {
   html += '</div>';
 
   if (filtered.length===0) {
-    html += '<div class="empty-state"><div class="empty-icon">☰</div><div class="empty-text">没有匹配的提醒</div></div>';
+    html += '<div class="empty-state"><div class="empty-icon">☰</div><div class="empty-text">没有匹配的提醒</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">+ 添加一条提醒</button></div>';
   } else {
     html += '<div class="reminder-list">';
     for (var j=0;j<filtered.length;j++) {
@@ -2558,9 +2679,15 @@ function renderMe() {
   html += '<div class="me-card">';
   html += '<div class="me-row"><span class="me-row-label">导出 JSON</span><span class="me-row-value"><button class="btn btn-sm btn-secondary" onclick="exportData()">导出</button></span></div>';
   html += '<div class="me-row"><span class="me-row-label">导入 JSON</span><span class="me-row-value"><label class="btn btn-sm btn-secondary" style="cursor:pointer;">导入<input type="file" accept=".json" class="file-input-hidden" onchange="importData(event)"></label></span></div>';
-  html += '<div class="me-row"><span class="me-row-label">加载示例数据</span><span class="me-row-value"><button class="btn btn-sm btn-secondary" onclick="loadSamplePack()">加载</button></span></div>';
-  html += '<div class="me-row"><span class="me-row-label">重置 Demo</span><span class="me-row-value"><button class="btn btn-sm btn-danger" onclick="resetDemo()">重置</button></span></div>';
   html += '</div></div>';
+
+  // Advanced / Developer options (collapsed)
+  html += '<details class="me-section me-advanced">';
+  html += '<summary class="me-section-title me-advanced-summary" style="cursor:pointer;list-style:none;">高级 <span style="font-size:10px;color:var(--text-muted);font-weight:400;margin-left:4px;">▾</span></summary>';
+  html += '<div class="me-card" style="margin-top:8px;">';
+  html += '<div class="me-row"><span class="me-row-label" style="font-size:12px;color:var(--text-muted);">加载示例数据</span><span class="me-row-value"><button class="btn btn-sm btn-ghost" onclick="loadSamplePack()" style="font-size:11px;min-height:28px;padding:4px 10px;color:var(--text-muted);">加载</button></span></div>';
+  html += '<div class="me-row"><span class="me-row-label" style="font-size:12px;color:var(--text-muted);">重置所有数据</span><span class="me-row-value"><button class="btn btn-sm btn-ghost" onclick="resetDemo()" style="font-size:11px;min-height:28px;padding:4px 10px;color:var(--danger);">重置</button></span></div>';
+  html += '</div></details>';
 
   // TimeCard mini
   html += '<div class="me-section">';
@@ -2591,7 +2718,7 @@ function renderMe() {
   html += '• 所有数据存储在浏览器 localStorage，不上传服务器<br>';
   html += '• 语音识别依赖浏览器 Web Speech API（推荐 Chrome/Edge + HTTPS）<br>';
   html += '• PWA 可添加到桌面，支持离线使用<br>';
-  html += '• V4.0 · GitHub Auto Deploy';
+  html += '• V4.0';
   html += '</div>';
   html += '</div></div></div>';
 
@@ -2605,9 +2732,6 @@ function changeScenario(id) {
   if (sc) appState.identity = sc.name;
   saveState();
   renderApp();
-}
-function changeInboxScenario(id) {
-  changeScenario(id);
 }
 
 function exportData() {
@@ -2630,11 +2754,12 @@ function importData(ev) {
     try {
       var data = JSON.parse(e.target.result);
       if (data && data.reminders) {
-        if (!confirm('导入将覆盖当前数据，确定继续？')) return;
-        appState = Object.assign(defaultState(), data);
-        saveState();
-        showToast('✓','数据已导入');
-        renderApp();
+        showConfirm('导入数据', '导入将覆盖当前数据，确定继续？', function(){
+          appState = Object.assign(defaultState(), data);
+          saveState();
+          showToast('✓','数据已导入');
+          renderApp();
+        });
       } else {
         showToast('✗','无效的备份文件');
       }
@@ -2688,12 +2813,13 @@ function closeDrawer() {
   if (overlay) overlay.classList.remove('open');
 }
 function deleteReminder(id) {
-  if (!confirm('确定删除这条提醒？')) return;
-  appState.reminders = appState.reminders.filter(function(r){return r.id!==id;});
-  appState.completedIds = appState.completedIds.filter(function(x){return x!==id;});
-  closeDrawer();
-  showToast('🗑','提醒已删除');
-  renderApp();
+  showConfirm('删除提醒', '确定删除这条提醒？', function(){
+    appState.reminders = appState.reminders.filter(function(r){return r.id!==id;});
+    appState.completedIds = appState.completedIds.filter(function(x){return x!==id;});
+    closeDrawer();
+    showToast('🗑','提醒已删除');
+    renderApp();
+  });
 }
 
 // ========== Toast ==========
@@ -2707,11 +2833,37 @@ function showToast(icon, text) {
   setTimeout(function(){ el.classList.add('removing'); setTimeout(function(){if(el.parentNode)el.remove();},300); }, 4000);
 }
 
+// ========== Custom Confirm Modal ==========
+function showConfirm(title, message, onConfirm) {
+  var overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay';
+  overlay.innerHTML = '<div class="confirm-box" onclick="event.stopPropagation()">' +
+    '<div class="confirm-title">'+esc(title)+'</div>' +
+    '<div class="confirm-msg">'+esc(message)+'</div>' +
+    '<div class="confirm-actions">' +
+    '<button class="btn btn-ghost btn-sm" data-act="cancel">取消</button>' +
+    '<button class="btn btn-primary btn-sm" data-act="ok">确定</button>' +
+    '</div></div>';
+  overlay.addEventListener('click', function(e){
+    if (e.target === overlay || (e.target.dataset && e.target.dataset.act==='cancel')) {
+      document.body.removeChild(overlay);
+    }
+  });
+  var okBtn = overlay.querySelector('[data-act="ok"]');
+  if (okBtn) {
+    okBtn.addEventListener('click', function(){
+      document.body.removeChild(overlay);
+      if (typeof onConfirm === 'function') onConfirm();
+    });
+  }
+  document.body.appendChild(overlay);
+}
+
 // ========== Simulated Notification ==========
 function simulateNotification() {
   var active = appState.reminders.filter(function(r){return !appState.completedIds.includes(r.id) && daysUntil(r.date)<=3;});
   if (active.length===0) {
-    showToast('🔔','这是页面内模拟提醒。PWA 可支持系统通知。');
+    showToast('🔔','当前没有近期提醒。添加一条提醒后可在此预览通知效果。');
     return;
   }
   var r = active[Math.floor(Math.random()*active.length)];
@@ -2783,20 +2935,21 @@ function loadSamplePack() {
   renderApp();
 }
 function resetDemo() {
-  if (!confirm('确定重置 Demo？这会清空所有数据。')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  appState = defaultState();
-  inboxDrafts = [];
-  quickDraft = null;
-  activeCalTab = 'today';
-  activeListFilter = 'all';
-  listSearchQuery = '';
-  selectedScenario = 'student';
-  hideWelcome();
-  showWelcome();
-  showToast('🔄','Demo 已重置');
-  appState.activeView = 'today';
-  renderApp();
+  showConfirm('重置数据', '确定重置？这会清空所有数据。', function(){
+    localStorage.removeItem(STORAGE_KEY);
+    appState = defaultState();
+    inboxDrafts = [];
+    quickDraft = null;
+    activeCalTab = 'today';
+    activeListFilter = 'all';
+    listSearchQuery = '';
+    selectedScenario = 'student';
+    hideWelcome();
+    showWelcome();
+    showToast('✓','数据已重置');
+    appState.activeView = 'today';
+    renderApp();
+  });
 }
 
 // ========== Helpers ==========
