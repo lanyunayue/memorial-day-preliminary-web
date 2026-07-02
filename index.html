@@ -5,9 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#2563EB">
-<meta name="description" content="Memorial day - 本地 AI 时间整理 Agent，快速添加提醒、解析通知、管理日程">
+<meta name="description" content="Memorial day - 一句话添加提醒，自动识别时间，本地保存，系统通知。帮你记住生日、缴费、体检、约会、纪念日。">
 <link rel="manifest" href="manifest.json">
-<title>Memorial day · 任务管理</title>
+<title>Memorial day · 提醒与待办</title>
 <style>
 /* ========== Design Tokens (TickTick / Apple Reminders / Notion inspired) ========== */
 :root {
@@ -1369,13 +1369,13 @@ ul, ol { list-style: none; }
       <div class="sidebar-logo">M</div>
       <div>
         <div class="sidebar-title">Memorial day</div>
-        <div class="sidebar-subtitle">本地 AI 整理 Agent</div>
+        <div class="sidebar-subtitle">一句话添加提醒</div>
       </div>
     </div>
     <nav class="nav-list" id="navList"></nav>
     <div class="sidebar-footer">
       <div class="sidebar-version">Web/PWA · V4.0</div>
-      <div class="sidebar-honest">本地规则解析 · 数据仅存浏览器 localStorage · 不联网传输</div>
+      <div class="sidebar-honest">本地保存 · 数据仅在你的浏览器里 · 不联网传输</div>
     </div>
   </aside>
 
@@ -1386,7 +1386,7 @@ ul, ol { list-style: none; }
       <button class="menu-btn" onclick="toggleSidebar(true)" aria-label="菜单">☰</button>
       <div class="topbar-title" id="topbarTitle">今天</div>
       <div class="topbar-spacer"></div>
-      <div class="topbar-chip" id="topbarScenario">学生</div>
+      <div class="topbar-chip" id="topbarScenario">个人生活</div>
       <div class="topbar-chip" id="topbarCount" style="background:var(--success-soft);color:var(--success);">0</div>
       <button class="topbar-action-icon" onclick="simulateNotification()" title="测试通知">🔔</button>
       <span class="topbar-version-dot">v4.0</span>
@@ -1414,23 +1414,19 @@ ul, ol { list-style: none; }
 <div class="welcome-overlay" id="welcomeOverlay" style="display:none;">
   <div class="welcome-card">
     <div class="welcome-eyebrow">Memorial day</div>
-    <div class="welcome-title">本地 AI 时间整理 Agent</div>
-    <div class="welcome-sub">选择你的场景，开始整理任务</div>
-    <label class="welcome-label">使用场景</label>
+    <div class="welcome-title">记住每一件重要的事</div>
+    <div class="welcome-sub">一句话加提醒，自动识别时间，到点通知你</div>
+    <label class="welcome-label">我主要用来记</label>
     <div class="scenario-chips" id="scenarioChips">
-      <button class="scenario-chip active" data-scenario="student" onclick="selectScenario('student')">学生</button>
-      <button class="scenario-chip" data-scenario="cadre" onclick="selectScenario('cadre')">班级干部</button>
-      <button class="scenario-chip" data-scenario="teacher" onclick="selectScenario('teacher')">教师</button>
-      <button class="scenario-chip" data-scenario="club" onclick="selectScenario('club')">社团</button>
-      <button class="scenario-chip" data-scenario="work" onclick="selectScenario('work')">实习</button>
-      <button class="scenario-chip" data-scenario="personal" onclick="selectScenario('personal')">个人</button>
-    </div>
-    <div class="welcome-extra">
-      <label class="welcome-label">补充信息（选填）</label>
-      <input type="text" class="input" id="welcomeExtraInput" placeholder="如：3班、产品组（选填）">
+      <button class="scenario-chip active" data-scenario="personal" onclick="selectScenario('personal')">个人生活</button>
+      <button class="scenario-chip" data-scenario="work" onclick="selectScenario('work')">工作</button>
+      <button class="scenario-chip" data-scenario="student" onclick="selectScenario('student')">学习</button>
+      <button class="scenario-chip" data-scenario="family" onclick="selectScenario('family')">家人朋友</button>
+      <button class="scenario-chip" data-scenario="health" onclick="selectScenario('health')">健康健身</button>
+      <button class="scenario-chip" data-scenario="finance" onclick="selectScenario('finance')">缴费记账</button>
     </div>
     <button class="welcome-btn" onclick="finishOnboarding()">开始使用</button>
-    <div class="welcome-footer">V4.0<br>本地规则解析 · TXT 真实读取</div>
+    <div class="welcome-footer">V4.0 · 本地保存，不联网上传</div>
   </div>
 </div>
 
@@ -1439,61 +1435,61 @@ ul, ol { list-style: none; }
 const STORAGE_KEY = 'memorial_day_app_state_v4';
 const NAV_ITEMS = [
   { id: 'today', icon: '今', label: '今天' },
-  { id: 'inbox', icon: '箱', label: '收集箱' },
+  { id: 'inbox', icon: '导', label: '导入' },
   { id: 'calendar', icon: '历', label: '日历' },
-  { id: 'list', icon: '单', label: '清单' },
+  { id: 'list', icon: '全', label: '全部' },
   { id: 'me', icon: '我', label: '我的' }
 ];
 const BOTTOM_TABS = [
   { id: 'today', icon: '今', label: '今天' },
-  { id: 'inbox', icon: '箱', label: '收集箱' },
+  { id: 'inbox', icon: '导', label: '导入' },
   { id: 'calendar', icon: '历', label: '日历' },
-  { id: 'list', icon: '单', label: '清单' },
+  { id: 'list', icon: '全', label: '全部' },
   { id: 'me', icon: '我', label: '我的' }
 ];
 
 const SCENARIOS = [
-  { id: 'student', name: '学生' },
-  { id: 'cadre', name: '班级干部' },
-  { id: 'teacher', name: '教师' },
-  { id: 'club', name: '社团' },
-  { id: 'work', name: '实习' },
-  { id: 'personal', name: '个人' }
+  { id: 'personal', name: '个人生活' },
+  { id: 'work', name: '工作' },
+  { id: 'student', name: '学习' },
+  { id: 'family', name: '家人朋友' },
+  { id: 'health', name: '健康健身' },
+  { id: 'finance', name: '缴费记账' }
 ];
 
-let selectedScenario = 'student';
+let selectedScenario = 'personal';
 let voiceSupported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
 const SAMPLE_NOTICES = [
   {
-    id: 'n1', title: '【学院通知】本周工作安排', source: '辅导员', publishTime: '2026-07-01 09:00',
+    id: 'n1', title: '家庭提醒', source: '家人', publishTime: '2026-07-01',
     fileType: 'TXT', status: 'unread',
-    body: '各位同学：\n\n1. 7月5日（本周五）下午3点在A301教室召开班会，全体同学务必参加。\n2. 请同学们注意期末考试安排，及时复习。\n3. 暑期社会实践报名截止7月20日。\n\n辅导员办公室\n2026年7月1日',
-    targetGroup: ['全体']
+    body: '记得几件事：\n\n1. 7月8日妈妈生日，记得订蛋糕和打电话。\n2. 下周六下午3点陪爸爸去医院体检。\n3. 8月15日是和女朋友在一起三周年纪念日。',
+    targetGroup: ['个人']
   },
   {
-    id: 'n2', title: '关于期末考试安排的通知', source: '教务处', publishTime: '2026-06-30 14:30',
-    fileType: 'PDF', status: 'unread',
-    body: '各班级：\n\n期末考试安排如下：\n1. 数据结构考试：7月10日上午9:00-11:00，地点C201\n2. 软件工程考试：7月8日下午2:30-4:30，地点B305\n3. 高数考试：7月12日上午9:00，地点A101，全体学生参加\n\n请同学们带好学生证，提前15分钟到场。',
-    targetGroup: ['全体']
-  },
-  {
-    id: 'n3', title: '关于提交创新创业大赛材料的通知', source: '创新创业中心', publishTime: '2026-06-29 10:00',
-    fileType: 'DOCX', status: 'unread',
-    body: '请同学们于7月8日（下周三）下午5点前将创新创业大赛项目材料（含项目计划书、PPT）提交至学工办203室。\n\n注意事项：\n1. 材料需电子版+纸质版\n2. 电子版命名：班级-姓名-项目名\n3. 逾期不再受理\n\n联系人：李老师',
-    targetGroup: ['全体']
-  },
-  {
-    id: 'n4', title: '体检与安全教育通知', source: '校医院 + 保卫处', publishTime: '2026-06-28 16:00',
+    id: 'n2', title: '本月缴费', source: '生活', publishTime: '2026-07-01',
     fileType: 'TXT', status: 'unread',
-    body: '各位同学：\n\n一、体检安排\n7月10日上午9点在校医院体检，请空腹，带好学生证。\n\n二、安全教育\n7月3日下午2点在B205实验室参加安全培训。\n\n三、缴费提醒\n未缴纳学费的同学于7月15日前完成缴费，逾期将影响选课。',
-    targetGroup: ['全体']
+    body: '本月账单：\n1. 7月5日前交房租 3500元\n2. 7月10日还信用卡账单\n3. 7月20日车险到期续保\n4. 每月1号扣话费和宽带费',
+    targetGroup: ['个人']
   },
   {
-    id: 'n5', title: '人工智能前沿讲座 / 报名截止提醒', source: '学生会学术部', publishTime: '2026-06-27 08:00',
+    id: 'n3', title: '健身计划', source: '自己', publishTime: '2026-07-01',
     fileType: 'TXT', status: 'unread',
-    body: '讲座通知：\n7月6日（本周四）晚上7点在图书馆报告厅举办"人工智能前沿与职业发展"讲座，欢迎全体同学参加。\n\n报名提醒：\n1. 计算机竞赛报名截止7月15日\n2. 志愿者活动报名截止7月10日\n\n欢迎同学们积极参与！',
-    targetGroup: ['全体']
+    body: '7月健身计划：\n- 每周二、周四晚上7点健身房\n- 每周六上午10点瑜伽课\n- 7月20日前完成体检报告提交\n- 月底称重目标：减2斤',
+    targetGroup: ['个人']
+  },
+  {
+    id: 'n4', title: '下周工作安排', source: '工作', publishTime: '2026-07-01',
+    fileType: 'TXT', status: 'unread',
+    body: '下周安排：\n周一上午10点部门周会\n周三下午3点项目汇报，提前准备PPT\n周五下班前提交Q3 OKR\n7月15日年度体检，地点：爱康国宾',
+    targetGroup: ['个人']
+  },
+  {
+    id: 'n5', title: '娱乐与生活', source: '自己', publishTime: '2026-07-01',
+    fileType: 'TXT', status: 'unread',
+    body: '想做的事：\n1. 本周日晚上7点和朋友约饭看电影\n2. 7月20日之前看完《人生海海》\n3. 月底去理发店\n4. 8月云南旅行，提前订机票酒店',
+    targetGroup: ['个人']
   }
 ];
 
@@ -1513,8 +1509,8 @@ let inboxHistoryCollapsed = true;
 
 function defaultState() {
   return {
-    identity: '学生',
-    scenario: 'student',
+    identity: '个人生活',
+    scenario: 'personal',
     reminders: [],
     inbox: [],
     activeView: 'today',
@@ -1869,7 +1865,7 @@ function renderBottomTab() {
 }
 
 function renderTopbar() {
-  var titles = { today:'今天', inbox:'收集箱', calendar:'日历', list:'清单', me:'我的' };
+  var titles = { today:'今天', inbox:'导入', calendar:'日历', list:'全部', me:'我的' };
   var t = document.getElementById('topbarTitle');
   if (t) t.textContent = titles[appState.activeView] || 'Memorial day';
   var s = document.getElementById('topbarScenario');
@@ -1955,14 +1951,14 @@ function renderToday() {
   // Quick add bar
   html += '<div class="quick-add" id="quickAdd">';
   html += '<div class="quick-add-row">';
-  html += '<input type="text" class="quick-add-input" id="quickAddInput" placeholder="把一句安排、通知内容或截止时间丢给我，例如：明天下午3点在B205开班会" autocomplete="off">';
+  html += '<input type="text" class="quick-add-input" id="quickAddInput" placeholder="试试输入：明天下午3点交报告、7月8日妈妈生日、每周五晚上健身" autocomplete="off">';
   html += '<div class="quick-add-actions">';
   var micCls = voiceSupported ? '' : ' disabled';
-  var micTitle = voiceSupported ? '语音输入' : '当前浏览器不支持语音识别';
+  var micTitle = voiceSupported ? '语音输入' : '当前浏览器不支持语音，请使用文字输入';
   html += '<span class="voice-listening-hint" id="voiceListeningHint" style="display:none;"><span class="voice-pulse-dot"></span>聆听中</span>';
   html += '<button class="quick-add-btn mic'+micCls+'" id="quickMicBtn" onclick="toggleQuickVoice(event)" title="'+micTitle+'">🎤</button>';
-  html += '<button class="quick-add-btn import" onclick="switchView(\'inbox\')">导入通知</button>';
-  html += '<button class="quick-add-btn" style="background:var(--accent);color:#fff;" onclick="quickAddParse()">+ 添加</button>';
+  html += '<button class="quick-add-btn import" onclick="switchView(\'inbox\')">导入文字</button>';
+  html += '<button class="quick-add-btn" style="background:var(--accent);color:#fff;" onclick="quickAddParse()">+ 添加提醒</button>';
   html += '</div>';
   html += '</div>';
   html += '</div>';
@@ -1976,7 +1972,7 @@ function renderToday() {
   var todayAll = overdue.concat(todayItems);
   html += '<div class="section-head"><div class="section-title">今天事项<span class="section-count">'+todayAll.length+'</span></div></div>';
   if (todayAll.length === 0) {
-    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天没有安排，在上方输入框添加第一条提醒</div><button class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:4px;">+ 快速添加</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天还没有提醒</div><button class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:4px;">+ 添加第一条提醒</button><button class="btn btn-ghost btn-sm" onclick="switchView(\'inbox\')" style="margin-top:8px;">导入一段文字</button></div>';
   } else {
     html += '<div class="task-list">';
     // Sort overdue by date (oldest first), then today by time
@@ -2045,7 +2041,7 @@ function renderTaskItem(r) {
 
 function renderAgentSuggest(overdue, today, upcoming) {
   var html = '<div class="agent-suggest">';
-  html += '<div class="agent-suggest-head"><div class="agent-suggest-icon">✦</div><div class="agent-suggest-title">Agent 建议</div></div>';
+  html += '<div class="agent-suggest-head"><div class="agent-suggest-icon">✦</div><div class="agent-suggest-title">智能建议</div></div>';
   var text = '';
   var total = overdue.length + today.length;
   if (overdue.length > 0) {
@@ -2140,7 +2136,7 @@ function saveQuickDraft(target) {
   var locText = locEl ? locEl.value.trim() : '';
   var prio = prioEl ? prioEl.value : quickDraft.riskLevel;
 
-  if (!title) { showToast('⚠','请输入标题'); return; }
+  if (!title) { showToast('⚠','请输入提醒内容'); return; }
 
   // Re-parse date if user changed it
   var parsedDate = '';
@@ -2302,19 +2298,19 @@ function renderInbox() {
   var scInbox = SCENARIOS.find(function(x){return x.id===appState.scenario;});
   var scInboxName = scInbox ? scInbox.name : appState.identity;
   html += '<div class="inbox-scenario">';
-  html += '<span style="color:var(--text-muted);font-size:12px;">当前身份：<b style="color:var(--text-secondary);font-weight:500;">'+esc(scInboxName)+'</b>（可在「我的」页修改）</span>';
+  html += '<span style="color:var(--text-muted);font-size:12px;">粘贴一段文字、通知或计划，整理成提醒草稿</span>';
   html += '</div>';
 
   // Paste zone
   html += '<div class="paste-zone">';
-  html += '<textarea id="inboxPasteArea" placeholder="粘贴辅导员/班级/项目通知文本..."></textarea>';
+  html += '<textarea id="inboxPasteArea" placeholder="把聊天记录、通知内容、一段计划粘贴到这里..."></textarea>';
   html += '<div class="paste-actions">';
   html += '<label class="upload-btn-label">📄 上传 TXT<input type="file" id="inboxFileInput" class="file-input-hidden" accept=".txt,text/plain"></label>';
-  html += '<button class="btn btn-primary" onclick="parseInboxText()" style="flex:1;justify-content:center;">解析与我有关的提醒</button>';
+  html += '<button class="btn btn-primary" onclick="parseInboxText()" style="flex:1;justify-content:center;">解析为提醒草稿</button>';
   html += '</div>';
   html += '<div id="inboxUploadStatus"></div>';
   if (inboxDrafts.length === 0 && !inboxPastedText) {
-    html += '<div class="inbox-hint-text">粘贴通知文本或上传TXT文件，点击解析按钮提取提醒</div>';
+    html += '<div class="inbox-hint-text">粘贴一段文字或上传 TXT 文件，自动识别里面的时间，整理成可以保存的提醒</div>';
   }
   html += '</div>';
 
@@ -2340,7 +2336,7 @@ function renderInbox() {
   var savedNotices = appState.inbox.filter(function(n){return n.status==='parsed';});
   if (appState.inbox.length > 0) {
     html += '<details class="inbox-history"'+(inboxHistoryCollapsed?'':' open')+'>';
-    html += '<summary>通知历史（'+appState.inbox.length+' 条）</summary>';
+    html += '<summary>导入历史（'+appState.inbox.length+' 条）</summary>';
     for (var k=0;k<Math.min(appState.inbox.length,10);k++) {
       var n = appState.inbox[k];
       html += '<div class="history-item">'+esc(n.title)+' · '+esc(n.source)+'</div>';
@@ -2380,7 +2376,7 @@ function parseInboxText() {
   var ta = document.getElementById('inboxPasteArea');
   if (!ta) return;
   var text = ta.value.trim();
-  if (!text) { showToast('⚠','请先粘贴通知文本或上传 TXT 文件'); return; }
+  if (!text) { showToast('⚠','请先粘贴一段文字或上传 TXT 文件'); return; }
   var identity = appState.identity || '学生';
   var drafts = extractReminders(text, identity, '文本粘贴');
   inboxDrafts = drafts;
@@ -2440,7 +2436,7 @@ function saveInboxDraftsTo(target) {
       riskLevel: d.riskLevel || 'mid',
       reminderSuggestion: parsedDate ? ('提前 '+(d.riskLevel==='high'?'3天':d.riskLevel==='mid'?'1天':'当天')+'提醒') : '建议手动设置日期',
       preparation: PREP_MAP[d.riskLevel] || PREP_MAP.mid,
-      source: d.source || '收集箱',
+      source: d.source || '导入',
       sourceText: d.sourceText || d.title,
       confidence: d.confidence || 0.7
     });
@@ -2516,7 +2512,7 @@ function readInboxFile(file) {
     reader.readAsText(file, 'UTF-8');
   } else {
     var us = document.getElementById('inboxUploadStatus');
-    if (us) us.innerHTML = '<div class="upload-status warn">当前版本支持 TXT 文件，其他格式后续完善。</div>';
+    if (us) us.innerHTML = '<div class="upload-status warn">只支持 TXT 文本文件，PDF/DOCX 解析后续版本支持。</div>';
     showToast('⚠','请上传 TXT 文件');
   }
 }
@@ -2559,7 +2555,7 @@ function renderCalendar() {
   });
 
   if (keys.length===0) {
-    html += '<div class="empty-state"><div class="empty-icon">▦</div><div class="empty-text">当前视图没有事项</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">去添加</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">▦</div><div class="empty-text">还没有安排，先添加一条提醒</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">+ 添加提醒</button></div>';
   } else {
     html += '<div class="timeline">';
     for (var k=0;k<keys.length;k++) {
@@ -2631,7 +2627,7 @@ function renderList() {
   html += '</div>';
 
   if (filtered.length===0) {
-    html += '<div class="empty-state"><div class="empty-icon">☰</div><div class="empty-text">没有匹配的提醒</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">+ 添加一条提醒</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">☰</div><div class="empty-text">还没有提醒</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">+ 添加第一条提醒</button></div>';
   } else {
     html += '<div class="reminder-list">';
     for (var j=0;j<filtered.length;j++) {
@@ -2712,12 +2708,12 @@ function renderMe() {
   html += '<div class="me-card">';
   html += '<div class="me-row" style="flex-direction:column;align-items:flex-start;gap:6px;">';
   html += '<div class="honest-box">';
-  html += '<b>诚实说明</b><br>';
-  html += '• 当前版本使用本地规则解析，未接入真实大模型 API<br>';
-  html += '• TXT 文件通过 FileReader 真实读取（UTF-8）<br>';
-  html += '• 所有数据存储在浏览器 localStorage，不上传服务器<br>';
-  html += '• 语音识别依赖浏览器 Web Speech API（推荐 Chrome/Edge + HTTPS）<br>';
-  html += '• PWA 可添加到桌面，支持离线使用<br>';
+  html += '<b>隐私与说明</b><br>';
+  html += '• 时间识别在本地完成，不联网上传你的内容<br>';
+  html += '• TXT 文件通过浏览器本地读取（UTF-8）<br>';
+  html += '• 所有提醒数据保存在你自己的浏览器里，不上传服务器<br>';
+  html += '• 语音识别依赖浏览器能力（推荐 Chrome/Edge + HTTPS）<br>';
+  html += '• 可添加到桌面使用，支持离线<br>';
   html += '• V4.0';
   html += '</div>';
   html += '</div></div></div>';
@@ -2799,7 +2795,7 @@ function openDrawer(id) {
   if (r.location) html += '<div class="drawer-field"><span class="drawer-field-key">地点</span><span class="drawer-field-val">'+esc(r.location)+'</span></div>';
   html += '<div class="drawer-field"><span class="drawer-field-key">来源</span><span class="drawer-field-val">'+esc(r.source||'手动创建')+'</span></div>';
   html += '</div>';
-  html += '<div class="drawer-section"><h4>Agent 建议</h4><div class="drawer-agent-msg">'+esc(r.reminderSuggestion||'')+'<br>'+esc(r.preparation||'')+'</div></div>';
+  html += '<div class="drawer-section"><h4>智能建议</h4><div class="drawer-agent-msg">'+esc(r.reminderSuggestion||'')+'<br>'+esc(r.preparation||'')+'</div></div>';
   if (r.sourceText) html += '<div class="drawer-section"><h4>原始文本</h4><div class="drawer-source">'+esc(r.sourceText)+'</div></div>';
   html += '<div class="drawer-actions">';
   html += '<button class="btn btn-sm btn-success" onclick="toggleComplete(\''+r.id+'\');closeDrawer();">'+(completed?'↩ 撤销完成':'✓ 标记完成')+'</button>';
@@ -2896,9 +2892,7 @@ function selectScenario(id) {
 }
 function finishOnboarding() {
   var sc = SCENARIOS.find(function(x){return x.id===selectedScenario;});
-  appState.identity = sc ? sc.name : '学生';
-  var extra = document.getElementById('welcomeExtraInput');
-  if (extra && extra.value.trim()) appState.identity += ' · ' + extra.value.trim();
+  appState.identity = sc ? sc.name : '个人生活';
   appState.scenario = selectedScenario;
   appState.onboarded = true;
   seedDemoDataIfNeeded();
@@ -2943,7 +2937,7 @@ function resetDemo() {
     activeCalTab = 'today';
     activeListFilter = 'all';
     listSearchQuery = '';
-    selectedScenario = 'student';
+    selectedScenario = 'personal';
     hideWelcome();
     showWelcome();
     showToast('✓','数据已重置');
@@ -2969,7 +2963,7 @@ function toggleSidebar(open) {
 function init() {
   if (!appState.onboarded) showWelcome();
   else hideWelcome();
-  selectedScenario = appState.scenario || 'student';
+  selectedScenario = appState.scenario || 'personal';
   renderApp();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function(){});
