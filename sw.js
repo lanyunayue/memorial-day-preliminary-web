@@ -1,6 +1,6 @@
-// Service Worker for 时刻 (Shike)
-// Cache name: shike-v-final-mvp - bump this to invalidate old caches
-var CACHE_NAME = 'shike-v-final-mvp';
+// Service Worker for 时刻 (Shike) - Real Product v2
+// Cache name: shike-real-product-v2 - bump to invalidate old caches
+var CACHE_NAME = 'shike-real-product-v2';
 var ASSETS = [
   './',
   './index.html',
@@ -18,7 +18,7 @@ self.addEventListener('install', function(event) {
   );
 });
 
-// Activate: clean old caches
+// Activate: clean all old caches
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(keys) {
@@ -35,24 +35,45 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-// Fetch: network-first for HTML, cache-first for other assets
+// Fetch: network-first for HTML (ensure updates), cache-first for other assets
 self.addEventListener('fetch', function(event) {
   var url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Network-first for HTML to ensure users always get the latest version
-  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+  // Network-first for HTML navigation - always try network first to get latest version
+  if (event.request.mode === 'navigate' || event.request.destination === 'document' ||
+      event.request.url.endsWith('.html') || event.request.url.endsWith('/')) {
     event.respondWith(
-      fetch(event.request).then(function(response) {
-        var copy = response.clone();
-        caches.open(CACHE_NAME).then(function(cache) {
-          cache.put(event.request, copy);
-        });
+      fetch(event.request, { cache: 'no-store' }).then(function(response) {
+        if (response && response.status === 200) {
+          var copy = response.clone();
+          caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(event.request, copy);
+          });
+        }
         return response;
       }).catch(function() {
         return caches.match(event.request).then(function(cached) {
           return cached || caches.match('./index.html');
         });
+      })
+    );
+    return;
+  }
+
+  // Network-first for manifest.json and sw.js too
+  if (event.request.url.endsWith('manifest.json') || event.request.url.endsWith('sw.js')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' }).then(function(response) {
+        if (response && response.status === 200) {
+          var copy2 = response.clone();
+          caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(event.request, copy2);
+          });
+        }
+        return response;
+      }).catch(function() {
+        return caches.match(event.request);
       })
     );
     return;
@@ -64,9 +85,9 @@ self.addEventListener('fetch', function(event) {
       if (cached) return cached;
       return fetch(event.request).then(function(response) {
         if (response && response.status === 200) {
-          var copy = response.clone();
+          var copy3 = response.clone();
           caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(event.request, copy);
+            cache.put(event.request, copy3);
           });
         }
         return response;
