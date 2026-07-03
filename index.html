@@ -5,9 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#2563EB">
-<meta name="description" content="Memorial day - 一句话添加提醒，自动识别时间，本地保存，系统通知。帮你记住生日、缴费、体检、约会、纪念日。">
+<meta name="description" content="时刻 - 一句话整理提醒，不错过重要时间。输入一句安排，自动识别时间，本地保存。">
 <link rel="manifest" href="manifest.json">
-<title>Memorial day · 提醒与待办</title>
+<title>时刻 - 智能提醒整理</title>
 <!-- ===== v5 hardening safety markers =====
   - SmartCreate v5: 智能创建 v5 已加固（本地解析，无外部API）
   - TimeInsights v5: 时光洞察 v5 已加固（localAdvice本地建议，提醒覆盖率本地计算）
@@ -435,6 +435,35 @@ ul, ol { list-style: none; }
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.7); }
 }
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: -8px 0 12px;
+  line-height: 1.5;
+}
+.quick-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.example-chip {
+  font-size: 13px;
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-weight: 500;
+}
+.example-chip:hover {
+  background: var(--accent-soft-strong);
+  border-color: var(--accent);
+}
+.page-header { margin-bottom: 12px; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin: 0; }
 .upload-btn-label.loading {
   opacity: 0.6;
   pointer-events: none;
@@ -906,6 +935,27 @@ ul, ol { list-style: none; }
 .reminder-list { display: flex; flex-direction: column; gap: 6px; }
 
 /* ========== Me View ========== */
+.me-user-card {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.me-user-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.me-user-desc {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+.me-user-meta {
+  font-size: 11px;
+  opacity: 0.7;
+}
 .me-section {
   margin-bottom: 20px;
 }
@@ -1376,15 +1426,15 @@ ul, ol { list-style: none; }
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="sidebar-logo">M</div>
+      <div class="sidebar-logo">时</div>
       <div>
-        <div class="sidebar-title">Memorial day</div>
-        <div class="sidebar-subtitle">一句话添加提醒</div>
+        <div class="sidebar-title">时刻</div>
+        <div class="sidebar-subtitle">一句话整理提醒，不错过重要时间</div>
       </div>
     </div>
     <nav class="nav-list" id="navList"></nav>
     <div class="sidebar-footer">
-      <div class="sidebar-version">Web/PWA · V4.0</div>
+      <div class="sidebar-version">时刻 · Web/PWA</div>
       <div class="sidebar-honest">本地保存 · 数据仅在你的浏览器里 · 不联网传输</div>
     </div>
   </aside>
@@ -1396,10 +1446,6 @@ ul, ol { list-style: none; }
       <button class="menu-btn" onclick="toggleSidebar(true)" aria-label="菜单">☰</button>
       <div class="topbar-title" id="topbarTitle">今天</div>
       <div class="topbar-spacer"></div>
-      <div class="topbar-chip" id="topbarScenario">个人生活</div>
-      <div class="topbar-chip" id="topbarCount" style="background:var(--success-soft);color:var(--success);">0</div>
-      <button class="topbar-action-icon" onclick="simulateNotification()" title="测试通知">🔔</button>
-      <span class="topbar-version-dot">v4.0</span>
     </header>
 
     <!-- Views Container -->
@@ -1423,9 +1469,9 @@ ul, ol { list-style: none; }
 <!-- Welcome Overlay -->
 <div class="welcome-overlay" id="welcomeOverlay" style="display:none;">
   <div class="welcome-card">
-    <div class="welcome-eyebrow">Memorial day</div>
-    <div class="welcome-title">记住每一件重要的事</div>
-    <div class="welcome-sub">一句话加提醒，自动识别时间，到点通知你</div>
+    <div class="welcome-eyebrow">时刻</div>
+    <div class="welcome-title">一句话整理提醒</div>
+    <div class="welcome-sub">不错过重要时间。输入一句安排，自动识别时间，生成可确认的提醒。</div>
     <label class="welcome-label">我主要用来记</label>
     <div class="scenario-chips" id="scenarioChips">
       <button class="scenario-chip active" data-scenario="personal" onclick="selectScenario('personal')">个人生活</button>
@@ -1436,13 +1482,13 @@ ul, ol { list-style: none; }
       <button class="scenario-chip" data-scenario="finance" onclick="selectScenario('finance')">缴费记账</button>
     </div>
     <button class="welcome-btn" onclick="finishOnboarding()">开始使用</button>
-    <div class="welcome-footer">V4.0 · 本地保存，不联网上传</div>
+    <div class="welcome-footer">本地保存，不联网上传 · 项目代号 Memorial day</div>
   </div>
 </div>
 
 <script>
 // ========== App State ==========
-const STORAGE_KEY = 'memorial_day_app_state_v4';
+const STORAGE_KEY = 'shike_app_state_v1';
 const NAV_ITEMS = [
   { id: 'today', icon: '今', label: '今天' },
   { id: 'inbox', icon: '导', label: '导入' },
@@ -1613,8 +1659,8 @@ var ACTION_KW = [
   { kw:'会议', cat:'会议', risk:'mid' },
   { kw:'领取', cat:'事务', risk:'mid' }
 ];
-var GROUP_KW = ['全体','全班','所有同学','各班','产品组','A组','我的小组','实习生'];
-var CLASS_RE = /([\u4e00-\u9fa5A-Za-z0-9]+?\d{2,4}[班]?|[\u4e00-\u9fa5]+?\d+班|[A-Z]组|\d+班|[\u4e00-\u9fa5]+专业|产品组|我的小组)/g;
+var GROUP_KW = ['全体','全班','所有同学','各班','产品组','我的小组','实习生'];
+var CLASS_RE = /([\u4e00-\u9fa5A-Za-z0-9]+?\d{2,4}[班]?|[\u4e00-\u9fa5]+?\d+班|\d+班|[\u4e00-\u9fa5]+专业|产品组|我的小组)/g;
 var PREP_MAP = {
   high: '建议提前 3 天准备，前一天确认材料，当天提前 15 分钟到场。',
   mid: '建议提前 1 天准备，当天准时参加。',
@@ -1875,9 +1921,9 @@ function renderBottomTab() {
 }
 
 function renderTopbar() {
-  var titles = { today:'今天', inbox:'导入', calendar:'日历', list:'全部', me:'我的' };
+  var titles = { today:'今天', inbox:'导入文字', calendar:'日历', list:'全部', me:'我的' };
   var t = document.getElementById('topbarTitle');
-  if (t) t.textContent = titles[appState.activeView] || 'Memorial day';
+  if (t) t.textContent = titles[appState.activeView] || '时刻';
   var s = document.getElementById('topbarScenario');
   if (s) {
     var sc = SCENARIOS.find(function(x){return x.id===appState.scenario;});
@@ -1957,11 +2003,12 @@ function renderToday() {
   html += '<span>'+esc(getGreeting())+'</span>';
   html += '<span class="scenario-label">'+esc(scName)+'</span>';
   html += '</div>';
+  html += '<div class="page-subtitle">把要做的事先记下来，重要时间不会错过</div>';
 
   // Quick add bar
   html += '<div class="quick-add" id="quickAdd">';
   html += '<div class="quick-add-row">';
-  html += '<input type="text" class="quick-add-input" id="quickAddInput" placeholder="试试输入：明天下午3点交报告、7月8日妈妈生日、每周五晚上健身" autocomplete="off">';
+  html += '<input type="text" class="quick-add-input" id="quickAddInput" placeholder="明天下午3点交报告" autocomplete="off">';
   html += '<div class="quick-add-actions">';
   var micCls = voiceSupported ? '' : ' disabled';
   var micTitle = voiceSupported ? '语音输入' : '当前浏览器不支持语音，请使用文字输入';
@@ -1970,6 +2017,12 @@ function renderToday() {
   html += '<button class="quick-add-btn import" onclick="switchView(\'inbox\')">导入文字</button>';
   html += '<button class="quick-add-btn" style="background:var(--accent);color:#fff;" onclick="quickAddParse()">+ 添加提醒</button>';
   html += '</div>';
+  html += '</div>';
+  html += '<div class="quick-examples" id="quickExamples">';
+  var examples = ['妈妈生日','每周五健身','月底还信用卡','下周一体检'];
+  for (var ei=0; ei<examples.length; ei++) {
+    html += '<button class="example-chip" onclick="fillQuickExample(\''+examples[ei].replace(/'/g,"\\'")+'\')">'+esc(examples[ei])+'</button>';
+  }
   html += '</div>';
   html += '</div>';
 
@@ -2051,7 +2104,7 @@ function renderTaskItem(r) {
 
 function renderAgentSuggest(overdue, today, upcoming) {
   var html = '<div class="agent-suggest">';
-  html += '<div class="agent-suggest-head"><div class="agent-suggest-icon">✦</div><div class="agent-suggest-title">智能建议</div></div>';
+  html += '<div class="agent-suggest-head"><div class="agent-suggest-icon">💡</div><div class="agent-suggest-title">温馨提示</div></div>';
   var text = '';
   var total = overdue.length + today.length;
   if (overdue.length > 0) {
@@ -2100,6 +2153,18 @@ function renderQuickDraft() {
   html += '</div>';
   html += '</div>';
   return html;
+}
+
+function fillQuickExample(text) {
+  var inp = document.getElementById('quickAddInput');
+  if (inp) {
+    inp.value = text;
+    inp.focus();
+    // 光标移到末尾
+    if (inp.setSelectionRange) {
+      inp.setSelectionRange(text.length, text.length);
+    }
+  }
 }
 
 function quickAddParse() {
@@ -2304,23 +2369,19 @@ function renderInbox() {
   var active = appState.activeView==='inbox'?' active':'';
   var html = '<div class="view'+active+'" id="view-inbox">';
 
-  // Scenario indicator (read-only, uses global identity; change in Me page)
-  var scInbox = SCENARIOS.find(function(x){return x.id===appState.scenario;});
-  var scInboxName = scInbox ? scInbox.name : appState.identity;
-  html += '<div class="inbox-scenario">';
-  html += '<span style="color:var(--text-muted);font-size:12px;">粘贴一段文字、通知或计划，整理成提醒草稿</span>';
-  html += '</div>';
+  // Page header
+  html += '<div class="page-header"><h2 class="page-title">导入文字</h2><p class="page-subtitle" style="margin:4px 0 0;">粘贴一段安排，自动整理成提醒草稿</p></div>';
 
   // Paste zone
   html += '<div class="paste-zone">';
-  html += '<textarea id="inboxPasteArea" placeholder="把聊天记录、通知内容、一段计划粘贴到这里..."></textarea>';
+  html += '<textarea id="inboxPasteArea" placeholder="粘贴通知、聊天记录、计划或一段安排，例如：下周一上午9点体检，请提前空腹。"></textarea>';
   html += '<div class="paste-actions">';
   html += '<label class="upload-btn-label">📄 上传 TXT<input type="file" id="inboxFileInput" class="file-input-hidden" accept=".txt,text/plain"></label>';
-  html += '<button class="btn btn-primary" onclick="parseInboxText()" style="flex:1;justify-content:center;">解析为提醒草稿</button>';
+  html += '<button class="btn btn-primary" onclick="parseInboxText()" style="flex:1;justify-content:center;">整理成提醒</button>';
   html += '</div>';
   html += '<div id="inboxUploadStatus"></div>';
   if (inboxDrafts.length === 0 && !inboxPastedText) {
-    html += '<div class="inbox-hint-text">粘贴一段文字或上传 TXT 文件，自动识别里面的时间，整理成可以保存的提醒</div>';
+    html += '<div class="inbox-hint-text">当前支持文字和 TXT，PDF/DOCX 后续版本支持。</div>';
   }
   html += '</div>';
 
@@ -2531,6 +2592,7 @@ function readInboxFile(file) {
 function renderCalendar() {
   var active = appState.activeView==='calendar'?' active':'';
   var html = '<div class="view'+active+'" id="view-calendar">';
+  html += '<div class="page-header"><h2 class="page-title">日历</h2><p class="page-subtitle" style="margin:4px 0 12px;">按日期查看你的安排</p></div>';
   html += '<div class="cal-tabs">';
   var tabs = [{id:'today',l:'今天'},{id:'tomorrow',l:'明天'},{id:'week',l:'本周'},{id:'future',l:'未来'}];
   for (var i=0;i<tabs.length;i++) {
@@ -2628,16 +2690,17 @@ function renderList() {
   });
 
   var html = '<div class="view'+active+'" id="view-list">';
+  html += '<div class="page-header"><h2 class="page-title">全部</h2><p class="page-subtitle" style="margin:4px 0 12px;">管理所有提醒和重要日期</p></div>';
   html += '<div class="filter-bar">';
   var filters = [{id:'all',l:'全部'},{id:'active',l:'未完成'},{id:'completed',l:'已完成'},{id:'high',l:'高优先级'}];
   for (var i=0;i<filters.length;i++) {
     html += '<button class="filter-chip'+(activeListFilter===filters[i].id?' active':'')+'" onclick="activeListFilter=\''+filters[i].id+'\';renderApp()">'+filters[i].l+'</button>';
   }
-  html += '<div class="search-box"><span class="search-icon">⌕</span><input type="text" placeholder="搜索提醒..." value="'+esc(listSearchQuery)+'" oninput="listSearchQuery=this.value;renderApp()"></div>';
+  html += '<div class="search-box"><span class="search-icon">⌕</span><input type="text" placeholder="搜索提醒、日期或地点" value="'+esc(listSearchQuery)+'" oninput="listSearchQuery=this.value;renderApp()"></div>';
   html += '</div>';
 
   if (filtered.length===0) {
-    html += '<div class="empty-state"><div class="empty-icon">☰</div><div class="empty-text">还没有提醒</div><button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">+ 添加第一条提醒</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">☰</div><div class="empty-text">'+(listSearchQuery?'没有找到相关提醒':'还没有提醒')+'</div>'+(listSearchQuery?'':'<button class="btn btn-primary btn-sm" onclick="switchViewAndFocus(\'today\')" style="margin-top:4px;">+ 添加第一条提醒</button>')+'</div>';
   } else {
     html += '<div class="reminder-list">';
     for (var j=0;j<filtered.length;j++) {
@@ -2654,79 +2717,59 @@ function renderMe() {
   var active = appState.activeView==='me'?' active':'';
   var totalCount = appState.reminders.length;
   var activeCount = appState.reminders.filter(function(r){return !appState.completedIds.includes(r.id);}).length;
-  var completedCount = appState.completedIds.length;
 
   var html = '<div class="view'+active+'" id="view-me">';
 
-  // Scenario
+  // User area
+  html += '<div class="me-user-card">';
+  html += '<div class="me-user-name">时刻</div>';
+  html += '<div class="me-user-desc">一句话整理提醒，不错过重要时间</div>';
+  html += '<div class="me-user-meta">数据保存在本机 · 共 '+totalCount+' 条提醒，待完成 '+activeCount+' 条</div>';
+  html += '</div>';
+
+  // Settings
   html += '<div class="me-section">';
-  html += '<div class="me-section-title">场景</div>';
+  html += '<div class="me-section-title">常用设置</div>';
   html += '<div class="me-card">';
-  html += '<div class="me-row"><span class="me-row-label">使用场景</span><span class="me-row-value"><select id="meScenarioSelect" onchange="changeScenario(this.value)">';
+  html += '<div class="me-row"><span class="me-row-label">默认场景</span><span class="me-row-value"><select id="meScenarioSelect" onchange="changeScenario(this.value)">';
   for (var i=0;i<SCENARIOS.length;i++) {
     html += '<option value="'+SCENARIOS[i].id+'"'+(appState.scenario===SCENARIOS[i].id?' selected':'')+'>'+SCENARIOS[i].name+'</option>';
   }
   html += '</select></span></div>';
-  html += '<div class="me-row"><span class="me-row-label">身份名称</span><span class="me-row-value"><input type="text" value="'+esc(appState.identity||'')+'" onchange="appState.identity=this.value;saveState();" style="width:120px;text-align:right;"></span></div>';
-  html += '</div></div>';
-
-  // Stats
-  html += '<div class="me-section">';
-  html += '<div class="me-section-title">统计</div>';
-  html += '<div class="me-card">';
-  html += '<div class="me-row"><span class="me-row-label">全部提醒</span><span class="me-row-value">'+totalCount+'</span></div>';
-  html += '<div class="me-row"><span class="me-row-label">待完成</span><span class="me-row-value" style="color:var(--accent);font-weight:600;">'+activeCount+'</span></div>';
-  html += '<div class="me-row"><span class="me-row-label">已完成</span><span class="me-row-value" style="color:var(--success);">'+completedCount+'</span></div>';
+  html += '<div class="me-row"><span class="me-row-label">语音输入</span><span class="me-row-value" style="color:var(--text-secondary);font-size:12px;">'+(voiceSupported?'支持（Chrome/Edge）':'当前浏览器不支持')+'</span></div>';
   html += '</div></div>';
 
   // Data management
   html += '<div class="me-section">';
   html += '<div class="me-section-title">数据管理</div>';
   html += '<div class="me-card">';
-  html += '<div class="me-row"><span class="me-row-label">导出 JSON</span><span class="me-row-value"><button class="btn btn-sm btn-secondary" onclick="exportData()">导出</button></span></div>';
-  html += '<div class="me-row"><span class="me-row-label">导入 JSON</span><span class="me-row-value"><label class="btn btn-sm btn-secondary" style="cursor:pointer;">导入<input type="file" accept=".json" class="file-input-hidden" onchange="importData(event)"></label></span></div>';
+  html += '<div class="me-row"><span class="me-row-label">导出数据</span><span class="me-row-value"><button class="btn btn-sm btn-secondary" onclick="exportData()">导出 JSON</button></span></div>';
+  html += '<div class="me-row"><span class="me-row-label">导入数据</span><span class="me-row-value"><label class="btn btn-sm btn-secondary" style="cursor:pointer;">导入 JSON<input type="file" accept=".json" class="file-input-hidden" onchange="importData(event)"></label></span></div>';
   html += '</div></div>';
 
-  // Advanced / Developer options (collapsed)
-  html += '<details class="me-section me-advanced">';
-  html += '<summary class="me-section-title me-advanced-summary" style="cursor:pointer;list-style:none;">高级 <span style="font-size:10px;color:var(--text-muted);font-weight:400;margin-left:4px;">▾</span></summary>';
-  html += '<div class="me-card" style="margin-top:8px;">';
-  html += '<div class="me-row"><span class="me-row-label" style="font-size:12px;color:var(--text-muted);">加载示例数据</span><span class="me-row-value"><button class="btn btn-sm btn-ghost" onclick="loadSamplePack()" style="font-size:11px;min-height:28px;padding:4px 10px;color:var(--text-muted);">加载</button></span></div>';
-  html += '<div class="me-row"><span class="me-row-label" style="font-size:12px;color:var(--text-muted);">重置所有数据</span><span class="me-row-value"><button class="btn btn-sm btn-ghost" onclick="resetDemo()" style="font-size:11px;min-height:28px;padding:4px 10px;color:var(--danger);">重置</button></span></div>';
-  html += '</div></details>';
-
-  // TimeCard mini
+  // About & honest notes
   html += '<div class="me-section">';
-  html += '<div class="me-section-title">时光卡片</div>';
+  html += '<div class="me-section-title">关于时刻</div>';
   html += '<div class="me-card">';
-  var upcoming = appState.reminders.filter(function(r){return !appState.completedIds.includes(r.id) && daysUntil(r.date)>=0;}).sort(function(a,b){return daysUntil(a.date)-daysUntil(b.date);});
-  var sel = upcoming[0] || appState.reminders[0];
-  if (sel) {
-    var ds = daysUntil(sel.date);
-    html += '<div class="timecard-mini">';
-    html += '<div class="timecard-preview"><div class="tc-d">'+Math.max(0,ds)+'</div><div style="font-size:8px;">天后</div></div>';
-    html += '<div class="timecard-info"><b style="color:var(--text-primary);">'+esc(sel.title)+'</b><br>'+esc(formatDateLabel(sel.date))+(sel.time?' '+esc(sel.time):'')+'<br><span style="font-size:10px;opacity:0.7;">'+esc(sel.preparation||'')+'</span></div>';
-    html += '</div>';
-  } else {
-    html += '<div class="me-row"><span class="me-row-label" style="color:var(--text-muted);">暂无提醒，添加后可生成卡片</span></div>';
-  }
-  html += '</div></div>';
-
-  // About
-  html += '<div class="me-section">';
-  html += '<div class="me-section-title">关于</div>';
-  html += '<div class="me-card">';
-  html += '<div class="me-row" style="flex-direction:column;align-items:flex-start;gap:6px;">';
+  html += '<div class="me-row" style="flex-direction:column;align-items:flex-start;gap:8px;">';
   html += '<div class="honest-box">';
-  html += '<b>隐私与说明</b><br>';
-  html += '• 时间识别在本地完成，不联网上传你的内容<br>';
-  html += '• TXT 文件通过浏览器本地读取（UTF-8）<br>';
-  html += '• 所有提醒数据保存在你自己的浏览器里，不上传服务器<br>';
-  html += '• 语音识别依赖浏览器能力（推荐 Chrome/Edge + HTTPS）<br>';
-  html += '• 可添加到桌面使用，支持离线<br>';
-  html += '• V4.0';
+  html += '<b>产品说明</b><br>';
+  html += '• 时刻 使用本地规则整理时间和事项，未接入云端大模型<br>';
+  html += '• 所有提醒数据保存在你自己的浏览器里，不需要账号登录，不上传服务器<br>';
+  html += '• 支持添加到桌面（PWA），离线也能使用<br>';
+  html += '• TXT 文件通过浏览器本地读取；PDF/DOCX 解析后续版本支持<br>';
+  html += '• 同时提供 HarmonyOS 原生端，两个端体验一致但当前不支持实时同步<br>';
+  html += '<br><span style="color:var(--text-muted);font-size:11px;">项目代号：Memorial day</span>';
   html += '</div>';
   html += '</div></div></div>';
+
+  // Danger zone (collapsed)
+  html += '<details class="me-section me-advanced">';
+  html += '<summary class="me-section-title me-advanced-summary" style="cursor:pointer;list-style:none;color:var(--text-muted);font-size:12px;">高级 <span style="font-size:10px;margin-left:4px;">▾</span></summary>';
+  html += '<div class="me-card" style="margin-top:8px;">';
+  html += '<div class="me-row"><span class="me-row-label" style="font-size:12px;color:var(--text-muted);">加载示例数据</span><span class="me-row-value"><button class="btn btn-sm btn-ghost" onclick="loadSamplePack()" style="font-size:11px;min-height:28px;padding:4px 10px;color:var(--text-muted);">加载</button></span></div>';
+  html += '<div class="me-row"><span class="me-row-label" style="font-size:12px;color:var(--danger);">清空所有数据</span><span class="me-row-value"><button class="btn btn-sm btn-ghost" onclick="resetDemo()" style="font-size:11px;min-height:28px;padding:4px 10px;color:var(--danger);">清空</button></span></div>';
+  html += '</div></details>';
 
   html += '</div>';
   return html;
@@ -2745,7 +2788,7 @@ function exportData() {
   var blob = new Blob([data], {type:'application/json'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
-  a.href = url; a.download = 'memorial-day-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.href = url; a.download = 'shike-backup-'+new Date().toISOString().slice(0,10)+'.json';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -2805,7 +2848,7 @@ function openDrawer(id) {
   if (r.location) html += '<div class="drawer-field"><span class="drawer-field-key">地点</span><span class="drawer-field-val">'+esc(r.location)+'</span></div>';
   html += '<div class="drawer-field"><span class="drawer-field-key">来源</span><span class="drawer-field-val">'+esc(r.source||'手动创建')+'</span></div>';
   html += '</div>';
-  html += '<div class="drawer-section"><h4>智能建议</h4><div class="drawer-agent-msg">'+esc(r.reminderSuggestion||'')+'<br>'+esc(r.preparation||'')+'</div></div>';
+  html += '<div class="drawer-section"><h4>备注</h4><div class="drawer-agent-msg">'+esc(r.reminderSuggestion||'')+(r.preparation?'<br>'+esc(r.preparation):'')+'</div></div>';
   if (r.sourceText) html += '<div class="drawer-section"><h4>原始文本</h4><div class="drawer-source">'+esc(r.sourceText)+'</div></div>';
   html += '<div class="drawer-actions">';
   html += '<button class="btn btn-sm btn-success" onclick="toggleComplete(\''+r.id+'\');closeDrawer();">'+(completed?'↩ 撤销完成':'✓ 标记完成')+'</button>';

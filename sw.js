@@ -1,5 +1,5 @@
-/* Memorial day PWA Service Worker - v4.0 */
-const CACHE_VERSION = 'memorial-day-preliminary-v4-0';
+/* 时刻 PWA Service Worker - v1.0 */
+const CACHE_VERSION = 'shike-v1-0';
 const CACHE_NAME = CACHE_VERSION;
 
 const STATIC_ASSETS = [
@@ -30,7 +30,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(key) {
-          return key.startsWith('memorial-day-') && key !== CACHE_NAME;
+          return key.startsWith('memorial-day-') || (key.startsWith('shike-') && key !== CACHE_NAME);
         }).map(function(key) {
           console.log('[SW] Deleting old cache:', key);
           return caches.delete(key);
