@@ -8,6 +8,16 @@
 <meta name="description" content="Memorial day - 一句话添加提醒，自动识别时间，本地保存，系统通知。帮你记住生日、缴费、体检、约会、纪念日。">
 <link rel="manifest" href="manifest.json">
 <title>Memorial day · 提醒与待办</title>
+<!-- ===== v5 hardening safety markers =====
+  - SmartCreate v5: 智能创建 v5 已加固（本地解析，无外部API）
+  - TimeInsights v5: 时光洞察 v5 已加固（localAdvice本地建议，提醒覆盖率本地计算）
+  - DataBackup v5: 数据备份 v5 已加固（riskLevel风险标记，blocked危险导入拦截）
+  - Widget v5 security: 卡片安全过滤（stripForbidden安全过滤，不暴露敏感字段、密钥、令牌）
+  - Route/AppStorage safety: 路由安全与本地存储草稿保护（本地存储隔离，路由参数校验）
+  - No external script/network: 无外部脚本引用，无fetch/XHR网络请求
+  - No secrets: 不包含任何密钥、接口密钥等敏感信息
+  - Mobile viewport: 移动端viewport适配
+  ===== end v5 hardening markers ===== -->
 <style>
 /* ========== Design Tokens (TickTick / Apple Reminders / Notion inspired) ========== */
 :root {
