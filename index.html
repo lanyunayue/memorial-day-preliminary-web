@@ -173,6 +173,11 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
 .modal-btns button{flex:1;padding:10px;border-radius:10px;font-size:14px;min-height:42px;font-weight:500}
 .modal-cancel{background:#2d2d50;color:#ccc}
 .modal-confirm{background:#e94560;color:#fff}
+.modal-box{background:#1e1e36;border-radius:16px;padding:24px 20px;max-width:380px;width:100%;border:1px solid #2d2d50;max-height:80vh;overflow-y:auto}
+.modal-body{font-size:14px;color:#aaaacc;margin-bottom:20px;line-height:1.5}
+.modal-body p{margin:0 0 10px}
+.modal-actions{display:flex;gap:8px}
+.modal-actions button{flex:1;padding:10px;border-radius:10px;font-size:14px;min-height:42px;font-weight:500}
 
 /* Toast */
 .toast-container{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:6px;pointer-events:none;width:90%;max-width:360px}
@@ -294,6 +299,8 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
       <button class="filter-chip" data-filter="soon" onclick="setAllFilter('soon')">快截止</button>
       <button class="filter-chip" data-filter="location" onclick="setAllFilter('location')">有地点</button>
       <button class="filter-chip" data-filter="repeat" onclick="setAllFilter('repeat')">重复提醒</button>
+      <button class="filter-chip" data-filter="today" onclick="setAllFilter('today')">今天</button>
+      <button class="filter-chip" data-filter="future" onclick="setAllFilter('future')">未来</button>
     </div>
     <div class="sort-row">
       <span>排序：</span>
@@ -303,6 +310,7 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
         <option value="updated">最近更新</option>
         <option value="date">日期优先</option>
         <option value="priority">优先级优先</option>
+        <option value="title">标题排序</option>
       </select>
     </div>
     <div class="batch-row" id="batchRow">
@@ -310,6 +318,7 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
       <button class="batch-btn" onclick="exportFilteredReminders()">导出当前结果</button>
       <button class="batch-btn" onclick="markFilteredCompleted()">全部标记完成</button>
       <button class="batch-btn" onclick="unmarkFilteredCompleted()">全部取消完成</button>
+      <button class="batch-btn danger" onclick="deleteFilteredReminders()">删除当前结果</button>
     </div>
   </div>
   <div class="section">
@@ -364,6 +373,7 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
   <div class="my-content">
     <div id="capacityWarn"></div>
     <div class="stats-grid" id="statsGrid"></div>
+    <div id="storageInfo" class="my-note" style="margin-top:8px"></div>
 
     <div class="my-section">
       <div class="my-section-title">数据管理</div>
@@ -379,12 +389,20 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
     </div>
 
     <div class="my-section">
+      <div class="my-section-title">辅助工具</div>
+      <div class="my-btn-list">
+        <button class="my-btn" onclick="copyAcceptanceExample()">📋 复制验收示例 <span class="arrow">›</span></button>
+        <button class="my-btn" onclick="showRiskExplanation()">ℹ️ 查看风险说明 <span class="arrow">›</span></button>
+      </div>
+    </div>
+
+    <div class="my-section">
       <div class="my-section-title">关于时刻</div>
       <div class="my-note">
         <strong>时刻</strong>是一句话整理提醒的小工具，帮你不错过重要时间。<br><br>
         • 数据保存在本机浏览器（localStorage），不上传服务器<br>
         • 本地规则识别日期、时间、地点和优先级，<strong>未接入真实大模型</strong><br>
-        • 可添加到桌面（PWA）使用<br>
+        • 可添加到桌面（PWA）使用，但不同浏览器表现不同<br>
         • PDF/DOCX 导入后续支持<br>
         • Memorial day 是项目代号，用户可见产品名为「时刻」<br>
         • Web 与 HarmonyOS 是同一产品的两个端，当前不支持跨端实时同步
@@ -435,6 +453,7 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
 var STORAGE_KEY = 'shike_reminders_v1';
 var CORRUPT_BACKUP_KEY = 'shike_reminders_corrupted_backup';
 var RECENT_SAVE_KEY = 'shike_recent_saves';
+var LAST_BACKUP_KEY = 'shike_last_backup';
 var currentDraft = null;
 var currentImportDrafts = [];
 var editingId = null;
@@ -444,20 +463,60 @@ var allSort = 'default';
 var searchQuery = '';
 var confirmCallback = null;
 var calYear, calMonth, calSelectedDay;
+var lastDeleted = null; // for undo
+var undoTimer = null;
 
 /* ---------- Utils ---------- */
 function uid(){return 'r_'+Date.now().toString(36)+'_'+Math.random().toString(36).substr(2,6)}
 function now(){return Date.now()}
+function pad(n){return n<10?'0'+n:''+n}
+function fmtDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function fmtTime(d){return pad(d.getHours())+':'+pad(d.getMinutes())}
 function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-function showToast(msg,type){
+function showToast(msg,type,action){
   type=type||'info';
   var c=document.getElementById('toastContainer');
   var t=document.createElement('div');
   t.className='toast '+type;
-  t.textContent=msg;
+  if(action){
+    t.innerHTML='';
+    var sp=document.createElement('span');sp.textContent=msg;
+    var btn=document.createElement('button');btn.textContent=action.label;btn.style.cssText='margin-left:12px;background:#fff3;border:none;color:inherit;padding:2px 8px;border-radius:6px;cursor:pointer;font-weight:600';
+    btn.onclick=function(){try{action.onClick()}catch(e){};t.remove();if(undoTimer){clearTimeout(undoTimer);undoTimer=null}};
+    t.appendChild(sp);t.appendChild(btn);
+    t.style.display='flex';t.style.alignItems='center';t.style.justifyContent='center';t.style.gap='4px';
+  }else{
+    t.textContent=msg;
+  }
   c.appendChild(t);
-  setTimeout(function(){t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(function(){t.remove()},300)},2200);
+  var timer=setTimeout(function(){t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(function(){t.remove()},300)},action?5000:2200);
+  return t;
+}
+
+function undoLastDelete(){
+  if(undoTimer){clearTimeout(undoTimer);undoTimer=null}
+  if(!lastDeleted){showToast('没有可撤销的删除','warn');return}
+  var list=loadReminders();
+  if(Array.isArray(lastDeleted)){
+    lastDeleted.forEach(function(it){list.unshift(it)});
+    showToast('已撤销删除 '+lastDeleted.length+' 条提醒','success');
+  }else{
+    list.unshift(lastDeleted);
+    showToast('已撤销删除','success');
+  }
+  if(saveReminders(list)){
+    lastDeleted=null;
+    renderAll();
+  }
+}
+
+function scheduleUndo(msg,single){
+  if(undoTimer){clearTimeout(undoTimer)}
+  lastDeleted=single?null:[];
+  var label=single?'撤销':'全部撤销';
+  showToast(msg,'warn',{label:label,onClick:function(){undoLastDelete()}});
+  undoTimer=setTimeout(function(){lastDeleted=null;undoTimer=null},5000);
 }
 
 function showConfirm(msg,onConfirm){
@@ -610,7 +669,9 @@ function parseReminderText(text){
     {re:/(\d+)分钟后/,out:function(m){return m[1]+'分钟后'}},
     {re:/半小时后|30分钟后/,out:'30分钟后'},
     {re:/一小时后|1小时后/,out:'1小时后'},
-    {re:/两小时后|2小时后/,out:'2小时后'},
+    {re:/两小时后|二小时后|2小时后/,out:'2小时后'},
+    {re:/([一二三四五六七八九十])\s*天(?:以)?后/,out:function(m){var nm={'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};return(nm[m[1]]||m[1])+'天后'}},
+    {re:/([一二三四五六七八九十两])\s*小时后/,out:function(m){var nm={'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};return(nm[m[1]]||m[1])+'小时后'}},
   ];
   for(var i=0;i<dateMap.length;i++){
     var dm=dateMap[i];
@@ -671,10 +732,30 @@ function parseReminderText(text){
   }
 
   // Title keywords for scenarios
-  var scenarios=['妈妈生日','爸爸生日','生日','健身','体检','看牙','信用卡','还款','房租','交报告','提交报告','开会','会议','考试','面试','看电影','旅行','截止','材料提交','复习','打卡','上课','报名','缴费','取快递','买药','去医院','去公司','去学校','约会'];
+  var scenarios=['妈妈生日','爸爸生日','生日','健身','体检','看牙','信用卡','还款','房租','交报告','提交报告','开会','会议','考试','面试','看电影','旅行','截止','材料提交','复习','打卡','上课','报名','缴费','取快递','买药','去医院','去公司','去学校','约会','交作业','提交论文','项目汇报','复盘','周报','日报','买票','订票'];
   for(var k=0;k<scenarios.length;k++){
     if(raw.indexOf(scenarios[k])>=0&&title.length>scenarios[k].length+4){
       // Keep the extracted title but if it's too generic, use scenario
+    }
+  }
+
+  // Additional priority keywords
+  var moreHighWords=['报名','票','论文','作业','汇报','复盘','周报','日报'];
+  for(var j2=0;j2<moreHighWords.length;j2++){
+    if(priority==='mid'&&raw.indexOf(moreHighWords[j2])>=0){priority='high';break}
+  }
+
+  // Additional locations (bare keywords without preposition)
+  if(!locationText){
+    var bareLocs=['图书馆','医院','公司','学校','电影院','宿舍','食堂','实验室','教室','机场','火车站','健身房','商场','超市'];
+    for(var li=0;li<bareLocs.length;li++){
+      if(raw.indexOf(bareLocs[li])>=0){
+        // Check if it's already captured via preposition pattern
+        if(raw.indexOf('在'+bareLocs[li])<0&&raw.indexOf('去'+bareLocs[li])<0&&raw.indexOf('到'+bareLocs[li])<0){
+          locationText=bareLocs[li];
+        }
+        break;
+      }
     }
   }
 
@@ -736,6 +817,9 @@ function renderDraftForm(draft){
     '<div class="form-row">'+
     '<div class="form-group" style="flex:100%"><label>备注</label><textarea class="form-textarea" id="draftNoteInput" placeholder="补充说明" aria-label="备注">'+esc(draft.notesText)+'</textarea></div>'+
     '</div>'+
+    '<div class="form-row">'+
+    '<div class="form-group" style="flex:100%"><label>重复</label><input type="text" class="form-input" id="draftRepeatInput" value="'+esc(draft.repeatText)+'" placeholder="如：每周、每月1号、每年7月8日" aria-label="重复规则"></div>'+
+    '</div>'+
     '<div class="form-actions">'+
       '<button class="btn-primary" id="saveDraftButton" onclick="saveDraftFromForm()">保存提醒</button>'+
       '<button class="btn-secondary" onclick="reparseDraft()">重新解析</button>'+
@@ -749,13 +833,15 @@ function renderDraftForm(draft){
 }
 
 function collectDraftForm(){
+  var repEl=document.getElementById('draftRepeatInput');
   return{
     title:document.getElementById('draftTitleInput').value.trim(),
     dateText:document.getElementById('draftDateInput').value.trim(),
     timeText:document.getElementById('draftTimeInput').value.trim(),
     locationText:document.getElementById('draftLocationInput').value.trim(),
     priority:document.getElementById('draftPrioritySelect').value,
-    notesText:document.getElementById('draftNoteInput').value.trim()
+    notesText:document.getElementById('draftNoteInput').value.trim(),
+    repeatText:repEl?repEl.value.trim():''
   };
 }
 
@@ -775,7 +861,7 @@ function saveDraftFromForm(){
     timeText:f.timeText,
     locationText:f.locationText,
     priority:f.priority,
-    repeatText:currentDraft.repeatText||'',
+    repeatText:f.repeatText||currentDraft.repeatText||'',
     notesText:f.notesText,
     source:currentDraft.source||'quick',
     completed:false,
@@ -856,9 +942,13 @@ function toggleComplete(id){
 
 function deleteReminder(id){
   showConfirm('确定删除这条提醒吗？',function(){
-    var list=loadReminders().filter(function(r){return r.id!==id});
+    var list=loadReminders();
+    var idx=list.findIndex(function(r){return r.id===id});
+    if(idx<0)return;
+    var removed=list.splice(idx,1)[0];
     if(saveReminders(list)){
-      showToast('已删除提醒','success');
+      lastDeleted=removed;
+      scheduleUndo('已删除提醒，可撤销',true);
       closeDetail();
       renderAll();
     }
@@ -934,6 +1024,9 @@ function renderEditForm(item){
     '</div>'+
     '<div class="form-row">'+
     '<div class="form-group" style="flex:100%"><label>备注</label><textarea class="form-textarea" id="editNoteInput">'+esc(item.notesText)+'</textarea></div>'+
+    '</div>'+
+    '<div class="form-row">'+
+    '<div class="form-group" style="flex:100%"><label>重复</label><input type="text" class="form-input" id="editRepeatInput" value="'+esc(item.repeatText)+'" placeholder="如：每周、每月1号"></div>'+
     '</div>';
   document.getElementById('drawerContent').innerHTML=html;
   document.getElementById('drawerFooter').innerHTML=
@@ -954,6 +1047,8 @@ function saveReminderEdit(id){
   item.locationText=document.getElementById('editLocationInput').value.trim();
   item.priority=document.getElementById('editPrioritySelect').value;
   item.notesText=document.getElementById('editNoteInput').value.trim();
+  var repEl=document.getElementById('editRepeatInput');
+  item.repeatText=repEl?repEl.value.trim():(item.repeatText||'');
   item.updatedAt=now();
   if(saveReminders(list)){
     editingId=null;
@@ -983,6 +1078,17 @@ function isToday(reminder){
   return t.indexOf('今天')>=0||t.indexOf('今日')>=0;
 }
 
+function isFuture(reminder){
+  var t=reminder.dateText||'';
+  if(!t)return false;
+  if(isToday(reminder)||isSoon(reminder))return false;
+  var futureWords=['下周','下个月','月底','月初','每周','每月','每年','天后','分钟后','小时后','下周','周末','下周末','月','号','日'];
+  for(var i=0;i<futureWords.length;i++){
+    if(t.indexOf(futureWords[i])>=0)return true;
+  }
+  return /(\d{1,2})月(\d{1,2})/.test(t);
+}
+
 function filterReminders(list){
   var q=searchQuery.toLowerCase().trim();
   return list.filter(function(r){
@@ -992,8 +1098,10 @@ function filterReminders(list){
     if(allFilter==='soon'&&!isSoon(r))return false;
     if(allFilter==='location'&&!r.locationText)return false;
     if(allFilter==='repeat'&&!r.repeatText)return false;
+    if(allFilter==='today'&&!isToday(r))return false;
+    if(allFilter==='future'&&!isFuture(r))return false;
     if(q){
-      var hay=(r.title+' '+r.rawText+' '+r.dateText+' '+r.timeText+' '+r.locationText+' '+r.notesText+' '+r.priority).toLowerCase();
+      var hay=(r.title+' '+r.rawText+' '+r.dateText+' '+r.timeText+' '+r.locationText+' '+r.notesText+' '+r.priority+' '+(r.repeatText||'')).toLowerCase();
       if(hay.indexOf(q)<0)return false;
     }
     return true;
@@ -1009,6 +1117,11 @@ function sortReminders(list,mode){
     if(mode==='priority'){
       var pa=a.priority==='high'?1:0,pb=b.priority==='high'?1:0;
       if(pb!==pa)return pb-pa;
+      return b.createdAt-a.createdAt;
+    }
+    if(mode==='title'){
+      var cmp=a.title.localeCompare(b.title,'zh-CN');
+      if(cmp!==0)return cmp;
       return b.createdAt-a.createdAt;
     }
     if(mode==='date'){
@@ -1318,9 +1431,12 @@ function exportData(){
   var d=new Date();
   var ds=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
   a.href=url;a.download='shike-reminders-'+ds+'.json';
-  document.body.appendChild(a);a.click();a.remove();
+  document.body.appendChild(a);a.click();
+  a.remove();
   URL.revokeObjectURL(url);
+  try{localStorage.setItem(LAST_BACKUP_KEY,String(now()))}catch(e){}
   showToast('已导出 '+list.length+' 条数据','success');
+  renderMy();
 }
 
 function exportFilteredReminders(){
@@ -1381,8 +1497,10 @@ function handleJsonImport(ev){
 
 function clearAllData(){
   showConfirm('确定清空所有提醒吗？此操作不可恢复。',function(){
+    var old=loadReminders();
     if(saveReminders([])){
-      showToast('已清空所有数据','success');
+      lastDeleted=old.slice();
+      scheduleUndo('已清空所有数据，可撤销',false);
       renderAll();
       renderMy();
       closeDetail();
@@ -1397,7 +1515,26 @@ function clearCompletedReminders(){
   showConfirm('确定删除 '+completed.length+' 条已完成提醒吗？',function(){
     var remaining=list.filter(function(r){return!r.completed});
     if(saveReminders(remaining)){
-      showToast('已清理 '+completed.length+' 条已完成提醒','success');
+      lastDeleted=completed.slice();
+      scheduleUndo('已清理 '+completed.length+' 条，可撤销',false);
+      renderAll();
+      renderMy();
+    }
+  });
+}
+
+function deleteFilteredReminders(){
+  var list=applyAllFilters();
+  if(list.length===0){showToast('当前筛选结果为空','warn');return}
+  showConfirm('确定删除当前筛选的 '+list.length+' 条提醒吗？',function(){
+    var all=loadReminders();
+    var ids={};
+    list.forEach(function(r){ids[r.id]=true});
+    var removed=all.filter(function(r){return ids[r.id]});
+    var remaining=all.filter(function(r){return!ids[r.id]});
+    if(saveReminders(remaining)){
+      lastDeleted=removed.slice();
+      scheduleUndo('已删除 '+removed.length+' 条，可撤销',false);
       renderAll();
       renderMy();
     }
@@ -1450,6 +1587,56 @@ function renderMy(){
     '<div class="stat-card"><div class="stat-num" style="color:#4a90e2">'+s.active+'</div><div class="stat-label">未完成</div></div>'+
     '<div class="stat-card"><div class="stat-num" style="color:#4ade80">'+s.done+'</div><div class="stat-label">已完成</div></div>'+
     '<div class="stat-card"><div class="stat-num" style="color:#e94560">'+s.high+'</div><div class="stat-label">较高优先级</div></div>';
+  // Storage info
+  var dataSize=0;
+  try{var raw=localStorage.getItem(STORAGE_KEY);dataSize=raw?raw.length:0}catch(e){}
+  var sizeStr=dataSize<1024?dataSize+' B':(dataSize/1024).toFixed(1)+' KB';
+  var lastBackup='从未备份';
+  try{var lb=localStorage.getItem(LAST_BACKUP_KEY);if(lb){var d=new Date(parseInt(lb,10));lastBackup=fmtDate(d)+' '+fmtTime(d)}}catch(e){}
+  var infoEl=document.getElementById('storageInfo');
+  if(infoEl){
+    infoEl.innerHTML='• 本地数据大小：<strong>'+sizeStr+'</strong><br>• 最近备份时间：<strong>'+esc(lastBackup)+'</strong>';
+  }
+}
+
+function copyAcceptanceExample(){
+  var text='明天下午3点交报告\n下周一上午9点体检，请提前空腹。\n6月30日前还信用卡。\n周六下午4点看电影，提前半小时出门。\n7月8日妈妈生日，提前一天提醒我。\n每月1号交房租。\n每周五晚上健身。';
+  var done=false;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){showToast('已复制验收示例到剪贴板','success')}).catch(function(){fallback()});
+  }else{fallback()}
+  function fallback(){
+    var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');showToast('已复制验收示例','success');done=true}catch(e){showToast('复制失败，请手动复制','warn')}
+    ta.remove();
+  }
+}
+
+function showRiskExplanation(){
+  var html='<div style="line-height:1.8;color:#c5cad3;font-size:14px">'+
+    '<p><strong style="color:#e94560">1. 数据清空风险</strong><br>localStorage 在清除浏览器数据、隐私模式、更换设备/浏览器后会丢失。请定期导出 JSON 备份。</p>'+
+    '<p><strong style="color:#e94560">2. 跨设备不同步</strong><br>数据仅保存在当前浏览器，换手机/电脑不可见，未接入云端同步。</p>'+
+    '<p><strong style="color:#e94560">3. 本地规则识别</strong><br>未接入真实大模型，解析基于规则，对非常规表达可能识别不准，请在草稿处核对后再保存。</p>'+
+    '<p><strong style="color:#e94560">4. PDF/DOCX 未支持</strong><br>当前仅支持文字和 TXT 导入，PDF/DOCX 后续版本完善。</p>'+
+    '<p><strong style="color:#e94560">5. PWA 缓存</strong><br>添加到桌面后如遇旧版本，可在浏览器设置中清除站点数据或强制刷新。</p>'+
+    '<p><strong style="color:#e94560">6. Web 与 HarmonyOS 不实时同步</strong><br>Web 和 HarmonyOS 是同一产品的两个独立端，数据不互通。</p>'+
+    '<p><strong style="color:#e94560">7. 手机浏览器兼容</strong><br>主流浏览器（Chrome/Safari/Edge/微信浏览器）测试通过，但旧版浏览器可能有显示差异。</p>'+
+    '</div>';
+  showModal('使用风险说明',html,'我知道了');
+}
+
+function showModal(title,html,btnText){
+  var mc=document.getElementById('modalContainer');
+  mc.innerHTML='<div class="modal-mask" onclick="hideModal()"></div>'+
+    '<div class="modal-box"><div class="modal-title">'+esc(title)+'</div>'+
+    '<div class="modal-body">'+html+'</div>'+
+    '<div class="modal-actions"><button class="btn-primary" onclick="hideModal()">'+esc(btnText||'确定')+'</button></div></div>';
+  mc.classList.add('show');
+}
+
+function hideModal(){
+  document.getElementById('modalContainer').classList.remove('show');
 }
 
 /* ---------- Page switching ---------- */
@@ -1481,7 +1668,12 @@ function renderAll(){
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){
     if(document.getElementById('detailDrawer').classList.contains('show')){closeDetail();return}
-    if(document.getElementById('modalContainer').classList.contains('show')){hideConfirm();return}
+    if(document.getElementById('modalContainer').classList.contains('show')){
+      // Check if it's a confirm modal or info modal
+      var mc=document.getElementById('modalContainer');
+      if(mc.querySelector('.modal-btns')){hideConfirm()}else{hideModal()}
+      return
+    }
     if(!document.getElementById('draftPanel').classList.contains('hidden')){cancelDraft();return}
   }
   if(e.key==='Enter'){
