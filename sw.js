@@ -1,6 +1,6 @@
-// Service Worker for 时刻 (Shike) - Final Product v4
-// Cache name: shike-final-product-v4 - bump to invalidate all old caches
-var CACHE_NAME = 'shike-final-product-v4';
+// Service Worker for 时刻 (Shike) - Teacher-Facing Final v5
+// Cache name: shike-final-product-v5 - bump to invalidate all old caches
+var CACHE_NAME = 'shike-final-product-v5';
 var ASSETS = [
   './',
   './index.html',

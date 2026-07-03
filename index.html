@@ -141,6 +141,8 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
 .my-btn .arrow{color:#555}
 .my-note{font-size:12px;color:#666688;padding:8px 16px;line-height:1.6;background:#16162a;border-radius:8px;margin-top:8px}
 .capacity-warn{background:#ffa50015;border:1px solid #ffa50030;border-radius:8px;padding:10px 14px;font-size:13px;color:#ffa500;margin-bottom:12px}
+.my-empty-hint{background:#1e1e36;border:1px dashed #2d2d50;border-radius:12px;padding:24px 16px;text-align:center;color:#8888aa;font-size:14px;line-height:1.6}
+.empty-btn{margin-top:12px;background:#e94560;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:14px;cursor:pointer;font-weight:500;min-height:44px}
 
 /* Detail drawer */
 .drawer-mask{position:fixed;inset:0;background:#00000080;z-index:100;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -241,7 +243,7 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
 <!-- PAGE: HOME -->
 <div class="page active" id="pageHome">
   <div class="quick-add">
-    <input type="text" class="quick-input" id="quickAddInput" placeholder="输入一句安排，如：明天下午3点交报告" aria-label="快速添加提醒" autocomplete="off">
+    <input type="text" class="quick-input" id="quickAddInput" placeholder="明天下午3点交报告" aria-label="快速添加提醒" autocomplete="off">
     <button class="quick-btn" id="quickAddButton" onclick="handleQuickAdd()" aria-label="添加提醒">添加提醒</button>
   </div>
   <div class="import-entry">
@@ -252,7 +254,8 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
     <button class="example-chip" onclick="fillExample('每周五晚上健身')">每周五健身</button>
     <button class="example-chip" onclick="fillExample('月底还信用卡')">月底还信用卡</button>
     <button class="example-chip" onclick="fillExample('下周一上午9点体检')">下周一体检</button>
-    <button class="example-chip" onclick="fillExample('每月1号交房租')">每月交房租</button>
+    <button class="example-chip" onclick="fillExample('明天下午3点交报告')">交报告</button>
+    <button class="example-chip" onclick="fillExample('每月1号交房租')">交房租</button>
   </div>
 
   <!-- Draft Panel -->
@@ -264,7 +267,7 @@ input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
   <!-- Today -->
   <div class="section" id="todaySection">
     <div class="section-header">
-      <div class="section-title">📅 今日提醒<span class="section-count" id="todayCount"></span></div>
+      <div class="section-title">📅 今天<span class="section-count" id="todayCount"></span></div>
     </div>
     <div id="todayList"></div>
   </div>
@@ -591,7 +594,7 @@ function isDuplicateRecent(rawText){
   try{
     var rec=JSON.parse(localStorage.getItem(RECENT_SAVE_KEY)||'[]');
     var cutoff=now()-5000;
-    rec=rec.filter(function(x){return x.t>cutoff});
+    rec=rec.filter(function(x){return x.ts>cutoff});
     var dup=rec.some(function(x){return x.t===rawText.trim()});
     localStorage.setItem(RECENT_SAVE_KEY,JSON.stringify(rec));
     return dup;
@@ -601,7 +604,7 @@ function markRecentSave(rawText){
   try{
     var rec=JSON.parse(localStorage.getItem(RECENT_SAVE_KEY)||'[]');
     var cutoff=now()-5000;
-    rec=rec.filter(function(x){return x.t>cutoff});
+    rec=rec.filter(function(x){return x.ts>cutoff});
     rec.push({t:rawText.trim(),ts:now()});
     localStorage.setItem(RECENT_SAVE_KEY,JSON.stringify(rec));
   }catch(e){}
@@ -785,9 +788,16 @@ function createDraft(text){
 function handleQuickAdd(){
   var inp=document.getElementById('quickAddInput');
   var text=inp.value.trim();
-  if(!text){showToast('请输入一句安排','warn');inp.focus();return}
+  if(!text){showToast('先输入一句提醒内容','warn');inp.focus();return}
+  if(text.length<2){showToast('内容太短，换一种说法试试','warn');inp.focus();return}
+  if(currentDraft){
+    showToast('已有草稿，请先保存或取消','warn');
+    document.getElementById('draftPanel').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
   if(createDraft(text)){
     showToast('已生成草稿，确认后保存');
+    inp.value='';
   }else{
     showToast('无法解析，请换一种说法','warn');
   }
@@ -1171,7 +1181,7 @@ function renderToday(){
     el.innerHTML=list.map(function(r){return renderCard(r)}).join('');
   }else{
     cnt.textContent='';
-    el.innerHTML='<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">今天还没有提醒</div><div class="empty-hint">输入一句安排，先添加第一条提醒。</div><button class="empty-btn" onclick="document.getElementById(\'quickAddInput\').focus()">添加提醒</button></div>';
+    el.innerHTML='<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">今天还没有提醒</div><div class="empty-hint">输入一句安排，先添加第一条提醒。</div><button class="empty-btn" onclick="document.getElementById(\'quickAddInput\').focus()">添加第一条提醒</button></div>';
   }
 }
 
@@ -1185,7 +1195,7 @@ function renderSoonList(){
     el.innerHTML=list.map(function(r){return renderCard(r)}).join('');
   }else{
     cnt.textContent='';
-    el.innerHTML='<div class="empty" style="padding:12px"><div class="empty-text" style="font-size:13px">暂时没有快截止提醒</div></div>';
+    el.innerHTML='<div class="empty" style="padding:12px"><div class="empty-text" style="font-size:13px">暂时没有快截止提醒。</div></div>';
   }
 }
 
@@ -1199,7 +1209,7 @@ function renderRecentList(){
     el.innerHTML=list.map(function(r){return renderCard(r)}).join('');
   }else{
     cnt.textContent='';
-    el.innerHTML='<div class="empty" style="padding:12px"><div class="empty-text" style="font-size:13px">最近添加会在你保存提醒后显示</div></div>';
+    el.innerHTML='<div class="empty" style="padding:12px"><div class="empty-text" style="font-size:13px">保存提醒后，这里会显示最近记录。</div></div>';
   }
 }
 
@@ -1298,10 +1308,14 @@ function renderImportDrafts(){
   var el=document.getElementById('importDraftList');
   var cnt=document.getElementById('importDraftCount');
   var unsaved=currentImportDrafts.filter(function(d){return!d.saved}).length;
-  cnt.textContent=currentImportDrafts.length+' 条';
+  if(currentImportDrafts.length>0){
+    cnt.textContent=currentImportDrafts.length+' 条';
+  }else{
+    cnt.textContent='';
+  }
   document.getElementById('saveAllImportBtn').style.display=currentImportDrafts.length>0?'':'none';
   if(currentImportDrafts.length===0){
-    el.innerHTML='<div class="empty" style="padding:16px"><div class="empty-text" style="font-size:13px">粘贴一段文字，时刻会帮你整理成提醒草稿。</div></div>';
+    el.innerHTML='<div class="empty" style="padding:16px"><div class="empty-icon">📥</div><div class="empty-text">还没有草稿</div><div class="empty-hint">粘贴文字后，这里会显示整理结果。</div></div>';
     return;
   }
   el.innerHTML=currentImportDrafts.map(function(d,idx){
@@ -1424,6 +1438,7 @@ function fillImportExample(){
 /* ---------- Data Management ---------- */
 function exportData(){
   var list=loadReminders();
+  if(list.length===0){showToast('还没有提醒数据可以导出','warn');return}
   var json=JSON.stringify(list,null,2);
   var blob=new Blob([json],{type:'application/json'});
   var url=URL.createObjectURL(blob);
@@ -1582,11 +1597,16 @@ function renderMy(){
   if(s.total>200){
     warn.innerHTML='<div class="capacity-warn">⚠️ 本地提醒较多（'+s.total+' 条），建议导出备份。</div>';
   }else{warn.innerHTML=''}
-  document.getElementById('statsGrid').innerHTML=
-    '<div class="stat-card"><div class="stat-num">'+s.total+'</div><div class="stat-label">全部提醒</div></div>'+
-    '<div class="stat-card"><div class="stat-num" style="color:#4a90e2">'+s.active+'</div><div class="stat-label">未完成</div></div>'+
-    '<div class="stat-card"><div class="stat-num" style="color:#4ade80">'+s.done+'</div><div class="stat-label">已完成</div></div>'+
-    '<div class="stat-card"><div class="stat-num" style="color:#e94560">'+s.high+'</div><div class="stat-label">较高优先级</div></div>';
+  var grid=document.getElementById('statsGrid');
+  if(s.total===0){
+    grid.innerHTML='<div class="my-empty-hint">还没有提醒数据。从一句话开始记录吧。</div>';
+  }else{
+    grid.innerHTML=
+      '<div class="stat-card"><div class="stat-num">'+s.total+'</div><div class="stat-label">全部提醒</div></div>'+
+      '<div class="stat-card"><div class="stat-num" style="color:#4a90e2">'+s.active+'</div><div class="stat-label">未完成</div></div>'+
+      '<div class="stat-card"><div class="stat-num" style="color:#4ade80">'+s.done+'</div><div class="stat-label">已完成</div></div>'+
+      '<div class="stat-card"><div class="stat-num" style="color:#e94560">'+s.high+'</div><div class="stat-label">较高优先级</div></div>';
+  }
   // Storage info
   var dataSize=0;
   try{var raw=localStorage.getItem(STORAGE_KEY);dataSize=raw?raw.length:0}catch(e){}
