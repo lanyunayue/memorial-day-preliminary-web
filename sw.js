@@ -1,6 +1,6 @@
-// Service Worker for 时刻 (Shike) - Teacher-Facing Final v5
-// Cache name: shike-final-product-v5 - bump to invalidate all old caches
-var CACHE_NAME = 'shike-final-product-v5';
+// Service Worker for 时刻 (Shike) - Final Product Grade v6
+// Cache name: shike-final-product-v6 - bump to invalidate all old caches
+var CACHE_NAME = 'shike-final-product-v6';
 var ASSETS = [
   './',
   './index.html',
@@ -32,7 +32,6 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  // Network-first for HTML navigation - always try network first to get latest version
   if (event.request.mode === 'navigate' || event.request.destination === 'document' ||
       event.request.url.endsWith('.html') || event.request.url.endsWith('/') ||
       event.request.url.endsWith('manifest.json') || event.request.url.endsWith('sw.js')) {
@@ -53,8 +52,6 @@ self.addEventListener('fetch', function(event) {
     );
     return;
   }
-
-  // Cache-first for static assets
   event.respondWith(
     caches.match(event.request).then(function(cached) {
       if (cached) return cached;
