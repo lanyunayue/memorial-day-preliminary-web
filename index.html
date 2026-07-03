@@ -1636,24 +1636,42 @@ function normalizeReminderDate(r){
       }
       if(targetDow!==null){
         var curDow=now.getDay();
-        var diff=targetDow-curDow;
-        if(weekKind==='本'||weekKind==='这'){
-          if(diff<=0)diff+=7; // future this week (if today, show next occurrence? we treat 本周 as same-week future)
-          if(diff===0&&(dt.indexOf('本周')<0&&dt.indexOf('这周')<0))diff=7;
+        // Use Monday-first numbering: Mon=0..Sun=6
+        var curDowMon=(curDow+6)%7;
+        var tgtDowMon=(targetDow+6)%7;
+        var diff;
+        if(weekKind==='下下'){
+          var toNextMon0=(7-curDowMon)%7; if(toNextMon0===0)toNextMon0=7;
+          var toNextNextMon0=toNextMon0+7;
+          diff=toNextNextMon0+tgtDowMon;
         }else if(weekKind==='下'){
-          diff=(7-curDow+targetDow)%7+7;
-          if(diff===0)diff=7;
-        }else if(weekKind==='next'||weekKind==='周'||weekKind==='星期'){
-          if(diff<=0)diff+=7;
+          // 下周X: weekday in the week starting next Monday
+          var toNextMon=(7-curDowMon)%7; if(toNextMon===0)toNextMon=7; // if today is Monday, "next Mon" is 7 days out
+          diff=toNextMon+tgtDowMon;
+        }else if(weekKind==='本'||weekKind==='这'){
+          // 本周X: weekday in current Mon-Sun week; if already past, fall to next week's that day
+          diff=tgtDowMon-curDowMon;
+          if(diff<0)diff+=7;
+        }else{
+          // bare 周X/星期X: nearest upcoming (today counts)
+          diff=tgtDowMon-curDowMon;
+          if(diff<0)diff+=7;
         }
-        if(weekKind==='下下'){diff=(7-curDow+targetDow)%7+14;if(diff===0)diff=14}
         var td=new Date(now);td.setDate(now.getDate()+diff);
-        return{dateKey:dateKey(td),display:dt.match(/(下下|下|本|这)?周[一二三四五六日天]/)[0],type:'relative',date:td};
+        var labelMatch=dt.match(/(下下|下|本|这)?(?:周|星期)[一二三四五六日天]/);
+        var label=labelMatch?labelMatch[0]:('周'+wm[2]);
+        return{dateKey:dateKey(td),display:label,type:'relative',date:td};
       }
-      // 周末
+      // 周末 (Saturday)
       if(dt.indexOf('周末')>=0){
         var cd=now.getDay();
-        var add=6-cd;if(add<=0)add+=7;
+        var add=6-cd;
+        if(add<0)add+=7; // past Saturday this week -> next
+        if(dt.indexOf('下周末')>=0){
+          // 下周末 = the Saturday after this coming weekend
+          if(add===0)add=7; // today is Saturday -> next weekend's Saturday = 7 days
+          else add+=7;
+        }
         var wd=new Date(now);wd.setDate(now.getDate()+add);
         return{dateKey:dateKey(wd),display:(dt.indexOf('下周末')>=0?'下周末':'周末'),type:'relative',date:wd};
       }
