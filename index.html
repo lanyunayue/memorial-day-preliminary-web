@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#2563EB">
 <meta name="description" content="时刻 - 一句话整理提醒，不错过重要时间。输入一句安排，自动识别时间，本地保存。">
 <link rel="manifest" href="manifest.json">
-<title>时刻 - 智能提醒整理</title>
+<title>时刻 - 一句话整理提醒</title>
 <!-- ===== v5 hardening safety markers =====
   - SmartCreate v5: 智能创建 v5 已加固（本地解析，无外部API）
   - TimeInsights v5: 时光洞察 v5 已加固（localAdvice本地建议，提醒覆盖率本地计算）
@@ -365,6 +365,24 @@ ul, ol { list-style: none; }
   color: var(--text-muted);
 }
 
+/* Hero */
+.hero {
+  padding: 8px 0 16px;
+}
+.hero-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+  letter-spacing: -0.5px;
+}
+.hero-sub {
+  font-size: 14px;
+  color: var(--accent-deep);
+  margin: 0;
+  font-weight: 500;
+}
+
 /* Quick add bar */
 .quick-add {
   background: var(--bg-paper);
@@ -378,36 +396,51 @@ ul, ol { list-style: none; }
   display: flex;
   gap: 8px;
   align-items: center;
+  margin-bottom: 8px;
 }
 .quick-add-input {
   flex: 1;
-  height: 44px;
+  width: 100%;
+  height: 46px;
   padding: 0 14px;
   background: var(--bg-soft);
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  font-size: 14px;
+  font-size: 15px;
   outline: none;
   transition: all 0.12s;
+  box-sizing: border-box;
 }
 .quick-add-input:focus { background: var(--bg); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .quick-add-input::placeholder { color: var(--text-muted); }
 .quick-add-actions {
   display: flex;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 8px;
+  align-items: center;
 }
 .quick-add-btn {
   height: 44px;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: var(--radius-md);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   transition: all 0.12s;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: var(--bg-soft);
+  color: var(--text-primary);
 }
+.quick-add-btn.primary {
+  background: var(--accent);
+  color: #fff;
+  flex: 1;
+  box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+}
+.quick-add-btn.primary:hover { background: var(--accent-deep); }
 .quick-add-btn.mic {
   width: 44px;
   padding: 0;
@@ -520,6 +553,13 @@ ul, ol { list-style: none; }
 }
 .draft-field input:focus, .draft-field select:focus { border-color: var(--accent); }
 .draft-field.full { grid-column: 1 / -1; }
+.draft-source {
+  padding: 8px 12px;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
 .draft-actions {
   display: flex;
   gap: 8px;
@@ -1491,18 +1531,18 @@ ul, ol { list-style: none; }
 // ========== App State ==========
 const STORAGE_KEY = 'shike_app_state_v1';
 const NAV_ITEMS = [
-  { id: 'today', icon: '今', label: '今天' },
-  { id: 'inbox', icon: '导', label: '导入' },
-  { id: 'calendar', icon: '历', label: '日历' },
-  { id: 'list', icon: '全', label: '全部' },
-  { id: 'me', icon: '我', label: '我的' }
+  { id: 'today', icon: '✓', label: '今天' },
+  { id: 'inbox', icon: '↘', label: '导入' },
+  { id: 'calendar', icon: '▦', label: '日历' },
+  { id: 'list', icon: '☰', label: '全部' },
+  { id: 'me', icon: '◉', label: '我的' }
 ];
 const BOTTOM_TABS = [
-  { id: 'today', icon: '今', label: '今天' },
-  { id: 'inbox', icon: '导', label: '导入' },
-  { id: 'calendar', icon: '历', label: '日历' },
-  { id: 'list', icon: '全', label: '全部' },
-  { id: 'me', icon: '我', label: '我的' }
+  { id: 'today', icon: '✓', label: '今天' },
+  { id: 'inbox', icon: '↘', label: '导入' },
+  { id: 'calendar', icon: '▦', label: '日历' },
+  { id: 'list', icon: '☰', label: '全部' },
+  { id: 'me', icon: '◉', label: '我的' }
 ];
 
 const SCENARIOS = [
@@ -1816,21 +1856,6 @@ function buildTitle(clean, action, date, time, loc) {
       if (!candidate && loc && loc.length <= 8 && /会议|班会|讲座|培训|答辩|体检|考试|测验/.test(kw + (cleanedAfter||''))) {
         candidate = loc + ' ' + kw;
       }
-      if (!candidate && date) {
-        var dm = date.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-        if (dm) {
-          var m = parseInt(dm[2],10), d = parseInt(dm[3],10);
-          var today = new Date(); today.setHours(0,0,0,0);
-          var target = new Date(parseInt(dm[1],10), m-1, d);
-          var diff = Math.round((target - today)/86400000);
-          var dateLabel;
-          if (diff === 0) dateLabel = '今天';
-          else if (diff === 1) dateLabel = '明天';
-          else if (diff === 2) dateLabel = '后天';
-          else dateLabel = m+'月'+d+'日';
-          candidate = dateLabel + ' ' + kw;
-        }
-      }
       if (!candidate) candidate = kw;
       return candidate;
     }
@@ -1994,34 +2019,31 @@ function renderToday() {
   var upcoming = all.filter(function(r){var d=daysUntil(r.date);return d>=1&&d<=3;})
     .sort(function(a,b){return daysUntil(a.date)-daysUntil(b.date);});
 
-  var sc = SCENARIOS.find(function(x){return x.id===appState.scenario;});
-  var scName = sc ? sc.name : '学生';
-
   var html = '<div class="view'+active+'" id="view-today">';
 
-  // Greeting
-  html += '<div class="greeting">';
-  html += '<span>'+esc(getGreeting())+'，时刻</span>';
+  // Hero: 产品名+副标题
+  html += '<div class="hero">';
+  html += '<h1 class="hero-title">时刻</h1>';
+  html += '<p class="hero-sub">一句话整理提醒，不错过重要时间。</p>';
   html += '</div>';
-  html += '<div class="page-subtitle">一句话整理提醒，不错过重要时间</div>';
 
-  // Quick add bar
+  // Quick add bar - always visible, guaranteed ids
   html += '<div class="quick-add" id="quickAdd">';
   html += '<div class="quick-add-row">';
   html += '<input type="text" class="quick-add-input" id="quickAddInput" placeholder="明天下午3点交报告" autocomplete="off">';
+  html += '</div>';
   html += '<div class="quick-add-actions">';
   var micCls = voiceSupported ? '' : ' disabled';
   var micTitle = voiceSupported ? '语音输入' : '当前浏览器不支持语音，请使用文字输入';
   html += '<span class="voice-listening-hint" id="voiceListeningHint" style="display:none;"><span class="voice-pulse-dot"></span>聆听中</span>';
-  html += '<button class="quick-add-btn mic'+micCls+'" id="quickMicBtn" onclick="toggleQuickVoice(event)" title="'+micTitle+'">🎤</button>';
-  html += '<button class="quick-add-btn import" onclick="switchView(\'inbox\')">导入文字</button>';
-  html += '<button class="quick-add-btn" style="background:var(--accent);color:#fff;" onclick="quickAddParse()">+ 添加提醒</button>';
-  html += '</div>';
+  html += '<button type="button" class="quick-add-btn mic'+micCls+'" id="quickMicBtn" onclick="toggleQuickVoice(event)" title="'+micTitle+'">🎤</button>';
+  html += '<button type="button" class="quick-add-btn import" id="goImportButton" onclick="switchView(\'inbox\')">导入文字</button>';
+  html += '<button type="button" class="quick-add-btn primary" id="quickAddButton" onclick="quickAddParse()">添加提醒</button>';
   html += '</div>';
   html += '<div class="quick-examples" id="quickExamples">';
   var examples = ['妈妈生日','每周五健身','月底还信用卡','下周一体检'];
   for (var ei=0; ei<examples.length; ei++) {
-    html += '<button class="example-chip" onclick="fillQuickExample(\''+examples[ei].replace(/'/g,"\\'")+'\')">'+esc(examples[ei])+'</button>';
+    html += '<button type="button" class="example-chip" onclick="fillQuickExample(\''+examples[ei].replace(/'/g,"\\'")+'\')">'+esc(examples[ei])+'</button>';
   }
   html += '</div>';
   html += '</div>';
@@ -2031,14 +2053,12 @@ function renderToday() {
     html += renderQuickDraft();
   }
 
-  // Today's items (overdue first, then today)
   var todayAll = overdue.concat(todayItems);
   html += '<div class="section-head"><div class="section-title">今天</div></div>';
   if (todayAll.length === 0) {
-    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天还没有提醒</div><div class="empty-sub">添加第一条提醒，让时刻帮你记住重要时间。</div><button class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:8px;">+ 添加第一条提醒</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天还没有提醒</div><div class="empty-sub">添加第一条提醒，让时刻帮你记住重要时间。</div><button type="button" class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:8px;">+ 添加第一条提醒</button></div>';
   } else {
     html += '<div class="task-list">';
-    // Sort overdue by date (oldest first), then today by time
     todayAll.sort(function(a,b){
       var da = daysUntil(a.date), db = daysUntil(b.date);
       if (da !== db) return da - db;
@@ -2053,10 +2073,10 @@ function renderToday() {
     html += '</div>';
   }
 
-  // Upcoming (3 days)
-  html += '<div class="section-head"><div class="section-title">快截止</div></div>';
+  // Upcoming (3 days) - show all upcoming, not just high priority
+  html += '<div class="section-head"><div class="section-title">即将到来</div></div>';
   if (upcoming.length === 0) {
-    html += '<div class="empty-state" style="padding:24px 16px;"><div class="empty-text" style="font-size:13px;font-weight:400;color:var(--text-muted);">暂时没有快截止的提醒。</div></div>';
+    html += '<div class="empty-state" style="padding:20px 16px;"><div class="empty-text" style="font-size:13px;font-weight:400;color:var(--text-muted);">暂时没有即将到来的提醒。</div></div>';
   } else {
     html += '<div class="task-list">';
     for (var j=0;j<Math.min(upcoming.length,5);j++) {
@@ -2133,22 +2153,22 @@ function renderQuickDraft() {
     {v:'low',l:'普通'}
   ];
   var html = '<div class="draft-card" id="quickDraftCard">';
-  html += '<div class="draft-card-title">✎ 草稿预览（确认后保存）</div>';
+  html += '<div class="draft-card-title">✎ 提醒草稿</div>';
   html += '<div class="draft-fields">';
   html += '<div class="draft-field full"><label>标题</label><input type="text" id="draftTitle" value="'+esc(d.title)+'"></div>';
   html += '<div class="draft-field"><label>日期</label><input type="text" id="draftDate" value="'+esc(d.date||'待设定')+'" placeholder="如：明天、7月3日"></div>';
   html += '<div class="draft-field"><label>时间</label><input type="text" id="draftTime" value="'+esc(d.time||'')+'" placeholder="如：下午3点、15:00"></div>';
-  html += '<div class="draft-field"><label>地点</label><input type="text" id="draftLocation" value="'+esc(d.location||'')+'" placeholder="如：B205"></div>';
+  html += '<div class="draft-field"><label>地点</label><input type="text" id="draftLocation" value="'+esc(d.location||'')+'" placeholder="选填"></div>';
   html += '<div class="draft-field"><label>优先级</label><select id="draftPriority">';
   for (var i=0;i<priorityOptions.length;i++) {
     html += '<option value="'+priorityOptions[i].v+'"'+(d.riskLevel===priorityOptions[i].v?' selected':'')+'>'+priorityOptions[i].l+'</option>';
   }
   html += '</select></div>';
+  html += '<div class="draft-field full"><label>来源</label><div class="draft-source">'+esc(d.source||'手动添加')+' · '+esc(d.sourceText||d.title)+'</div></div>';
   html += '</div>';
   html += '<div class="draft-actions">';
-  html += '<button class="btn btn-ghost btn-sm" onclick="cancelQuickDraft()">取消</button>';
-  html += '<button class="btn btn-secondary btn-sm" onclick="saveQuickDraft(\'list\')">保存到清单</button>';
-  html += '<button class="btn btn-primary btn-sm" onclick="saveQuickDraft(\'today\')">保存到今天</button>';
+  html += '<button type="button" class="btn btn-ghost btn-sm" onclick="cancelQuickDraft()">取消</button>';
+  html += '<button type="button" class="btn btn-primary btn-sm" id="saveReminderBtn" onclick="saveQuickDraft(\'today\')" style="flex:1;">保存提醒</button>';
   html += '</div>';
   html += '</div>';
   return html;
@@ -2170,21 +2190,25 @@ function quickAddParse() {
   var input = document.getElementById('quickAddInput');
   if (!input) return;
   var text = input.value.trim();
-  if (!text) return;
-  var drafts = extractReminders(text, appState.identity, '快速添加');
+  if (!text) {
+    showToast('!','请输入一句话，例如"明天下午3点交报告"');
+    input.focus();
+    return;
+  }
+  var drafts = extractReminders(text, appState.identity, '手动添加');
   if (drafts.length === 0) {
-    // Create a minimal draft even if parsing fails
     quickDraft = {
       id: uid(), title: text, date: '', time: '', location: '',
-      category: '事项', riskLevel: detectPriority(text, 'mid'),
-      source: '快速添加', sourceText: text
+      category: '事项', riskLevel: detectPriority(text, 'low'),
+      source: '手动添加', sourceText: text
     };
+    showToast('!','没识别出时间，请在草稿中补充日期和时间');
   } else {
     var d = drafts[0];
     quickDraft = {
       id: d.id, title: d.title, date: d.date, time: d.time, location: d.location,
       category: d.category, riskLevel: d.riskLevel,
-      source: '快速添加', sourceText: d.sourceText
+      source: '手动添加', sourceText: d.sourceText
     };
   }
   input.value = '';
@@ -2237,10 +2261,13 @@ function saveQuickDraft(target) {
   };
   appState.reminders.push(reminder);
   quickDraft = null;
-  showToast('✓','已添加：'+title);
+  saveState();
+  showToast('✓','已保存提醒：'+title);
   if (target === 'list') appState.activeView = 'list';
   else appState.activeView = 'today';
   renderApp();
+  // Scroll to top to see the new reminder
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function cancelQuickDraft() {
@@ -2822,8 +2849,14 @@ function importData(ev) {
 // ========== Toggle Complete ==========
 function toggleComplete(id) {
   var idx = appState.completedIds.indexOf(id);
-  if (idx >= 0) appState.completedIds.splice(idx, 1);
-  else appState.completedIds.push(id);
+  if (idx >= 0) {
+    appState.completedIds.splice(idx, 1);
+    showToast('✓','已标记为未完成');
+  } else {
+    appState.completedIds.push(id);
+    showToast('✓','已完成');
+  }
+  saveState();
   renderApp();
 }
 
@@ -2864,8 +2897,9 @@ function deleteReminder(id) {
   showConfirm('删除提醒', '确定删除这条提醒？', function(){
     appState.reminders = appState.reminders.filter(function(r){return r.id!==id;});
     appState.completedIds = appState.completedIds.filter(function(x){return x!==id;});
+    saveState();
     closeDrawer();
-    showToast('🗑','提醒已删除');
+    showToast('✓','提醒已删除');
     renderApp();
   });
 }
