@@ -344,7 +344,8 @@ ul, ol { list-style: none; }
   color: var(--text-muted);
 }
 .empty-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
-.empty-text { font-size: 13px; margin-bottom: 12px; line-height: 1.6; }
+.empty-text { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.empty-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
 
 /* ========== Today View ========== */
 .greeting {
@@ -2000,10 +2001,9 @@ function renderToday() {
 
   // Greeting
   html += '<div class="greeting">';
-  html += '<span>'+esc(getGreeting())+'</span>';
-  html += '<span class="scenario-label">'+esc(scName)+'</span>';
+  html += '<span>'+esc(getGreeting())+'，时刻</span>';
   html += '</div>';
-  html += '<div class="page-subtitle">把要做的事先记下来，重要时间不会错过</div>';
+  html += '<div class="page-subtitle">一句话整理提醒，不错过重要时间</div>';
 
   // Quick add bar
   html += '<div class="quick-add" id="quickAdd">';
@@ -2033,9 +2033,9 @@ function renderToday() {
 
   // Today's items (overdue first, then today)
   var todayAll = overdue.concat(todayItems);
-  html += '<div class="section-head"><div class="section-title">今天事项<span class="section-count">'+todayAll.length+'</span></div></div>';
+  html += '<div class="section-head"><div class="section-title">今天</div></div>';
   if (todayAll.length === 0) {
-    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天还没有提醒</div><button class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:4px;">+ 添加第一条提醒</button><button class="btn btn-ghost btn-sm" onclick="switchView(\'inbox\')" style="margin-top:8px;">导入一段文字</button></div>';
+    html += '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">今天还没有提醒</div><div class="empty-sub">添加第一条提醒，让时刻帮你记住重要时间。</div><button class="btn btn-primary btn-sm" onclick="var inp=document.getElementById(\'quickAddInput\');if(inp)inp.focus();" style="margin-top:8px;">+ 添加第一条提醒</button></div>';
   } else {
     html += '<div class="task-list">';
     // Sort overdue by date (oldest first), then today by time
@@ -2054,17 +2054,16 @@ function renderToday() {
   }
 
   // Upcoming (3 days)
-  if (upcoming.length > 0) {
-    html += '<div class="section-head"><div class="section-title">快截止<span class="section-count">'+upcoming.length+'</span></div></div>';
+  html += '<div class="section-head"><div class="section-title">快截止</div></div>';
+  if (upcoming.length === 0) {
+    html += '<div class="empty-state" style="padding:24px 16px;"><div class="empty-text" style="font-size:13px;font-weight:400;color:var(--text-muted);">暂时没有快截止的提醒。</div></div>';
+  } else {
     html += '<div class="task-list">';
     for (var j=0;j<Math.min(upcoming.length,5);j++) {
       html += renderTaskItem(upcoming[j]);
     }
     html += '</div>';
   }
-
-  // Agent suggestion
-  html += renderAgentSuggest(overdue, todayItems, upcoming);
 
   html += '</div>';
   return html;
@@ -3014,10 +3013,22 @@ function toggleSidebar(open) {
 
 // ========== Init ==========
 function init() {
-  if (!appState.onboarded) showWelcome();
-  else hideWelcome();
+  // 首次打开直接进入主界面，不强制弹 onboarding 遮罩，保证第一屏就能输入
+  if (appState.onboarded) {
+    hideWelcome();
+  } else {
+    hideWelcome();
+    appState.onboarded = true;
+    appState.identity = appState.identity || '个人生活';
+    appState.scenario = appState.scenario || 'personal';
+    saveState();
+  }
   selectedScenario = appState.scenario || 'personal';
   renderApp();
+  setTimeout(function(){
+    var inp = document.getElementById('quickAddInput');
+    if (inp) inp.focus();
+  }, 100);
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function(){});
   }
