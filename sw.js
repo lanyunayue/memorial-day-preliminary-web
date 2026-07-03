@@ -1,22 +1,17 @@
-/* 时刻 PWA Service Worker - v1.0 */
-const CACHE_VERSION = 'shike-v1-0';
-const CACHE_NAME = CACHE_VERSION;
-
-const STATIC_ASSETS = [
+// Service Worker for 时刻 (Shike)
+// Cache name: shike-v-final-mvp - bump this to invalidate old caches
+var CACHE_NAME = 'shike-v-final-mvp';
+var ASSETS = [
   './',
   './index.html',
-  './manifest.json',
-  './sw.js'
+  './manifest.json'
 ];
 
-// Install: cache core static assets
+// Install: pre-cache core assets
 self.addEventListener('install', function(event) {
-  console.log('[SW] Installing, cache:', CACHE_NAME);
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(STATIC_ASSETS).catch(function(err) {
-        console.log('[SW] Cache addAll warning (may be offline):', err);
-      });
+      return cache.addAll(ASSETS);
     }).then(function() {
       return self.skipWaiting();
     })
@@ -25,14 +20,12 @@ self.addEventListener('install', function(event) {
 
 // Activate: clean old caches
 self.addEventListener('activate', function(event) {
-  console.log('[SW] Activating, claiming clients');
   event.waitUntil(
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(key) {
-          return key.startsWith('memorial-day-') || (key.startsWith('shike-') && key !== CACHE_NAME);
+          return key !== CACHE_NAME;
         }).map(function(key) {
-          console.log('[SW] Deleting old cache:', key);
           return caches.delete(key);
         })
       );
@@ -42,29 +35,22 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-// Fetch strategy - network-first for HTML (navigate), cache-first with network update for others
+// Fetch: network-first for HTML, cache-first for other assets
 self.addEventListener('fetch', function(event) {
-  var request = event.request;
-  if (request.method !== 'GET') return;
-  var url = new URL(request.url);
+  var url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
-  if (!url.protocol.startsWith('http')) return;
 
-  if (request.mode === 'navigate') {
+  // Network-first for HTML to ensure users always get the latest version
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
     event.respondWith(
-      fetch(request).then(function(networkResponse) {
-        if (networkResponse && networkResponse.status === 200) {
-          var copy = networkResponse.clone();
-          caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(request, copy);
-          });
-          return networkResponse;
-        }
-        return caches.match(request).then(function(cached) {
-          return cached || networkResponse;
+      fetch(event.request).then(function(response) {
+        var copy = response.clone();
+        caches.open(CACHE_NAME).then(function(cache) {
+          cache.put(event.request, copy);
         });
+        return response;
       }).catch(function() {
-        return caches.match(request).then(function(cached) {
+        return caches.match(event.request).then(function(cached) {
           return cached || caches.match('./index.html');
         });
       })
@@ -72,20 +58,21 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
+  // Cache-first for other static assets
   event.respondWith(
-    caches.match(request).then(function(cachedResponse) {
-      var fetchPromise = fetch(request).then(function(networkResponse) {
-        if (networkResponse && networkResponse.status === 200) {
-          var copy = networkResponse.clone();
+    caches.match(event.request).then(function(cached) {
+      if (cached) return cached;
+      return fetch(event.request).then(function(response) {
+        if (response && response.status === 200) {
+          var copy = response.clone();
           caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(request, copy);
+            cache.put(event.request, copy);
           });
         }
-        return networkResponse;
+        return response;
       }).catch(function() {
-        return cachedResponse;
+        return cached;
       });
-      return cachedResponse || fetchPromise;
     })
   );
 });
