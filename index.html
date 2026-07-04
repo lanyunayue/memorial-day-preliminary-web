@@ -90,6 +90,7 @@ body{display:flex;flex-direction:column;position:relative}
 .save-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-md);padding:0 28px;min-height:52px;font-size:17px;font-weight:700;cursor:pointer;transition:all .15s ease;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 10px rgba(139,115,85,.3);font-family:var(--font);letter-spacing:.5px}
 .save-btn:active{transform:scale(.96);background:var(--accent-soft)}
 .save-btn:disabled{opacity:.5;cursor:not-allowed}
+.input-diff-note{font-size:12px;color:var(--text-muted);text-align:center;margin-top:10px;line-height:1.5}
 
 /* Record Cards - THICK, SUBSTANTIAL */
 .card-section{margin-bottom:20px}
@@ -260,6 +261,11 @@ body{display:flex;flex-direction:column;position:relative}
 .theme-dot.ink{background:linear-gradient(135deg,#1a1a1c,#2a2a2e)}
 .theme-dot.sage{background:linear-gradient(135deg,#f6f7f4,#dde3d7)}
 .theme-dot.mica{background:linear-gradient(135deg,#f7f5f8,#e6dfea)}
+.why-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow-sm);border:1px solid var(--border-soft)}
+.why-item{display:flex;gap:12px;align-items:flex-start;padding:8px 0}
+.why-item+.why-item{border-top:1px solid var(--border-soft)}
+.why-num{width:22px;height:22px;border-radius:50%;background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.why-text{font-size:13px;color:var(--text-sec);line-height:1.6;flex:1}
 .my-notes{padding:14px 18px;font-size:12px;color:var(--text-muted);background:var(--bg-soft);margin:0 0 16px;border-radius:var(--radius-md);line-height:1.8}
 .my-notes p{margin:2px 0}
 .version-info{text-align:center;padding:20px 0 10px;font-size:12px;color:var(--text-muted);line-height:2}
@@ -375,6 +381,7 @@ body{display:flex;flex-direction:column;position:relative}
       <textarea class="main-input" id="quickInput" placeholder="输入后保存" rows="1" aria-label="记一件事"></textarea>
       <button class="save-btn" id="saveButton">保存</button>
     </div>
+    <div class="input-diff-note">可识别时间、重复和纪念日，保存后自动进入日历。</div>
   </div>
 
   <div id="nextReminderBlock"></div>
@@ -432,11 +439,11 @@ body{display:flex;flex-direction:column;position:relative}
 <!-- IMPORT -->
 <div class="page" id="pageImport">
   <div class="import-panel">
-    <div class="input-label">批量整理</div>
-    <div class="import-desc">粘贴多行文字，按行拆分为记录草稿。本地规则整理。</div>
-    <textarea class="import-textarea" id="importTextInput" placeholder="每行一条记录..."></textarea>
+    <div class="input-label">整理一段通知</div>
+    <div class="import-desc">粘贴聊天或通知文字，时刻会按行拆成记录草稿。本地规则整理。</div>
+    <textarea class="import-textarea" id="importTextInput" placeholder="粘贴多行文字，每行一条记录..."></textarea>
     <div class="import-actions">
-      <button class="save-btn" id="importParseBtn" style="flex:1">开始整理</button>
+      <button class="save-btn" id="importParseBtn" style="flex:1">整理成记录</button>
       <button class="btn-secondary" id="importExampleBtn" style="display:flex;align-items:center;justify-content:center;cursor:pointer">示例</button>
       <label class="btn-secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer">
         TXT
@@ -498,9 +505,27 @@ body{display:flex;flex-direction:column;position:relative}
     </div>
   </div>
 
+  <div class="my-section">
+    <div class="my-section-title">为什么不用普通备忘录？</div>
+    <div class="why-card">
+      <div class="why-item">
+        <div class="why-num">1</div>
+        <div class="why-text">备忘录只是保存文字，时刻会整理成带时间、类型、倒计时的记录卡片。</div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">2</div>
+        <div class="why-text">日历需要手动填时间，时刻能从一句话里自动识别日期、时间和重复规则。</div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">3</div>
+        <div class="why-text">班群通知、聊天安排可以批量粘贴整理，不用一条条手动添加。</div>
+      </div>
+    </div>
+  </div>
+
   <div class="my-notes">
     <p>数据：本机保存，刷新不丢。</p>
-    <p>本地规则整理，未接入真实大模型。</p>
+    <p>本地规则整理，未接入云端AI。</p>
     <p>提醒：页面打开时每分钟检查一次，浏览器关闭后不保证提醒。</p>
     <p>语音输入后续优化，当前建议使用文字记录。</p>
     <p>PDF/DOCX 后续支持。</p>
@@ -509,7 +534,7 @@ body{display:flex;flex-direction:column;position:relative}
 
   <div class="version-info">
     <div class="ver-num" id="appVersion">v0.4.0</div>
-    <div id="appUpdatedAt">更新时间：2026-07-04 18:55</div>
+    <div id="appUpdatedAt">更新时间：2026-07-04 19:05</div>
   </div>
 </div>
 
@@ -570,7 +595,7 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* ================= Constants ================= */
 var APP_VERSION = 'v0.4.0';
-var APP_UPDATED_AT = '2026-07-04 18:55';
+var APP_UPDATED_AT = '2026-07-04 19:05';
 
 var STORAGE_KEY = 'shike_reminders_v1';
 var THEME_KEY = 'shike_theme_v1';
