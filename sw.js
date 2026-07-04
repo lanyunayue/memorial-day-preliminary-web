@@ -1,5 +1,5 @@
-// Service Worker for 时刻 (Shike) - Final Product v8
-var CACHE_NAME = 'shike-final-v8';
+// Service Worker for 时刻 (Shike) - v0.4.0 Final
+var CACHE_NAME = 'shike-v040-r2';
 var ASSETS = ['./','./index.html','./manifest.json'];
 self.addEventListener('install',function(event){
   event.waitUntil(caches.open(CACHE_NAME).then(function(cache){return cache.addAll(ASSETS)}).then(function(){return self.skipWaiting()}));
