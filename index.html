@@ -104,6 +104,9 @@ body{display:flex;flex-direction:column;position:relative}
 .record-card.kind-habit::before{background:var(--habit)}
 .record-card.kind-note::before{background:var(--note)}
 .record-card.archived{opacity:.5}
+.record-card.handled{opacity:.65}
+.record-card.handled .rc-title{text-decoration:line-through;text-decoration-color:var(--text-muted)}
+.rc-handle-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:var(--success-bg);color:var(--success);margin-left:6px}
 .rc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
 .rc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .rc-kind{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.3px}
@@ -129,6 +132,7 @@ body{display:flex;flex-direction:column;position:relative}
 .rc-action{padding:8px 12px;text-align:center;font-size:12px;color:var(--text-sec);background:var(--bg-soft);border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s ease;font-family:var(--font);font-weight:500}
 .rc-action:active{background:var(--border);transform:scale(.96)}
 .rc-action.danger{color:var(--warn);opacity:.75}
+.rc-action.success{color:var(--success);font-weight:600}
 .rc-action.primary{color:var(--accent);background:var(--accent-bg)}
 .rc-spacer{flex:1}
 
@@ -284,6 +288,8 @@ body{display:flex;flex-direction:column;position:relative}
 .drawer-footer .btn-cancel:active{background:var(--border)}
 .drawer-footer .btn-primary{background:var(--accent);color:#fff}
 .drawer-footer .btn-primary:active{background:var(--accent-soft)}
+.drawer-footer .btn-secondary{background:var(--success-bg);color:var(--success)}
+.drawer-footer .btn-secondary:active{background:var(--border)}
 .drawer-footer .btn-danger{background:var(--warn-bg);color:var(--warn)}
 .drawer-footer .btn-danger:active{background:var(--border)}
 
@@ -426,10 +432,12 @@ body{display:flex;flex-direction:column;position:relative}
 <div class="page" id="pageImport">
   <div class="import-panel">
     <div class="input-label">批量整理</div>
-    <div class="import-desc">粘贴一段文字，每行一条记录，时刻会自动整理成可保存的草稿。</div>
+    <div class="import-desc">粘贴一段文字，每行一条记录，时刻会自动整理成可保存的草稿。<br>
+    示例：下周一体检，记得空腹。 / 月底还信用卡。 / 每天睡前涂润唇膏。 / 7月8日妈妈生日。</div>
     <textarea class="import-textarea" id="importTextInput" placeholder="每行一条记录..."></textarea>
     <div class="import-actions">
       <button class="save-btn" id="importParseBtn" style="flex:1">开始整理</button>
+      <button class="btn-secondary" id="importExampleBtn" style="display:flex;align-items:center;justify-content:center;cursor:pointer">示例</button>
       <label class="btn-secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer">
         TXT
         <input type="file" id="importFileInput" accept=".txt,text/plain" style="display:none">
@@ -493,6 +501,7 @@ body{display:flex;flex-direction:column;position:relative}
   <div class="my-notes">
     <p>数据：本机保存，刷新不丢。</p>
     <p>本地规则整理，未接入真实大模型。</p>
+    <p>提醒：页面打开时每分钟检查一次，浏览器关闭后不保证提醒。</p>
     <p>语音输入后续优化，当前建议使用文字记录。</p>
     <p>PDF/DOCX 后续支持。</p>
     <p>Web 与 HarmonyOS 当前不实时同步。</p>
@@ -561,7 +570,7 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* ================= Constants ================= */
 var APP_VERSION = 'v0.4.0';
-var APP_UPDATED_AT = '2026-07-04 05:30';
+var APP_UPDATED_AT = '2026-07-04 17:48';
 
 var STORAGE_KEY = 'shike_reminders_v1';
 var THEME_KEY = 'shike_theme_v1';
@@ -706,6 +715,7 @@ function normalizeRecord(r){
 }
 function normalizeRecordState(r){
   if(r.archived) return 'archived';
+  if(r.handledAt) return 'handled';
   if(r.notifiedAt) return 'notified';
   return 'active';
 }
@@ -1053,15 +1063,17 @@ function updateNotifyStatusUI(){
   var map={granted:'已开启',denied:'已拒绝',default:'未开启',unsupported:'不支持'};
   el.textContent=map[st]||'未开启';
 }
-function requestNotificationPermission(){
-  if(!isNotificationSupported()){showToast('当前浏览器不支持系统通知，可以继续保存记录','warn');return;}
-  if(Notification.permission==='granted'){showToast('通知已开启');updateNotifyStatusUI();return;}
-  if(Notification.permission==='denied'){showToast('没有通知权限，记录已保存，可稍后在浏览器设置中开启','warn');return;}
+function requestNotificationPermission(cb){
+  if(!isNotificationSupported()){showToast('当前浏览器不支持系统通知，可以继续保存记录','warn');if(cb)cb(false);return;}
+  if(Notification.permission==='granted'){showToast('通知已开启');updateNotifyStatusUI();if(cb)cb(true);return;}
+  if(Notification.permission==='denied'){showToast('没有通知权限，记录已保存，可稍后在浏览器设置中开启','warn');if(cb)cb(false);return;}
   Notification.requestPermission().then(function(perm){
-    if(perm==='granted'){showToast('通知已开启，到时间会提醒你','success');scheduleReminderNotifications();}
+    var granted=perm==='granted';
+    if(granted){showToast('通知已开启，到时间会提醒你','success');scheduleReminderNotifications();}
     else{showToast('未开启通知，记录已保存在本地','warn');}
     updateNotifyStatusUI();
-  }).catch(function(){showToast('无法请求通知权限','warn');updateNotifyStatusUI();});
+    if(cb)cb(granted);
+  }).catch(function(){showToast('无法请求通知权限','warn');updateNotifyStatusUI();if(cb)cb(false);});
 }
 function canNotify(r){
   if(!r||r.archived) return false;
@@ -1189,10 +1201,23 @@ function toggleArchive(id){
   var idx=list.findIndex(function(r){return r.id===id;});
   if(idx<0) return;
   list[idx].archived=!list[idx].archived;
+  if(list[idx].archived) list[idx].handledAt=null;
   list[idx].recordState=normalizeRecordState(list[idx]);
   list[idx].updatedAt=Date.now();
   saveReminders(list);
   showToast(list[idx].archived?'已隐藏':'已恢复','success');
+  closeDrawer();renderAll();
+}
+function markHandled(id){
+  var list=loadReminders();
+  var idx=list.findIndex(function(r){return r.id===id;});
+  if(idx<0) return;
+  var r=list[idx];
+  if(r.handledAt){r.handledAt=null;showToast('已取消处理','success');}
+  else{r.handledAt=Date.now();r.notifiedAt=null;showToast('已处理','success');}
+  r.recordState=normalizeRecordState(r);
+  r.updatedAt=Date.now();
+  saveReminders(list);
   closeDrawer();renderAll();
 }
 function deleteRecord(id){
@@ -1213,6 +1238,8 @@ function renderRecordCard(r,opts){
   var kindLabel=getKindLabel(kind);
   var notifyBadge='';
   function _notifyGranted(){return isNotificationSupported()&&Notification.permission==='granted';}
+  var isHandled=!!r.handledAt;
+  var isReminderKind=(kind==='reminder');
   if(r.notifyMode&&r.notifyMode!=='none'){
     if(r.notifiedAt&&r.repeat==='none'){
       notifyBadge='<span class="rc-notify-badge notified">已提醒</span>';
@@ -1222,12 +1249,17 @@ function renderRecordCard(r,opts){
       notifyBadge='<span class="rc-notify-badge off">待授权</span>';
     }
   }
+  if(isHandled){
+    notifyBadge='<span class="rc-handle-badge">已处理</span>'+notifyBadge;
+  }
   var actionsHtml='';
   if(!opts.compact){
-    var canN=true; // All non-archived records can have notify toggled
+    var canN=true;
+    var handleBtn=isReminderKind?'<button class="rc-action '+(isHandled?'':'success')+'" data-action="handle" data-id="'+r.id+'">'+(isHandled?'取消处理':'已处理')+'</button>':'';
     actionsHtml='<div class="rc-actions">'+
       '<button class="rc-action primary" data-action="edit" data-id="'+r.id+'">编辑</button>'+
       (canN?'<button class="rc-action" data-action="notify" data-id="'+r.id+'">'+(r.notifyMode!=='none'?'关提醒':'提醒')+'</button>':'')+
+      handleBtn+
       '<div class="rc-spacer"></div>'+
       '<button class="rc-action" data-action="archive" data-id="'+r.id+'">'+(r.archived?'恢复':'隐藏')+'</button>'+
       '<button class="rc-action danger" data-action="delete" data-id="'+r.id+'">删除</button>'+
@@ -1236,7 +1268,7 @@ function renderRecordCard(r,opts){
   var metaHtml='<span class="rc-kind">'+kindLabel+'</span><span class="rc-date-info">'+escHtml(meta)+'</span>';
   var cdHtml=cd?'<span class="rc-countdown '+cd.cls+'">'+cd.text+'</span>':'';
   var noteHtml=r.note?'<div class="rc-note">'+escHtml(r.note)+'</div>':'';
-  return '<div class="record-card kind-'+kind+(r.archived?' archived':'')+'" data-id="'+r.id+'">'+
+  return '<div class="record-card kind-'+kind+(r.archived?' archived':'')+(isHandled?' handled':'')+'" data-id="'+r.id+'">'+
     '<div class="rc-top"><div class="rc-meta">'+metaHtml+notifyBadge+'</div>'+cdHtml+'</div>'+
     '<div class="rc-title">'+escHtml(r.title)+'</div>'+noteHtml+actionsHtml+'</div>';
 }
@@ -1257,7 +1289,7 @@ function getRecordsByDateKey(dateKey){
 
 /* ================= Page: Home ================= */
 function renderHome(){
-  var list=loadReminders().filter(function(r){return !r.archived;});
+  var list=loadReminders().filter(function(r){return !r.archived&&!r.handledAt;});
   var nextBlock=$('nextReminderBlock');
   var recentBlock=$('recentListBlock');
 
@@ -1271,19 +1303,31 @@ function renderHome(){
 
   var upcoming=list.filter(function(r){
     var d=getReminderDateObject(r);
-    if(!d) return false;
+    if(!d){
+      if(r.recordKind==='anniversary'){
+        var ad=getReminderDateObject(r,{allowPast:true});
+        return !!ad;
+      }
+      return false;
+    }
+    if(r.recordKind==='anniversary') return true;
     return d.getTime()>=Date.now()-3600000;
   }).sort(function(a,b){
-    var da=getReminderDateObject(a),db=getReminderDateObject(b);
+    var da=getReminderDateObject(a,{allowPast:a.recordKind==='anniversary'}),db=getReminderDateObject(b,{allowPast:b.recordKind==='anniversary'});
     return(da?da.getTime():Infinity)-(db?db.getTime():Infinity);
   });
   var nextId=upcoming.length>0?upcoming[0].id:null;
   if(nextId){
     nextBlock.innerHTML='<div class="card-section">'+
-      '<div class="card-section-head"><div class="card-section-title">即将到来</div>'+
-      '<div class="card-section-count">1</div></div>'+
+      '<div class="card-section-head"><div class="card-section-title">下一个记录</div></div>'+
       renderRecordCard(upcoming[0])+'</div>';
-  }else{nextBlock.innerHTML='';}
+  }else{
+    nextBlock.innerHTML='<div class="card-section">'+
+      '<div class="card-section-head"><div class="card-section-title">下一个记录</div></div>'+
+      '<div class="empty-state-card" style="padding:20px">'+
+      '<div class="empty-title">还没有安排时间的记录</div>'+
+      '<div class="empty-desc">为记录设置日期后，会在这里显示即将到来的事项。</div></div></div>';
+  }
 
   var recent=list.filter(function(r){return r.id!==nextId;}).slice(0,3);
   if(recent.length>0){
@@ -1570,6 +1614,11 @@ function openDetailDrawer(id){
   var cd=formatRecordCountdown(r);
   var kindLabel=getKindLabel(r.recordKind);
   var notifyLabels={none:'不提醒',same_day:'当天提醒',day_before:'提前一天',three_days_before:'提前三天'};
+  var notifyModes=[{v:'none',l:'不提醒'},{v:'same_day',l:'当天提醒'},{v:'day_before',l:'提前一天'},{v:'three_days_before',l:'提前三天'}];
+  var canSetNotify=!!(r.dateText||r.timeText);
+  var notifyChips='<div class="radio-group" id="detailNotifyGroup">'+notifyModes.map(function(m){
+    return '<span class="radio-chip'+(r.notifyMode===m.v?' active':'')+'" data-notify="'+m.v+'">'+m.l+'</span>';
+  }).join('')+'</div>';
   var body='<div style="margin-bottom:18px">'+
     '<div style="font-size:20px;font-weight:700;margin-bottom:8px;line-height:1.5">'+escHtml(r.title)+'</div>'+
     (cd?'<div style="font-size:15px;color:var(--accent);font-weight:600">'+cd.text+'</div>':'')+'</div>'+
@@ -1578,15 +1627,41 @@ function openDetailDrawer(id){
     '<div class="detail-row"><span class="detail-label">时间</span><span class="detail-value">'+(r.timeText?escHtml(r.timeText):'未设时间')+'</span></div>'+
     (r.locationText?'<div class="detail-row"><span class="detail-label">地点</span><span class="detail-value">'+escHtml(r.locationText)+'</span></div>':'')+
     (r.repeatText?'<div class="detail-row"><span class="detail-label">重复</span><span class="detail-value">'+escHtml(r.repeatText)+'</span></div>':'')+
-    '<div class="detail-row"><span class="detail-label">提醒</span><span class="detail-value">'+(notifyLabels[r.notifyMode]||'不提醒')+'</span></div>'+
+    (canSetNotify?'<div class="detail-row" style="flex-direction:column;align-items:flex-start;gap:8px"><span class="detail-label">提醒设置</span>'+notifyChips+'</div>':
+    '<div class="detail-row"><span class="detail-label">提醒</span><span class="detail-value">'+(notifyLabels[r.notifyMode]||'不提醒')+'</span></div>')+
     (r.note?'<div class="detail-row"><span class="detail-label">备注</span><span class="detail-value">'+escHtml(r.note)+'</span></div>':'')+
     '<div class="detail-row"><span class="detail-label">记录时间</span><span class="detail-value">'+new Date(r.createdAt).toLocaleDateString('zh-CN')+'</span></div>';
-  var footer='<button class="btn-cancel" id="drawerCloseBtn">关闭</button>'+
+  var handleBtn=(r.recordKind==='reminder'?'<button class="btn-secondary" id="drawerHandleBtn">'+(r.handledAt?'取消处理':'已处理')+'</button>':'');
+  var footer='<button class="btn-cancel" id="drawerCloseBtn">关闭</button>'+handleBtn+
     '<button class="btn-primary" id="drawerEditBtn">编辑</button>';
   openDrawer('记录详情',body,footer);
   setTimeout(function(){
     var cb=$('drawerCloseBtn');if(cb)cb.addEventListener('click',closeDrawer);
+    var hb=$('drawerHandleBtn');if(hb)hb.addEventListener('click',function(){markHandled(id);});
     var eb=$('drawerEditBtn');if(eb)eb.addEventListener('click',function(){openEditDrawer(id);});
+    var ng=$('detailNotifyGroup');
+    if(ng){
+      ng.querySelectorAll('.radio-chip').forEach(function(chip){
+        chip.addEventListener('click',function(){
+          var mode=chip.dataset.notify;
+          var list2=loadReminders();
+          var idx2=list2.findIndex(function(x){return x.id===id;});
+          if(idx2<0)return;
+          if(mode!=='none'&&isNotificationSupported()&&Notification.permission==='default'){
+            requestNotificationPermission(function(granted){
+              if(!granted){showToast('没有通知权限，可稍后在浏览器设置中开启','warn');}
+            });
+          }
+          list2[idx2].notifyMode=mode;
+          list2[idx2].updatedAt=Date.now();
+          saveReminders(list2);
+          scheduleReminderNotifications();
+          showToast('提醒设置已更新','success');
+          openDetailDrawer(id);
+          renderAll();
+        });
+      });
+    }
   },10);
 }
 function openEditDrawer(id){
@@ -1703,6 +1778,7 @@ function bindCardActions(container){
       if(!action||!id) return;
       if(action==='edit') openEditDrawer(id);
       else if(action==='notify') toggleNotify(id);
+      else if(action==='handle') markHandled(id);
       else if(action==='archive') toggleArchive(id);
       else if(action==='delete') deleteRecord(id);
     });
@@ -1838,6 +1914,10 @@ function init(){
 
   // Import
   $('importParseBtn').addEventListener('click',handleImportParse);
+  $('importExampleBtn').addEventListener('click',function(){
+    $('importTextInput').value='下周一体检，记得空腹。\n月底还信用卡。\n每天睡前涂润唇膏。\n7月8日妈妈生日。';
+    showToast('已填入示例文本','success');
+  });
   $('importFileInput').addEventListener('change',handleTxtUpload);
 
   // My page
