@@ -78,16 +78,16 @@ body{display:flex;flex-direction:column;position:relative}
 @keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* Input Card - STRONG, PROMINENT */
-.input-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:20px 20px 18px;box-shadow:var(--shadow-input);border:1.5px solid var(--accent-bg);margin-bottom:20px;transition:all .25s ease;position:relative}
+.input-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:20px 20px 18px;box-shadow:var(--shadow-input);border:2px solid var(--accent);margin-bottom:20px;transition:all .25s ease;position:relative}
 .input-card.focused{box-shadow:var(--shadow-lg);border-color:var(--accent)}
-.input-card::before{content:'';position:absolute;top:0;left:18px;right:18px;height:3px;background:var(--accent);border-radius:0 0 3px 3px;opacity:.6}
-.input-label{font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:.3px}
-.input-hint{font-size:13px;color:var(--text-muted);margin-bottom:14px}
-.input-row{display:flex;gap:10px;align-items:flex-end}
-.main-input{flex:1;border:none;background:var(--bg-soft);border-radius:var(--radius-md);padding:14px 16px;font-size:16px;font-family:var(--font);color:var(--text);outline:none;resize:none;min-height:50px;max-height:140px;line-height:1.5;transition:all .2s}
-.main-input:focus{background:var(--accent-bg)}
-.main-input::placeholder{color:var(--text-muted)}
-.save-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-md);padding:0 24px;height:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .15s ease;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 8px rgba(139,115,85,.25);font-family:var(--font)}
+.input-card::before{content:'';position:absolute;top:0;left:18px;right:18px;height:4px;background:var(--accent);border-radius:0 0 4px 4px;opacity:.8}
+.input-label{font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px}
+.input-hint{font-size:13px;color:var(--text-muted);margin-bottom:12px}
+.input-row{display:flex;gap:10px;align-items:stretch}
+.main-input{flex:1;border:2px solid var(--border-soft);background:var(--bg-soft);border-radius:var(--radius-md);padding:14px 16px;font-size:17px;font-family:var(--font);color:var(--text);outline:none;resize:none;min-height:52px;max-height:140px;line-height:1.5;transition:all .2s}
+.main-input:focus{background:#fff;border-color:var(--accent)}
+.main-input::placeholder{color:var(--text-muted);font-size:15px}
+.save-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-md);padding:0 28px;min-height:52px;font-size:17px;font-weight:700;cursor:pointer;transition:all .15s ease;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 10px rgba(139,115,85,.3);font-family:var(--font);letter-spacing:.5px}
 .save-btn:active{transform:scale(.96);background:var(--accent-soft)}
 .save-btn:disabled{opacity:.5;cursor:not-allowed}
 
@@ -141,19 +141,19 @@ body{display:flex;flex-direction:column;position:relative}
 .week-month{font-size:14px;font-weight:600;color:var(--text-sec)}
 .week-today-hint{font-size:11px;color:var(--accent);font-weight:500}
 .week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px}
-.wk-day{background:var(--bg-card);border-radius:var(--radius-md);padding:10px 4px 8px;text-align:center;border:1.5px solid var(--border-soft);cursor:pointer;transition:all .15s ease;position:relative}
+.wk-day{background:var(--bg-card);border-radius:var(--radius-md);padding:12px 4px 10px;text-align:center;border:2px solid var(--border-soft);cursor:pointer;transition:all .15s ease;position:relative;min-height:64px}
 .wk-day:active{transform:scale(.93)}
 .wk-day.today{border-color:var(--accent);background:var(--accent-bg)}
 .wk-day.selected{border-color:var(--accent);background:var(--accent);color:#fff}
 .wk-day.selected .wk-num{color:#fff}
-.wk-day.selected .wk-dow{color:rgba(255,255,255,.8)}
-.wk-day.has-mark::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);display:block;margin:5px auto 0}
+.wk-day.selected .wk-dow{color:rgba(255,255,255,.85)}
+.wk-day.has-mark::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);display:block;margin:6px auto 0}
 .wk-day.today.has-mark::after{background:var(--accent)}
 .wk-day.selected.has-mark::after{background:#fff}
 .wk-day.other-month{opacity:.35}
-.wk-dow{font-size:10px;color:var(--text-muted);margin-bottom:3px;font-weight:500}
+.wk-dow{font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:500}
 .wk-day.selected .wk-dow{color:rgba(255,255,255,.8)}
-.wk-num{font-size:16px;font-weight:700;color:var(--text)}
+.wk-num{font-size:20px;font-weight:700;color:var(--text);line-height:1}
 .wk-day.today .wk-num{color:var(--accent)}
 .wk-day.selected .wk-num{color:#fff}
 .week-day-summary{margin-top:10px;background:var(--bg-soft);border-radius:var(--radius-md);padding:12px 14px;font-size:13px;color:var(--text-sec);display:none}
@@ -180,12 +180,12 @@ body{display:flex;flex-direction:column;position:relative}
 .cal-weekday{font-size:11px;color:var(--text-muted);padding:8px 0;font-weight:600}
 .cal-weekday.wknd{color:var(--warn)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
-.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:14px;cursor:pointer;position:relative;transition:all .15s ease;color:var(--text-sec);font-weight:500}
+.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md);font-size:16px;cursor:pointer;position:relative;transition:all .15s ease;color:var(--text-sec);font-weight:600;border:2px solid transparent}
 .cal-cell:active{transform:scale(.9)}
-.cal-cell.other-month{color:var(--text-muted);opacity:.3}
-.cal-cell.today{background:var(--accent-bg);color:var(--accent);font-weight:700;border:1.5px solid var(--accent)}
-.cal-cell.selected{background:var(--accent);color:#fff;font-weight:700;border:1.5px solid var(--accent)}
-.cal-cell.has-mark::after{content:'';position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.cal-cell.other-month{color:var(--text-muted);opacity:.25}
+.cal-cell.today{background:var(--accent-bg);color:var(--accent);font-weight:700;border-color:var(--accent)}
+.cal-cell.selected{background:var(--accent);color:#fff;font-weight:700;border-color:var(--accent)}
+.cal-cell.has-mark::after{content:'';position:absolute;bottom:5px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
 .cal-cell.selected.has-mark::after{background:#fff}
 .cal-cell.today.has-mark::after{background:var(--accent)}
 .cal-day-panel{background:var(--bg-card);border-radius:var(--radius-lg);padding:16px;border:1px solid var(--border-soft);box-shadow:var(--shadow-sm)}
@@ -372,13 +372,14 @@ body{display:flex;flex-direction:column;position:relative}
     <div class="input-label">记一件事</div>
     <div class="input-hint">一句话就够了</div>
     <div class="input-row">
-      <textarea class="main-input" id="quickAddInput" placeholder="输入后保存" rows="1" aria-label="记一件事"></textarea>
-      <button class="save-btn" id="quickAddButton">保存</button>
+      <textarea class="main-input" id="quickInput" placeholder="输入后保存" rows="1" aria-label="记一件事"></textarea>
+      <button class="save-btn" id="saveButton">保存</button>
     </div>
   </div>
 
   <div id="nextReminderBlock"></div>
-  <div id="recentListBlock"></div>
+  <div id="homeRecordList"></div>
+  <div id="emptyHomeState" style="display:none"></div>
 
   <div class="card-section" id="weekSection">
     <div class="week-strip-header">
@@ -386,20 +387,20 @@ body{display:flex;flex-direction:column;position:relative}
       <div class="week-today-hint" id="weekTodayHint"></div>
     </div>
     <div class="week-strip" id="weekStrip"></div>
-    <div class="week-day-summary" id="weekDaySummary"></div>
+    <div class="week-day-summary" id="selectedWeekDateRecords"></div>
   </div>
 </div>
 
 <!-- CALENDAR -->
 <div class="page" id="pageCalendar">
   <div class="cal-header">
-    <div class="cal-title" id="calTitle"></div>
+    <div class="cal-title" id="calendarTitle"></div>
     <div class="cal-nav">
-      <button class="cal-nav-btn" id="calPrevBtn" aria-label="上个月">
+      <button class="cal-nav-btn" id="calendarPrev" aria-label="上个月">
         <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <button class="cal-nav-btn today-btn" id="calTodayBtn">今天</button>
-      <button class="cal-nav-btn" id="calNextBtn" aria-label="下个月">
+      <button class="cal-nav-btn today-btn" id="calendarToday">今天</button>
+      <button class="cal-nav-btn" id="calendarNext" aria-label="下个月">
         <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
@@ -407,8 +408,8 @@ body{display:flex;flex-direction:column;position:relative}
   <div class="cal-weekdays">
     <div class="cal-weekday">一</div><div class="cal-weekday">二</div><div class="cal-weekday">三</div><div class="cal-weekday">四</div><div class="cal-weekday">五</div><div class="cal-weekday wknd">六</div><div class="cal-weekday wknd">日</div>
   </div>
-  <div class="cal-grid" id="calGrid"></div>
-  <div id="calSelectedBlock"></div>
+  <div class="cal-grid" id="calendarGrid"></div>
+  <div id="selectedDateRecords"></div>
 </div>
 
 <!-- ALL -->
@@ -432,8 +433,7 @@ body{display:flex;flex-direction:column;position:relative}
 <div class="page" id="pageImport">
   <div class="import-panel">
     <div class="input-label">批量整理</div>
-    <div class="import-desc">粘贴一段文字，每行一条记录，时刻会自动整理成可保存的草稿。<br>
-    示例：下周一体检，记得空腹。 / 月底还信用卡。 / 每天睡前涂润唇膏。 / 7月8日妈妈生日。</div>
+    <div class="import-desc">粘贴多行文字，按行拆分为记录草稿。本地规则整理。</div>
     <textarea class="import-textarea" id="importTextInput" placeholder="每行一条记录..."></textarea>
     <div class="import-actions">
       <button class="save-btn" id="importParseBtn" style="flex:1">开始整理</button>
@@ -509,7 +509,7 @@ body{display:flex;flex-direction:column;position:relative}
 
   <div class="version-info">
     <div class="ver-num" id="appVersion">v0.4.0</div>
-    <div id="appUpdatedAt">更新时间：--</div>
+    <div id="appUpdatedAt">更新时间：2026-07-04 18:55</div>
   </div>
 </div>
 
@@ -570,7 +570,7 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* ================= Constants ================= */
 var APP_VERSION = 'v0.4.0';
-var APP_UPDATED_AT = '2026-07-04 17:48';
+var APP_UPDATED_AT = '2026-07-04 18:55';
 
 var STORAGE_KEY = 'shike_reminders_v1';
 var THEME_KEY = 'shike_theme_v1';
@@ -1291,7 +1291,7 @@ function getRecordsByDateKey(dateKey){
 function renderHome(){
   var list=loadReminders().filter(function(r){return !r.archived&&!r.handledAt;});
   var nextBlock=$('nextReminderBlock');
-  var recentBlock=$('recentListBlock');
+  var recentBlock=$('homeRecordList');
 
   if(list.length===0){
     nextBlock.innerHTML='';
@@ -1382,10 +1382,10 @@ function renderWeekStrip(){
   });
   // Show summary for selected date
   if(weekSelectedDate) showWeekDaySummary(weekSelectedDate);
-  else $('weekDaySummary').classList.remove('show');
+  else $('selectedWeekDateRecords').classList.remove('show');
 }
 function showWeekDaySummary(date){
-  var panel=$('weekDaySummary');
+  var panel=$('selectedWeekDateRecords');
   var recs=getRecordsByDateKey(getDateKey(date));
   var dateStr=(date.getMonth()+1)+'月'+date.getDate()+'日';
   if(recs.length===0){
@@ -1405,8 +1405,8 @@ function renderCalendarMonth(){
   return renderCalendar();
 }
 function renderCalendar(){
-  $('calTitle').textContent=calYear+'年'+(calMonth+1)+'月';
-  var grid=$('calGrid');
+  $('calendarTitle').textContent=calYear+'年'+(calMonth+1)+'月';
+  var grid=$('calendarGrid');
   var firstDay=new Date(calYear,calMonth,1);
   var lastDay=new Date(calYear,calMonth+1,0);
   var startWd=firstDay.getDay()||7;
@@ -1448,14 +1448,14 @@ function renderCalendar(){
     });
   });
   if(calSelectedDate) renderCalDayPanel(calSelectedDate);
-  else $('calSelectedBlock').innerHTML='';
+  else $('selectedDateRecords').innerHTML='';
 }
 function selectCalendarDate(y,m,d){
   calSelectedDate=new Date(y,m,d);
   renderCalendar();
 }
 function renderCalDayPanel(date){
-  var block=$('calSelectedBlock');
+  var block=$('selectedDateRecords');
   var recs=getRecordsByDateKey(getDateKey(date));
   var dateStr=(date.getMonth()+1)+'月'+date.getDate()+'日';
   if(recs.length===0){
@@ -1793,9 +1793,9 @@ function bindCardActions(container){
 
 /* ================= Quick Add ================= */
 function handleQuickAdd(){
-  var input=$('quickAddInput');
+  var input=$('quickInput');
   var text=input.value.trim();
-  if(!text){showToast('请输入内容','warn');input.focus();return;}
+  if(!text){showToast('先写下一件事','warn');input.focus();return;}
   var parsed=parseReminderText(text);
   if(!parsed){showToast('请输入内容','warn');return;}
   var item=addReminder(parsed);
@@ -1828,7 +1828,7 @@ function switchPage(page){
     renderCalendar();
   }else if(page==='all'){renderAllList();}
   else if(page==='my'){renderMyPage();}
-  else if(page==='home'){renderHome();bindCardActions($('nextReminderBlock'));bindCardActions($('recentListBlock'));}
+  else if(page==='home'){renderHome();bindCardActions($('nextReminderBlock'));bindCardActions($('homeRecordList'));}
 }
 
 /* ================= Export / Import / Clear ================= */
@@ -1875,7 +1875,7 @@ function renderAll(){
   if(currentPage==='my') renderMyPage();
   updateNotifyStatusUI();
   bindCardActions($('nextReminderBlock'));
-  bindCardActions($('recentListBlock'));
+  bindCardActions($('homeRecordList'));
 }
 
 /* ================= Init ================= */
@@ -1890,21 +1890,25 @@ function init(){
     localStorage.setItem(VERSION_KEY,APP_VERSION+'|'+APP_UPDATED_AT);
   }catch(e){}
 
+  // Set version info immediately (not just when visiting my page)
+  $('appVersion').textContent=APP_VERSION;
+  $('appUpdatedAt').textContent='更新时间：'+APP_UPDATED_AT;
+
   // Input
-  var qInput=$('quickAddInput');
+  var qInput=$('quickInput');
   qInput.addEventListener('input',function(){autoResizeInput(this);});
   qInput.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleQuickAdd();}});
   qInput.addEventListener('focus',function(){$('inputCard').classList.add('focused');});
   qInput.addEventListener('blur',function(){$('inputCard').classList.remove('focused');});
-  $('quickAddButton').addEventListener('click',handleQuickAdd);
+  $('saveButton').addEventListener('click',handleQuickAdd);
 
   // Calendar
   var now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
   calSelectedDate=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   weekSelectedDate=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  $('calPrevBtn').addEventListener('click',calGoPrev);
-  $('calNextBtn').addEventListener('click',calGoNext);
-  $('calTodayBtn').addEventListener('click',calGoToday);
+  $('calendarPrev').addEventListener('click',calGoPrev);
+  $('calendarNext').addEventListener('click',calGoNext);
+  $('calendarToday').addEventListener('click',calGoToday);
 
   // All page
   $('allSearchInput').addEventListener('input',function(){searchQuery=this.value;renderAllList();});
@@ -1964,6 +1968,17 @@ function init(){
 
   // Initial render
   renderAll();
+
+  // Function aliases for API compatibility
+  window.handleQuickSave=handleQuickAdd;
+  window.createRecordFromText=parseReminderText;
+  window.addRecord=addReminder;
+  window.loadRecords=loadReminders;
+  window.saveRecords=saveReminders;
+  window.renderHomeRecords=renderHome;
+  window.safeParseRecords=loadReminders;
+  window.backupCorruptedRecords=function(){try{var d=localStorage.getItem(STORAGE_KEY);if(d)localStorage.setItem(STORAGE_KEY+'_corrupted_backup',d);}catch(e){}};
+  window.normalizeRecordDate=function(item){var d=getReminderDateObject(item,{allowPast:true});return d?getDateKey(d):null;};
 
   // Service worker
   if('serviceWorker' in navigator){
