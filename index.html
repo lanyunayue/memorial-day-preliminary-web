@@ -523,6 +523,19 @@ body{display:flex;flex-direction:column;position:relative}
     </div>
   </div>
 
+  <div class="my-section">
+    <div class="my-section-title">老师验收流程</div>
+    <div class="why-card">
+      <div class="why-item"><div class="why-num">1</div><div class="why-text">在首页输入"下周六下午3点看电影"，点击保存</div></div>
+      <div class="why-item"><div class="why-num">2</div><div class="why-text">查看首页记录卡片是否出现</div></div>
+      <div class="why-item"><div class="why-num">3</div><div class="why-text">打开日历，看下周六是否有圆点标记</div></div>
+      <div class="why-item"><div class="why-num">4</div><div class="why-text">点击日期，看当天是否显示记录</div></div>
+      <div class="why-item"><div class="why-num">5</div><div class="why-text">到"整理一段通知"页，粘贴4行通知，点"整理成记录"</div></div>
+      <div class="why-item"><div class="why-num">6</div><div class="why-text">检查是否生成4条草稿，可单条或全部保存</div></div>
+      <div class="why-item"><div class="why-num">7</div><div class="why-text">刷新页面，确认记录仍在（localStorage持久化）</div></div>
+    </div>
+  </div>
+
   <div class="my-notes">
     <p>数据：本机保存，刷新不丢。</p>
     <p>本地规则整理，未接入云端AI。</p>
@@ -534,7 +547,7 @@ body{display:flex;flex-direction:column;position:relative}
 
   <div class="version-info">
     <div class="ver-num" id="appVersion">v0.4.0</div>
-    <div id="appUpdatedAt">更新时间：2026-07-04 19:05</div>
+    <div id="appUpdatedAt">更新时间：2026-07-04 21:15</div>
   </div>
 </div>
 
@@ -595,7 +608,7 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* ================= Constants ================= */
 var APP_VERSION = 'v0.4.0';
-var APP_UPDATED_AT = '2026-07-04 19:05';
+var APP_UPDATED_AT = '2026-07-04 21:15';
 
 var STORAGE_KEY = 'shike_reminders_v1';
 var THEME_KEY = 'shike_theme_v1';
@@ -1320,9 +1333,11 @@ function renderHome(){
 
   if(list.length===0){
     nextBlock.innerHTML='';
-    recentBlock.innerHTML='<div class="empty-state-card">'+
+    recentBlock.innerHTML='<div class="card-section">'+
+      '<div class="card-section-head"><div class="card-section-title">最近记录</div></div>'+
+      '<div class="empty-state-card">'+
       '<div class="empty-title">还没有记录</div>'+
-      '<div class="empty-desc">写下一件事，它会留在这里。<br>刷新不丢，可设提醒。</div></div>';
+      '<div class="empty-desc">写下一件事，它会留在这里。<br>刷新不丢，可设提醒。</div></div></div>';
     renderWeekStrip();return;
   }
 
@@ -1354,13 +1369,21 @@ function renderHome(){
       '<div class="empty-desc">为记录设置日期后，会在这里显示即将到来的事项。</div></div></div>';
   }
 
-  var recent=list.filter(function(r){return r.id!==nextId;}).slice(0,3);
+  // 最近记录：排除nextId后取最多3条；如果不足3条，也包含无日期记录
+  var remaining=list.filter(function(r){return r.id!==nextId;});
+  // 按更新时间倒序，确保最新保存的在前
+  remaining.sort(function(a,b){return (b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
+  var recent=remaining.slice(0,3);
+  var recentHtml='<div class="card-section">'+
+    '<div class="card-section-head"><div class="card-section-title">最近记录</div>'+
+    '<div class="card-section-count">'+remaining.length+'</div></div>';
   if(recent.length>0){
-    recentBlock.innerHTML='<div class="card-section">'+
-      '<div class="card-section-head"><div class="card-section-title">最近记录</div>'+
-      '<div class="card-section-count">'+recent.length+'</div></div>'+
-      recent.map(function(r){return renderRecordCard(r);}).join('')+'</div>';
-  }else{recentBlock.innerHTML='';}
+    recentHtml+=recent.map(function(r){return renderRecordCard(r);}).join('');
+  }else{
+    recentHtml+='<div class="empty-state-card" style="padding:16px"><div class="empty-desc" style="text-align:center">新增的记录会出现在这里。</div></div>';
+  }
+  recentHtml+='</div>';
+  recentBlock.innerHTML=recentHtml;
   renderWeekStrip();
 }
 

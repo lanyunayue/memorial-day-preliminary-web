@@ -1,6 +1,6 @@
 // Service Worker for 时刻 (Shike) - v0.4.0 Root Fix
 // Strategy: network-first for HTML to ensure root always gets latest; cache-first for static assets
-var CACHE_NAME = 'shike-differentiation-v11';
+var CACHE_NAME = 'shike-teacher-accept-v12';
 var ALWAYS_NETWORK_FIRST = ['./', './index.html', './?'];
 
 self.addEventListener('install', function(event) {
