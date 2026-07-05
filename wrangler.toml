@@ -1,0 +1,6 @@
+name = "memorial-day-preliminary-web"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./"

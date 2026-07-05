@@ -13,8 +13,8 @@
 
 为保证展示稳定性，项目提供多个静态镜像地址。如遇某个平台访问异常，可切换至备用地址。
 
-- **主站（GitHub Pages）**：https://lanyunayue.github.io/memorial-day-preliminary-web/
-- **Cloudflare Pages**：https://shike-memorial.pages.dev （构建命令需在 Dashboard 设为空，输出目录设为 `/`，详见下方部署说明）
+- **主站（Cloudflare Workers）**：https://memorial-day-preliminary-web.308138249.workers.dev/
+- **备用站（GitHub Pages）**：https://lanyunayue.github.io/memorial-day-preliminary-web/
 - **历史镜像（Netlify）**：https://memorialdaylan.netlify.app/
 
 ## 核心功能
@@ -58,24 +58,17 @@
 - 源目录：`web-demo/memorial-day-champion/`
 - 部署目录：`dist/memorial-day-preliminary-web/`
 - 修改后同步两个目录再 commit + push
-- GitHub Pages：已启用，从 main 分支根目录自动部署（https://lanyunayue.github.io/memorial-day-preliminary-web/）
-- Cloudflare Pages：已连接 GitHub 仓库，需在 Dashboard 修正构建设置（见下方）
-- Netlify：通过 git push 自动部署（历史镜像，https://memorialdaylan.netlify.app/）
+- **Cloudflare Workers（主站）**：通过 `wrangler deploy` 以 Workers Static Assets 方式部署，自动从 main 分支部署
+- **GitHub Pages（备用）**：已启用，从 main 分支根目录自动部署（https://lanyunayue.github.io/memorial-day-preliminary-web/）
+- **Netlify（历史镜像）**：通过 git push 自动部署（https://memorialdaylan.netlify.app/）
 
-### Cloudflare Pages 构建设置修正（重要）
+### Cloudflare 部署说明
 
-如果 Cloudflare Pages 构建失败（提示 `npx wrangler deploy` 或 `Missing entry-point`），需要在 Cloudflare Dashboard 修正设置：
-
-1. 打开 https://dash.cloudflare.com/ → Workers & Pages → 选择 `shike-memorial` 项目
-2. 点击 **Build settings**（构建设置）→ **Edit configurations**（编辑配置）
-3. **Framework preset**（框架预设）：选择 `None` 或 `Static HTML`
-4. **Build command**（构建命令）：**留空/清空**（不要填任何内容）
-5. **Build output directory**（构建输出目录）：填 `/`（单个斜杠，表示根目录）
-6. **Root directory**（根目录）：留空
-7. 点击 **Save** 保存
-8. 回到 Deployments 页面，点击 **Retry deployment**（重新部署）
-
-**注意**：本项目是纯静态站点，不需要 `wrangler.toml` 配置文件（已删除），不需要任何构建步骤，Cloudflare 直接从根目录提供静态文件即可。
+- 使用 Cloudflare Workers Static Assets 托管静态文件
+- 构建命令：`npx wrangler deploy`（由 Cloudflare 自动执行）
+- 配置文件：`wrangler.toml`（Workers Static Assets 配置，指定 `assets.directory = "./"`）
+- 响应头配置：`_headers` 文件
+- 每次 push 到 main 分支自动触发重新部署
 
 ## HarmonyOS 原生端
 
