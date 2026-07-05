@@ -1,0 +1,20 @@
+# Cloudflare Pages Headers for 时刻 (Shike)
+# Ensure proper caching and security headers
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(self), camera=()
+
+# Service Worker should not be cached
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# HTML should always be fresh
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Static assets can be cached
+/manifest.json
+  Cache-Control: public, max-age=3600

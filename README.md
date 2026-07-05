@@ -1,4 +1,4 @@
-# 时刻 (Shike) v0.4.0
+# 时刻 (Shike) v0.5.1
 
 > 你的贴心记事助手。
 
@@ -6,8 +6,16 @@
 
 - **用户可见产品名**：时刻
 - **副标题**：你的贴心记事助手
-- **当前版本**：v0.4.0
-- **公网体验**：https://memorialdaylan.netlify.app/
+- **当前版本**：v0.5.1
+- **数据存储**：浏览器 localStorage（本地保存，刷新不丢）
+
+## 在线体验地址
+
+为保证展示稳定性，项目提供多个静态镜像地址。如遇某个平台访问异常，可切换至备用地址。
+
+- **主站（GitHub Pages）**：https://lanyunayue.github.io/memorial-day-preliminary-web/
+- **备用站（Cloudflare Pages，待连接）**：待 Cloudflare Pages 项目配置完成后更新
+- **历史镜像（Netlify）**：https://memorialdaylan.netlify.app/
 
 ## 核心功能
 
@@ -20,8 +28,9 @@
 - **系统通知**：支持 Notification API，到时间自动提醒
 - **数据持久化**：localStorage 本地保存，刷新不丢
 - **导出/导入**：支持 JSON 备份导出和导入
-- **4套主题**：暖米 / 墨黑 / 松青 / 云母
+- **5套主题**：雾蓝 / 暖米 / 墨黑 / 松青 / 云母
 - **PWA 支持**：可添加到桌面
+- **语音输入**：支持 Web Speech API 语音识别（Chrome/Edge 推荐）
 
 ## 技术说明
 
@@ -29,7 +38,7 @@
 - localStorage key: `shike_reminders_v1`
 - 本地规则解析时间词，未接入真实大模型
 - 响应式设计，移动端优先
-- Service Worker 缓存：network-first 策略
+- Service Worker 缓存：network-first 策略（HTML 始终获取最新版本）
 - 数据结构：id, title, rawText, dateText, timeText, locationText, repeat, repeatText, note, archived, createdAt, updatedAt, recordKind, recordState, notifyMode, notifiedAt
 
 ## 解析支持
@@ -49,12 +58,22 @@
 - 源目录：`web-demo/memorial-day-champion/`
 - 部署目录：`dist/memorial-day-preliminary-web/`
 - 修改后同步两个目录再 commit + push
-- 通过 git push 触发 Netlify 自动部署
+- GitHub Pages 自动从 main 分支部署（已启用）
+- Cloudflare Pages 配置文件：`wrangler.toml`（Pages 输出目录为根目录，无需构建命令）
+- Netlify 通过 git push 自动部署（历史镜像）
+
+### Cloudflare Pages 部署指南
+
+1. 登录 Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git
+2. 选择 `lanyunayue/memorial-day-preliminary-web` 仓库
+3. 构建命令：留空（或填 `echo skip build`）
+4. 输出目录：`/`（根目录）
+5. 生产分支：`main`
+6. 点击 Save and Deploy
 
 ## HarmonyOS 原生端
 
 - 用户可见文案统一为"时刻"，副标题"你的贴心记事助手"
 - 版本 v0.4.0
 - 系统提醒能力由原生通知模块继续完善，当前以本地记录和页面提醒为主
-- 语音输入后续优化
 - Web 与 HarmonyOS 当前不实时同步
