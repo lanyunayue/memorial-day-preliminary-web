@@ -14,7 +14,7 @@
 为保证展示稳定性，项目提供多个静态镜像地址。如遇某个平台访问异常，可切换至备用地址。
 
 - **主站（GitHub Pages）**：https://lanyunayue.github.io/memorial-day-preliminary-web/
-- **备用站（Cloudflare Pages，待连接）**：待 Cloudflare Pages 项目配置完成后更新
+- **Cloudflare Pages**：待连接（配置文件已就绪，`wrangler.toml` + `_headers`，在 Cloudflare Dashboard 连接 GitHub 仓库即可部署，预计地址为 `https://shike-memorial.pages.dev`）
 - **历史镜像（Netlify）**：https://memorialdaylan.netlify.app/
 
 ## 核心功能
@@ -58,18 +58,16 @@
 - 源目录：`web-demo/memorial-day-champion/`
 - 部署目录：`dist/memorial-day-preliminary-web/`
 - 修改后同步两个目录再 commit + push
-- GitHub Pages 自动从 main 分支部署（已启用）
-- Cloudflare Pages 配置文件：`wrangler.toml`（Pages 输出目录为根目录，无需构建命令）
-- Netlify 通过 git push 自动部署（历史镜像）
+- GitHub Pages：已启用，从 main 分支根目录自动部署
+- Cloudflare Pages：配置文件 `wrangler.toml` + `_headers` 已就绪，需在 Cloudflare Dashboard 一键连接 GitHub 仓库
+- Netlify：通过 git push 自动部署（历史镜像）
 
-### Cloudflare Pages 部署指南
+### Cloudflare Pages 连接步骤
 
 1. 登录 Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git
 2. 选择 `lanyunayue/memorial-day-preliminary-web` 仓库
-3. 构建命令：留空（或填 `echo skip build`）
-4. 输出目录：`/`（根目录）
-5. 生产分支：`main`
-6. 点击 Save and Deploy
+3. 构建命令：留空；输出目录：`/`；生产分支：`main`
+4. 点击 Save and Deploy
 
 ## HarmonyOS 原生端
 

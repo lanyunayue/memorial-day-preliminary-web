@@ -11,7 +11,7 @@
 为保证展示稳定性，项目提供多个静态镜像地址。如遇某个平台访问异常，可切换至备用地址。
 
 - **主站（GitHub Pages）**：https://lanyunayue.github.io/memorial-day-preliminary-web/
-- **备用站（Cloudflare Pages，待连接）**：待 Cloudflare Pages 项目配置完成后更新
+- **Cloudflare Pages**：待连接（配置文件已就绪，在 Cloudflare Dashboard 连接 GitHub 仓库后即可部署，预计地址为 `https://shike-memorial.pages.dev`）
 - **历史镜像（Netlify）**：https://memorialdaylan.netlify.app/
 
 ## 核心特性
