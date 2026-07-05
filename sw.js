@@ -1,7 +1,7 @@
 // Service Worker for 时刻 (Shike) - v0.5.0 Multi-Host Migration
 // Strategy: network-first for HTML to ensure root always gets latest; cache-first for static assets
 // Updated cache name for multi-platform deployment (Cloudflare Pages + GitHub Pages + Netlify)
-var CACHE_NAME = 'shike-multi-host-v15';
+var CACHE_NAME = 'shike-v060-v16';
 var ALWAYS_NETWORK_FIRST = ['./', './index.html', './?'];
 
 self.addEventListener('install', function(event) {

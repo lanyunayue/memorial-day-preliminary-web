@@ -63,17 +63,33 @@ body{display:flex;flex-direction:column;position:relative}
 .preset-4{background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);}
 .preset-5{background:linear-gradient(135deg,#f7971e 0%,#ffd200 100%);}
 
+/* Opening Animation */
+.opening-overlay{position:fixed;inset:0;z-index:900;background:linear-gradient(160deg,#faf8f5 0%,#f0ebe4 40%,#e8e0d5 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.opening-overlay.hidden{display:none}
+.opening-content{display:flex;flex-direction:column;align-items:center;position:relative;z-index:2}
+.op-logo{font-size:52px;font-weight:700;letter-spacing:12px;color:#2c2c2c;margin-bottom:18px;opacity:0;transform:scale(0.92);animation:opLogoIn .7s .15s cubic-bezier(.22,.8,.36,1) forwards}
+.op-line{width:0;height:2px;background:linear-gradient(90deg,transparent,#b8a89a,transparent);margin-bottom:18px;animation:opLineIn .6s .5s ease forwards}
+.op-sub{font-size:16px;color:#6b6358;margin-bottom:8px;opacity:0;transform:translateY(8px);animation:opUp .5s .7s ease forwards;letter-spacing:2px}
+.op-tag{font-size:13px;color:#9a9085;opacity:0;transform:translateY(8px);animation:opUp .5s .85s ease forwards;letter-spacing:4px}
+.op-skip{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);background:transparent;border:1px solid rgba(180,170,155,.4);color:#8a8075;padding:8px 28px;border-radius:20px;font-size:13px;cursor:pointer;opacity:0;animation:opFade .5s 1s ease forwards;font-family:var(--font);transition:all .2s}
+.op-skip:hover{background:rgba(180,170,155,.1);border-color:rgba(180,170,155,.6)}
+.op-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
+.op-dot{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(184,168,154,.3),transparent 70%)}
+.op-d1{width:260px;height:260px;top:15%;left:-60px;opacity:0;animation:opDotIn 1.2s .1s ease forwards}
+.op-d2{width:200px;height:200px;bottom:10%;right:-40px;opacity:0;animation:opDotIn 1.2s .3s ease forwards}
+.op-d3{width:140px;height:140px;top:55%;right:20%;opacity:0;animation:opDotIn 1.2s .5s ease forwards}
+@keyframes opLogoIn{to{opacity:1;transform:scale(1)}}
+@keyframes opLineIn{to{width:60px}}
+@keyframes opUp{to{opacity:1;transform:translateY(0)}}
+@keyframes opFade{to{opacity:.7}}
+@keyframes opDotIn{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1)}}
 /* Onboarding */
-.onboarding{position:fixed;inset:0;z-index:900;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;opacity:0;animation:onbFade .6s ease forwards}
+.onboarding{position:fixed;inset:0;z-index:900;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px}
 .onboarding.hidden{display:none}
-.onb-logo{font-size:56px;font-weight:700;letter-spacing:10px;color:var(--text);margin-bottom:14px;opacity:0;transform:translateY(12px);animation:onbUp .7s .15s ease forwards}
-.onb-sub{font-size:17px;color:var(--text-sec);margin-bottom:12px;opacity:0;transform:translateY(12px);animation:onbUp .7s .35s ease forwards}
-.onb-tag{font-size:14px;color:var(--text-muted);margin-bottom:44px;opacity:0;transform:translateY(12px);animation:onbUp .7s .5s ease forwards}
-.onb-start{padding:14px 52px;background:var(--accent);color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:500;cursor:pointer;opacity:0;transform:translateY(12px);animation:onbUp .7s .7s ease forwards;transition:all .2s ease;box-shadow:var(--shadow-md);font-family:var(--font)}
-.onb-start:active{transform:scale(.97)}
-.onb-start:hover{background:var(--accent-soft)}
-@keyframes onbFade{to{opacity:1}}
-@keyframes onbUp{to{opacity:1;transform:translateY(0)}}
+.onb-logo{font-size:56px;font-weight:700;letter-spacing:10px;color:var(--text);margin-bottom:14px}
+.onb-sub{font-size:17px;color:var(--text-sec);margin-bottom:12px}
+.onb-tag{font-size:14px;color:var(--text-muted);margin-bottom:44px}
+.onb-start{padding:14px 52px;background:var(--accent);color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:500;cursor:pointer;font-family:var(--font);box-shadow:var(--shadow-md)}
 
 /* Header */
 .app-header{padding:16px 20px 12px;flex-shrink:0}
@@ -429,6 +445,22 @@ body{display:flex;flex-direction:column;position:relative}
 <body>
 <div class="app" id="app">
 
+<!-- Opening Animation -->
+<div class="opening-overlay hidden" id="openingOverlay">
+  <div class="opening-particles">
+    <div class="op-dot op-d1"></div>
+    <div class="op-dot op-d2"></div>
+    <div class="op-dot op-d3"></div>
+  </div>
+  <div class="opening-content">
+    <div class="op-logo">时刻</div>
+    <div class="op-line"></div>
+    <div class="op-sub">你的贴心记事助手</div>
+    <div class="op-tag">记录重要时间</div>
+  </div>
+  <button class="op-skip" id="opSkipBtn">跳过</button>
+</div>
+
 <!-- Onboarding -->
 <div class="onboarding hidden" id="onboarding">
   <div class="onb-logo">时刻</div>
@@ -675,8 +707,8 @@ body{display:flex;flex-direction:column;position:relative}
 'use strict';
 
 /* ================= Constants ================= */
-var APP_VERSION = 'v0.5.0';
-var APP_UPDATED_AT = '2026-07-05 22:30';
+var APP_VERSION = 'v0.6.0';
+var APP_UPDATED_AT = '2026-07-05 23:30';
 
 var STORAGE_KEY = 'shike_reminders_v1';
 var THEME_KEY = 'shike_theme_v1';
@@ -779,32 +811,47 @@ function compressImage(file, maxWidth, quality){
 }
 
 /* ================= Onboarding ================= */
-function showOnboarding(){
+function shouldShowOpeningAnimation(){
   try{
-    var seen=localStorage.getItem(ONBOARDING_KEY);
-    if(seen) return false;
-  }catch(e){ return false; }
-  var ob=$('onboarding');
+    var last=localStorage.getItem(ONBOARDING_KEY);
+    if(!last) return true;
+    // After first time, don't show full opening (just quick intro anim)
+    return false;
+  }catch(e){return true;}
+}
+function showOpeningAnimation(){
+  var ob=$('openingOverlay');
+  if(!ob) return false;
   ob.classList.remove('hidden');
+  // Auto-hide after 1.8s
+  setTimeout(function(){hideOpeningAnimation();},1800);
   return true;
 }
+function hideOpeningAnimation(){
+  var ob=$('openingOverlay');
+  if(!ob) return;
+  ob.style.transition='opacity .4s ease';
+  ob.style.opacity='0';
+  setTimeout(function(){
+    ob.classList.add('hidden');
+    ob.style.opacity='';ob.style.transition='';
+    try{localStorage.setItem(ONBOARDING_KEY,'1');}catch(e){}
+    dom.app.classList.add('intro-anim');
+    setTimeout(function(){dom.app.classList.remove('intro-anim');},1200);
+  },400);
+}
+function skipOpeningAnimation(){hideOpeningAnimation();}
+function showOnboarding(){return false;} // deprecated, opening animation handles first-run
 function hideOnboarding(){
   $('onboarding').classList.add('hidden');
-  try{ localStorage.setItem(ONBOARDING_KEY,'1'); }catch(e){}
+  try{localStorage.setItem(ONBOARDING_KEY,'1');}catch(e){}
   dom.app.classList.add('intro-anim');
-  setTimeout(function(){ dom.app.classList.remove('intro-anim'); }, 1200);
+  setTimeout(function(){dom.app.classList.remove('intro-anim');},1200);
 }
-function resetOnboarding(){ try{ localStorage.removeItem(ONBOARDING_KEY); }catch(e){} }
+function resetOnboarding(){try{localStorage.removeItem(ONBOARDING_KEY);}catch(e){}}
 function playReplayIntro(){
   switchPage('home');
-  setTimeout(function(){
-    var ob=$('onboarding');
-    ob.classList.remove('hidden');
-    ob.style.animation='none'; ob.offsetHeight; ob.style.animation='';
-    ob.querySelectorAll('.onb-logo,.onb-sub,.onb-tag,.onb-start').forEach(function(el){
-      el.style.animation='none'; el.offsetHeight; el.style.animation='';
-    });
-  },200);
+  showOpeningAnimation();
 }
 
 /* ================= Theme ================= */
@@ -865,6 +912,8 @@ function migrateReminder(r){
   if(o.coverPreset===undefined) o.coverPreset=0;
   if(o.subtitle===undefined) o.subtitle='';
   if(o.pinned===undefined) o.pinned=false;
+  if(o.cardStyle===undefined) o.cardStyle='normal';
+  if(o.accentColor===undefined) o.accentColor='';
   return o;
 }
 function normalizeRecord(r){
@@ -876,6 +925,10 @@ function normalizeRecord(r){
   if(r.coverPreset===undefined) r.coverPreset=0;
   if(r.subtitle===undefined) r.subtitle='';
   if(r.pinned===undefined) r.pinned=false;
+  if(r.cardStyle===undefined) {
+    r.cardStyle = (r.recordKind==='anniversary') ? 'large' : 'normal';
+  }
+  if(r.accentColor===undefined) r.accentColor='';
   return r;
 }
 function normalizeRecordState(r){
@@ -938,85 +991,168 @@ function parseReminderText(raw){
   var title=text;
   var repeatMode='none',repeatText='';
   var weeklyDay=null,monthlyDay=null;
+  var isRelativeTime=false,relativeMinutes=0;
 
+  // Chinese number map
+  var cnNum={'零':0,'〇':0,'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+  function cnToNum(s){
+    if(!s) return null;
+    if(/^\d+$/.test(s)) return parseInt(s);
+    if(s==='半') return 30;
+    // Handle patterns like 十, 十一, 二十, 二十三
+    if(s.length===1&&cnNum[s]!==undefined) return cnNum[s];
+    if(s.indexOf('十')>=0){
+      var parts=s.split('十');
+      var tens=parts[0]===''?1:(cnNum[parts[0]]||1);
+      var ones=parts[1]?(cnNum[parts[1]]||0):0;
+      return tens*10+ones;
+    }
+    return cnNum[s]||null;
+  }
+
+  // Repeat detection
   var wm=text.match(/每周([一二三四五六日天])/);
-  if(wm){repeatMode='weekly';repeatText='每周';weeklyDay=wm[1];}
-  else if(/每周/.test(text)){repeatMode='weekly';repeatText='每周';}
+  if(wm){repeatMode='weekly';repeatText='每周'+wm[1];weeklyDay=wm[1];}
   else if(/每天|每日|天天/.test(text)){repeatMode='daily';repeatText='每天';}
   else{
     var mm=text.match(/每月(\d{1,2})[号日]/);
-    if(mm){repeatMode='monthly';repeatText='每月';monthlyDay=parseInt(mm[1]);}
-    else if(/每月/.test(text)){repeatMode='monthly';repeatText='每月';}
-    else if(/每年|周年|生日/.test(text)){repeatMode='yearly';repeatText='每年';}
+    if(mm){repeatMode='monthly';repeatText='每月'+mm[1]+'号';monthlyDay=parseInt(mm[1]);}
+    else if(/每年/.test(text)){repeatMode='yearly';repeatText='每年';}
   }
 
+  // Remove repeat words from title
   if(repeatMode==='daily') title=title.replace(/每天|每日|天天/g,'');
   if(weeklyDay) title=title.replace(new RegExp('每?周'+weeklyDay+'|每星期'+weeklyDay),'');
   if(monthlyDay) title=title.replace(new RegExp('每?月'+monthlyDay+'[号日]?'),'');
+  if(repeatMode==='yearly') title=title.replace(/每年/g,'');
 
-  var timeOfDayWords=['睡前','晚上','中午','早上','凌晨','上午','下午','明早','明晚','今晚'];
-  for(var i=0;i<timeOfDayWords.length;i++){
-    var tw=timeOfDayWords[i];
-    var ti=title.indexOf(tw);
-    if(ti>=0){
-      if(!timeText) timeText=tw;
-      title=title.replace(tw,'');
-      if((tw==='明早'||tw==='明晚')&&!dateText) dateText=tw;
-      else if(tw==='今晚'&&!dateText) dateText='今晚';
+  // Relative time detection (before date words, since these imply date+time)
+  var relH=title.match(/(\d+|半|一|两|二|三|四)\s*个?小时后/);
+  var relM=title.match(/(\d+|半)\s*分钟后/);
+  var relShort=title.match(/(待会|等一下|一会儿|稍后|马上)/);
+  if(relH){
+    var hv=cnToNum(relH[1]);
+    relativeMinutes=hv*60;
+    isRelativeTime=true;
+    dateText='今天';
+    title=title.replace(relH[0],'');
+  }else if(relM){
+    var mv=relM[1]==='半'?30:parseInt(relM[1]);
+    relativeMinutes=mv;
+    isRelativeTime=true;
+    dateText='今天';
+    title=title.replace(relM[0],'');
+  }else if(relShort){
+    var w=relShort[1];
+    if(w==='马上') relativeMinutes=10;
+    else if(w==='稍后') relativeMinutes=60;
+    else relativeMinutes=30; // 待会/等一下/一会儿
+    isRelativeTime=true;
+    dateText='今天';
+    title=title.replace(w,'');
+  }
+
+  // Time-of-day period words
+  var periodWords=['睡前','今晚','明晚','明早','晚上','中午','早上','凌晨','上午','下午'];
+  var detectedPeriod='';
+  for(var pi=0;pi<periodWords.length;pi++){
+    var pw=periodWords[pi];
+    if(title.indexOf(pw)>=0){
+      detectedPeriod=pw;
+      title=title.replace(pw,'');
+      if(pw==='明早'||pw==='明晚'){ if(!dateText) dateText='明天'; }
+      else if(pw==='今晚'){ if(!dateText) dateText='今天'; }
       break;
     }
   }
 
-  var dateWords=['大后天','后天','明天','今天','下下周一','下下周二','下下周三','下下周四','下下周五','下下周六','下下周日',
+  // Date words
+  var dateWords=['大后天','后天','明天','今天','昨天','前天',
+    '下下周一','下下周二','下下周三','下下周四','下下周五','下下周六','下下周日',
     '下周一','下周二','下周三','下周四','下周五','下周六','下周日',
-    '本周一','本周二','本周三','本周四','本周五','本周六','本周日',
+    '本周一','本周二','本周三','本周四','本周五','本周六','本周日','这周一','这周二','这周三','这周四','这周五','这周六','这周日',
     '周一','周二','周三','周四','周五','周六','周日',
     '星期一','星期二','星期三','星期四','星期五','星期六','星期日','星期天',
-    '下周末','这周末','本周末','周末','月底','月初','下个月','下月','昨天','前天','昨晚',
-    '半小时后','一小时后','两小时后','1小时后','2小时后','三天后','5天后','3天后','7天后','30分钟后'];
-  for(var j=0;j<dateWords.length;j++){
-    var w=dateWords[j];
-    if(weeklyDay&&(w==='周'+weeklyDay||w==='星期'+weeklyDay||(weeklyDay==='天'&&(w==='周日'||w==='星期天'||w==='星期日')))) continue;
-    var idx=title.indexOf(w);
-    if(idx>=0){ dateText=w; title=title.replace(w,''); break; }
+    '下周末','这周末','本周末','周末','月底','月末','月初','下个月','下月','昨晚',
+    '三天后','5天后','3天后','7天后','待会','等一下','一会儿','稍后','马上'];
+  if(!dateText){
+    for(var dj=0;dj<dateWords.length;dj++){
+      var dw=dateWords[dj];
+      if(weeklyDay&&(dw==='周'+weeklyDay||dw==='星期'+weeklyDay)) continue;
+      if(title.indexOf(dw)>=0){ dateText=dw; title=title.replace(dw,''); break; }
+    }
   }
+  // N天后 (catch-all)
   var ndm=title.match(/(\d+)\s*天[以后]/);
   if(!dateText&&ndm){dateText=ndm[0];title=title.replace(ndm[0],'');}
-  var adm=title.match(/(\d{1,2})月(\d{1,2})[日号]前?/);
+  // 年月日
+  var adm=title.match(/(\d{4})?年?(\d{1,2})月(\d{1,2})[日号]前?/);
   if(!dateText&&adm){dateText=adm[0];title=title.replace(adm[0],'');}
 
-  var tpm=title.match(/(\d{1,2})[点:：](\d{1,2})?分?/);
-  if(tpm){
-    timeText=(timeText?timeText+' ':'')+tpm[0];
-    title=title.replace(tpm[0],'');
+  // Time detection - digital: 9:00, 09:00, 9点, 9点钟, 9点半
+  var timeDigit=title.match(/(\d{1,2})[:：](\d{1,2})/);
+  if(timeDigit){
+    timeText=(detectedPeriod?detectedPeriod+' ':'')+timeDigit[0];
+    title=title.replace(timeDigit[0],'');
   }else{
-    var sm=title.match(/([一二三四五六七八九十]十?[一二三四五六七八九]?|十[一二三四五六七八九]?)[点时](?!心|评|击|缀|头|名|滴|燃|卡|糕|班)/);
-    if(sm){
-      var bi=title.indexOf(sm[0]);
-      var cb=bi>0?title.charAt(bi-1):'';
-      var nonTime=['早','重','特','地','弱','试','盘','糕','班','终','起','焦','打'];
-      if(nonTime.indexOf(cb)<0){
-        timeText=(timeText?timeText+' ':'')+sm[0];
-        title=title.replace(sm[0],'');
+    // Chinese + digital: 9点, 9点钟, 9点半, 9点30分, 9点45
+    var tcn=title.match(/(\d{1,2}|[一二三四五六七八九十]十?[一二三四五六七八九]?|十[一二三四五六七八九]?)[点时](钟?)(半|[一二三四五]十|[1-5]?\d)?(分?钟?)?/);
+    if(tcn){
+      var hourVal=cnToNum(tcn[1]);
+      var minVal=0;
+      var minPart=tcn[3];
+      if(minPart){
+        if(minPart==='半') minVal=30;
+        else{
+          var mn=cnToNum(minPart);
+          if(mn!==null) minVal=mn;
+          else if(/^\d+$/.test(minPart)) minVal=parseInt(minPart);
+        }
       }
+      timeText=(detectedPeriod?detectedPeriod+' ':'')+pad2(hourVal)+':'+pad2(minVal);
+      title=title.replace(tcn[0],'');
+    }else if(detectedPeriod){
+      // Only period word, no specific time - will default in normalizeReminderDate
+      timeText=detectedPeriod;
     }
   }
 
-  var locWords=['图书馆','教室','医院','公司','学校','电影院','家','宿舍','食堂','办公室','咖啡厅','咖啡馆','机场','车站','超市','药店'];
-  for(var k=0;k<locWords.length;k++){
-    var lw=locWords[k];
-    var li=title.indexOf(lw);
-    if(li>=0){locationText=lw;title=title.replace(lw,'');break;}
+  // If we have a timeText but no dateText, default to today
+  if(timeText&&!dateText&&!isRelativeTime){
+    dateText='今天';
   }
 
+  // If relative time, set timeText
+  if(isRelativeTime){
+    var now=new Date();
+    var target=new Date(now.getTime()+relativeMinutes*60000);
+    timeText=pad2(target.getHours())+':'+pad2(target.getMinutes());
+  }
+
+  // Location
+  var locWords=['图书馆','教室','医院','公司','学校','电影院','家','宿舍','食堂','办公室','咖啡厅','咖啡馆','机场','车站','超市','药店','实验室'];
+  for(var k=0;k<locWords.length;k++){
+    var lw=locWords[k];
+    if(title.indexOf(lw)>=0){locationText=lw;title=title.replace(lw,'');break;}
+  }
+
+  // Note after punctuation
   var noteMatch=title.match(/[，,。.；;](.+)$/);
   if(noteMatch){noteText=noteMatch[1].trim();title=title.replace(noteMatch[0],'');}
 
-  title=title.replace(/^(记得|别忘了|我要|帮我|请|要|需要|应该|得)[\s，,。.；;]*/,'');
-  title=title.replace(/^[\s，,。.；;到去和与跟]+|[\s，,。.；;了的啊]+$/g,'').trim();
+  // Clean title: remove leading filler words
+  title=title.replace(/^(记得|别忘了|我要|帮我|请|要|需要|应该|得|提醒我|记得要)[\s，,。.；;]*/,'');
+  // Clean trailing particles
+  title=title.replace(/^[\s，,。.；;到去和与跟]+|[\s，,。.；;了的啊钟分]+$/g,'').trim();
+  // Collapse multiple spaces
+  title=title.replace(/\s+/g,' ').trim();
+  // Remove standalone 钟/分 that might be left over
+  title=title.replace(/[钟分](?=[\s，,。.；;]|$)/g,'').trim();
+  title=title.replace(/\s+/g,' ').trim();
+
   if(!title||title.length<1){
     title=text.replace(/[，,。.；;].*$/,'').trim().slice(0,30);
-    title=title.replace(/^(记得|别忘了|我要|帮我|请|要|需要|应该|得)[\s，,。.；;]*/,'').trim()||text.slice(0,30);
+    title=title.replace(/^(记得|别忘了|我要|帮我|请|要|需要|应该|得|提醒我)[\s，,。.；;]*/,'').trim()||text.slice(0,30);
   }
   if(!title) title=text.slice(0,30);
 
@@ -1033,17 +1169,24 @@ function normalizeReminderDate(r,opt){
   var dt=r.dateText||'',tt=r.timeText||'',repeat=r.repeat||'none';
   var hour=9,minute=0;
   if(tt){
-    var hm=tt.match(/(\d{1,2})[点:：](\d{1,2})?/);
+    // Try HH:MM format first
+    var hm=tt.match(/(\d{1,2})[:：](\d{1,2})/);
     if(hm){
-      hour=parseInt(hm[1]); minute=hm[2]?parseInt(hm[2]):0;
+      hour=parseInt(hm[1]); minute=parseInt(hm[2])||0;
       if(hour>24) hour=9;
+      if(minute>59) minute=0;
+      // Afternoon/evening adjustment for 12-hour format
       if(/下午|晚上|今晚|明晚/.test(tt)&&hour<12) hour+=12;
+      if(/凌晨/.test(tt)&&hour===12) hour=0;
     }else{
-      if(/中午/.test(tt)){hour=12;}
-      else if(/下午/.test(tt)){hour=15;}
-      else if(/晚上|今晚|明晚|睡前/.test(tt)){hour=21;}
-      else if(/早上|凌晨|明早/.test(tt)){hour=8;}
-      else if(/上午/.test(tt)){hour=10;}
+      // Period-word only defaults
+      if(/睡前/.test(tt)){hour=22;minute=30;}
+      else if(/中午/.test(tt)){hour=12;minute=0;}
+      else if(/下午/.test(tt)){hour=15;minute=0;}
+      else if(/晚上|今晚|明晚/.test(tt)){hour=21;minute=0;}
+      else if(/早上|明早/.test(tt)){hour=8;minute=0;}
+      else if(/凌晨/.test(tt)){hour=1;minute=0;}
+      else if(/上午/.test(tt)){hour=10;minute=0;}
     }
   }
   function sethm(){d.setHours(hour,minute,0,0);}
@@ -1124,11 +1267,10 @@ function normalizeReminderDate(r,opt){
     var dm2=dt.match(/(\d+)/);var days=dm2?parseInt(dm2[1]):1;
     d.setDate(d.getDate()+days);sethm();hasDate=true;
   }else if(tt&&!dt){
-    var hasNumericTime=/(\d{1,2})[点:：]/.test(tt);
-    if(hasNumericTime||/明早|明晚|今晚/.test(tt)){
+    var hasNumericTime=/(\d{1,2})[:：点]/.test(tt);
+    if(hasNumericTime||/明早|明晚|今晚|下午|晚上|早上|上午|中午|凌晨|睡前/.test(tt)){
       sethm();
       if(/明早|明晚/.test(tt)) d.setDate(d.getDate()+1);
-      else if(!opt.allowPast&&d<=now) d.setDate(d.getDate()+1);
       hasDate=true;
     }
   }
@@ -1157,6 +1299,68 @@ function calculateDaysSince(r){
   var past=new Date(nd);past.setHours(0,0,0,0);
   var diff=Math.round((today-past)/(1000*60*60*24));
   return diff>=0?diff:null;
+}
+function getRecordTargetDateTime(r){
+  if(r.repeat&&r.repeat!=='none'&&r.repeat!=='yearly') return null;
+  var d=getReminderDateObject(r,{allowPast:true});
+  if(!d) return null;
+  return d;
+}
+function formatLiveCountdown(r){
+  var target=getRecordTargetDateTime(r);
+  if(!target) return null;
+  if(r.recordKind==='anniversary') return null; // anniversaries use day-level
+  if(r.repeat&&r.repeat!=='none'&&r.repeat!=='yearly') return null;
+  var now=new Date();
+  var diff=target.getTime()-now.getTime();
+  var absDiff=Math.abs(diff);
+  var mins=Math.floor(absDiff/60000);
+  var hrs=Math.floor(absDiff/3600000);
+  var days=Math.floor(absDiff/86400000);
+  if(r.archived) return {text:'已隐藏',cls:'overdue',ms:diff};
+  if(r.handledAt) return {text:'已处理',cls:'',ms:diff};
+  if(diff<=0){
+    if(mins<1) return {text:'已到时间',cls:'overdue',ms:diff};
+    if(mins<60) return {text:'已过 '+mins+' 分钟',cls:'overdue',ms:diff};
+    if(hrs<24) return {text:'已过 '+hrs+' 小时',cls:'overdue',ms:diff};
+    return {text:'已过 '+days+' 天',cls:'overdue',ms:diff};
+  }
+  if(mins<1) return {text:'即将开始',cls:'soon',ms:diff};
+  if(mins<60) return {text:'还有 '+mins+' 分钟',cls:'soon',ms:diff};
+  if(hrs<24){
+    var remMins=mins-hrs*60;
+    return {text:'还有 '+hrs+' 小时'+(remMins>0?remMins+' 分钟':''),cls:'soon',ms:diff};
+  }
+  if(days<2){
+    var remHrs2=hrs-days*24;
+    return {text:'还有 '+days+' 天'+(remHrs2>0?remHrs2+' 小时':''),cls:days===0?'today':'soon',ms:diff};
+  }
+  return {text:'还有 '+days+' 天',cls:'',ms:diff};
+}
+var _countdownTicker=null;
+function startCountdownTicker(){
+  if(_countdownTicker) clearInterval(_countdownTicker);
+  _countdownTicker=setInterval(refreshCountdowns,60000);
+}
+function refreshCountdowns(){
+  if(currentPage==='home') renderHome();
+  // Update countdown elements without full re-render
+  var cards=document.querySelectorAll('.record-card[data-id],.hero-card[data-id]');
+  cards.forEach(function(card){
+    var id=card.dataset.id;
+    if(!id) return;
+    var r=reminders.find(function(x){return x.id===id;});
+    if(!r) return;
+    var cd=card.querySelector('.rc-countdown,.hc-countdown');
+    if(!cd) return;
+    var lc=formatLiveCountdown(r);
+    var fc=formatRecordCountdown(r);
+    var info=lc||fc;
+    if(info){
+      cd.textContent=info.text;
+      cd.className='rc-countdown '+(info.cls||'');
+    }
+  });
 }
 function getMemoryCountdownData(r){
   // Returns { big: '48', label: '天后', isPast: false, dateLabel: '2026年7月8日' }
@@ -1213,6 +1417,11 @@ function formatRecordCountdown(r){
     return r.dateText?{text:r.dateText,cls:'anniv'}:{text:'已记录',cls:'anniv'};
   }
   if(r.repeat&&r.repeat!=='none') return{text:r.repeatText||r.repeat,cls:''};
+  // Try live hour/minute countdown for non-repeating reminders with time
+  if(r.recordKind==='reminder'&&r.timeText&&!r.archived){
+    var live=formatLiveCountdown(r);
+    if(live) return live;
+  }
   var dl=calculateDaysLeft(r);
   if(dl===null) return r.dateText?{text:r.dateText,cls:''}:{text:'未设日期',cls:'nodate'};
   if(dl<0)return{text:'已过 '+Math.abs(dl)+' 天',cls:'overdue'};
@@ -1371,7 +1580,10 @@ function addReminder(draft){
     rawText:draft.rawText||draft.title,archived:false,
     createdAt:Date.now(),updatedAt:Date.now(),ts:Date.now(),
     notifyMode:draft.dateText?'same_day':'none',notifiedAt:null,
-    coverImage:null,coverPreset:0,subtitle:'',pinned:false
+    coverImage:null,coverPreset:0,subtitle:'',
+    cardStyle: draft.cardStyle || ((draft.recordKind==='anniversary')?'large':'normal'),
+    accentColor: draft.accentColor||'',
+    pinned:!!draft.pinned
   };
   item=normalizeRecord(item);
   var resolved=getReminderDateObject(item);
@@ -1426,21 +1638,50 @@ function deleteRecord(id){
 }
 
 /* ================= Card Rendering ================= */
-function renderMemoryCard(r, compact){
+function renderHeroCard(r,compact){
   compact=!!compact;
-  var cd=getMemoryCountdownData(r);
   var preset=parseInt(r.coverPreset)||0;
   if(preset<0||preset>5) preset=0;
   var bgStyle='';
   var hasCover=!!r.coverImage;
   if(hasCover){
-    bgStyle='background-image:url('+r.coverImage+');';
+    bgStyle='background-image:url('+r.coverImage+');background-size:cover;background-position:center;';
   }else{
     bgStyle='background:'+COVER_PRESETS[preset]+';';
   }
   var overlay=hasCover?'<div class="mhc-overlay"></div>':'';
   var pinStar=r.pinned?'<div class="mhc-pin" title="已置顶"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>':'';
+  var kind=r.recordKind||'note';
+  var kindLabel=getKindLabel(kind);
+  var isAniv=(kind==='anniversary');
   var subtitleHtml=r.subtitle?'<div class="mhc-subtitle">'+escHtml(r.subtitle)+'</div>':'';
+
+  // Countdown display varies by type
+  var bigNumHtml='';
+  var dateLine='';
+  if(isAniv){
+    var cd=getMemoryCountdownData(r);
+    bigNumHtml='<div class="mhc-countdown">'+escHtml(cd.big)+(cd.label?'<span style="font-size:22px;font-weight:600;margin-left:4px;opacity:.9">'+cd.label+'</span>':'')+'</div>';
+    dateLine='<div class="mhc-date">'+escHtml(cd.dateLabel)+'</div>';
+  }else{
+    var lcd=formatLiveCountdown(r);
+    var fcd=formatRecordCountdown(r);
+    var cinfo=lcd||fcd;
+    var targetD=getRecordTargetDateTime(r);
+    if(kind==='habit'){
+      bigNumHtml='<div class="mhc-countdown" style="font-size:36px">'+escHtml(r.repeatText||'习惯')+'</div>';
+      dateLine='<div class="mhc-date">'+(targetD?escHtml((targetD.getMonth()+1)+'月'+targetD.getDate()+'日'):escHtml(r.dateText||''))+'</div>';
+    }else if(cinfo&&r.timeText){
+      var bigText=cinfo.text;
+      // Make it look like a countdown display
+      bigNumHtml='<div class="mhc-countdown" style="font-size:32px;line-height:1.2">'+escHtml(bigText)+'</div>';
+      dateLine='<div class="mhc-date">'+escHtml((r.dateText||'')+' '+(r.timeText||''))+'</div>';
+    }else{
+      bigNumHtml='<div class="mhc-countdown" style="font-size:36px">'+escHtml(kindLabel)+'</div>';
+      dateLine='<div class="mhc-date">'+escHtml(r.dateText||r.timeText||'')+'</div>';
+    }
+  }
+
   var actionsHtml='';
   if(!compact){
     actionsHtml='<div class="mhc-actions">'+
@@ -1450,31 +1691,31 @@ function renderMemoryCard(r, compact){
       '<button class="mhc-action danger" data-action="delete" data-id="'+r.id+'">删除</button>'+
       '</div>';
   }
-  var bigNumHtml='<div class="mhc-countdown">'+escHtml(cd.big)+(cd.label?'<span style="font-size:22px;font-weight:600;margin-left:4px;opacity:.9">'+cd.label+'</span>':'')+'</div>';
-  if(compact){
-    bigNumHtml='<div class="mhc-countdown">'+escHtml(cd.big)+(cd.label?'<span style="font-size:16px;font-weight:600;margin-left:3px;opacity:.9">'+cd.label+'</span>':'')+'</div>';
-  }
-  return '<div class="memory-hero-card '+(compact?'compact ':'')+(hasCover?'has-cover':'')+' preset-'+preset+'" style="'+bgStyle+'" data-id="'+r.id+'">'+
+  var typeBadge='<span class="mhc-type-badge">'+escHtml(kindLabel)+'</span>';
+  return '<div class="memory-hero-card '+(compact?'compact ':'')+(hasCover?'has-cover':'')+' preset-'+preset+' hero-kind-'+kind+'" style="'+bgStyle+'" data-id="'+r.id+'">'+
     overlay+
     '<div class="mhc-content">'+
       '<div class="mhc-top">'+
-        '<div class="mhc-badges"><span class="mhc-type-badge">纪念</span></div>'+
+        '<div class="mhc-badges">'+typeBadge+'</div>'+
         pinStar+
       '</div>'+
       bigNumHtml+
-      '<div class="mhc-date">'+escHtml(cd.dateLabel)+'</div>'+
+      dateLine+
       '<div class="mhc-title">'+escHtml(r.title)+'</div>'+
       subtitleHtml+
       actionsHtml+
     '</div>'+
     '</div>';
 }
+function renderMemoryCard(r,compact){
+  return renderHeroCard(r,compact);
+}
 
 function renderRecordCard(r,opts){
   opts=opts||{};
-  // Anniversary records in non-compact mode use memory card in lists; but in compact lists (calendar day, all-list non-hero) use normal card with anniversary styling
-  if(r.recordKind==='anniversary'&&!opts.compact&&opts.heroStyle){
-    return renderMemoryCard(r,false);
+  // Large card style: use hero card for cardStyle==='large' records in non-compact mode
+  if(!opts.compact&&opts.heroStyle&&r.cardStyle==='large'){
+    return renderHeroCard(r,false);
   }
   var cd=formatRecordCountdown(r);
   var meta=formatRecordMeta(r);
@@ -1573,34 +1814,43 @@ function renderHome(){
   }
   emptyBlock.style.display='none';
 
-  // Hero memory card: pinned anniversary first, then most recent anniversary (max 1)
-  var annivList=list.filter(function(r){return r.recordKind==='anniversary';});
-  var heroAnniv=null;
-  var pinnedAnniv=annivList.filter(function(r){return r.pinned;});
-  if(pinnedAnniv.length>0){
-    heroAnniv=pinnedAnniv.sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);})[0];
-  }else if(annivList.length>0){
-    // Pick nearest upcoming anniversary
-    var sortedAnniv=annivList.slice().sort(function(a,b){
-      var da=getReminderDateObject(a,{allowPast:true}),db=getReminderDateObject(b,{allowPast:true});
-      var na=da?da.getTime():Infinity,nb=db?db.getTime():Infinity;
-      var now=Date.now();
-      // Prefer future dates
-      var fa=na>=now?na:na+365*86400000,fb=nb>=now?nb:nb+365*86400000;
-      return fa-fb;
+  // Hero cards: pinned or cardStyle==='large' records (max 1 hero)
+  var heroCandidates=list.filter(function(r){return r.pinned||r.cardStyle==='large';});
+  var heroRec=null;
+  if(heroCandidates.length>0){
+    // Pinned items first, then by recency
+    heroCandidates.sort(function(a,b){
+      if(a.pinned&&!b.pinned) return -1;
+      if(!a.pinned&&b.pinned) return 1;
+      return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);
     });
-    heroAnniv=sortedAnniv[0];
+    heroRec=heroCandidates[0];
   }
-  if(heroAnniv){
-    heroBlock.innerHTML='<div class="card-section"><div class="card-section-head"><div class="card-section-title">纪念时刻</div></div>'+
-      renderMemoryCard(heroAnniv,false)+'</div>';
+  if(!heroRec){
+    // Fallback: pick nearest upcoming anniversary if any
+    var annivList=list.filter(function(r){return r.recordKind==='anniversary';});
+    if(annivList.length>0){
+      var sortedAnniv=annivList.slice().sort(function(a,b){
+        var da=getReminderDateObject(a,{allowPast:true}),db=getReminderDateObject(b,{allowPast:true});
+        var na=da?da.getTime():Infinity,nb=db?db.getTime():Infinity;
+        var nowTs=Date.now();
+        var fa=na>=nowTs?na:na+365*86400000,fb=nb>=nowTs?nb:nb+365*86400000;
+        return fa-fb;
+      });
+      heroRec=sortedAnniv[0];
+    }
+  }
+  if(heroRec){
+    var heroTitle=(heroRec.recordKind==='anniversary')?'纪念时刻':'置顶';
+    heroBlock.innerHTML='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+heroTitle+'</div></div>'+
+      renderHeroCard(heroRec,false)+'</div>';
   }else{
     heroBlock.innerHTML='';
   }
 
-  // Next reminder: exclude hero anniversary, find nearest upcoming
+  // Next reminder: exclude hero record, find nearest upcoming
   var upcoming=list.filter(function(r){
-    if(heroAnniv&&r.id===heroAnniv.id) return false;
+    if(heroRec&&r.id===heroRec.id) return false;
     var d=getReminderDateObject(r);
     if(!d){
       if(r.recordKind==='anniversary'){
@@ -1625,7 +1875,7 @@ function renderHome(){
   }
 
   // Recent records: exclude hero and next, take up to 3
-  var excludeIds=[heroAnniv?heroAnniv.id:null,nextId].filter(Boolean);
+  var excludeIds=[heroRec?heroRec.id:null,nextId].filter(Boolean);
   var remaining=list.filter(function(r){return excludeIds.indexOf(r.id)<0;});
   remaining.sort(function(a,b){return (b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   var recent=remaining.slice(0,3);
@@ -1634,7 +1884,7 @@ function renderHome(){
     '<div class="card-section-count">'+remaining.length+'</div></div>';
   if(recent.length>0){
     recentHtml+=recent.map(function(r){
-      if(r.recordKind==='anniversary') return renderMemoryCard(r,true);
+      if(r.cardStyle==='large'||r.recordKind==='anniversary') return renderHeroCard(r,true);
       return renderRecordCard(r);
     }).join('');
   }else{
@@ -1798,7 +2048,7 @@ function renderCalDayPanel(date){
       '<div class="cal-day-empty">这天还没有记录</div></div>';
   }else{
     var itemsHtml=recs.map(function(r){
-      if(r.recordKind==='anniversary') return renderMemoryCard(r,true);
+      if(r.cardStyle==='large'||r.recordKind==='anniversary') return renderHeroCard(r,true);
       return renderRecordCard(r,{compact:true});
     }).join('');
     block.innerHTML='<div class="cal-day-panel"><div class="cal-day-title">'+dateStr+
@@ -1928,7 +2178,7 @@ function renderAllList(){
     return;
   }
   container.innerHTML=filtered.map(function(r){
-    if(r.recordKind==='anniversary'&&r.pinned) return renderMemoryCard(r,false);
+    if(r.cardStyle==='large'||(r.recordKind==='anniversary'&&r.pinned)) return renderHeroCard(r,false);
     return renderRecordCard(r);
   }).join('');
   bindCardActions(container);
@@ -2374,52 +2624,53 @@ function handleQuickAdd(){
 function autoResizeInput(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
 
 /* ================= Voice ================= */
+function isWeChatBrowser(){
+  var ua=navigator.userAgent.toLowerCase();
+  return /micromessenger/.test(ua);
+}
+function shouldShowVoiceButton(){
+  if(isWeChatBrowser()) return false;
+  return isSpeechSupported();
+}
 function isSpeechSupported(){
   return 'webkitSpeechRecognition' in window||'SpeechRecognition' in window;
 }
+function _voiceResultHandler(e){
+  voiceState='processing';
+  var transcript='';
+  for(var i=0;i<e.results.length;i++){transcript+=e.results[i][0].transcript;}
+  var input=$('quickInput');
+  if(input){
+    var cur=input.value.trim();
+    input.value=cur?(cur+' '+transcript.trim()):transcript.trim();
+    autoResizeInput(input);
+    input.focus();
+  }
+}
+function _voiceErrorHandler(e){
+  voiceState='idle';
+  var btn=$('voiceBtn');
+  if(btn)btn.classList.remove('recording');
+  if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+    showToast('麦克风权限被拒绝','warn');
+  }else if(e.error==='no-speech'||e.error==='aborted'){
+    // silent
+  }else if(e.error==='network'){
+    showToast('语音识别需要网络连接','warn');
+  }else{
+    showToast('语音识别失败，请重试','warn');
+  }
+}
 function initVoice(){
-  if(!isSpeechSupported()) return;
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  voiceRecognition=new SR();
-  voiceRecognition.lang='zh-CN';
-  voiceRecognition.interimResults=false;
-  voiceRecognition.maxAlternatives=1;
-  voiceRecognition.onstart=function(){
-    voiceState='recording';
+  if(!shouldShowVoiceButton()){
     var btn=$('voiceBtn');
-    if(btn) btn.classList.add('recording');
-  };
-  voiceRecognition.onresult=function(e){
-    voiceState='processing';
-    var transcript='';
-    for(var i=0;i<e.results.length;i++){
-      transcript+=e.results[i][0].transcript;
+    if(btn){btn.classList.add('hidden');btn.style.display='none';}
+    var hint=document.querySelector('.input-diff-note');
+    if(isWeChatBrowser()&&hint){
+      hint.textContent='可识别时间、重复和纪念日。微信内可使用文字输入。';
     }
-    var input=$('quickInput');
-    if(input){
-      var cur=input.value.trim();
-      input.value=cur?(cur+' '+transcript.trim()):transcript.trim();
-      autoResizeInput(input);
-      input.focus();
-    }
-  };
-  voiceRecognition.onerror=function(e){
-    voiceState='idle';
-    var btn=$('voiceBtn');
-    if(btn) btn.classList.remove('recording');
-    if(e.error==='not-allowed'||e.error==='permission-denied'){
-      showToast('麦克风权限被拒绝，可在浏览器设置中开启','warn');
-    }else if(e.error==='no-speech'){
-      // silent
-    }else{
-      showToast('语音识别失败，请重试','warn');
-    }
-  };
-  voiceRecognition.onend=function(){
-    voiceState='idle';
-    var btn=$('voiceBtn');
-    if(btn) btn.classList.remove('recording');
-  };
+    return;
+  }
   var btn=$('voiceBtn');
   if(btn){
     btn.classList.remove('hidden');
@@ -2430,10 +2681,26 @@ function initVoice(){
         return;
       }
       if(voiceState==='processing') return;
+      // Recreate instance to avoid "already started" errors
       try{
+        if(voiceRecognition){
+          try{voiceRecognition.abort();}catch(ex){}
+          voiceRecognition=null;
+        }
+        var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+        voiceRecognition=new SR();
+        voiceRecognition.lang='zh-CN';
+        voiceRecognition.interimResults=false;
+        voiceRecognition.maxAlternatives=1;
+        voiceRecognition.onstart=function(){voiceState='recording';if(btn)btn.classList.add('recording');};
+        voiceRecognition.onresult=_voiceResultHandler;
+        voiceRecognition.onerror=_voiceErrorHandler;
+        voiceRecognition.onend=function(){voiceState='idle';if(btn)btn.classList.remove('recording');};
         voiceRecognition.start();
       }catch(ex){
-        // already started
+        showToast('语音启动失败，请重试','warn');
+        voiceState='idle';
+        if(btn)btn.classList.remove('recording');
       }
     });
   }
@@ -2584,11 +2851,17 @@ function init(){
   });
 
   // Onboarding
-  if(!showOnboarding()){
+  if(shouldShowOpeningAnimation()){
+    showOpeningAnimation();
+  }else{
     dom.app.classList.add('intro-anim');
     setTimeout(function(){dom.app.classList.remove('intro-anim');},1200);
   }
-  $('onbStartBtn').addEventListener('click',hideOnboarding);
+  var opSkip=$('opSkipBtn');
+  if(opSkip) opSkip.addEventListener('click',skipOpeningAnimation);
+  var onbBtn=$('onbStartBtn');
+  if(onbBtn) onbBtn.addEventListener('click',hideOnboarding);
+  startCountdownTicker();
 
   // Notifications
   updateNotifyStatusUI();
