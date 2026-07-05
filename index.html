@@ -440,6 +440,9 @@ body{display:flex;flex-direction:column;position:relative}
 
 ::-webkit-scrollbar{width:0;height:0}
 .hidden{display:none!important}
+
+.hero-cards-grid{display:flex;flex-direction:column;gap:12px;}
+.hero-cards-grid{display:flex;flex-direction:column;gap:12px;}
 </style>
 </head>
 <body>
@@ -741,6 +744,7 @@ var _editCoverPreset = 0;
 var _editCoverImage = null;
 var _editSubtitle = '';
 var _editPinned = false;
+var _editCardStyle = 'normal';
 var calendarGrid = [];
 var voiceRecognition = null;
 var voiceState = 'idle'; // idle, recording, processing
@@ -1814,43 +1818,33 @@ function renderHome(){
   }
   emptyBlock.style.display='none';
 
-  // Hero cards: pinned or cardStyle==='large' records (max 1 hero)
-  var heroCandidates=list.filter(function(r){return r.pinned||r.cardStyle==='large';});
-  var heroRec=null;
-  if(heroCandidates.length>0){
-    // Pinned items first, then by recency
-    heroCandidates.sort(function(a,b){
-      if(a.pinned&&!b.pinned) return -1;
-      if(!a.pinned&&b.pinned) return 1;
-      return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);
-    });
-    heroRec=heroCandidates[0];
-  }
-  if(!heroRec){
-    // Fallback: pick nearest upcoming anniversary if any
-    var annivList=list.filter(function(r){return r.recordKind==='anniversary';});
-    if(annivList.length>0){
-      var sortedAnniv=annivList.slice().sort(function(a,b){
-        var da=getReminderDateObject(a,{allowPast:true}),db=getReminderDateObject(b,{allowPast:true});
-        var na=da?da.getTime():Infinity,nb=db?db.getTime():Infinity;
-        var nowTs=Date.now();
-        var fa=na>=nowTs?na:na+365*86400000,fb=nb>=nowTs?nb:nb+365*86400000;
-        return fa-fb;
-      });
-      heroRec=sortedAnniv[0];
-    }
-  }
-  if(heroRec){
-    var heroTitle=(heroRec.recordKind==='anniversary')?'纪念时刻':'置顶';
-    heroBlock.innerHTML='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+heroTitle+'</div></div>'+
-      renderHeroCard(heroRec,false)+'</div>';
+  // Hero cards: pinned/large/anniversaries (up to 2)
+  var heroCandidates=list.filter(function(r){return r.pinned||r.cardStyle==='large'||r.recordKind==='anniversary';});
+  var nowTs=Date.now();
+  heroCandidates.sort(function(a,b){
+    if(a.pinned&&!b.pinned) return -1;
+    if(!a.pinned&&b.pinned) return 1;
+    var da=getReminderDateObject(a,{allowPast:a.recordKind==='anniversary'});
+    var db=getReminderDateObject(b,{allowPast:b.recordKind==='anniversary'});
+    var na=da?da.getTime():Infinity,nb=db?db.getTime():Infinity;
+    if(a.recordKind==='anniversary'&&na<nowTs) na+=365*86400000;
+    if(b.recordKind==='anniversary'&&nb<nowTs) nb+=365*86400000;
+    if(isFinite(na)&&isFinite(nb)) return na-nb;
+    return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);
+  });
+  var heroPicked=heroCandidates.slice(0,2);
+  if(heroPicked.length>0){
+    var heroHtml='<div class="card-section"><div class="card-section-head"><div class="card-section-title">置顶时刻</div></div><div class="hero-cards-grid">';
+    heroPicked.forEach(function(rc){heroHtml+=renderHeroCard(rc,false);});
+    heroHtml+='</div></div>';
+    heroBlock.innerHTML=heroHtml;
   }else{
     heroBlock.innerHTML='';
   }
 
   // Next reminder: exclude hero record, find nearest upcoming
   var upcoming=list.filter(function(r){
-    if(heroRec&&r.id===heroRec.id) return false;
+    if(heroPicked.some(function(h){return h.id===r.id;})) return false;
     var d=getReminderDateObject(r);
     if(!d){
       if(r.recordKind==='anniversary'){
@@ -1869,13 +1863,13 @@ function renderHome(){
   if(nextId){
     nextBlock.innerHTML='<div class="card-section">'+
       '<div class="card-section-head"><div class="card-section-title">下一个提醒</div></div>'+
-      renderRecordCard(upcoming[0])+'</div>';
+      ((upcoming[0].cardStyle==='large'||upcoming[0].recordKind==='anniversary')?renderHeroCard(upcoming[0],false):renderRecordCard(upcoming[0]))+'</div>';
   }else{
     nextBlock.innerHTML='';
   }
 
   // Recent records: exclude hero and next, take up to 3
-  var excludeIds=[heroRec?heroRec.id:null,nextId].filter(Boolean);
+  var excludeIds=heroPicked.map(function(r){return r.id;});if(nextId)excludeIds.push(nextId);
   var remaining=list.filter(function(r){return excludeIds.indexOf(r.id)<0;});
   remaining.sort(function(a,b){return (b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   var recent=remaining.slice(0,3);
@@ -2313,14 +2307,18 @@ function openDetailDrawer(id){
     (canSetNotify?'<div class="detail-row" style="flex-direction:column;align-items:flex-start;gap:8px"><span class="detail-label">提醒设置</span>'+notifyChips+'</div>':
     '<div class="detail-row"><span class="detail-label">提醒</span><span class="detail-value">'+(notifyLabels[r.notifyMode]||'不提醒')+'</span></div>')+
     (r.note?'<div class="detail-row"><span class="detail-label">备注</span><span class="detail-value">'+escHtml(r.note)+'</span></div>':'')+
+    '<div class="detail-row"><span class="detail-label">卡片样式</span><span class="detail-value">'+(r.cardStyle==='large'?'大卡片':'普通')+'</span></div>'+
+    '<div class="detail-row"><span class="detail-label">置顶</span><span class="detail-value">'+(r.pinned?'是':'否')+'</span></div>'+
     '<div class="detail-row"><span class="detail-label">记录时间</span><span class="detail-value">'+new Date(r.createdAt).toLocaleDateString('zh-CN')+'</span></div>';
   var handleBtn=(r.recordKind==='reminder'||r.recordKind==='habit'?'<button class="btn-secondary" id="drawerHandleBtn">'+(r.handledAt?'取消处理':'已处理')+'</button>':'');
-  var footer='<button class="btn-cancel" id="drawerCloseBtn">关闭</button>'+handleBtn+
+  var pinBtn2='<button class="btn-secondary" id="drawerPinBtn2">'+(r.pinned?'取消置顶':'置顶')+'</button>';
+  var footer='<button class="btn-cancel" id="drawerCloseBtn">关闭</button>'+handleBtn+pinBtn2+
     '<button class="btn-primary" id="drawerEditBtn">编辑</button>';
   openDrawer('记录详情',body,footer);
   setTimeout(function(){
     var cb=$('drawerCloseBtn');if(cb)cb.addEventListener('click',closeDrawer);
     var hb=$('drawerHandleBtn');if(hb)hb.addEventListener('click',function(){markHandled(id);});
+    var pb2=$('drawerPinBtn2');if(pb2)pb2.addEventListener('click',function(){togglePin(id);});
     var eb=$('drawerEditBtn');if(eb)eb.addEventListener('click',function(){openEditDrawer(id);});
     var ng=$('detailNotifyGroup');
     if(ng){
@@ -2434,14 +2432,19 @@ function openEditDrawer(id){
   _editCoverImage=r.coverImage||null;
   _editSubtitle=r.subtitle||'';
   _editPinned=!!r.pinned;
+  _editCardStyle=r.cardStyle||((r.recordKind==='anniversary')?'large':'normal');
 
   var isAnniv=(_editKind==='anniversary');
-  var coverPickerHtml=isAnniv?renderCoverPicker({coverImage:_editCoverImage,coverPreset:_editCoverPreset}):'';
-  var subtitleField=isAnniv?'<div class="form-group"><label class="form-label">副标题</label>'+
-    '<input class="form-input" id="editSubtitle" value="'+escHtml(_editSubtitle)+'" placeholder="一句简短备注（选填）"></div>':'';
-  var pinField=isAnniv?'<div class="form-group"><div class="form-switch-row">'+
+  var showLargeCard=(_editCardStyle==='large');
+  var coverPickerHtml=renderCoverPicker({coverImage:_editCoverImage,coverPreset:_editCoverPreset});
+  var subtitleField='<div class="form-group"><label class="form-label">副标题</label>'+
+    '<input class="form-input" id="editSubtitle" value="'+escHtml(_editSubtitle)+'" placeholder="一句简短备注（选填）"></div>';
+  var cardStyleField='<div class="form-group"><div class="form-switch-row">'+
+    '<span class="form-switch-label">大卡片展示</span>'+
+    '<div class="my-switch '+(_editCardStyle==='large'?'on':'')+'" id="editCardStyleSwitch"></div></div></div>';
+  var pinField='<div class="form-group"><div class="form-switch-row">'+
     '<span class="form-switch-label">置顶到首页</span>'+
-    '<div class="my-switch '+(_editPinned?'on':'')+'" id="editPinSwitch"></div></div></div>':'';
+    '<div class="my-switch '+(_editPinned?'on':'')+'" id="editPinSwitch"></div></div></div>';
 
   var body='<div class="form-group"><label class="form-label">内容</label>'+
     '<input class="form-input" id="editTitle" value="'+escHtml(r.title)+'" placeholder="记录内容..."></div>'+
@@ -2477,7 +2480,7 @@ function openEditDrawer(id){
       '</div></div>'+
     '<div class="form-group"><label class="form-label">备注</label>'+
       '<input class="form-input" id="editNote" value="'+escHtml(r.note||'')+'" placeholder="选填"></div>'+
-    coverPickerHtml+pinField+
+    coverPickerHtml+cardStyleField+pinField+
     '<input type="hidden" id="editId" value="'+(id||'')+'">';
   var footer='<button class="btn-cancel" id="editCancelBtn">取消</button>'+
     (isNew?'':'<button class="btn-danger" id="editDeleteBtn">删除</button>')+
@@ -2510,7 +2513,15 @@ function openEditDrawer(id){
         pinSw.classList.toggle('on',_editPinned);
       });
     }
-    if(isAnniv) bindCoverPicker(id);
+    var cssw=$('editCardStyleSwitch');if(cssw){
+      cssw.addEventListener('click',function(){
+        _editCardStyle=(_editCardStyle==='large')?'normal':'large';
+        cssw.classList.toggle('on',_editCardStyle==='large');
+        var eid=$('editId')?$('editId').value:'';
+        openEditDrawer(eid||null);
+      });
+    }
+    bindCoverPicker(id);
   },300);
 }
 function saveEdit(){
@@ -2540,6 +2551,7 @@ function saveEdit(){
       list[idx].coverPreset=_editCoverPreset;
       list[idx].subtitle=_editSubtitle;
       list[idx].pinned=_editPinned;
+      list[idx].cardStyle=_editCardStyle;
       list[idx]=normalizeRecord(list[idx]);
     }
   }else{
@@ -2547,7 +2559,8 @@ function saveEdit(){
       note:note,repeat:repeat,repeatText:repeatTextMap[repeat]||'',rawText:title+' '+dateText+' '+timeText,
       archived:false,createdAt:Date.now(),updatedAt:Date.now(),ts:Date.now(),
       recordKind:kind,recordState:'active',notifyMode:notifyMode,notifiedAt:null,
-      coverImage:_editCoverImage,coverPreset:_editCoverPreset,subtitle:_editSubtitle,pinned:_editPinned};
+      coverImage:_editCoverImage,coverPreset:_editCoverPreset,subtitle:_editSubtitle,pinned:_editPinned,
+      cardStyle:_editCardStyle};
     item=normalizeRecord(item);
     list.unshift(item);
   }
