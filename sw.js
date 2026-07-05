@@ -1,6 +1,6 @@
 // Service Worker for 时刻 (Shike) - v0.5.0 Premium
 // Strategy: network-first for HTML to ensure root always gets latest; cache-first for static assets
-var CACHE_NAME = 'shike-premium-v13';
+var CACHE_NAME = 'shike-multi-host-v14';
 var ALWAYS_NETWORK_FIRST = ['./', './index.html', './?'];
 
 self.addEventListener('install', function(event) {
