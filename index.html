@@ -711,7 +711,7 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* ================= Constants ================= */
 var APP_VERSION = 'v0.6.0';
-var APP_UPDATED_AT = '2026-07-06 00:20';
+var APP_UPDATED_AT = '2026-07-06 00:40';
 
 var STORAGE_KEY = 'shike_reminders_v1';
 var THEME_KEY = 'shike_theme_v1';
@@ -2894,10 +2894,57 @@ function init(){
   window.backupCorruptedRecords=function(){try{var d=localStorage.getItem(STORAGE_KEY);if(d)localStorage.setItem(STORAGE_KEY+'_corrupted_backup',d);}catch(e){}};
   window.normalizeRecordDate=function(item){var d=getReminderDateObject(item,{allowPast:true});return d?getDateKey(d):null;};
 
-  // Service worker
+  // Service worker - aggressive update to beat cached versions
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
+    // Register with cache buster so browser always fetches latest sw.js
+    var swUrl='sw.js?v='+encodeURIComponent(APP_VERSION);
+    navigator.serviceWorker.register(swUrl,{updateViaCache:'none'}).then(function(reg){
+      // If new SW found/installing, wait for it to activate then reload
+      if(reg.waiting){
+        // New SW already waiting - post message to activate it
+        reg.waiting.postMessage({type:'SKIP_WAITING'});
+      }
+      reg.addEventListener('updatefound',function(){
+        var newSw=reg.installing;
+        if(!newSw) return;
+        newSw.addEventListener('statechange',function(){
+          if(newSw.state==='installed'&&navigator.serviceWorker.controller){
+            // New version installed - reload to activate
+            try{localStorage.setItem('shike_pending_reload','1');}catch(e){}
+            window.location.reload(true);
+          }
+        });
+      });
+      // Check for updates immediately
+      reg.update().catch(function(){});
+      // Periodically check for updates every 10 minutes
+      setInterval(function(){reg.update().catch(function(){});},600000);
+    }).catch(function(){});
+    // When controller changes (new SW takes over), reload
+    navigator.serviceWorker.addEventListener('controllerchange',function(){
+      if(localStorage.getItem('shike_pending_reload')==='1'){
+        localStorage.removeItem('shike_pending_reload');
+        window.location.reload(true);
+      }
+    });
   }
+  // Also hard-reload if our stored version is stale (extra safety)
+  try{
+    var lastVer=localStorage.getItem('shike_last_ver');
+    if(lastVer&&lastVer!==APP_VERSION){
+      localStorage.setItem('shike_last_ver',APP_VERSION);
+      // Clear old SW caches via direct API
+      if('caches' in window){
+        caches.keys().then(function(keys){
+          keys.forEach(function(k){
+            if(k.indexOf('shike-')===0&&k!=='shike-v060-v19'){caches.delete(k);}
+          });
+        });
+      }
+    }else{
+      localStorage.setItem('shike_last_ver',APP_VERSION);
+    }
+  }catch(e){}
 }
 
 window.addEventListener('error',function(e){

@@ -1,29 +1,42 @@
-// Service Worker for 时刻 (Shike) - v0.5.0 Multi-Host Migration
-// Strategy: network-first for HTML to ensure root always gets latest; cache-first for static assets
-// Updated cache name for multi-platform deployment (Cloudflare Pages + GitHub Pages + Netlify)
-var CACHE_NAME = 'shike-v060-v18';
-var ALWAYS_NETWORK_FIRST = ['./', './index.html', './?'];
+// Service Worker for 时刻 (Shike) - v0.6.0 Force-Update
+// Strategy: network-first for HTML + sw.js itself; cache-first for other assets
+// Aggressively cleans up old caches; responds to SKIP_WAITING for immediate activation
+var CACHE_NAME = 'shike-v060-v19';
 
 self.addEventListener('install', function(event) {
-  // Force the waiting service worker to become the active service worker immediately
   self.skipWaiting();
+});
+
+self.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(keys) {
-      // Delete ALL old caches (any cache that doesn't match current CACHE_NAME)
       return Promise.all(keys.filter(function(k) {
         return k !== CACHE_NAME;
       }).map(function(k) {
         return caches.delete(k);
       }));
     }).then(function() {
-      // Take control of all clients immediately
       return self.clients.claim();
     })
   );
 });
+
+function isHtmlOrNav(req) {
+  if (req.mode === 'navigate') return true;
+  var accept = req.headers.get('accept');
+  if (accept && accept.indexOf('text/html') !== -1) return true;
+  return false;
+}
+
+function isSwJs(url) {
+  return url.pathname.endsWith('/sw.js') || url.pathname.endsWith('sw.js');
+}
 
 self.addEventListener('fetch', function(event) {
   var req = event.request;
@@ -31,10 +44,10 @@ self.addEventListener('fetch', function(event) {
 
   var url = new URL(req.url);
 
-  // For HTML navigation requests (including root /), use network-first to always get latest
-  if (req.mode === 'navigate' || (req.headers.get('accept') && req.headers.get('accept').includes('text/html'))) {
+  // Network-first for HTML navigation AND sw.js itself (critical for updates)
+  if (isHtmlOrNav(req) || isSwJs(url)) {
     event.respondWith(
-      fetch(req).then(function(networkRes) {
+      fetch(req, { cache: 'no-store' }).then(function(networkRes) {
         if (networkRes && networkRes.status === 200) {
           var clone = networkRes.clone();
           caches.open(CACHE_NAME).then(function(cache) {
@@ -51,7 +64,7 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  // For other assets (JS/CSS inlined in HTML, manifest, etc.), use cache-first with network fallback
+  // Cache-first for other assets
   event.respondWith(
     caches.match(req).then(function(cached) {
       if (cached) return cached;
