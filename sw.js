@@ -1,5 +1,5 @@
-// Service Worker for 时刻 (Shike) - v0.7.0
-var CACHE_NAME = 'shike-v070-v20';
+// Service Worker for 时刻 (Shike) - v0.8.0
+var CACHE_NAME = 'shike-v080-v3';
 self.addEventListener('install', function(event){self.skipWaiting();});
 self.addEventListener('message',function(event){if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});
 self.addEventListener('activate',function(event){event.waitUntil(caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return k!==CACHE_NAME;}).map(function(k){return caches.delete(k);}));}).then(function(){return self.clients.claim();}));});
