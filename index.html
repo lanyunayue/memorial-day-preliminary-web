@@ -501,6 +501,16 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
 .cover-preset{aspect-ratio:1;border-radius:var(--radius-sm);cursor:pointer;background-size:cover;background-position:center;border:2px solid transparent;transition:all .2s}
 .cover-preset:hover{transform:scale(1.05)}
 .cover-preset.active{border-color:var(--accent)}
+/* Reusable cover picker (cp-*) */
+.cp-wrap{margin-bottom:var(--space-8)}
+.cp-preview{width:100%;height:120px;border-radius:var(--radius-md);background-size:cover;background-position:center;margin-bottom:var(--space-8);position:relative;border:1px dashed var(--ink-line);display:flex;align-items:center;justify-content:center;color:var(--ink-mute);font-size:var(--fs-caption);overflow:hidden;cursor:pointer}
+.cp-preview.has-image{border-style:solid}
+.cp-remove{position:absolute;top:var(--space-8);right:var(--space-8);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);font-size:18px;line-height:1}
+.cp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-6);margin-bottom:var(--space-8)}
+.cp-preset{aspect-ratio:1;border-radius:var(--radius-sm);cursor:pointer;background-size:cover;background-position:center;border:2px solid transparent;transition:all .2s;position:relative;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px}
+.cp-preset:hover{transform:scale(1.05)}
+.cp-preset.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.cp-check{text-shadow:0 1px 3px rgba(0,0,0,.5)}
 
 /* ========== CONFIRM MODAL ========== */
 .modal-backdrop{
@@ -569,6 +579,18 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
 }
 
 /* ========== RESPONSIVE ========== */
+@media(max-width:480px){
+  .app-main{padding:0 var(--space-16) var(--space-20)}
+  .app-header{padding:calc(env(safe-area-inset-top) + var(--space-12)) var(--space-16) var(--space-12)}
+  .card{padding:var(--space-14)}
+  .card-large-content{padding:var(--space-16);min-height:160px}
+  .cal-grid{gap:1px}
+  .cal-cell{min-height:38px;font-size:13px}
+  .bottom-nav{padding:var(--space-6) var(--space-6) calc(var(--space-6) + env(safe-area-inset-bottom))}
+  .drawer{padding:var(--space-8) var(--space-16) calc(var(--space-20) + env(safe-area-inset-bottom))}
+  .input-field{font-size:16px}
+  .btn{min-height:42px;padding:var(--space-10) var(--space-16)}
+}
 @media(max-width:414px){
   .app-main{padding:0 var(--space-16) var(--space-20)}
   .app-header{padding:calc(env(safe-area-inset-top) + var(--space-10)) var(--space-16) var(--space-10)}
@@ -577,6 +599,18 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
   .card{padding:var(--space-14)}
   .card-large-content{padding:var(--space-16);min-height:160px}
   .theme-grid{grid-template-columns:repeat(4,1fr);gap:var(--space-8)}
+}
+@media(max-width:380px){
+  .app-main{padding:0 var(--space-12) var(--space-16)}
+  .app-header{padding:calc(env(safe-area-inset-top) + var(--space-8)) var(--space-12) var(--space-8)}
+  .brand-name{font-size:18px;letter-spacing:1px}
+  .big-number{font-size:36px}
+  .card-large-content{min-height:140px}
+  .cal-cell{font-size:12px;min-height:36px}
+  .cal-weekday{font-size:10px;padding:var(--space-2) 0}
+  .nav-item span{font-size:9px}
+  .input-field{padding:var(--space-10) var(--space-12);min-height:40px}
+  .drawer{padding:var(--space-8) var(--space-12) calc(var(--space-16) + env(safe-area-inset-bottom))}
 }
 @media(max-width:375px){
   .brand-name{font-size:18px;letter-spacing:1px}
@@ -707,7 +741,7 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
       <div class="card" style="border-style:dashed;border-width:2px;background:transparent">
         <div style="text-align:center;padding:var(--space-8) 0">
           <p style="color:var(--ink-soft);margin-bottom:var(--space-12);font-size:var(--fs-body)">写点什么吧，时刻会帮你记住</p>
-          <textarea class="input-field" id="importTextarea" placeholder="例如：明天下午三点交实验报告" rows="3" aria-label="记录内容"></textarea>
+          <textarea class="input-field" id="importTextarea" placeholder="例如：下周三开会" rows="3" aria-label="记录内容"></textarea>
           <div style="display:flex;gap:var(--space-8);margin-top:var(--space-12);justify-content:center;flex-wrap:wrap">
             <button class="btn btn-accent" id="importSaveBtn" aria-label="保存记录">保存</button>
             <button class="btn btn-ghost" id="importOpenDrawerBtn" aria-label="详细编辑">详细编辑</button>
@@ -869,6 +903,12 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
     </label>
   </div>
   <div class="drawer-field">
+    <label class="drawer-label">
+      <input type="checkbox" id="drawerPinned" style="margin-right:6px;vertical-align:middle" aria-label="置顶">
+      置顶此记录
+    </label>
+  </div>
+  <div class="drawer-field">
     <label class="drawer-label">封面图片</label>
     <div class="cover-preview" id="coverPreview">
       <span id="coverPreviewText">点击添加封面</span>
@@ -887,6 +927,7 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
       <button class="btn btn-ghost btn-sm" id="coverLargeBtn" aria-label="设为大卡片">设为大卡片</button>
     </div>
     <input type="file" id="coverFileInput" accept="image/jpeg,image/png,image/webp" style="display:none" aria-label="选择封面图片">
+    <input type="file" id="coverImageInput" accept="image/*" style="display:none" aria-label="上传封面图片">
   </div>
   <div class="drawer-footer">
     <button class="btn btn-ghost" id="drawerCancelBtn" aria-label="取消">取消</button>
@@ -916,7 +957,7 @@ select.input-field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:/
    CONSTANTS
    ============================================================ */
 const APP_VERSION = 'v0.8.0';
-const APP_UPDATED_AT = '2026-07-07 03:30';
+const APP_UPDATED_AT = '2026-07-07';
 const STORAGE_KEY = 'shike_records_v1';
 const SETTINGS_KEY = 'shike_settings_v1';
 const FIRST_VISIT_KEY = 'shike_first_visit_v1';
@@ -1131,6 +1172,7 @@ function migrateRecord(r){
     isLarge:!!r.isLarge,
     hasReminder:!!r.hasReminder,
     notified:!!r.notified,
+    recordState:r.recordState||'pending',
     rawText:r.rawText||'',
     dateText:r.dateText||'',
     subtitle:r.subtitle||'',
@@ -1401,8 +1443,8 @@ function readImageFile(file){
     fr.readAsDataURL(file);
   });
 }
-function validateImageDataURL(url){
-  return typeof url==='string' && url.slice(0,11)==='data:image/';
+function validateImageDataURL(u){
+  return typeof u==='string' && u.startsWith('data:image/') && u.length > 100;
 }
 function compressImageFile(file,maxWidth,quality){
   maxWidth=maxWidth||1200; quality=quality||0.72;
@@ -1429,6 +1471,8 @@ function compressImageFile(file,maxWidth,quality){
     });
   });
 }
+// Alias
+function compressImage(file,maxWidth,quality){ return compressImageFile(file,maxWidth,quality); }
 
 /* ============================================================
    TOAST
@@ -1437,13 +1481,14 @@ let toastTimer=null;
 function toast(msg,type){
   type=type||'';
   const c=$('#toastContainer');
+  if(!c) return;
   const d=document.createElement('div');
   d.className='toast '+(type||'');
   d.textContent=msg;
   c.appendChild(d);
   setTimeout(function(){
     d.classList.add('leaving');
-    setTimeout(function(){ d.remove(); },220);
+    setTimeout(function(){ if(d.remove) d.remove(); },220);
   },2200);
 }
 
@@ -1542,6 +1587,32 @@ function togglePin(id){
   r.pinned=!r.pinned; r.updatedAt=Date.now();
   saveRecords();
   toast(r.pinned?t('pinned'):t('unpinned'));
+}
+function toggleArchive(id){
+  const r=records.find(x=>x.id===id); if(!r) return;
+  r.archived=!r.archived; r.updatedAt=Date.now();
+  saveRecords();
+  toast(r.archived?'已隐藏':'已恢复');
+  refreshAll();
+}
+function markHandled(id){
+  const r=records.find(x=>x.id===id); if(!r) return;
+  r.recordState=r.recordState==='handled'?'pending':'handled';
+  r.updatedAt=Date.now();
+  saveRecords();
+  toast(r.recordState==='handled'?'已标记处理':'已取消处理');
+  refreshAll();
+}
+function toggleNotify(id){
+  const r=records.find(x=>x.id===id); if(!r) return;
+  r.hasReminder=!r.hasReminder;
+  if(r.hasReminder && !r.timeText){
+    r.timeText='09:00';
+  }
+  r.updatedAt=Date.now();
+  saveRecords();
+  toast(r.hasReminder?'已开启提醒':'已关闭提醒');
+  refreshAll();
 }
 
 /* ============================================================
@@ -1973,6 +2044,7 @@ function openDrawer(id){
   $('#drawerDate').value='';
   $('#drawerTime').value='';
   $('#drawerYearly').checked=false;
+  $('#drawerPinned').checked=false;
   $$('.kind-btn').forEach(b=>b.classList.toggle('active',b.dataset.kind==='note'));
   updateCoverPreview(null,null);
   ui._editIsLarge=false;
@@ -1985,6 +2057,7 @@ function openDrawer(id){
       $('#drawerDate').value=r.dateKey||'';
       $('#drawerTime').value=r.timeText||'';
       $('#drawerYearly').checked=!!r.yearly;
+      $('#drawerPinned').checked=!!r.pinned;
       $$('.kind-btn').forEach(b=>b.classList.toggle('active',b.dataset.kind===r.recordKind));
       ui._editCoverImage=r.coverImage||null;
       ui._editPreset=r.coverPreset||null;
@@ -2004,8 +2077,19 @@ function closeDrawer(){
   $('#drawer').classList.remove('open');
   $('#drawerBackdrop').classList.remove('open');
   ui.editingId=null;
-  ui._editCoverImage=null; ui._editPreset=null;
+  ui._editCoverImage=null; ui._editPreset=null; ui._editCoverPreset=null;
+  ui._editIsLarge=false;
 }
+// Aliases for external/legacy API compatibility
+function openEditDrawer(id){ return openDrawer(id); }
+function closeEdit(){ return closeDrawer(); }
+function saveEdit(){ return saveFromDrawer(); }
+// _editCoverPreset alias -> _editPreset
+Object.defineProperty(ui,'_editCoverPreset',{
+  get:function(){return ui._editPreset;},
+  set:function(v){ui._editPreset=v;},
+  configurable:true,
+});
 function updateCoverPreview(img,preset){
   const prev=$('#coverPreview');
   const txt=$('#coverPreviewText');
@@ -2034,6 +2118,82 @@ function updateCoverPreview(img,preset){
     txt.style.display='block';
     rm.style.display='none';
   }
+}
+
+/* ============================================================
+   COVER PICKER (reusable renderer)
+   ============================================================ */
+function renderCoverPicker(opts){
+  opts=opts||{};
+  var coverImage=opts.coverImage||null;
+  var coverPreset=opts.coverPreset||null;
+  var presetList=[
+    {key:'sunset',label:'暖色',bg:'linear-gradient(135deg,#f5a07b,#e86b4f)'},
+    {key:'ocean',label:'海洋',bg:'linear-gradient(135deg,#7bb5d4,#4a7a9a)'},
+    {key:'forest',label:'森林',bg:'linear-gradient(135deg,#8ab880,#4f7a48)'},
+    {key:'dusk',label:'黄昏',bg:'linear-gradient(135deg,#c895a0,#8a5c7a)'},
+  ];
+  var previewStyle='';
+  var previewClass='cp-preview';
+  var previewText='点击添加封面';
+  var showRemove='none';
+  var showText='block';
+  if(coverImage && validateImageDataURL(coverImage)){
+    previewStyle='background-image:url("'+coverImage+'");';
+    previewClass+=' has-image';
+    showText='none'; showRemove='flex';
+  }else if(coverPreset){
+    var pmap={sunset:'linear-gradient(135deg,#f5a07b,#e86b4f)',ocean:'linear-gradient(135deg,#7bb5d4,#4a7a9a)',forest:'linear-gradient(135deg,#8ab880,#4f7a48)',dusk:'linear-gradient(135deg,#c895a0,#8a5c7a)'};
+    previewStyle='background-image:'+(pmap[coverPreset]||pmap.sunset)+';';
+    previewClass+=' has-image';
+    showText='none'; showRemove='flex';
+  }
+  var presetsHtml=presetList.map(function(p){
+    var sel=(p.key===coverPreset)?' selected':'';
+    var check=(p.key===coverPreset)?'<span class="cp-check">✓</span>':'';
+    return '<button type="button" class="cp-preset'+sel+'" data-preset="'+p.key+'" style="background:'+p.bg+'" aria-label="'+p.label+'">'+check+'</button>';
+  }).join('');
+  var html='<div class="cp-wrap" id="cpWrap">'+
+    '<div class="'+previewClass+'" style="'+previewStyle+'" id="cpPreview">'+
+      '<span class="cp-text" style="display:'+showText+'">'+previewText+'</span>'+
+      '<button type="button" class="cp-remove" id="cpRemoveBtn" aria-label="移除封面" style="display:'+showRemove+'">×</button>'+
+    '</div>'+
+    '<div class="cp-grid">'+presetsHtml+'</div>'+
+    '<button type="button" class="btn btn-ghost btn-sm" id="cpUploadBtn" aria-label="上传图片">上传图片</button>'+
+  '</div>';
+  return html;
+}
+function bindCoverPickerEvents(container,onChange){
+  if(!container) return;
+  container.addEventListener('click',function(e){
+    var preset=e.target.closest('[data-preset]');
+    var remove=e.target.closest('#cpRemoveBtn');
+    var upload=e.target.closest('#cpUploadBtn');
+    var prev=e.target.closest('#cpPreview');
+    if(preset){
+      e.stopPropagation();
+      var key=preset.dataset.preset;
+      ui._editPreset=key;
+      ui._editCoverImage=null;
+      ui._editCoverPreset=key;
+      if(typeof onChange==='function') onChange({coverImage:null,coverPreset:key});
+      return;
+    }
+    if(remove){
+      e.stopPropagation();
+      ui._editCoverImage=null;
+      ui._editPreset=null;
+      ui._editCoverPreset=null;
+      if(typeof onChange==='function') onChange({coverImage:null,coverPreset:null});
+      return;
+    }
+    if(upload||(prev && !e.target.closest('#cpRemoveBtn'))){
+      e.stopPropagation();
+      var inp=document.getElementById('coverImageInput')||document.getElementById('coverFileInput');
+      if(inp) inp.click();
+      return;
+    }
+  });
 }
 
 /* ============================================================
@@ -2451,6 +2611,18 @@ function bindEvents(){
         card.classList.toggle('selected',ui.selectedIds.has(id));
         return;
       }
+      if(action==='handle'){ e.stopPropagation(); markHandled(id); return; }
+      if(action==='notify'){ e.stopPropagation(); toggleNotify(id); return; }
+      if(action==='archive'){ e.stopPropagation(); toggleArchive(id); return; }
+      if(action==='delete'){
+        e.stopPropagation();
+        confirmDialog('删除记录','确定删除这条记录？此操作不可恢复。',()=>{
+          deleteRecord(id); toast('已删除'); refreshAll();
+        });
+        return;
+      }
+      if(action==='cover'){ e.stopPropagation(); openDrawer(id); setTimeout(()=>{const cp=$('#coverPreview');if(cp)cp.click();},300); return; }
+      if(action==='view'){ e.stopPropagation(); openDrawer(id); return; }
       // Default: open edit drawer
       if(ui.batchMode){
         if(ui.selectedIds.has(id)) ui.selectedIds.delete(id);
@@ -2519,6 +2691,15 @@ function bindEvents(){
   b('drawerTitleInput','keydown',(e)=>{
     if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); saveFromDrawer(); }
   });
+  b('drawerDate','keydown',(e)=>{
+    if(e.key==='Enter'){ e.preventDefault(); saveFromDrawer(); }
+  });
+  b('drawerTime','keydown',(e)=>{
+    if(e.key==='Enter'){ e.preventDefault(); saveFromDrawer(); }
+  });
+  b('drawerNotes','keydown',(e)=>{
+    if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); saveFromDrawer(); }
+  });
 
   // Kind selector
   const ks=$('#kindSelector');
@@ -2532,25 +2713,41 @@ function bindEvents(){
     });
   }
 
-  // Cover upload
-  b('coverUploadBtn','click',()=>{ $('#coverFileInput').click(); });
-  b('coverFileInput','change',(e)=>{
+  // Cover upload (shared handler)
+  function handleCoverFileInput(e){
     const file=e.target.files&&e.target.files[0]; if(!file){ return; }
+    // Validate file type
+    if(!file.type || !file.type.startsWith('image/')){
+      toast('请选择图片文件','warning'); e.target.value=''; return;
+    }
     const btn=$('#coverUploadBtn');
     if(btn){ btn.disabled=true; btn.innerHTML='<span class="loading"></span> 处理中'; }
+    // Warn if file > 5MB (will still compress)
+    if(file.size > 5*1024*1024){
+      toast('图片较大，正在压缩...','');
+    }
     compressImageFile(file,1200,0.72).then(function(dataUrl){
       if(!validateImageDataURL(dataUrl)){ toast('图片处理失败','error'); return; }
+      // Warn if compressed dataUrl > 500KB
+      if(dataUrl.length > 500*1024){
+        toast('背景已更新（图片较大，可能影响加载速度）','warning');
+      }else{
+        toast('背景已更新');
+      }
       ui._editCoverImage=dataUrl;
       ui._editPreset=null;
+      ui._editCoverPreset=null;
       updateCoverPreview(dataUrl,null);
-      toast(t('bgUpdated'));
     }).catch(function(err){
-      toast(err.message||'图片处理失败','error');
+      toast('图片读取失败','error');
     }).then(function(){
       if(btn){ btn.disabled=false; btn.textContent='上传图片'; }
       e.target.value='';
     });
-  });
+  }
+  b('coverUploadBtn','click',()=>{ $('#coverFileInput').click(); });
+  b('coverFileInput','change',handleCoverFileInput);
+  b('coverImageInput','change',handleCoverFileInput);
 
   // Cover presets
   const cp=$('#coverPresets');
@@ -2560,6 +2757,9 @@ function bindEvents(){
       const preset=p.dataset.preset;
       if(ui._editPreset===preset){
         ui._editPreset=null;
+        ui._editCoverImage=null;
+        ui._editIsLarge=false;
+        $('#coverLargeBtn').textContent='设为大卡片';
       }else{
         ui._editPreset=preset;
         ui._editCoverImage=null;
@@ -2570,8 +2770,9 @@ function bindEvents(){
 
   // Cover remove
   b('coverRemoveBtn','click',()=>{
-    ui._editCoverImage=null; ui._editPreset=null;
+    ui._editCoverImage=null; ui._editPreset=null; ui._editCoverPreset=null; ui._editIsLarge=false;
     updateCoverPreview(null,null);
+    $('#coverLargeBtn').textContent='设为大卡片';
   });
 
   // Click on cover preview to upload
@@ -2617,8 +2818,8 @@ function bindEvents(){
   document.addEventListener('keydown',(e)=>{
     // Esc closes drawer/modal
     if(e.key==='Escape'){
-      if($('#confirmModal').classList.contains('open')){ closeConfirm(); return; }
-      if($('#drawer').classList.contains('open')){ closeDrawer(); return; }
+      const cm=$('#confirmModal'); if(cm && cm.classList.contains('open')){ closeConfirm(); return; }
+      const dr=$('#drawer'); if(dr && dr.classList.contains('open')){ closeDrawer(); return; }
     }
     // Ctrl/Cmd+K focuses search or home input
     if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){
@@ -2644,6 +2845,7 @@ function saveFromDrawer(){
   const dateKey=$('#drawerDate').value||null;
   const timeText=$('#drawerTime').value||null;
   const yearly=$('#drawerYearly').checked;
+  const pinned=$('#drawerPinned').checked;
   let kind='note';
   const activeKind=$$('.kind-btn').find(function(b){return b.classList.contains('active')});
   if(activeKind) kind=activeKind.dataset.kind;
@@ -2660,6 +2862,7 @@ function saveFromDrawer(){
     dateKey:dateKey,
     timeText:timeText,
     yearly:yearly,
+    pinned:pinned,
     hasReminder:hasReminder,
     coverImage:ui._editCoverImage,
     coverPreset:ui._editPreset,
@@ -2710,6 +2913,11 @@ function registerSW(){
   }
 }
 
+/* ========== INIT WEATHER (stub) ========== */
+function initWeather(){
+  // Weather feature reserved for future versions; safe no-op
+}
+
 /* ========== INIT ========== */
 function init(){
   loadSettings();
@@ -2718,12 +2926,14 @@ function init(){
   bindEvents();
   handleOpening();
   renderHome();
+  renderAll();
   renderCalendar();
   renderCalSelected();
   renderImport();
   renderMy();
   renderThemeGrid();
   startClock();
+  initWeather();
   if('Notification' in window && Notification.permission==='granted'){
     settings.notifPerm='granted';
     startNotifCheck();
@@ -2735,21 +2945,24 @@ function init(){
 
 document.addEventListener('DOMContentLoaded',init);
 
-
-
-
 /* Expose for testing */
-;(()=>{const names=['parseNLP','pad2','fmtDateKey','fmtDateCN','compressImageFile','readImageFile','exportCardAsImage','formatLiveCountdown','checkDueReminders','requestNotificationPermission','migrateRecord','records','settings','STORAGE_KEY','debounce','loadRecords','saveRecords','getHabitStats','getMemoryStats'];names.forEach(n=>{try{if(typeof self[n]!=='undefined')window[n]=self[n];}catch(e){}});
-/* Expose for testing */
-window.parseNLP=parseNLP;window.pad2=pad2;window.fmtDateKey=fmtDateKey;window.fmtDateCN=fmtDateCN;
+window.parseNLP=parseNLP;
+window.pad2=pad2;
+window.fmtDateKey=fmtDateKey;
+window.fmtDateCN=fmtDateCN;
 window.compressImageFile=typeof compressImageFile!=='undefined'?compressImageFile:null;
 window.readImageFile=typeof readImageFile!=='undefined'?readImageFile:null;
 window.exportCardAsImage=typeof exportCardAsImage!=='undefined'?exportCardAsImage:null;
-window.formatLiveCountdown=typeof formatLiveCountdown!=='undefined'?formatLiveCountdown:null;
 window.checkDueReminders=typeof checkDueReminders!=='undefined'?checkDueReminders:null;
 window.requestNotificationPermission=typeof requestNotificationPermission!=='undefined'?requestNotificationPermission:null;
-window.migrateRecord=migrateRecord;window.records=records;window.settings=settings;window.STORAGE_KEY=STORAGE_KEY;
+window.migrateRecord=migrateRecord;
+window.records=records;
+window.settings=settings;
+window.STORAGE_KEY=STORAGE_KEY;
 window.debounce=debounce;
+window.loadRecords=loadRecords;
+window.saveRecords=saveRecords;
+window.initWeather=initWeather;
 })();</script>
 </body>
 </html>
