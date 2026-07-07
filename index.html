@@ -174,6 +174,19 @@ a{color:inherit;text-decoration:none;}
   letter-spacing:.04em;
 }
 .app.has-records .input-hint{display:none;}
+.demo-hint{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:8px;font-size:12px;color:var(--ink-mute);letter-spacing:.04em;
+}
+.demo-btn{
+  padding:4px 10px;border-radius:20px;
+  background:var(--bg-soft);color:var(--ink-soft);
+  border:1px solid var(--ink-line);
+  font-size:12px;letter-spacing:.04em;transition:all .15s;
+}
+.demo-btn:active{transform:scale(.96);background:var(--ink-line);}
+.app.has-records .demo-hint{justify-content:flex-start;}
+.app.has-records .demo-prefix{display:none;}
 
 /* Voice */
 .voice-row{display:flex;align-items:center;gap:8px;margin-top:10px;min-height:24px;}
@@ -629,6 +642,10 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
           <span class="voice-status" id="voiceStatus"></span>
         </div>
         <div class="input-hint" data-i18n="inputHint">可识别时间、重复和纪念日，保存后自动进入日历</div>
+        <div class="demo-hint">
+          <span class="demo-prefix" data-i18n="demoPrefix">不知道写什么？</span>
+          <button class="demo-btn" id="demoBtn" data-i18n="demoAction">体验示例</button>
+        </div>
       </div>
     </div>
 
@@ -826,16 +843,19 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.7.3';
-var APP_UPDATED_AT='2026-07-07 20:11';
+var APP_VERSION='v0.7.4';
+var APP_UPDATED_AT='2026-07-07 23:09';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
+var DEMO_FLAG_KEY='shike_demo_records_added_v1';
 
 /* ========== i18n ========== */
 var I18N={
   'zh-CN':{
     appName:'时刻',tagline:'你的贴心记事助手',save:'保存',cancel:'取消',delete:'删除',edit:'编辑',
     inputPlaceholder:'试着写下需要记住的事情',inputHint:'可识别时间、重复和纪念日，保存后自动进入日历',
+    demoPrefix:'不知道写什么？',demoAction:'体验示例',demoAlready:'示例已经在这里了',
+    demoAdded:'已添加 {n} 条示例记录，可以在首页、全部和日历查看',
     navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
@@ -879,6 +899,8 @@ var I18N={
   'zh-TW':{
     appName:'時刻',tagline:'你的貼心記事助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
+    demoPrefix:'不知道寫什麼？',demoAction:'體驗示例',demoAlready:'示例已經在這裡了',
+    demoAdded:'已新增 {n} 條示例記錄，可以在首頁、全部和日曆查看',
     navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
@@ -922,6 +944,8 @@ var I18N={
   'en':{
     appName:'Shike',tagline:'Your personal time keeper',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
+    demoPrefix:'Not sure what to add?',demoAction:'Try examples',demoAlready:'The examples are already here',
+    demoAdded:'Added {n} example records. View them on Home, All, and Calendar.',
     navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
@@ -965,6 +989,8 @@ var I18N={
   'ja':{
     appName:'時刻',tagline:'あなたの大切な時間を記録',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
+    demoPrefix:'何を書くか迷ったら',demoAction:'例を試す',demoAlready:'例はすでに追加されています',
+    demoAdded:'{n} 件のサンプル記録を追加しました。ホーム・一覧・カレンダーで確認できます',
     navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
@@ -1166,6 +1192,82 @@ function migrateRecord(r){
 function saveRecords(){
   try{localStorage.setItem(STORAGE_KEY,JSON.stringify(records));}
   catch(e){showToast(t('storageError')||'存储空间已满','error');}
+}
+
+/* ========== Demo records ========== */
+function demoDateKey(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
+function demoDateText(d){
+  var now=new Date();
+  var md=(d.getMonth()+1)+'月'+d.getDate()+'日';
+  return d.getFullYear()===now.getFullYear()?md:(d.getFullYear()+'年'+md);
+}
+function getNextDemoBirthdayDate(){
+  var now=new Date();
+  var d=new Date(now.getFullYear(),6,8);
+  if(setHoursZero(d).getTime()<setHoursZero(now).getTime())d.setFullYear(now.getFullYear()+1);
+  return d;
+}
+function getMonthEndDate(){
+  var now=new Date();
+  return new Date(now.getFullYear(),now.getMonth()+1,0);
+}
+function buildDemoRecordTemplates(){
+  var now=new Date();
+  var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var tomorrow=new Date(today);tomorrow.setDate(today.getDate()+1);
+  var birthday=getNextDemoBirthdayDate();
+  var monthEnd=getMonthEndDate();
+  var base=Date.now();
+  return [
+    {demoKey:'v074_mom_birthday',title:'妈妈生日',dateText:demoDateText(birthday),dateKey:demoDateKey(birthday),timeText:'',note:'记得提前准备礼物',repeat:'yearly',rawText:'妈妈生日',recordKind:'anniversary',coverPreset:0,subtitle:'记得提前准备礼物',pinned:true,cardStyle:'large'},
+    {demoKey:'v074_meeting',title:'开会',dateText:'明天',dateKey:demoDateKey(tomorrow),timeText:'15:00',note:'',repeat:'none',rawText:'明天下午三点开会',recordKind:'reminder',coverPreset:1,subtitle:'',pinned:false,cardStyle:'normal'},
+    {demoKey:'v074_lip_balm',title:'涂润唇膏',dateText:'每天',dateKey:demoDateKey(today),timeText:'22:30',note:'',repeat:'daily',rawText:'每天睡前涂润唇膏',recordKind:'habit',coverPreset:3,subtitle:'',pinned:false,cardStyle:'normal'},
+    {demoKey:'v074_credit_card',title:'还信用卡',dateText:'月底',dateKey:demoDateKey(monthEnd),timeText:'',note:'',repeat:'monthly',rawText:'月底还信用卡',recordKind:'reminder',coverPreset:4,subtitle:'',pinned:false,cardStyle:'normal'},
+    {demoKey:'v074_travel_list',title:'旅行清单',dateText:'',dateKey:'',timeText:'',note:'身份证、充电器、换洗衣物、雨伞',repeat:'none',rawText:'旅行清单',recordKind:'note',coverPreset:2,subtitle:'身份证、充电器、换洗衣物、雨伞',pinned:false,cardStyle:'normal'}
+  ].map(function(tpl,i){
+    return normalizeRecord({
+      id:'demo_'+tpl.demoKey+'_'+base,
+      demoKey:tpl.demoKey,
+      title:tpl.title,dateText:tpl.dateText,dateKey:tpl.dateKey,timeText:tpl.timeText,note:tpl.note,
+      repeat:tpl.repeat,repeatText:repeatLabel(tpl.repeat),rawText:tpl.rawText,
+      archived:false,createdAt:base-i*1000,updatedAt:base-i*1000,ts:base-i*1000,
+      recordKind:tpl.recordKind,recordState:'active',notifyMode:'none',notifiedAt:null,
+      coverImage:null,coverPreset:tpl.coverPreset,subtitle:tpl.subtitle,pinned:tpl.pinned,
+      cardStyle:tpl.cardStyle,accentColor:'',displayMode:'auto'
+    });
+  });
+}
+function hasDemoRecords(){
+  try{if(localStorage.getItem(DEMO_FLAG_KEY)==='true')return true;}catch(e){}
+  return records.some(function(r){return r.demoKey&&String(r.demoKey).indexOf('v074_')===0;});
+}
+function demoRecordExists(tpl){
+  return records.some(function(r){
+    if(r.demoKey===tpl.demoKey)return true;
+    return r.recordKind===tpl.recordKind&&r.title===tpl.title&&(!tpl.rawText||r.rawText===tpl.rawText);
+  });
+}
+function refreshAfterDemoImport(){
+  updateLayoutState();
+  renderHome();
+  renderAll();
+  renderCalendar();
+  renderMy();
+  startCountdownTicker();
+}
+function addDemoRecords(){
+  if(hasDemoRecords()){showToast(t('demoAlready'),'warn');return;}
+  var templates=buildDemoRecordTemplates();
+  var toAdd=templates.filter(function(tpl){return !demoRecordExists(tpl);});
+  if(toAdd.length===0){
+    try{localStorage.setItem(DEMO_FLAG_KEY,'true');}catch(e){}
+    showToast(t('demoAlready'),'warn');return;
+  }
+  records=toAdd.concat(records);
+  saveRecords();
+  try{localStorage.setItem(DEMO_FLAG_KEY,'true');}catch(e){}
+  refreshAfterDemoImport();
+  showToast(tf('demoAdded',{n:toAdd.length}),'success');
 }
 
 /* ========== NLP Parser ========== */
@@ -2515,6 +2617,7 @@ function init(){
   inp.addEventListener('input',autoResizeInput);
   inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveFromInput();}});
   b('saveBtn','click',saveFromInput);
+  b('demoBtn','click',addDemoRecords);
   // Nav
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(){switchPage(n.dataset.page);});
