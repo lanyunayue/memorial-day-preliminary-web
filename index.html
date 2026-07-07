@@ -54,7 +54,7 @@ a{color:inherit;text-decoration:none;}
 
 /* ========== App Container ========== */
 .app{
-  max-width:430px;margin:0 auto;
+  width:100%;max-width:430px;margin:0 auto;
   min-height:100vh;min-height:100dvh;
   position:relative;
   padding-top:var(--safe-top);
@@ -314,7 +314,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   background:color-mix(in srgb,var(--bg) 92%,transparent);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   border-top:1px solid var(--ink-line);
-  display:flex;max-width:430px;margin:0 auto;
+  display:flex;width:100%;max-width:430px;margin:0 auto;
   padding-bottom:var(--safe-bottom);
 }
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 8px;color:var(--ink-mute);transition:color .2s;}
@@ -536,6 +536,44 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   .home-hero,.content{padding-left:16px;padding-right:16px;}
   .input-row{gap:8px;padding:8px 8px 8px 14px;}
   .save-btn{padding:10px 13px;}
+}
+
+@media (min-width:768px){
+  .app,.nav{max-width:860px;}
+  .topbar{padding-left:28px;padding-right:28px;}
+  .home-hero,.content{padding-left:28px;padding-right:28px;}
+  .my-header{padding-left:28px;padding-right:28px;}
+  .my-stats{padding-left:28px;padding-right:28px;gap:12px;}
+  .settings-list{padding-left:28px;padding-right:28px;}
+  .local-note{margin-left:28px;margin-right:28px;}
+  .hero-card{min-height:200px;padding:28px;}
+  .cards-grid{gap:14px;}
+  .record-card{padding:16px 18px;}
+  .week-strip{padding:12px 8px;}
+  .cal-grid{gap:6px;}
+  .cal-cell{border-radius:12px;font-size:15px;}
+  .drawer{max-width:560px;}
+  .confirm-box{max-width:380px;}
+}
+
+@media (min-width:1024px){
+  .app,.nav{max-width:1040px;}
+  .topbar{padding-left:34px;padding-right:34px;}
+  .home-hero,.content{padding-left:34px;padding-right:34px;}
+  .my-header{padding:28px 34px 20px;}
+  .my-stats{padding:18px 34px;gap:14px;}
+  .settings-list{padding-left:34px;padding-right:34px;}
+  .local-note{margin-left:34px;margin-right:34px;}
+  .app:not(.has-records) .home-hero{max-width:760px;margin:0 auto;}
+  #page-calendar .content{max-width:860px;margin:0 auto;}
+  .app.has-records .home-hero{padding-top:14px;}
+  .hero-card{min-height:220px;}
+  .drawer{max-width:640px;}
+  .nav-item{padding-top:11px;padding-bottom:9px;}
+}
+
+@media (min-width:1280px){
+  .app,.nav{max-width:1080px;}
 }
 
 /* Page transitions */
@@ -788,8 +826,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.7.2';
-var APP_UPDATED_AT='2026-07-07 11:01';
+var APP_VERSION='v0.7.3';
+var APP_UPDATED_AT='2026-07-07 20:11';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 
