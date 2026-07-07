@@ -365,6 +365,12 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   background:var(--bg-elev);font-size:14px;outline:none;transition:border-color .2s;
 }
 .form-input:focus,.form-select:focus{border-color:var(--accent);}
+.all-search-input{margin-bottom:10px;}
+.cal-quick-add{display:flex;gap:8px;margin-top:12px;}
+.cal-quick-input{flex:1;min-width:0;}
+.cal-quick-btn{flex:0 0 auto;padding:0 16px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;}
+.local-note{margin:0 20px 16px;padding:10px 12px;border-radius:10px;background:var(--bg-soft);color:var(--ink-mute);font-size:12px;line-height:1.6;}
+.setting-note{font-size:12px;color:var(--ink-mute);line-height:1.5;padding:0 4px 8px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .radio-group{display:flex;gap:6px;flex-wrap:wrap;}
 .radio-chip{
@@ -621,6 +627,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <div class="card-section-title" data-i18n="allRecords">全部记录</div>
         <div class="card-section-count" id="allCount">0</div>
       </div>
+      <input class="form-input all-search-input" id="allSearchInput" placeholder="搜索记录" data-i18n-ph="searchRecords">
       <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
         <span class="radio-chip active" data-filter="all" data-i18n="all">全部</span>
         <span class="radio-chip" data-filter="reminder" data-i18n="reminder">提醒</span>
@@ -648,6 +655,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
       <div id="importDraftList"></div>
       <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--ink-line);">
         <div class="card-section-title" style="font-size:15px;margin-bottom:10px;" data-i18n="backup">数据备份</div>
+        <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="localDataHint">数据默认保存在当前浏览器，可通过备份文件迁移。</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="import-btn" id="exportBtn" data-i18n="exportData">导出数据</button>
           <label class="import-btn" style="cursor:pointer;" data-i18n="importData">导入数据
@@ -666,6 +674,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
       <div class="my-days" id="myDays"></div>
     </div>
     <div class="my-stats" id="myStats"></div>
+    <div class="local-note" data-i18n="localDataHint">数据默认保存在当前浏览器，可通过备份文件迁移。</div>
     <div class="settings-list">
       <div class="setting-group">
         <div class="setting-group-title" data-i18n="personalize">个性化</div>
@@ -713,6 +722,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <div class="setting-item" id="notifyPermItem" style="display:none;">
           <button class="setting-item-btn" id="reqNotifyBtn" data-i18n="enableNotify">开启通知</button>
         </div>
+        <div class="setting-note" data-i18n="notifyOpenPageHint">页面打开时检查提醒，浏览器关闭后不保证提醒。</div>
       </div>
       <div class="setting-group">
         <div class="setting-group-title" data-i18n="about">关于</div>
@@ -778,8 +788,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.7.1';
-var APP_UPDATED_AT='2026-07-07 00:40';
+var APP_VERSION='v0.7.2';
+var APP_UPDATED_AT='2026-07-07 11:01';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 
@@ -789,7 +799,8 @@ var I18N={
     appName:'时刻',tagline:'你的贴心记事助手',save:'保存',cancel:'取消',delete:'删除',edit:'编辑',
     inputPlaceholder:'试着写下需要记住的事情',inputHint:'可识别时间、重复和纪念日，保存后自动进入日历',
     navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
-    allRecords:'全部记录',all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
+    allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
+    all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
     close:'关闭',confirm:'确定',details:'详情',setLarge:'大卡片',setNormal:'普通',setBg:'换背景',
     setPin:'置顶',unpin:'取消置顶',setTheme:'主题',language:'语言',calendarMode:'日历显示',
     solar:'新历',lunar:'农历',weather:'首页天气',username:'用户名',usernamePh:'设置你的名字',
@@ -797,6 +808,9 @@ var I18N={
     replayIntro:'重播开场',batchImport:'批量整理',importHint:'每行一条，自动识别时间和类型。',
     parseImport:'识别内容',loadExample:'填入示例',uploadTxt:'上传TXT',exportData:'导出数据',
     importData:'导入数据',clearData:'清空数据',backup:'数据备份',
+    localDataHint:'数据默认保存在当前浏览器，可通过备份文件迁移。',
+    exportDone:'备份文件已导出',importDone:'导入成功',importFailed:'文件格式错误',
+    importConfirm:'将导入 {n} 条记录（合并到现有数据）',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'记录从此刻开始',daysText:'这是你来到时刻的第 {n} 天',userDaysText:'{name}，这是你来到时刻的第 {n} 天',
     nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',
@@ -806,8 +820,12 @@ var I18N={
     presets:'预置',coverHint:'大卡片可换背景',
     weatherUnavail:'天气暂时不可用',weatherDenied:'未获得位置权限',weatherNoSupport:'当前浏览器不支持定位',
     weatherHint:'开启后首页显示当前位置天气',wechatVoiceHint:'微信内暂不支持语音，可用文字记录',
+    notifyUnsupported:'不支持',notifyEnabled:'已开启',notifyDenied:'已拒绝',notifyOff:'未开启',
+    notifyDeniedToast:'通知权限已拒绝',notifyOpenPageHint:'页面打开时检查提醒，浏览器关闭后不保证提醒。',
+    notifyDueBody:'提醒时间到了',
     voiceListening:'正在听…',voiceProcessing:'识别中…',voiceReady:'点击话筒说话',
     saved:'已保存',emptyInput:'请输入内容',clearConfirm:'确定清空所有数据？此操作不可撤销。',
+    storageRecovered:'本地数据异常，已保留恢复备份',
     deleted:'已删除',updated:'已更新',
     holidayNewYear:'元旦',holidaySpring:'春节',holidayLantern:'元宵',holidayQingming:'清明',
     holidayLabor:'劳动节',holidayDragon:'端午',holidayMidAutumn:'中秋',holidayNational:'国庆',
@@ -817,14 +835,15 @@ var I18N={
     sun:'周日',mon:'周一',tue:'周二',wed:'周三',thu:'周四',fri:'周五',sat:'周六',
     theme_paper:'米白',theme_mono:'黑白',theme_coffee:'暖棕',theme_mist:'雾蓝',theme_rose:'玫瑰',theme_forest:'森林',theme_night:'夜间',theme_sakura:'樱花',
     cardStyle:'卡片样式',cardLarge:'大卡片',cardNormal:'普通',accentColor:'主题色',
-    noRecordsToday:'今日暂无记录',eventsToday:'今日有 {n} 件事',
+    noRecordsToday:'今日暂无记录',eventsToday:'今日有 {n} 件事',calQuickAddPh:'为这一天添加记录',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
   },
   'zh-TW':{
     appName:'時刻',tagline:'你的貼心記事助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
     navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
-    allRecords:'全部記錄',all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
+    allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
+    all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
     close:'關閉',confirm:'確定',details:'詳情',setLarge:'大卡片',setNormal:'普通',setBg:'換背景',
     setPin:'置頂',unpin:'取消置頂',setTheme:'主題',language:'語言',calendarMode:'日曆顯示',
     solar:'新曆',lunar:'農曆',weather:'首頁天氣',username:'用戶名',usernamePh:'設定你的名字',
@@ -832,6 +851,9 @@ var I18N={
     replayIntro:'重播開場',batchImport:'批次整理',importHint:'每行一條，自動識別時間和類型。',
     parseImport:'識別內容',loadExample:'填入示例',uploadTxt:'上傳TXT',exportData:'匯出資料',
     importData:'匯入資料',clearData:'清空資料',backup:'資料備份',
+    localDataHint:'資料預設保存在目前瀏覽器，可透過備份檔案遷移。',
+    exportDone:'備份檔案已匯出',importDone:'匯入成功',importFailed:'檔案格式錯誤',
+    importConfirm:'將匯入 {n} 條記錄（合併到現有資料）',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     daysText:'這是你來到時刻的第 {n} 天',userDaysText:'{name}，這是你來到時刻的第 {n} 天',
     nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',
@@ -841,8 +863,12 @@ var I18N={
     presets:'預置',coverHint:'大卡片可換背景',
     weatherUnavail:'天氣暫時不可用',weatherDenied:'未獲得位置權限',weatherNoSupport:'當前瀏覽器不支援定位',
     weatherHint:'開啟後首頁顯示當前位置天氣',wechatVoiceHint:'微信內暫不支援語音，可用文字記錄',
+    notifyUnsupported:'不支援',notifyEnabled:'已開啟',notifyDenied:'已拒絕',notifyOff:'未開啟',
+    notifyDeniedToast:'通知權限已拒絕',notifyOpenPageHint:'頁面開啟時檢查提醒，瀏覽器關閉後不保證提醒。',
+    notifyDueBody:'提醒時間到了',
     voiceListening:'正在聽…',voiceProcessing:'識別中…',voiceReady:'點擊話筒說話',
     saved:'已儲存',emptyInput:'請輸入內容',clearConfirm:'確定清空所有資料？此操作不可撤銷。',
+    storageRecovered:'本地資料異常，已保留恢復備份',
     deleted:'已刪除',updated:'已更新',
     holidayNewYear:'元旦',holidaySpring:'春節',holidayLantern:'元宵',holidayQingming:'清明',
     holidayLabor:'勞動節',holidayDragon:'端午',holidayMidAutumn:'中秋',holidayNational:'國慶',
@@ -852,14 +878,15 @@ var I18N={
     sun:'週日',mon:'週一',tue:'週二',wed:'週三',thu:'週四',fri:'週五',sat:'週六',
     theme_paper:'米白',theme_mono:'黑白',theme_coffee:'暖棕',theme_mist:'霧藍',theme_rose:'玫瑰',theme_forest:'森林',theme_night:'夜間',theme_sakura:'櫻花',
     cardStyle:'卡片樣式',cardLarge:'大卡片',cardNormal:'普通',accentColor:'主題色',
-    noRecordsToday:'今日暫無記錄',eventsToday:'今日有 {n} 件事',
+    noRecordsToday:'今日暫無記錄',eventsToday:'今日有 {n} 件事',calQuickAddPh:'為這一天新增記錄',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
   },
   'en':{
     appName:'Shike',tagline:'Your personal time keeper',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
     navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
-    allRecords:'All records',all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
+    allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
+    all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
     close:'Close',confirm:'OK',details:'Details',setLarge:'Large Card',setNormal:'Normal',setBg:'Background',
     setPin:'Pin',unpin:'Unpin',setTheme:'Theme',language:'Language',calendarMode:'Calendar',
     solar:'Solar',lunar:'Lunar',weather:'Weather',username:'Name',usernamePh:'Set your name',
@@ -867,6 +894,9 @@ var I18N={
     replayIntro:'Replay intro',batchImport:'Batch organize',importHint:'One per line. Times and types auto-detected.',
     parseImport:'Parse',loadExample:'Load example',uploadTxt:'Upload TXT',exportData:'Export',
     importData:'Import',clearData:'Clear all',backup:'Backup',
+    localDataHint:'Data is saved in this browser by default and can be moved with a backup file.',
+    exportDone:'Backup exported',importDone:'Imported',importFailed:'Invalid file format',
+    importConfirm:'Import {n} records and merge them with current data',
     clockFormat:'{month} {day}, {year} {hour}:{min}',
     daysText:'Day {n} with Shike',userDaysText:'{name}, day {n} with Shike',
     nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',
@@ -876,8 +906,12 @@ var I18N={
     presets:'Presets',coverHint:'Large cards support backgrounds',
     weatherUnavail:'Weather unavailable',weatherDenied:'Location permission denied',weatherNoSupport:'Geolocation not supported',
     weatherHint:'Show local weather on home',wechatVoiceHint:'Voice not supported in WeChat, use text instead',
+    notifyUnsupported:'Unsupported',notifyEnabled:'On',notifyDenied:'Denied',notifyOff:'Off',
+    notifyDeniedToast:'Notification permission denied',notifyOpenPageHint:'Reminders are checked while this page is open; browser-close delivery is not guaranteed.',
+    notifyDueBody:'Reminder time',
     voiceListening:'Listening…',voiceProcessing:'Processing…',voiceReady:'Tap mic to speak',
     saved:'Saved',emptyInput:'Please enter something',clearConfirm:'Clear all data? This cannot be undone.',
+    storageRecovered:'Local data issue detected; recovery copy kept',
     deleted:'Deleted',updated:'Updated',
     holidayNewYear:"New Year",holidaySpring:'Spring Festival',holidayLantern:'Lantern Fest.',holidayQingming:'Qingming',
     holidayLabor:'Labor Day',holidayDragon:'Dragon Boat',holidayMidAutumn:'Mid-Autumn',holidayNational:'National Day',
@@ -887,14 +921,15 @@ var I18N={
     sun:'Sun',mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',
     theme_paper:'Paper',theme_mono:'Mono',theme_coffee:'Coffee',theme_mist:'Mist',theme_rose:'Rose',theme_forest:'Forest',theme_night:'Night',theme_sakura:'Sakura',
     cardStyle:'Card style',cardLarge:'Large',cardNormal:'Normal',accentColor:'Accent',
-    noRecordsToday:'Nothing today',eventsToday:'{n} events today',
+    noRecordsToday:'Nothing today',eventsToday:'{n} events today',calQuickAddPh:'Add a record for this day',
     jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec'
   },
   'ja':{
     appName:'時刻',tagline:'あなたの大切な時間を記録',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
     navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
-    allRecords:'すべての記録',all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
+    allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
+    all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
     close:'閉じる',confirm:'OK',details:'詳細',setLarge:'大カード',setNormal:'通常',setBg:'背景',
     setPin:'固定',unpin:'固定解除',setTheme:'テーマ',language:'言語',calendarMode:'暦表示',
     solar:'新暦',lunar:'旧暦',weather:'天気',username:'名前',usernamePh:'お名前を設定',
@@ -902,6 +937,9 @@ var I18N={
     replayIntro:'オープニング再生',batchImport:'一括整理',importHint:'1行に1件、時間と種類を自動認識。',
     parseImport:'解析',loadExample:'サンプル',uploadTxt:'TXTアップロード',exportData:'エクスポート',
     importData:'インポート',clearData:'全削除',backup:'バックアップ',
+    localDataHint:'データはこのブラウザに保存され、バックアップファイルで移行できます。',
+    exportDone:'バックアップを書き出しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',
+    importConfirm:'{n}件の記録を既存データに統合してインポートします',
     clockFormat:'{year}年{month}月{day}日 {hour}:{min}',
     daysText:'時刻を使い始めて{n}日目',userDaysText:'{name}さん、時刻を使い始めて{n}日目',
     nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',
@@ -911,8 +949,12 @@ var I18N={
     presets:'プリセット',coverHint:'大カードは背景変更可',
     weatherUnavail:'天気取得不可',weatherDenied:'位置情報が拒否されました',weatherNoSupport:'このブラウザは位置情報に対応していません',
     weatherHint:'ホームに現在地の天気を表示',wechatVoiceHint:'WeChat内では音声入力に対応していません。テキストをご利用ください',
+    notifyUnsupported:'非対応',notifyEnabled:'オン',notifyDenied:'拒否済み',notifyOff:'オフ',
+    notifyDeniedToast:'通知権限が拒否されています',notifyOpenPageHint:'ページを開いている間だけリマインドを確認します。ブラウザ終了後の通知は保証されません。',
+    notifyDueBody:'リマインドの時間です',
     voiceListening:'聞いています…',voiceProcessing:'認識中…',voiceReady:'マイクをタップして話してください',
     saved:'保存しました',emptyInput:'内容を入力してください',clearConfirm:'すべてのデータを削除しますか？この操作は元に戻せません。',
+    storageRecovered:'ローカルデータ異常のため復元用コピーを保存しました',
     deleted:'削除しました',updated:'更新しました',
     holidayNewYear:'元旦',holidaySpring:'春節',holidayLantern:'元宵節',holidayQingming:'清明節',
     holidayLabor:'労働節',holidayDragon:'端午節',holidayMidAutumn:'中秋節',holidayNational:'国慶節',
@@ -922,7 +964,7 @@ var I18N={
     sun:'日',mon:'月',tue:'火',wed:'水',thu:'木',fri:'金',sat:'土',
     theme_paper:'紙',theme_mono:'墨',theme_coffee:'珈琲',theme_mist:'霧',theme_rose:'薔薇',theme_forest:'森',theme_night:'夜',theme_sakura:'桜',
     cardStyle:'カードスタイル',cardLarge:'大カード',cardNormal:'通常',accentColor:'テーマカラー',
-    noRecordsToday:'今日の予定はありません',eventsToday:'今日は{n}件の予定',
+    noRecordsToday:'今日の予定はありません',eventsToday:'今日は{n}件の予定',calQuickAddPh:'この日に記録を追加',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
   }
 };
@@ -1040,14 +1082,28 @@ function isWeChat(){return /MicroMessenger/i.test(navigator.userAgent);}
 
 /* ========== Storage ========== */
 var records=[];
-function loadRecords(){
+var RECOVERY_KEY='shike_records_recovery_v1';
+function backupCorruptedRecords(raw){
+  if(!raw)return;
   try{
-    var raw=localStorage.getItem(STORAGE_KEY);
+    localStorage.setItem(RECOVERY_KEY,JSON.stringify({savedAt:Date.now(),raw:String(raw).slice(0,500000)}));
+  }catch(e){}
+}
+function loadRecords(){
+  var raw='';
+  try{
+    raw=localStorage.getItem(STORAGE_KEY);
     if(!raw){records=[];return;}
-    records=JSON.parse(raw)||[];
+    var parsed=JSON.parse(raw);
+    if(!Array.isArray(parsed))throw new Error('records_not_array');
+    records=parsed;
     // Migration: add missing fields
     records.forEach(function(r){migrateRecord(r);});
-  }catch(e){records=[];}
+  }catch(e){
+    backupCorruptedRecords(raw);
+    records=[];
+    setTimeout(function(){showToast(t('storageRecovered'),'warn');},0);
+  }
 }
 function migrateRecord(r){
   if(!r.id)r.id=genId();
@@ -1738,19 +1794,68 @@ function renderCalendarDay(){
   }else{
     html+='<div class="mini-empty">'+t('noRecordsToday')+'</div>';
   }
+  html+='<div class="cal-quick-add">'+
+    '<input class="form-input cal-quick-input" id="calQuickInput" placeholder="'+escHtml(t('calQuickAddPh'))+'" onkeydown="if(event.key===\'Enter\'){event.preventDefault();saveCalendarQuickAdd();}">'+
+    '<button class="cal-quick-btn" onclick="saveCalendarQuickAdd()">'+t('save')+'</button>'+
+  '</div>';
   html+='</div>';
   detail.innerHTML=html;
+}
+
+function dateKeyFromDate(d){
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+}
+function dateTextFromDate(d){
+  var target=setHoursZero(d);
+  var today=setHoursZero(new Date());
+  var diff=Math.round((target-today)/86400000);
+  if(diff===0)return t('today');
+  if(diff===1)return t('tomorrow');
+  if(diff===2)return t('dayAfter');
+  if(LANG==='en'){
+    var months=[t('jan'),t('feb'),t('mar'),t('apr'),t('may'),t('jun'),t('jul'),t('aug'),t('sep'),t('oct'),t('nov'),t('dec')];
+    return months[d.getMonth()]+' '+d.getDate();
+  }
+  return (d.getMonth()+1)+'月'+d.getDate()+'日';
+}
+function hasExplicitDateInput(text){
+  return /大后天|后天|明天|今天|昨天|今晚|下个月|下月|月底|月末|周|星期|\d{1,2}\s*[月\/\-]\s*\d{1,2}|(?:\d+|[一二两三四五六七八九十]+)\s*天后?|一周后|1周后|一个星期后/.test(text);
+}
+function saveCalendarQuickAdd(){
+  var inp=$('calQuickInput');
+  var text=(inp&&inp.value||'').trim();
+  if(!text){showToast(t('emptyInput'),'warn');return;}
+  var parsed=parseReminderText(text);
+  if(!parsed||!parsed.title){showToast(t('emptyInput'),'warn');return;}
+  if(calSelectedDate&&!hasExplicitDateInput(text)&&parsed.relativeMinutes===null){
+    parsed.dateKey=dateKeyFromDate(calSelectedDate);
+    parsed.dateText=dateTextFromDate(calSelectedDate);
+  }
+  saveParsedRecord(parsed,text);
+  if(inp)inp.value='';
+  renderCalendar();
+  startCountdownTicker();
+  showToast(t('saved'),'success');
 }
 
 
 /* ========== All page ========== */
 var allFilter='all';
+var allSearchQuery='';
+var allSearchTimer=null;
+function recordMatchesAllSearch(r,q){
+  if(!q)return true;
+  var kindLabel={reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[r.recordKind]||'';
+  var text=[r.title,r.note,r.rawText,r.dateText,r.timeText,r.recordKind,kindLabel].join(' ').toLowerCase();
+  return text.indexOf(q.toLowerCase())>=0;
+}
 function renderAll(){
   var list=records.slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   if(allFilter!=='all')list=list.filter(function(r){return r.recordKind===allFilter;});
+  if(allSearchQuery)list=list.filter(function(r){return recordMatchesAllSearch(r,allSearchQuery);});
   $('allCount').textContent=list.length;
   var c=$('allList');
-  if(list.length===0){c.innerHTML='<div class="mini-empty">'+t('emptyHint')+'</div>';return;}
+  if(list.length===0){c.innerHTML='<div class="mini-empty">'+(allSearchQuery?t('noSearchResult'):t('emptyHint'))+'</div>';return;}
   var html='';
   list.forEach(function(r){
     if(r.cardStyle==='large'||r.recordKind==='anniversary')html+=renderHeroCard(r,true);
@@ -1847,10 +1952,37 @@ function getUsageDays(){
 }
 function updateNotifyStatus(){
   var s=$('notifyStatus'),item=$('notifyPermItem');
-  if(!('Notification' in window)){s.textContent='不支持';item.style.display='none';return;}
-  if(Notification.permission==='granted'){s.textContent='已开启';item.style.display='none';}
-  else if(Notification.permission==='denied'){s.textContent='已拒绝';item.style.display='none';}
-  else{s.textContent='未开启';item.style.display='flex';}
+  if(!s||!item)return;
+  if(!('Notification' in window)){s.textContent=t('notifyUnsupported');item.style.display='none';return;}
+  if(Notification.permission==='granted'){s.textContent=t('notifyEnabled');item.style.display='none';}
+  else if(Notification.permission==='denied'){s.textContent=t('notifyDenied');item.style.display='none';}
+  else{s.textContent=t('notifyOff');item.style.display='flex';}
+}
+
+var notifyTimer=null;
+function startNotificationChecker(){
+  if(notifyTimer)clearInterval(notifyTimer);
+  checkDueNotifications();
+  notifyTimer=setInterval(checkDueNotifications,60000);
+}
+function checkDueNotifications(){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  var now=Date.now();
+  var changed=false;
+  records.forEach(function(r){
+    if(r.recordKind==='anniversary')return;
+    var d=getRecordTargetDateTime(r);
+    if(!d||!r.timeText)return;
+    var target=d.getTime();
+    if(target>now||now-target>120000)return;
+    if(r.notifiedAt&&r.notifiedAt>=target)return;
+    var body=[r.dateText,r.timeText].filter(Boolean).join(' ')||t('notifyDueBody');
+    try{new Notification(r.title||t('appName'),{body:body});}
+    catch(e){showToast((r.title||'')+' '+t('notifyDueBody'),'warn');}
+    r.notifiedAt=now;
+    changed=true;
+  });
+  if(changed)saveRecords();
 }
 
 /* ========== Weather ========== */
@@ -1928,6 +2060,7 @@ function renderWeatherError(msg){
 }
 
 /* ========== CRUD ========== */
+var inputSaveLocked=false;
 function saveParsedRecord(parsed,rawText){
   var item={
     id:genId(),title:parsed.title,
@@ -1948,15 +2081,18 @@ function saveParsedRecord(parsed,rawText){
   return item;
 }
 function saveFromInput(){
+  if(inputSaveLocked)return;
   var inp=$('quickInput');
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
   var parsed=parseReminderText(text);
   if(!parsed||!parsed.title){showToast(t('emptyInput'),'warn');return;}
+  inputSaveLocked=true;
   saveParsedRecord(parsed,text);
   inp.value='';autoResizeInput();
   showToast(t('saved'),'success');
   switchPage('home');renderHome();startCountdownTicker();
+  setTimeout(function(){inputSaveLocked=false;},500);
 }
 function deleteRecord(id){
   var r=records.find(function(x){return x.id===id;});
@@ -2356,6 +2492,17 @@ function init(){
       c.classList.add('active');renderAll();
     });
   });
+  var allSearch=$('allSearchInput');
+  if(allSearch){
+    allSearch.addEventListener('input',function(){
+      var val=(allSearch.value||'').trim();
+      if(allSearchTimer)clearTimeout(allSearchTimer);
+      allSearchTimer=setTimeout(function(){
+        allSearchQuery=val;
+        if(currentPage==='all')renderAll();
+      },180);
+    });
+  }
   // My page handlers
   b('usernameInput','change',function(){
     settings.username=($('usernameInput').value||'').trim();saveSettings(settings);renderMy();
@@ -2379,7 +2526,12 @@ function init(){
     setWeatherEnabled(!settings.weatherEnabled);renderMy();
   });
   b('reqNotifyBtn','click',function(){
-    Notification.requestPermission().then(function(p){updateNotifyStatus();});
+    if(!('Notification' in window)){showToast(t('notifyUnsupported'),'warn');updateNotifyStatus();return;}
+    Notification.requestPermission().then(function(p){
+      updateNotifyStatus();
+      if(p==='granted')checkDueNotifications();
+      else if(p==='denied')showToast(t('notifyDeniedToast'),'warn');
+    }).catch(function(){showToast(t('notifyUnsupported'),'warn');updateNotifyStatus();});
   });
   b('replayBtn','click',function(){
     switchPage('home');
@@ -2396,22 +2548,26 @@ function init(){
     $('importTextInput').value='下周一体检\n月底还信用卡\n每天睡前涂润唇膏\n7月8日妈妈生日\n明天下午三点开会\n待会喝水';
   });
   b('exportBtn','click',function(){
-    var blob=new Blob([JSON.stringify(records,null,2)],{type:'application/json'});
-    var url=URL.createObjectURL(blob);
-    var a=document.createElement('a');a.href=url;a.download='shike-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
-    URL.revokeObjectURL(url);
+    try{
+      var blob=new Blob([JSON.stringify(records,null,2)],{type:'application/json'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');a.href=url;a.download='shike-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+      setTimeout(function(){URL.revokeObjectURL(url);},0);
+      showToast(t('exportDone'),'success');
+    }catch(e){showToast(t('importFailed'),'error');}
   });
   b('restoreFileInput','change',function(e){
     var f=e.target.files&&e.target.files[0];if(!f)return;
     var fr=new FileReader();fr.onload=function(ev){
       try{var arr=JSON.parse(ev.target.result);
         if(Array.isArray(arr)){
-          showConfirm('导入数据','将导入 '+arr.length+' 条记录（合并到现有数据）','导入','取消',function(){
+          showConfirm(t('importData'),tf('importConfirm',{n:arr.length}),t('confirm'),t('cancel'),function(){
             arr.forEach(function(r){migrateRecord(r);if(!records.find(function(x){return x.id===r.id;}))records.push(r);});
-            saveRecords();renderCurrent();showToast('导入成功','success');
+            saveRecords();renderCurrent();showToast(t('importDone'),'success');
           });
-        }
-      }catch(err){showToast('文件格式错误','error');}
+        }else showToast(t('importFailed'),'error');
+      }catch(err){showToast(t('importFailed'),'error');}
+      e.target.value='';
     };fr.readAsText(f);
   });
   b('clearBtn','click',function(){
@@ -2433,6 +2589,7 @@ function init(){
       if(countdownTimer)clearInterval(countdownTimer);
     }else{
       startHomeClock();startCountdownTicker();
+      checkDueNotifications();
       if(settings.weatherEnabled)fetchWeather();
     }
   });
@@ -2466,6 +2623,7 @@ function init(){
   }catch(e){}
   // Focus input when empty
   if(!hasAnyRecord()){setTimeout(function(){inp&&inp.focus();},600);}
+  startNotificationChecker();
   // Initial render
   renderHome();
 }
