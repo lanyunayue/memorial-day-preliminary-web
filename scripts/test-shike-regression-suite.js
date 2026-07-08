@@ -38,8 +38,34 @@ const tests = [
     name: 'I18N placeholders',
     script: 'test-shike-i18n-placeholders.js',
     expected: 'I18N placeholder regression passed: 6/6'
+  },
+  {
+    name: 'ICS export',
+    script: 'test-shike-ics-export.js',
+    expected: 'ICS export regression passed: 11/11'
+  },
+  {
+    name: 'Backup hardening',
+    script: 'test-shike-backup-hardening.js',
+    expected: 'Backup hardening regression passed: 11/11'
   }
 ];
+
+[
+  {
+    name: 'NLP parser',
+    script: 'test-shike-nlp-parser.js',
+    expected: 'NLP parser regression passed'
+  },
+  {
+    name: 'Record id uniqueness',
+    script: 'test-shike-record-id-uniqueness.js',
+    expected: 'Record id uniqueness regression passed'
+  }
+].forEach((optionalTest) => {
+  const scriptPath = path.join(__dirname, optionalTest.script);
+  if (require('fs').existsSync(scriptPath)) tests.push(optionalTest);
+});
 
 const startedAt = Date.now();
 const results = [];

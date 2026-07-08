@@ -795,6 +795,15 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
     <div class="local-note" data-i18n="localDataHint">数据默认保存在当前浏览器，可通过备份文件迁移。</div>
     <div class="settings-list">
       <div class="setting-group">
+        <div class="setting-group-title" data-i18n="calendarExport">日历导出</div>
+        <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="calendarExportHint">生成标准 .ics 文件，可导入 Google Calendar、Apple Calendar 或 Outlook。</p>
+        <button class="import-btn" id="exportIcsBtn" style="width:100%;" data-i18n="exportIcs">导出全部日历文件</button>
+      </div>
+      <div class="setting-group">
+        <div class="setting-group-title" data-i18n="dataSafety">数据安全</div>
+        <p id="dataSafetyHint" style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0;" data-i18n="dataSafetyHint">时刻的数据保存在当前浏览器。重要记录建议定期导出备份。</p>
+      </div>
+      <div class="setting-group">
         <div class="setting-group-title" data-i18n="personalize">个性化</div>
         <div class="setting-item">
           <span class="setting-item-label" data-i18n="username">用户名</span>
@@ -925,12 +934,14 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.0';
-var APP_UPDATED_AT='2026-07-08 19:51';
+var APP_VERSION='v0.8.1';
+var APP_UPDATED_AT='2026-07-09 20:35';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
 var ASSISTANT_COLLAPSED_KEY='shike_assistant_collapsed';
+var LAST_GOOD_RECORDS_KEY='shike_records_last_good_v1';
+var BACKUP_SCHEMA_VERSION=2;
 
 /* ========== i18n ========== */
 var I18N={
@@ -956,10 +967,16 @@ var I18N={
     personalize:'个性化',about:'关于',enableNotify:'开启通知',notifyPerm:'通知权限',
     replayIntro:'重播开场',batchImport:'批量整理',importHint:'每行一条，自动识别时间和类型。',
     parseImport:'识别内容',loadExample:'填入示例',uploadTxt:'上传TXT',exportData:'导出数据',
+    calendarExport:'日历导出',calendarExportHint:'生成标准 .ics 文件，可导入 Google Calendar、Apple Calendar 或 Outlook。',
+    exportIcs:'导出全部日历文件',exportRecordIcs:'导出日历',icsExportDone:'日历文件已导出',icsExportEmpty:'没有可导出的日期记录',
+    icsExportResult:'已导出 {n} 条日历记录，跳过 {skipped} 条无日期记录',
+    dataSafety:'数据安全',dataSafetyHint:'时刻的数据保存在当前浏览器。重要记录建议定期导出备份。',
     importData:'导入数据',clearData:'清空数据',backup:'数据备份',
     localDataHint:'数据默认保存在当前浏览器，可通过备份文件迁移。',
     exportDone:'备份文件已导出',importDone:'导入成功',importFailed:'文件格式错误',storageError:'存储空间已满',
     importConfirm:'将导入 {n} 条记录（合并到现有数据）',
+    importConfirmDetail:'将追加导入 {n} 条记录。文件版本：{version}。导出时间：{exportedAt}。缺失 id：{missing}，重复 id：{duplicates}，现有冲突：{conflicts}，无效记录：{invalid}。确认后会合并到当前数据，不会清空现有记录。',
+    importResult:'导入成功，新增 {added} 条，跳过 {skipped} 条无效记录',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'记录从此刻开始',daysText:'这是你来到时刻的第 {n} 天',userDaysText:'{name}，这是你来到时刻的第 {n} 天',
     nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',
@@ -1009,10 +1026,16 @@ var I18N={
     personalize:'個人化',about:'關於',enableNotify:'開啟通知',notifyPerm:'通知權限',
     replayIntro:'重播開場',batchImport:'批次整理',importHint:'每行一條，自動識別時間和類型。',
     parseImport:'識別內容',loadExample:'填入示例',uploadTxt:'上傳TXT',exportData:'匯出資料',
+    calendarExport:'日曆匯出',calendarExportHint:'生成標準 .ics 檔案，可匯入 Google Calendar、Apple Calendar 或 Outlook。',
+    exportIcs:'匯出全部日曆檔案',exportRecordIcs:'匯出日曆',icsExportDone:'日曆檔案已匯出',icsExportEmpty:'沒有可匯出的日期記錄',
+    icsExportResult:'已匯出 {n} 條日曆記錄，略過 {skipped} 條無日期記錄',
+    dataSafety:'資料安全',dataSafetyHint:'時刻的資料保存在目前瀏覽器。重要記錄建議定期匯出備份。',
     importData:'匯入資料',clearData:'清空資料',backup:'資料備份',
     localDataHint:'資料預設保存在目前瀏覽器，可透過備份檔案遷移。',
     exportDone:'備份檔案已匯出',importDone:'匯入成功',importFailed:'檔案格式錯誤',storageError:'儲存空間已滿',
     importConfirm:'將匯入 {n} 條記錄（合併到現有資料）',
+    importConfirmDetail:'將追加匯入 {n} 條記錄。檔案版本：{version}。匯出時間：{exportedAt}。缺失 id：{missing}，重複 id：{duplicates}，現有衝突：{conflicts}，無效記錄：{invalid}。確認後會合併到目前資料，不會清空現有記錄。',
+    importResult:'匯入成功，新增 {added} 條，略過 {skipped} 條無效記錄',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     daysText:'這是你來到時刻的第 {n} 天',userDaysText:'{name}，這是你來到時刻的第 {n} 天',
     nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',
@@ -1062,10 +1085,16 @@ var I18N={
     personalize:'Personalize',about:'About',enableNotify:'Enable notifications',notifyPerm:'Notifications',
     replayIntro:'Replay intro',batchImport:'Batch organize',importHint:'One per line. Times and types auto-detected.',
     parseImport:'Parse',loadExample:'Load example',uploadTxt:'Upload TXT',exportData:'Export',
+    calendarExport:'Calendar export',calendarExportHint:'Generate a standard .ics file for Google Calendar, Apple Calendar, or Outlook import.',
+    exportIcs:'Export calendar file',exportRecordIcs:'Export calendar',icsExportDone:'Calendar file exported',icsExportEmpty:'No dated records to export',
+    icsExportResult:'Exported {n} calendar records, skipped {skipped} undated records',
+    dataSafety:'Data safety',dataSafetyHint:'Shike data is stored in this browser. Export backups regularly for important records.',
     importData:'Import',clearData:'Clear all',backup:'Backup',
     localDataHint:'Data is saved in this browser by default and can be moved with a backup file.',
     exportDone:'Backup exported',importDone:'Imported',importFailed:'Invalid file format',storageError:'Storage is full',
     importConfirm:'Import {n} records and merge them with current data',
+    importConfirmDetail:'Append {n} records. File version: {version}. Exported at: {exportedAt}. Missing ids: {missing}, duplicate ids: {duplicates}, existing conflicts: {conflicts}, invalid records: {invalid}. Current data will not be cleared.',
+    importResult:'Imported {added} records, skipped {skipped} invalid records',
     clockFormat:'{month} {day}, {year} {hour}:{min}',
     daysText:'Day {n} with Shike',userDaysText:'{name}, day {n} with Shike',
     nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',
@@ -1115,10 +1144,16 @@ var I18N={
     personalize:'カスタマイズ',about:'時刻について',enableNotify:'通知を有効化',notifyPerm:'通知権限',
     replayIntro:'オープニング再生',batchImport:'一括整理',importHint:'1行に1件、時間と種類を自動認識。',
     parseImport:'解析',loadExample:'サンプル',uploadTxt:'TXTアップロード',exportData:'エクスポート',
+    calendarExport:'カレンダー出力',calendarExportHint:'標準 .ics ファイルを生成し、Google Calendar、Apple Calendar、Outlook にインポートできます。',
+    exportIcs:'全カレンダーファイルを書き出す',exportRecordIcs:'カレンダー出力',icsExportDone:'カレンダーファイルを書き出しました',icsExportEmpty:'出力できる日付付き記録がありません',
+    icsExportResult:'{n} 件のカレンダー記録を書き出し、日付なし {skipped} 件をスキップしました',
+    dataSafety:'データ保護',dataSafetyHint:'時刻のデータはこのブラウザに保存されます。重要な記録は定期的にバックアップしてください。',
     importData:'インポート',clearData:'全削除',backup:'バックアップ',
     localDataHint:'データはこのブラウザに保存され、バックアップファイルで移行できます。',
     exportDone:'バックアップを書き出しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',storageError:'保存容量がいっぱいです',
     importConfirm:'{n}件の記録を既存データに統合してインポートします',
+    importConfirmDetail:'{n} 件を追加インポートします。ファイル版：{version}。出力時間：{exportedAt}。ID なし：{missing}、重複 ID：{duplicates}、既存衝突：{conflicts}、無効記録：{invalid}。現在の記録は削除されません。',
+    importResult:'インポートしました。追加 {added} 件、無効スキップ {skipped} 件',
     clockFormat:'{year}年{month}月{day}日 {hour}:{min}',
     daysText:'時刻を使い始めて{n}日目',userDaysText:'{name}さん、時刻を使い始めて{n}日目',
     nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',
@@ -1237,6 +1272,7 @@ function getHolidayInfo(date){
 
 /* ========== Utilities ========== */
 function pad2(n){return n<10?'0'+n:''+n;}
+function daysInMonthOf(year,monthIndex){return new Date(year,monthIndex+1,0).getDate();}
 function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function $(id){return document.getElementById(id);}
 function genId(){return 'r_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);}
@@ -1278,6 +1314,7 @@ function loadRecords(){
     records=parsed;
     // Migration: add missing fields
     records.forEach(function(r){migrateRecord(r);});
+    ensureUniqueRecordIds(records);
   }catch(e){
     backupCorruptedRecords(raw);
     records=[];
@@ -1298,6 +1335,7 @@ function migrateRecord(r){
   if(!r.displayMode)r.displayMode='auto';
   if(!r.repeat)r.repeat='none';
   if(!r.repeatText)r.repeatText='';
+  if(typeof r.monthEnd!=='boolean')r.monthEnd=isMonthEndRepeatRecord(r);
   if(!r.dateKey){
     var d=getRecordTargetDateTime(r);
     if(d)r.dateKey=d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
@@ -1305,8 +1343,271 @@ function migrateRecord(r){
   return r;
 }
 function saveRecords(){
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(records));}
-  catch(e){showToast(t('storageError')||'存储空间已满','error');}
+  try{
+    ensureUniqueRecordIds(records);
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(records));
+    saveLastGoodRecords(records);
+    return true;
+  }
+  catch(e){showToast(t('storageError')||'存储空间已满','error');return false;}
+}
+function saveLastGoodRecords(arr){
+  try{
+    localStorage.setItem(LAST_GOOD_RECORDS_KEY,JSON.stringify({
+      app:'shike',
+      appVersion:APP_VERSION,
+      schemaVersion:BACKUP_SCHEMA_VERSION,
+      savedAt:new Date().toISOString(),
+      records:arr||[]
+    }));
+  }catch(e){}
+}
+function ensureUniqueRecordIds(arr){
+  var seen={};
+  (arr||[]).forEach(function(r){
+    if(!r)return;
+    if(!r.id||seen[r.id]){
+      var id;
+      do{id=genId();}while(seen[id]);
+      r.id=id;
+    }
+    seen[r.id]=true;
+  });
+  return arr;
+}
+function cloneRecord(r){
+  return JSON.parse(JSON.stringify(r||{}));
+}
+function buildBackupPayload(){
+  return {
+    app:'shike',
+    appVersion:APP_VERSION,
+    schemaVersion:BACKUP_SCHEMA_VERSION,
+    exportedAt:new Date().toISOString(),
+    recordCount:records.length,
+    records:records.map(cloneRecord)
+  };
+}
+function isValidImportedRecord(r){
+  if(!r||typeof r!=='object'||Array.isArray(r))return false;
+  return !!String(r.title||r.rawText||r.note||'').trim();
+}
+function parseBackupPayload(raw){
+  var data=JSON.parse(raw);
+  var arr=Array.isArray(data)?data:(data&&Array.isArray(data.records)?data.records:null);
+  if(!arr)throw new Error('invalid_backup');
+  return {
+    meta:Array.isArray(data)?{}:data,
+    records:arr
+  };
+}
+function prepareBackupImport(parsed){
+  var existing={};
+  records.forEach(function(r){if(r&&r.id)existing[r.id]=true;});
+  var seenInput={},used=Object.assign({},existing);
+  var out=[];
+  var summary={
+    total:(parsed.records||[]).length,valid:0,invalid:0,missing:0,duplicates:0,conflicts:0,
+    version:(parsed.meta&&parsed.meta.appVersion)||('schema '+((parsed.meta&&parsed.meta.schemaVersion)||'legacy')),
+    exportedAt:(parsed.meta&&parsed.meta.exportedAt)||'unknown'
+  };
+  (parsed.records||[]).forEach(function(raw){
+    if(!isValidImportedRecord(raw)){summary.invalid++;return;}
+    var r=cloneRecord(raw);
+    var originalId=r.id;
+    if(!originalId)summary.missing++;
+    else if(seenInput[originalId]){summary.duplicates++;r.id='';}
+    else if(existing[originalId]){summary.conflicts++;r.id='';}
+    if(originalId)seenInput[originalId]=true;
+    migrateRecord(r);
+    while(!r.id||used[r.id])r.id=genId();
+    used[r.id]=true;
+    summary.valid++;
+    out.push(r);
+  });
+  return {records:out,summary:summary};
+}
+function buildImportConfirmMessage(summary){
+  return tf('importConfirm',{n:summary.valid})+'\n'+tf('importConfirmDetail',{
+    n:summary.valid,
+    version:summary.version,
+    exportedAt:summary.exportedAt,
+    missing:summary.missing,
+    duplicates:summary.duplicates,
+    conflicts:summary.conflicts,
+    invalid:summary.invalid
+  });
+}
+function mergePreparedImport(prepared){
+  var before=records.map(cloneRecord);
+  try{
+    records=records.concat(prepared.records);
+    ensureUniqueRecordIds(records);
+    if(!saveRecords())throw new Error('save_failed');
+    renderCurrent();
+    showToast(tf('importResult',{added:prepared.records.length,skipped:prepared.summary.invalid}),'success');
+    return {added:prepared.records.length,skipped:prepared.summary.invalid};
+  }catch(e){
+    records=before;
+    saveRecords();
+    showToast(t('importFailed'),'error');
+    return {added:0,skipped:prepared.summary.valid+prepared.summary.invalid,error:e};
+  }
+}
+
+/* ========== Calendar export (.ics) ========== */
+function icsEscapeText(value){
+  return String(value||'')
+    .replace(/\\/g,'\\\\')
+    .replace(/\r\n|\r|\n/g,'\\n')
+    .replace(/;/g,'\\;')
+    .replace(/,/g,'\\,');
+}
+function icsFoldLine(line){
+  line=String(line||'');
+  var out=[];
+  while(line.length>73){
+    out.push(line.slice(0,73));
+    line=' '+line.slice(73);
+  }
+  out.push(line);
+  return out.join('\r\n');
+}
+function icsUtcStamp(date){
+  var d=date instanceof Date?date:new Date(date);
+  if(isNaN(d.getTime()))d=new Date();
+  return d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+'Z';
+}
+function icsDateFromKey(dateKey){
+  var m=String(dateKey||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m)return null;
+  return new Date(parseInt(m[1],10),parseInt(m[2],10)-1,parseInt(m[3],10));
+}
+function icsDateOnly(date){
+  return date.getFullYear()+pad2(date.getMonth()+1)+pad2(date.getDate());
+}
+function icsLocalDateTime(date){
+  return icsDateOnly(date)+'T'+pad2(date.getHours())+pad2(date.getMinutes())+pad2(date.getSeconds());
+}
+function icsTimeParts(timeText){
+  var m=String(timeText||'').match(/^(\d{1,2}):(\d{2})$/);
+  if(!m)return null;
+  var h=parseInt(m[1],10),min=parseInt(m[2],10);
+  if(h<0||h>23||min<0||min>59)return null;
+  return {h:h,m:min};
+}
+function isMonthEndRepeatRecord(r){
+  if(!r||r.repeat!=='monthly')return false;
+  if(r.monthEnd===true)return true;
+  var text=[r.dateText,r.rawText,r.title].filter(Boolean).join(' ');
+  return /每月底|每月末|月底|月末/.test(text);
+}
+function icsRepeatRuleForRecord(r){
+  if(!r)return '';
+  if(isMonthEndRepeatRecord(r))return 'FREQ=MONTHLY;BYMONTHDAY=-1';
+  if(r.recordKind==='anniversary'||r.repeat==='yearly')return 'FREQ=YEARLY';
+  if(r.repeat==='daily')return 'FREQ=DAILY';
+  if(r.repeat==='weekly')return 'FREQ=WEEKLY';
+  if(r.repeat==='monthly')return 'FREQ=MONTHLY';
+  return '';
+}
+function icsUidForRecord(r){
+  var base=String((r&&r.id)||(r&&r.createdAt)||Date.now()).replace(/[^A-Za-z0-9_.-]/g,'');
+  return 'shike-'+(base||Date.now())+'@local.shike';
+}
+function icsDescriptionForRecord(r){
+  var lines=['由时刻导出'];
+  if(r.rawText&&r.rawText!==r.title)lines.push('原文：'+r.rawText);
+  if(r.note)lines.push(r.note);
+  return lines.join('\n');
+}
+function recordToIcsEvent(r){
+  if(!r||!r.dateKey)return null;
+  var start=icsDateFromKey(r.dateKey);
+  if(!start)return null;
+  var time=icsTimeParts(r.timeText);
+  var allDay=!time||r.recordKind==='anniversary';
+  var title=String(r.title||r.rawText||t('appName')).trim();
+  var lines=['BEGIN:VEVENT'];
+  lines.push('UID:'+icsUidForRecord(r));
+  lines.push('DTSTAMP:'+icsUtcStamp(new Date()));
+  if(r.createdAt)lines.push('CREATED:'+icsUtcStamp(new Date(r.createdAt)));
+  if(r.updatedAt)lines.push('LAST-MODIFIED:'+icsUtcStamp(new Date(r.updatedAt)));
+  if(allDay){
+    var end=new Date(start);
+    end.setDate(end.getDate()+1);
+    lines.push('DTSTART;VALUE=DATE:'+icsDateOnly(start));
+    lines.push('DTEND;VALUE=DATE:'+icsDateOnly(end));
+  }else{
+    start.setHours(time.h,time.m,0,0);
+    var endTime=new Date(start);
+    endTime.setMinutes(endTime.getMinutes()+30);
+    lines.push('DTSTART:'+icsLocalDateTime(start));
+    lines.push('DTEND:'+icsLocalDateTime(endTime));
+  }
+  var rule=icsRepeatRuleForRecord(r);
+  if(rule)lines.push('RRULE:'+rule);
+  lines.push('SUMMARY:'+icsEscapeText(title));
+  lines.push('DESCRIPTION:'+icsEscapeText(icsDescriptionForRecord(r)));
+  if(r.locationText)lines.push('LOCATION:'+icsEscapeText(r.locationText));
+  if(r.recordKind)lines.push('CATEGORIES:'+icsEscapeText(({reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[r.recordKind]||r.recordKind)));
+  lines.push('STATUS:CONFIRMED');
+  lines.push('END:VEVENT');
+  return lines;
+}
+function buildIcsCalendar(sourceRecords){
+  var skipped=0;
+  var eventGroups=[];
+  (sourceRecords||records).forEach(function(r){
+    var ev=recordToIcsEvent(r);
+    if(ev)eventGroups.push(ev);
+    else skipped++;
+  });
+  var lines=[
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Shike//Time Records//CN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:'+icsEscapeText(t('appName'))
+  ];
+  eventGroups.forEach(function(group){lines=lines.concat(group);});
+  lines.push('END:VCALENDAR');
+  return {text:lines.map(icsFoldLine).join('\r\n')+'\r\n',eventCount:eventGroups.length,skippedCount:skipped};
+}
+function safeFilePart(value){
+  return String(value||'record').replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'').slice(0,24)||'record';
+}
+function ymdForFile(date){
+  var d=date||new Date();
+  return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate());
+}
+function downloadTextFile(filename,content,type){
+  var blob=new Blob([content],{type:type||'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download=filename;
+  a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},0);
+}
+function exportIcsFile(){
+  try{
+    var cal=buildIcsCalendar(records);
+    if(!cal.eventCount){showToast(t('icsExportEmpty'),'warn');return cal;}
+    downloadTextFile('shike-calendar-'+ymdForFile(new Date())+'.ics',cal.text,'text/calendar;charset=utf-8');
+    showToast(tf('icsExportResult',{n:cal.eventCount,skipped:cal.skippedCount}),'success');
+    return cal;
+  }catch(e){showToast(t('importFailed'),'error');return null;}
+}
+function exportRecordIcsFile(id){
+  var r=records.find(function(x){return x.id===id;});
+  if(!r){showToast(t('icsExportEmpty'),'warn');return null;}
+  var cal=buildIcsCalendar([r]);
+  if(!cal.eventCount){showToast(t('icsExportEmpty'),'warn');return cal;}
+  downloadTextFile('shike-record-'+safeFilePart(r.title)+'.ics',cal.text,'text/calendar;charset=utf-8');
+  showToast(t('icsExportDone'),'success');
+  return cal;
 }
 
 /* ========== Demo records ========== */
@@ -1337,7 +1638,7 @@ function buildDemoRecordTemplates(){
     {demoKey:'v074_mom_birthday',title:'妈妈生日',dateText:demoDateText(birthday),dateKey:demoDateKey(birthday),timeText:'',note:'记得提前准备礼物',repeat:'yearly',rawText:'妈妈生日',recordKind:'anniversary',coverPreset:0,subtitle:'记得提前准备礼物',pinned:true,cardStyle:'large'},
     {demoKey:'v074_meeting',title:'开会',dateText:'明天',dateKey:demoDateKey(tomorrow),timeText:'15:00',note:'',repeat:'none',rawText:'明天下午三点开会',recordKind:'reminder',coverPreset:1,subtitle:'',pinned:false,cardStyle:'normal'},
     {demoKey:'v074_lip_balm',title:'涂润唇膏',dateText:'每天',dateKey:demoDateKey(today),timeText:'22:30',note:'',repeat:'daily',rawText:'每天睡前涂润唇膏',recordKind:'habit',coverPreset:3,subtitle:'',pinned:false,cardStyle:'normal'},
-    {demoKey:'v074_credit_card',title:'还信用卡',dateText:'月底',dateKey:demoDateKey(monthEnd),timeText:'',note:'',repeat:'monthly',rawText:'月底还信用卡',recordKind:'reminder',coverPreset:4,subtitle:'',pinned:false,cardStyle:'normal'},
+    {demoKey:'v074_credit_card',title:'还信用卡',dateText:'月底',dateKey:demoDateKey(monthEnd),timeText:'',note:'',repeat:'monthly',rawText:'月底还信用卡',recordKind:'reminder',monthEnd:true,coverPreset:4,subtitle:'',pinned:false,cardStyle:'normal'},
     {demoKey:'v074_travel_list',title:'旅行清单',dateText:'',dateKey:'',timeText:'',note:'身份证、充电器、换洗衣物、雨伞',repeat:'none',rawText:'旅行清单',recordKind:'note',coverPreset:2,subtitle:'身份证、充电器、换洗衣物、雨伞',pinned:false,cardStyle:'normal'}
   ].map(function(tpl,i){
     return normalizeRecord({
@@ -1345,6 +1646,7 @@ function buildDemoRecordTemplates(){
       demoKey:tpl.demoKey,
       title:tpl.title,dateText:tpl.dateText,dateKey:tpl.dateKey,timeText:tpl.timeText,note:tpl.note,
       repeat:tpl.repeat,repeatText:repeatLabel(tpl.repeat),rawText:tpl.rawText,
+      monthEnd:!!tpl.monthEnd,
       archived:false,createdAt:base-i*1000,updatedAt:base-i*1000,ts:base-i*1000,
       recordKind:tpl.recordKind,recordState:'active',notifyMode:'none',notifiedAt:null,
       coverImage:null,coverPreset:tpl.coverPreset,subtitle:tpl.subtitle,pinned:tpl.pinned,
@@ -1506,12 +1808,12 @@ function inferRecordKindFromText(text){
 function parseReminderText(rawText){
   if(!rawText)return null;
   var text=rawText.trim();
-  var result={title:'',dateText:'',dateKey:'',timeText:'',recordKind:'reminder',repeat:'none',repeatText:'',rawText:rawText,relativeMinutes:null};
+  var result={title:'',dateText:'',dateKey:'',timeText:'',recordKind:'reminder',repeat:'none',repeatText:'',rawText:rawText,relativeMinutes:null,monthEnd:false};
 
   // === 1. Repeat detection ===
   if(/每天|每日|天天/.test(text)){result.repeat='daily';result.repeatText=t('reminder');/*fallback*/}
   else if(/每周[一二三四五六日天]?|每个星期/.test(text)){result.repeat='weekly';}
-  else if(/每月\d{1,2}[日号]?|每个月/.test(text)){result.repeat='monthly';}
+  else if(/每月底|每月末|每月\d{1,2}[日号]?|每个月/.test(text)){result.repeat='monthly';}
   else if(/每年/.test(text)){result.repeat='yearly';result.recordKind='anniversary';}
 
   // Extract day-of-week for weekly
@@ -1520,6 +1822,7 @@ function parseReminderText(rawText){
   // Extract day-of-month for monthly
   var moMatch=text.match(/每月(\d{1,2})[日号]?/);
   if(moMatch)result.monthDay=parseInt(moMatch[1],10);
+  if(/每月底|每月末/.test(text))result.monthEnd=true;
 
   // === 2. Relative time ===
   var now=new Date();
@@ -1587,7 +1890,19 @@ function parseReminderText(rawText){
           if(result.repeat==='yearly')result.recordKind='anniversary';
         }else{
           // Month-end / next month
-          if(/月底|月末/.test(text)){
+          if(result.repeat==='monthly'&&result.monthEnd){
+            targetDate=new Date(today.getFullYear(),today.getMonth()+1,0);
+            result.dateText='月底';
+          }else if(result.repeat==='monthly'&&result.monthDay){
+            var md=Math.min(result.monthDay,daysInMonthOf(today.getFullYear(),today.getMonth()));
+            targetDate=new Date(today.getFullYear(),today.getMonth(),md);
+            if(targetDate.getTime()<today.getTime()){
+              var nextMonth=today.getMonth()+1;
+              md=Math.min(result.monthDay,daysInMonthOf(today.getFullYear(),nextMonth));
+              targetDate=new Date(today.getFullYear(),nextMonth,md);
+            }
+            result.dateText=(targetDate.getMonth()+1)+'月'+targetDate.getDate()+'日';
+          }else if(/月底|月末/.test(text)){
             targetDate=new Date(today.getFullYear(),today.getMonth()+1,0);
             result.dateText='月底';
           }else if(/下个月|下月/.test(text)){
@@ -1694,7 +2009,7 @@ function parseReminderText(rawText){
   // === 5. Title cleaning ===
   var clean=text;
   // Remove date words
-  var dateWords=['大后天','后天','明天','今天','昨天','下个月','下月','月底','月末','今晚'];
+  var dateWords=['大后天','后天','明天','今天','昨天','下个月','下月','每月底','每月末','月底','月末','今晚'];
   dateWords.forEach(function(w){clean=clean.split(w).join('');});
   // Remove week patterns (including 每 prefix for habits)
   clean=clean.replace(/每?(下下|下|这|本)?(周|星期)[一二三四五六日天]/g,'');
@@ -1782,6 +2097,7 @@ function getRecordTargetDateTime(r,opts){
 function normalizeRecord(r){
   if(!r.recordKind)r.recordKind=inferRecordKind(r);
   if(!r.cardStyle)r.cardStyle=(r.recordKind==='anniversary')?'large':'normal';
+  if(typeof r.monthEnd!=='boolean')r.monthEnd=isMonthEndRepeatRecord(r);
   var d=getRecordTargetDateTime(r);
   if(d&&!r.dateKey)r.dateKey=d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
   return r;
@@ -2271,6 +2587,7 @@ function renderMy(){
   // Version
   $('appVersion').textContent=APP_VERSION;
   $('appUpdatedAt').textContent=APP_UPDATED_AT;
+  if($('dataSafetyHint'))$('dataSafetyHint').textContent=t('dataSafetyHint')+' '+t('allRecords')+'：'+stat;
   // Username input
   $('usernameInput').value=settings.username||'';
   // Theme
@@ -2413,6 +2730,7 @@ function saveParsedRecord(parsed,rawText){
     dateText:parsed.dateText,dateKey:parsed.dateKey,
     timeText:parsed.timeText,locationText:'',note:'',
     repeat:parsed.repeat||'none',repeatText:parsed.repeatText||repeatLabel(parsed.repeat||'none'),
+    monthEnd:!!parsed.monthEnd,
     rawText:rawText||parsed.title,
     archived:false,createdAt:Date.now(),updatedAt:Date.now(),ts:Date.now(),
     recordKind:parsed.recordKind,recordState:'active',notifyMode:'none',notifiedAt:null,
@@ -2491,7 +2809,8 @@ function openDetail(id){
     '<div class="detail-row"><span class="detail-label">置顶</span><span class="detail-value">'+(r.pinned?'是':'否')+'</span></div>'+
     '<div class="detail-row"><span class="detail-label">记录时间</span><span class="detail-value">'+new Date(r.createdAt).toLocaleDateString()+'</span></div>'+
   '</div>';
-  var footer='<button class="btn-cancel" onclick="closeDrawer()">'+t('close')+'</button>'+
+  var footer=(r.dateKey?'<button class="btn-secondary" onclick="exportRecordIcsFile(\''+id+'\')">'+t('exportRecordIcs')+'</button>':'')+
+    '<button class="btn-cancel" onclick="closeDrawer()">'+t('close')+'</button>'+
     '<button class="btn-secondary" onclick="togglePin(\''+id+'\');openDetail(\''+id+'\');">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
     '<button class="btn-primary" onclick="openEditDrawer(\''+id+'\')">'+t('edit')+'</button>';
   openDrawer(r.title,body,footer);
@@ -2898,21 +3217,23 @@ function init(){
   });
   b('exportBtn','click',function(){
     try{
-      var blob=new Blob([JSON.stringify(records,null,2)],{type:'application/json'});
+      var blob=new Blob([JSON.stringify(buildBackupPayload(),null,2)],{type:'application/json'});
       var url=URL.createObjectURL(blob);
-      var a=document.createElement('a');a.href=url;a.download='shike-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+      var a=document.createElement('a');a.href=url;a.download='shike-backup-'+ymdForFile(new Date())+'.json';a.click();
       setTimeout(function(){URL.revokeObjectURL(url);},0);
       showToast(t('exportDone'),'success');
     }catch(e){showToast(t('importFailed'),'error');}
   });
+  b('exportIcsBtn','click',exportIcsFile);
   b('restoreFileInput','change',function(e){
     var f=e.target.files&&e.target.files[0];if(!f)return;
     var fr=new FileReader();fr.onload=function(ev){
-      try{var arr=JSON.parse(ev.target.result);
-        if(Array.isArray(arr)){
-          showConfirm(t('importData'),tf('importConfirm',{n:arr.length}),t('confirm'),t('cancel'),function(){
-            arr.forEach(function(r){migrateRecord(r);if(!records.find(function(x){return x.id===r.id;}))records.push(r);});
-            saveRecords();renderCurrent();showToast(t('importDone'),'success');
+      try{
+        var parsed=parseBackupPayload(ev.target.result);
+        var prepared=prepareBackupImport(parsed);
+        if(prepared.summary.valid){
+          showConfirm(t('importData'),buildImportConfirmMessage(prepared.summary),t('confirm'),t('cancel'),function(){
+            mergePreparedImport(prepared);
           });
         }else showToast(t('importFailed'),'error');
       }catch(err){showToast(t('importFailed'),'error');}
