@@ -4,8 +4,8 @@
   "description": "随手记，按时提醒",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#faf8f5",
-  "theme_color": "#faf8f5",
+  "background_color": "#f7f3ed",
+  "theme_color": "#f7f3ed",
   "orientation": "portrait",
   "icons": [
     {

@@ -5,9 +5,39 @@ const root = path.resolve(__dirname, '..');
 
 const tests = [
   {
+    name: 'PWA assets',
+    script: 'test-shike-pwa-assets.js',
+    expected: 'PWA asset regression passed: 8/8'
+  },
+  {
+    name: 'HTML integrity',
+    script: 'test-shike-html-integrity.js',
+    expected: 'HTML integrity regression passed: 7/7'
+  },
+  {
+    name: 'A11y static',
+    script: 'test-shike-a11y-static.js',
+    expected: 'A11y static regression passed: 6/6'
+  },
+  {
+    name: 'Demo examples',
+    script: 'test-shike-demo-examples.js',
+    expected: 'Demo examples regression passed: 6/6'
+  },
+  {
     name: 'Time sprite',
     script: 'test-shike-time-sprite.js',
     expected: 'Time sprite regression passed: 8/8'
+  },
+  {
+    name: 'Responsive CSS',
+    script: 'test-shike-responsive-css.js',
+    expected: 'Responsive CSS regression passed: 9/9'
+  },
+  {
+    name: 'I18N placeholders',
+    script: 'test-shike-i18n-placeholders.js',
+    expected: 'I18N placeholder regression passed: 6/6'
   }
 ];
 

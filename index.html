@@ -729,9 +729,9 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   <div class="page" id="page-calendar">
     <div class="content">
       <div class="cal-month">
-        <button class="cal-nav-btn" id="calPrev">‹</button>
+        <button class="cal-nav-btn" id="calPrev" aria-label="上个月">‹</button>
         <div class="cal-month-title" id="calMonthTitle"></div>
-        <button class="cal-nav-btn" id="calNext">›</button>
+        <button class="cal-nav-btn" id="calNext" aria-label="下个月">›</button>
       </div>
       <div class="cal-grid" id="calGrid"></div>
       <div id="calDayDetail"></div>
@@ -846,7 +846,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <div class="setting-group-title" data-i18n="about">关于</div>
         <div class="setting-item">
           <span class="setting-item-label" data-i18n="replayIntro">重播开场</span>
-          <button class="setting-item-btn" id="replayBtn">›</button>
+          <button class="setting-item-btn" id="replayBtn" aria-label="重播开场">›</button>
         </div>
       </div>
       <div class="ver-line">
@@ -951,14 +951,14 @@ var I18N={
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
     close:'关闭',confirm:'确定',details:'详情',setLarge:'大卡片',setNormal:'普通',setBg:'换背景',
-    setPin:'置顶',unpin:'取消置顶',setTheme:'主题',language:'语言',calendarMode:'日历显示',
+    setPin:'置顶',unpin:'取消置顶',theme:'主题',setTheme:'主题',language:'语言',calendarMode:'日历显示',
     solar:'新历',lunar:'农历',weather:'首页天气',username:'用户名',usernamePh:'设置你的名字',
     personalize:'个性化',about:'关于',enableNotify:'开启通知',notifyPerm:'通知权限',
     replayIntro:'重播开场',batchImport:'批量整理',importHint:'每行一条，自动识别时间和类型。',
     parseImport:'识别内容',loadExample:'填入示例',uploadTxt:'上传TXT',exportData:'导出数据',
     importData:'导入数据',clearData:'清空数据',backup:'数据备份',
     localDataHint:'数据默认保存在当前浏览器，可通过备份文件迁移。',
-    exportDone:'备份文件已导出',importDone:'导入成功',importFailed:'文件格式错误',
+    exportDone:'备份文件已导出',importDone:'导入成功',importFailed:'文件格式错误',storageError:'存储空间已满',
     importConfirm:'将导入 {n} 条记录（合并到现有数据）',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'记录从此刻开始',daysText:'这是你来到时刻的第 {n} 天',userDaysText:'{name}，这是你来到时刻的第 {n} 天',
@@ -1004,14 +1004,14 @@ var I18N={
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
     close:'關閉',confirm:'確定',details:'詳情',setLarge:'大卡片',setNormal:'普通',setBg:'換背景',
-    setPin:'置頂',unpin:'取消置頂',setTheme:'主題',language:'語言',calendarMode:'日曆顯示',
+    setPin:'置頂',unpin:'取消置頂',theme:'主題',setTheme:'主題',language:'語言',calendarMode:'日曆顯示',
     solar:'新曆',lunar:'農曆',weather:'首頁天氣',username:'用戶名',usernamePh:'設定你的名字',
     personalize:'個人化',about:'關於',enableNotify:'開啟通知',notifyPerm:'通知權限',
     replayIntro:'重播開場',batchImport:'批次整理',importHint:'每行一條，自動識別時間和類型。',
     parseImport:'識別內容',loadExample:'填入示例',uploadTxt:'上傳TXT',exportData:'匯出資料',
     importData:'匯入資料',clearData:'清空資料',backup:'資料備份',
     localDataHint:'資料預設保存在目前瀏覽器，可透過備份檔案遷移。',
-    exportDone:'備份檔案已匯出',importDone:'匯入成功',importFailed:'檔案格式錯誤',
+    exportDone:'備份檔案已匯出',importDone:'匯入成功',importFailed:'檔案格式錯誤',storageError:'儲存空間已滿',
     importConfirm:'將匯入 {n} 條記錄（合併到現有資料）',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     daysText:'這是你來到時刻的第 {n} 天',userDaysText:'{name}，這是你來到時刻的第 {n} 天',
@@ -1057,14 +1057,14 @@ var I18N={
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
     close:'Close',confirm:'OK',details:'Details',setLarge:'Large Card',setNormal:'Normal',setBg:'Background',
-    setPin:'Pin',unpin:'Unpin',setTheme:'Theme',language:'Language',calendarMode:'Calendar',
+    setPin:'Pin',unpin:'Unpin',theme:'Theme',setTheme:'Theme',language:'Language',calendarMode:'Calendar',
     solar:'Solar',lunar:'Lunar',weather:'Weather',username:'Name',usernamePh:'Set your name',
     personalize:'Personalize',about:'About',enableNotify:'Enable notifications',notifyPerm:'Notifications',
     replayIntro:'Replay intro',batchImport:'Batch organize',importHint:'One per line. Times and types auto-detected.',
     parseImport:'Parse',loadExample:'Load example',uploadTxt:'Upload TXT',exportData:'Export',
     importData:'Import',clearData:'Clear all',backup:'Backup',
     localDataHint:'Data is saved in this browser by default and can be moved with a backup file.',
-    exportDone:'Backup exported',importDone:'Imported',importFailed:'Invalid file format',
+    exportDone:'Backup exported',importDone:'Imported',importFailed:'Invalid file format',storageError:'Storage is full',
     importConfirm:'Import {n} records and merge them with current data',
     clockFormat:'{month} {day}, {year} {hour}:{min}',
     daysText:'Day {n} with Shike',userDaysText:'{name}, day {n} with Shike',
@@ -1086,7 +1086,7 @@ var I18N={
     holidayLabor:'Labor Day',holidayDragon:'Dragon Boat',holidayMidAutumn:'Mid-Autumn',holidayNational:'National Day',
     holidayValentine:"Valentine's",holidayWomen:"Women's Day",holidayTree:'Arbor Day',holidayChildren:"Children's Day",
     holidayTeacher:"Teacher's Day",holidayChristmas:'Christmas',
-    weekdays:['S','M','T','W','T','F','S'],
+    mon_fmt:'Month {m}',weekdays:['S','M','T','W','T','F','S'],
     sun:'Sun',mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',
     theme_paper:'Paper',theme_mono:'Mono',theme_coffee:'Coffee',theme_mist:'Mist',theme_rose:'Rose',theme_forest:'Forest',theme_night:'Night',theme_sakura:'Sakura',
     cardStyle:'Card style',cardLarge:'Large',cardNormal:'Normal',accentColor:'Accent',
@@ -1110,14 +1110,14 @@ var I18N={
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
     close:'閉じる',confirm:'OK',details:'詳細',setLarge:'大カード',setNormal:'通常',setBg:'背景',
-    setPin:'固定',unpin:'固定解除',setTheme:'テーマ',language:'言語',calendarMode:'暦表示',
+    setPin:'固定',unpin:'固定解除',theme:'テーマ',setTheme:'テーマ',language:'言語',calendarMode:'暦表示',
     solar:'新暦',lunar:'旧暦',weather:'天気',username:'名前',usernamePh:'お名前を設定',
     personalize:'カスタマイズ',about:'時刻について',enableNotify:'通知を有効化',notifyPerm:'通知権限',
     replayIntro:'オープニング再生',batchImport:'一括整理',importHint:'1行に1件、時間と種類を自動認識。',
     parseImport:'解析',loadExample:'サンプル',uploadTxt:'TXTアップロード',exportData:'エクスポート',
     importData:'インポート',clearData:'全削除',backup:'バックアップ',
     localDataHint:'データはこのブラウザに保存され、バックアップファイルで移行できます。',
-    exportDone:'バックアップを書き出しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',
+    exportDone:'バックアップを書き出しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',storageError:'保存容量がいっぱいです',
     importConfirm:'{n}件の記録を既存データに統合してインポートします',
     clockFormat:'{year}年{month}月{day}日 {hour}:{min}',
     daysText:'時刻を使い始めて{n}日目',userDaysText:'{name}さん、時刻を使い始めて{n}日目',
@@ -1140,7 +1140,7 @@ var I18N={
     holidayValentine:'バレンタイン',holidayWomen:'婦人デー',holidayTree:'植樹節',holidayChildren:'子供の日',
     holidayTeacher:'教師節',holidayChristmas:'クリスマス',
     weekdays:['日','月','火','水','木','金','土'],
-    sun:'日',mon:'月',tue:'火',wed:'水',thu:'木',fri:'金',sat:'土',
+    mon_fmt:'{m}月',sun:'日',mon:'月',tue:'火',wed:'水',thu:'木',fri:'金',sat:'土',
     theme_paper:'紙',theme_mono:'墨',theme_coffee:'珈琲',theme_mist:'霧',theme_rose:'薔薇',theme_forest:'森',theme_night:'夜',theme_sakura:'桜',
     cardStyle:'カードスタイル',cardLarge:'大カード',cardNormal:'通常',accentColor:'テーマカラー',
     noRecordsToday:'今日の予定はありません',eventsToday:'今日は{n}件の予定',calQuickAddPh:'この日に記録を追加',
@@ -1953,7 +1953,7 @@ function renderRecordCard(r){
   if(r.dateText)meta.push(r.dateText);
   if(r.timeText)meta.push(r.timeText);
   if(r.repeat&&r.repeat!=='none')meta.push(repeatLabel(r.repeat));
-  var pin=r.pinned?'<button class="rc-icon-btn rc-pin" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">●</button>':'<button class="rc-icon-btn rc-pin not-pinned" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">○</button>';
+  var pin=r.pinned?'<button class="rc-icon-btn rc-pin" aria-label="'+t('unpin')+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">●</button>':'<button class="rc-icon-btn rc-pin not-pinned" aria-label="'+t('setPin')+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">○</button>';
   return '<div class="record-card" onclick="openDetail(\''+r.id+'\')">'+
     '<div class="rc-main">'+
       '<div class="rc-title">'+escHtml(r.title)+'</div>'+
