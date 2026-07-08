@@ -336,6 +336,66 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 .nav-icon{width:22px;height:22px;}
 .nav-label{font-size:10px;letter-spacing:.04em;}
 
+/* ========== Time Sprite ========== */
+.time-sprite{
+  position:fixed;right:16px;bottom:calc(78px + var(--safe-bottom));z-index:58;
+  display:flex;flex-direction:column;align-items:flex-end;gap:8px;
+  pointer-events:none;
+}
+.time-sprite *{box-sizing:border-box;}
+.time-sprite-orb{
+  pointer-events:auto;width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--bg-elev) 88%,transparent);
+  border:1px solid color-mix(in srgb,var(--ink-line) 80%,transparent);
+  color:var(--ink);box-shadow:0 10px 28px rgba(44,37,32,.16);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transition:transform .2s,box-shadow .2s,background .2s;
+}
+.time-sprite-orb:active{transform:scale(.94);}
+.time-sprite-orb::after{
+  content:'';position:absolute;width:54px;height:54px;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);
+  animation:spritePulse 3.8s ease-in-out infinite;pointer-events:none;
+}
+.time-sprite-mark{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-size:15px;font-weight:700;
+  background:var(--accent-bg);color:var(--accent);
+}
+.time-sprite-panel{
+  pointer-events:auto;width:min(292px,calc(100vw - 32px));
+  background:color-mix(in srgb,var(--bg-elev) 92%,transparent);
+  border:1px solid var(--ink-line);border-radius:18px;
+  box-shadow:0 16px 38px rgba(44,37,32,.18);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  padding:12px 12px 10px;transform-origin:bottom right;
+  transition:opacity .22s,transform .22s,visibility .22s;
+}
+.time-sprite.collapsed .time-sprite-panel{
+  opacity:0;visibility:hidden;transform:translateY(8px) scale(.96);pointer-events:none;
+}
+.time-sprite-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
+.time-sprite-title{font-family:var(--font-serif);font-size:15px;font-weight:600;letter-spacing:.04em;}
+.time-sprite-close{
+  width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);background:var(--bg-soft);font-size:16px;line-height:1;
+}
+.time-sprite-message{font-size:13px;line-height:1.55;color:var(--ink);margin-bottom:7px;}
+.time-sprite-meta{font-size:12px;line-height:1.5;color:var(--ink-mute);margin-bottom:10px;}
+.time-sprite-actions{display:flex;gap:7px;flex-wrap:wrap;}
+.time-sprite-action{
+  padding:6px 10px;border-radius:14px;background:var(--bg-soft);color:var(--ink-soft);
+  border:1px solid var(--ink-line);font-size:12px;letter-spacing:.04em;
+}
+.time-sprite-action.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.time-sprite-action.hidden{display:none;}
+@keyframes spritePulse{
+  0%,70%,100%{transform:scale(.92);opacity:0;}
+  12%,42%{transform:scale(1);opacity:.55;}
+}
+
 /* ========== Drawer ========== */
 .drawer-mask,.confirm-mask,.opening-mask{
   position:fixed;inset:0;z-index:100;
@@ -553,6 +613,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 
 @media (min-width:768px){
   .app,.nav{max-width:860px;}
+  .time-sprite{right:max(22px,calc((100vw - 860px)/2 + 22px));bottom:calc(82px + var(--safe-bottom));}
   .topbar{padding-left:28px;padding-right:28px;}
   .home-hero,.content{padding-left:28px;padding-right:28px;}
   .my-header{padding-left:28px;padding-right:28px;}
@@ -571,6 +632,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 
 @media (min-width:1024px){
   .app,.nav{max-width:1040px;}
+  .time-sprite{right:max(28px,calc((100vw - 1040px)/2 + 28px));}
   .topbar{padding-left:34px;padding-right:34px;}
   .home-hero,.content{padding-left:34px;padding-right:34px;}
   .my-header{padding:28px 34px 20px;}
@@ -587,6 +649,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 
 @media (min-width:1280px){
   .app,.nav{max-width:1080px;}
+  .time-sprite{right:max(32px,calc((100vw - 1080px)/2 + 32px));}
 }
 
 /* Page transitions */
@@ -838,16 +901,36 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
     <span class="nav-label" data-i18n="navMy">我的</span>
   </button>
 </nav>
+
+<!-- Time Sprite -->
+<div class="time-sprite collapsed" id="timeSprite" aria-live="polite">
+  <div class="time-sprite-panel" id="timeSpritePanel">
+    <div class="time-sprite-head">
+      <div class="time-sprite-title" id="timeSpriteTitle" data-i18n="spriteName">时刻精灵</div>
+      <button class="time-sprite-close" id="timeSpriteClose" aria-label="收起时刻精灵">×</button>
+    </div>
+    <div class="time-sprite-message" id="timeSpriteMessage"></div>
+    <div class="time-sprite-meta" id="timeSpriteMeta"></div>
+    <div class="time-sprite-actions">
+      <button class="time-sprite-action primary" id="timeSpriteInputBtn" data-i18n="spriteInputAction">写一句</button>
+      <button class="time-sprite-action" id="timeSpriteDemoBtn" data-i18n="spriteDemoAction">体验示例</button>
+    </div>
+  </div>
+  <button class="time-sprite-orb" id="timeSpriteToggle" aria-label="打开时刻精灵" aria-expanded="false" aria-controls="timeSpritePanel">
+    <span class="time-sprite-mark" aria-hidden="true">时</span>
+  </button>
+</div>
 <script>
 /* ================================================================
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.7.4';
-var APP_UPDATED_AT='2026-07-07 23:09';
+var APP_VERSION='v0.8.0';
+var APP_UPDATED_AT='2026-07-08 19:51';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
+var ASSISTANT_COLLAPSED_KEY='shike_assistant_collapsed';
 
 /* ========== i18n ========== */
 var I18N={
@@ -856,6 +939,14 @@ var I18N={
     inputPlaceholder:'试着写下需要记住的事情',inputHint:'可识别时间、重复和纪念日，保存后自动进入日历',
     demoPrefix:'不知道写什么？',demoAction:'体验示例',demoAlready:'示例已经在这里了',
     demoAdded:'已添加 {n} 条示例记录，可以在首页、全部和日历查看',
+    spriteName:'时刻精灵',spriteOpen:'打开时刻精灵',spriteClose:'收起时刻精灵',
+    spriteInputAction:'写一句',spriteDemoAction:'体验示例',
+    spriteEmptyMessage:'把一句话交给我，我帮你整理成一个时刻。',
+    spriteDemoMessage:'不知道写什么？可以点体验示例，看提醒、纪念、习惯和日历怎么连起来。',
+    spriteSoonMessage:'最近有 {n} 个时刻快到了，记得看一眼。',
+    spriteTodayMessage:'今天有 {n} 个时刻在等你。',
+    spriteQuietMessage:'我会在这里帮你留意最近的时刻。',
+    spriteTodayLine:'今日 {n} 条',spriteNextLine:'最近：{title} · {when}',
     navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
@@ -901,6 +992,14 @@ var I18N={
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
     demoPrefix:'不知道寫什麼？',demoAction:'體驗示例',demoAlready:'示例已經在這裡了',
     demoAdded:'已新增 {n} 條示例記錄，可以在首頁、全部和日曆查看',
+    spriteName:'時刻精靈',spriteOpen:'打開時刻精靈',spriteClose:'收起時刻精靈',
+    spriteInputAction:'寫一句',spriteDemoAction:'體驗示例',
+    spriteEmptyMessage:'把一句話交給我，我幫你整理成一個時刻。',
+    spriteDemoMessage:'不知道寫什麼？可以點體驗示例，看提醒、紀念、習慣和日曆怎麼連起來。',
+    spriteSoonMessage:'最近有 {n} 個時刻快到了，記得看一眼。',
+    spriteTodayMessage:'今天有 {n} 個時刻在等你。',
+    spriteQuietMessage:'我會在這裡幫你留意最近的時刻。',
+    spriteTodayLine:'今日 {n} 條',spriteNextLine:'最近：{title} · {when}',
     navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
@@ -946,6 +1045,14 @@ var I18N={
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
     demoPrefix:'Not sure what to add?',demoAction:'Try examples',demoAlready:'The examples are already here',
     demoAdded:'Added {n} example records. View them on Home, All, and Calendar.',
+    spriteName:'Shike sprite',spriteOpen:'Open Shike sprite',spriteClose:'Collapse Shike sprite',
+    spriteInputAction:'Write one',spriteDemoAction:'Try examples',
+    spriteEmptyMessage:'Give me one sentence, and I will turn it into a moment.',
+    spriteDemoMessage:'Not sure what to add? Try examples to see reminders, anniversaries, habits, and calendar dots.',
+    spriteSoonMessage:'{n} moments are coming up soon.',
+    spriteTodayMessage:'You have {n} moments today.',
+    spriteQuietMessage:'I will keep an eye on your upcoming moments here.',
+    spriteTodayLine:'Today {n}',spriteNextLine:'Next: {title} · {when}',
     navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
@@ -991,6 +1098,14 @@ var I18N={
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
     demoPrefix:'何を書くか迷ったら',demoAction:'例を試す',demoAlready:'例はすでに追加されています',
     demoAdded:'{n} 件のサンプル記録を追加しました。ホーム・一覧・カレンダーで確認できます',
+    spriteName:'時刻アシスタント',spriteOpen:'時刻アシスタントを開く',spriteClose:'時刻アシスタントを閉じる',
+    spriteInputAction:'一文を書く',spriteDemoAction:'例を試す',
+    spriteEmptyMessage:'一文を渡してください。時刻として整理します。',
+    spriteDemoMessage:'何を書くか迷ったら、例でリマインド・記念日・習慣・カレンダー連携を見られます。',
+    spriteSoonMessage:'近く {n} 件の時刻があります。',
+    spriteTodayMessage:'今日は {n} 件の時刻があります。',
+    spriteQuietMessage:'ここで近い時刻をそっと見守ります。',
+    spriteTodayLine:'今日 {n} 件',spriteNextLine:'次：{title} · {when}',
     navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
@@ -1253,6 +1368,7 @@ function refreshAfterDemoImport(){
   renderAll();
   renderCalendar();
   renderMy();
+  renderTimeSprite();
   startCountdownTicker();
 }
 function addDemoRecords(){
@@ -1268,6 +1384,95 @@ function addDemoRecords(){
   try{localStorage.setItem(DEMO_FLAG_KEY,'true');}catch(e){}
   refreshAfterDemoImport();
   showToast(tf('demoAdded',{n:toAdd.length}),'success');
+}
+
+/* ========== Time Sprite ========== */
+var timeSpriteCollapsed=true;
+function readTimeSpriteCollapsed(){
+  try{
+    var saved=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
+    if(saved==='true')return true;
+    if(saved==='false')return false;
+  }catch(e){}
+  return !!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
+}
+function saveTimeSpriteCollapsed(value){
+  timeSpriteCollapsed=!!value;
+  try{localStorage.setItem(ASSISTANT_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');}catch(e){}
+  renderTimeSprite();
+}
+function getTimeSpriteRecordDate(r){
+  return getRecordTargetDateTime(r,{allowPast:r&&r.recordKind==='anniversary'});
+}
+function getTimeSpriteUpcomingItems(){
+  var nowTs=new Date().getTime();
+  return records.map(function(r){
+    var d=getTimeSpriteRecordDate(r);
+    return d?{record:r,date:d,time:d.getTime()}:null;
+  }).filter(function(item){return item&&item.time>=nowTs-60000;})
+    .sort(function(a,b){return a.time-b.time;});
+}
+function getTimeSpriteTodayCount(){
+  var today=setHoursZero(new Date()).getTime();
+  return records.filter(function(r){
+    var d=getTimeSpriteRecordDate(r);
+    return d&&setHoursZero(d).getTime()===today;
+  }).length;
+}
+function formatTimeSpriteWhen(item){
+  if(!item||!item.date)return '';
+  var when=dateTextFromDate(item.date);
+  if(item.record&&item.record.timeText)when+=' '+item.record.timeText;
+  return when;
+}
+function renderTimeSprite(){
+  var root=$('timeSprite');if(!root)return;
+  var expanded=!timeSpriteCollapsed;
+  root.classList.toggle('collapsed',!expanded);
+  var toggle=$('timeSpriteToggle');
+  if(toggle){
+    if(toggle.setAttribute){
+      toggle.setAttribute('aria-expanded',expanded?'true':'false');
+      toggle.setAttribute('aria-label',expanded?t('spriteClose'):t('spriteOpen'));
+    }
+  }
+  var close=$('timeSpriteClose');if(close&&close.setAttribute)close.setAttribute('aria-label',t('spriteClose'));
+  var title=$('timeSpriteTitle');if(title)title.textContent=t('spriteName');
+  var inputBtn=$('timeSpriteInputBtn');if(inputBtn)inputBtn.textContent=t('spriteInputAction');
+  var demoBtn=$('timeSpriteDemoBtn');
+  if(demoBtn){
+    demoBtn.textContent=t('spriteDemoAction');
+    demoBtn.classList.toggle('hidden',hasDemoRecords());
+  }
+  var items=getTimeSpriteUpcomingItems();
+  var nowTs=Date.now();
+  var soon=items.filter(function(item){return item.time>=nowTs&&item.time<=nowTs+3*86400000;}).length;
+  var todayCount=getTimeSpriteTodayCount();
+  var msg=t('spriteQuietMessage');
+  if(!hasAnyRecord())msg=t('spriteEmptyMessage');
+  else if(soon>0)msg=tf('spriteSoonMessage',{n:soon});
+  else if(todayCount>0)msg=tf('spriteTodayMessage',{n:todayCount});
+  else if(!hasDemoRecords()&&records.length<2)msg=t('spriteDemoMessage');
+  var message=$('timeSpriteMessage');if(message)message.textContent=msg;
+  var metaParts=[];
+  if(todayCount>0)metaParts.push(tf('spriteTodayLine',{n:todayCount}));
+  if(items[0])metaParts.push(tf('spriteNextLine',{title:items[0].record.title||t('appName'),when:formatTimeSpriteWhen(items[0])}));
+  var meta=$('timeSpriteMeta');if(meta)meta.textContent=metaParts.join(' · ');
+}
+function initTimeSprite(){
+  timeSpriteCollapsed=readTimeSpriteCollapsed();
+  b('timeSpriteToggle','click',function(){saveTimeSpriteCollapsed(!timeSpriteCollapsed);});
+  b('timeSpriteClose','click',function(){saveTimeSpriteCollapsed(true);});
+  b('timeSpriteInputBtn','click',function(){
+    saveTimeSpriteCollapsed(true);
+    switchPage('home');
+    setTimeout(function(){var inp=$('quickInput');if(inp)inp.focus();},60);
+  });
+  b('timeSpriteDemoBtn','click',function(){
+    addDemoRecords();
+    saveTimeSpriteCollapsed(false);
+  });
+  renderTimeSprite();
 }
 
 /* ========== NLP Parser ========== */
@@ -1691,6 +1896,7 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
+  renderTimeSprite();
   window.scrollTo(0,0);
 }
 
@@ -2261,6 +2467,7 @@ function renderCurrent(){
   else if(currentPage==='all')renderAll();
   else if(currentPage==='calendar')renderCalendar();
   else if(currentPage==='my')renderMy();
+  renderTimeSprite();
 }
 
 /* ========== Detail ========== */
@@ -2618,6 +2825,7 @@ function init(){
   inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveFromInput();}});
   b('saveBtn','click',saveFromInput);
   b('demoBtn','click',addDemoRecords);
+  initTimeSprite();
   // Nav
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(){switchPage(n.dataset.page);});
