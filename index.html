@@ -781,6 +781,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
           </label>
           <button class="import-btn" id="clearBtn" data-i18n="clearData" style="color:#b5433a;">清空数据</button>
         </div>
+        <div id="importPreviewCard" class="draft-item hidden" style="margin-top:12px;"></div>
       </div>
     </div>
   </div>
@@ -798,10 +799,50 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <div class="setting-group-title" data-i18n="calendarExport">日历导出</div>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="calendarExportHint">生成标准 .ics 文件，可导入 Google Calendar、Apple Calendar 或 Outlook。</p>
         <button class="import-btn" id="exportIcsBtn" style="width:100%;" data-i18n="exportIcs">导出全部日历文件</button>
+        <details style="margin-top:10px;font-size:12px;color:var(--ink-mute);line-height:1.7;">
+          <summary style="cursor:pointer;color:var(--ink-soft);" data-i18n="calendarImportGuideTitle">如何导入日历</summary>
+          <div data-i18n="calendarImportGuide">这是手动导入标准日历文件：Google Calendar 在设置里选择“导入和导出”；Apple Calendar 可直接打开 .ics 或在日历 App 导入；Outlook 在导入/订阅日历中选择 .ics 文件。</div>
+        </details>
       </div>
       <div class="setting-group">
         <div class="setting-group-title" data-i18n="dataSafety">数据安全</div>
-        <p id="dataSafetyHint" style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0;" data-i18n="dataSafetyHint">时刻的数据保存在当前浏览器。重要记录建议定期导出备份。</p>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="recordCountLabel">当前记录数</span><span class="setting-item-value" id="safetyRecordCount">0</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="exportableCountLabel">可导出日历数</span><span class="setting-item-value" id="safetyExportableCount">0</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="undatedCountLabel">无日期记录数</span><span class="setting-item-value" id="safetyUndatedCount">0</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="lastBackupLabel">上次备份</span><span class="setting-item-value" id="safetyLastBackup">尚未备份</span></div>
+        <p id="dataSafetyHint" style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:8px 0 10px;" data-i18n="dataSafetyHint">时刻的数据保存在当前浏览器。重要记录建议定期导出备份。</p>
+        <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="backupVsCalendarHint">JSON 备份用于恢复时刻数据；.ics 用于导入第三方日历，两者不是一回事。</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="import-btn" id="exportBackupBtnMy" data-i18n="exportJsonBackup">导出 JSON 备份</button>
+          <label class="import-btn" style="cursor:pointer;" data-i18n="importJsonBackup">导入 JSON 备份
+            <input type="file" accept=".json" id="restoreFileInputMy" style="display:none">
+          </label>
+        </div>
+        <p id="safetyStatusHint" style="font-size:12px;color:var(--ink-soft);line-height:1.6;margin:10px 0 0;"></p>
+      </div>
+      <div class="setting-group">
+        <div class="setting-group-title" data-i18n="reminderNoticeTitle">提醒说明</div>
+        <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:0 0 10px;" data-i18n="reminderNoticeText">网页版提醒依赖浏览器环境。页面关闭后，长期提醒不一定可靠；建议将时刻添加到桌面并定期打开查看，重要日程建议导出 .ics 到系统日历。</p>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="notifyPerm">通知权限</span><span class="setting-item-value" id="notifyStatus">--</span></div>
+        <div class="setting-item" id="notifyPermItem" style="display:none;">
+          <button class="setting-item-btn" id="reqNotifyBtn" data-i18n="enableNotify">开启通知</button>
+        </div>
+        <div class="setting-item" id="installPwaItem" style="display:none;">
+          <button class="setting-item-btn" id="installPwaBtn" data-i18n="installPwa">添加到桌面</button>
+        </div>
+        <div class="setting-note" data-i18n="pwaInstallHint">如果浏览器没有显示安装按钮，可使用浏览器菜单中的“添加到桌面”或“安装应用”。</div>
+      </div>
+      <div class="setting-group">
+        <details>
+          <summary class="setting-group-title" style="cursor:pointer;" data-i18n="demoRouteTitle">从一句话到日历</summary>
+          <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:8px 0 0;" data-i18n="demoRouteText">把一句话整理成时刻，再导出到你常用的日历。</p>
+          <ol style="font-size:12px;color:var(--ink-soft);line-height:1.8;margin:8px 0 0 18px;padding:0;">
+            <li data-i18n="demoRouteStep1">输入一句话：明天下午三点开会</li>
+            <li data-i18n="demoRouteStep2">生成记录并进入日历</li>
+            <li data-i18n="demoRouteStep3">导出 .ics 到系统日历</li>
+            <li data-i18n="demoRouteStep4">导出 JSON 备份保护数据</li>
+          </ol>
+        </details>
       </div>
       <div class="setting-group">
         <div class="setting-group-title" data-i18n="personalize">个性化</div>
@@ -842,14 +883,6 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
           <span class="setting-item-label" data-i18n="weather">首页天气</span>
           <div class="my-switch" id="weatherSwitch"></div>
         </div>
-        <div class="setting-item">
-          <span class="setting-item-label" data-i18n="notifyPerm">通知权限</span>
-          <span class="setting-item-value" id="notifyStatus">--</span>
-        </div>
-        <div class="setting-item" id="notifyPermItem" style="display:none;">
-          <button class="setting-item-btn" id="reqNotifyBtn" data-i18n="enableNotify">开启通知</button>
-        </div>
-        <div class="setting-note" data-i18n="notifyOpenPageHint">页面打开时检查提醒，浏览器关闭后不保证提醒。</div>
       </div>
       <div class="setting-group">
         <div class="setting-group-title" data-i18n="about">关于</div>
@@ -934,13 +967,14 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.1';
-var APP_UPDATED_AT='2026-07-09 20:35';
+var APP_VERSION='v0.8.2';
+var APP_UPDATED_AT='2026-07-09 22:10';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
 var ASSISTANT_COLLAPSED_KEY='shike_assistant_collapsed';
 var LAST_GOOD_RECORDS_KEY='shike_records_last_good_v1';
+var LAST_BACKUP_KEY='shike_last_backup_at';
 var BACKUP_SCHEMA_VERSION=2;
 
 /* ========== i18n ========== */
@@ -971,6 +1005,19 @@ var I18N={
     exportIcs:'导出全部日历文件',exportRecordIcs:'导出日历',icsExportDone:'日历文件已导出',icsExportEmpty:'没有可导出的日期记录',
     icsExportResult:'已导出 {n} 条日历记录，跳过 {skipped} 条无日期记录',
     dataSafety:'数据安全',dataSafetyHint:'时刻的数据保存在当前浏览器。重要记录建议定期导出备份。',
+    calendarImportGuideTitle:'如何导入日历',calendarImportGuide:'这是手动导入标准日历文件：Google Calendar 在设置里选择“导入和导出”；Apple Calendar 可直接打开 .ics 或在日历 App 导入；Outlook 在导入/订阅日历中选择 .ics 文件。',
+    recordCountLabel:'当前记录数',exportableCountLabel:'可导出日历数',undatedCountLabel:'无日期记录数',lastBackupLabel:'上次备份',
+    neverBackedUp:'尚未备份',backupSuggested:'记录较多，建议导出 JSON 备份。',backupLooksOk:'记录不多，按需要备份即可。',
+    backupVsCalendarHint:'JSON 备份用于恢复时刻数据；.ics 用于导入第三方日历，两者不是一回事。',
+    exportJsonBackup:'导出 JSON 备份',importJsonBackup:'导入 JSON 备份',
+    reminderNoticeTitle:'提醒说明',reminderNoticeText:'网页版提醒依赖浏览器环境。页面关闭后，长期提醒不一定可靠；建议将时刻添加到桌面并定期打开查看，重要日程建议导出 .ics 到系统日历。',
+    installPwa:'添加到桌面',pwaInstallHint:'如果浏览器没有显示安装按钮，可使用浏览器菜单中的“添加到桌面”或“安装应用”。',
+    demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
+    demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
+    importPreviewTitle:'导入预览',sourceTypeLabel:'文件类型',sourceNewBackup:'新版时刻备份',sourceLegacyArray:'旧版数组备份',sourceLegacyRecords:'旧版 records 备份',
+    schemaVersionLabel:'schemaVersion',exportedAtLabel:'导出时间',totalImportLabel:'将导入记录数',validImportLabel:'有效记录',invalidImportLabel:'无效记录',
+    missingIdLabel:'缺失 id',duplicateIdLabel:'重复 id',conflictIdLabel:'冲突 id',importModeLabel:'导入模式',appendImportMode:'追加导入',
+    confirmImport:'确认导入',cancelImport:'取消',
     importData:'导入数据',clearData:'清空数据',backup:'数据备份',
     localDataHint:'数据默认保存在当前浏览器，可通过备份文件迁移。',
     exportDone:'备份文件已导出',importDone:'导入成功',importFailed:'文件格式错误',storageError:'存储空间已满',
@@ -1030,6 +1077,19 @@ var I18N={
     exportIcs:'匯出全部日曆檔案',exportRecordIcs:'匯出日曆',icsExportDone:'日曆檔案已匯出',icsExportEmpty:'沒有可匯出的日期記錄',
     icsExportResult:'已匯出 {n} 條日曆記錄，略過 {skipped} 條無日期記錄',
     dataSafety:'資料安全',dataSafetyHint:'時刻的資料保存在目前瀏覽器。重要記錄建議定期匯出備份。',
+    calendarImportGuideTitle:'如何匯入日曆',calendarImportGuide:'這是手動匯入標準日曆檔案：Google Calendar 在設定裡選擇「匯入和匯出」；Apple Calendar 可直接打開 .ics 或在日曆 App 匯入；Outlook 在匯入/訂閱日曆中選擇 .ics 檔案。',
+    recordCountLabel:'目前記錄數',exportableCountLabel:'可匯出日曆數',undatedCountLabel:'無日期記錄數',lastBackupLabel:'上次備份',
+    neverBackedUp:'尚未備份',backupSuggested:'記錄較多，建議匯出 JSON 備份。',backupLooksOk:'記錄不多，按需要備份即可。',
+    backupVsCalendarHint:'JSON 備份用於恢復時刻資料；.ics 用於匯入第三方日曆，兩者不是一回事。',
+    exportJsonBackup:'匯出 JSON 備份',importJsonBackup:'匯入 JSON 備份',
+    reminderNoticeTitle:'提醒說明',reminderNoticeText:'網頁版提醒依賴瀏覽器環境。頁面關閉後，長期提醒不一定可靠；建議將時刻加入桌面並定期打開查看，重要日程建議匯出 .ics 到系統日曆。',
+    installPwa:'加入桌面',pwaInstallHint:'如果瀏覽器沒有顯示安裝按鈕，可使用瀏覽器選單中的「加入桌面」或「安裝應用」。',
+    demoRouteTitle:'從一句話到日曆',demoRouteText:'把一句話整理成時刻，再匯出到你常用的日曆。',
+    demoRouteStep1:'輸入一句話：明天下午三點開會',demoRouteStep2:'生成記錄並進入日曆',demoRouteStep3:'匯出 .ics 到系統日曆',demoRouteStep4:'匯出 JSON 備份保護資料',
+    importPreviewTitle:'匯入預覽',sourceTypeLabel:'檔案類型',sourceNewBackup:'新版時刻備份',sourceLegacyArray:'舊版陣列備份',sourceLegacyRecords:'舊版 records 備份',
+    schemaVersionLabel:'schemaVersion',exportedAtLabel:'匯出時間',totalImportLabel:'將匯入記錄數',validImportLabel:'有效記錄',invalidImportLabel:'無效記錄',
+    missingIdLabel:'缺失 id',duplicateIdLabel:'重複 id',conflictIdLabel:'衝突 id',importModeLabel:'匯入模式',appendImportMode:'追加匯入',
+    confirmImport:'確認匯入',cancelImport:'取消',
     importData:'匯入資料',clearData:'清空資料',backup:'資料備份',
     localDataHint:'資料預設保存在目前瀏覽器，可透過備份檔案遷移。',
     exportDone:'備份檔案已匯出',importDone:'匯入成功',importFailed:'檔案格式錯誤',storageError:'儲存空間已滿',
@@ -1089,6 +1149,19 @@ var I18N={
     exportIcs:'Export calendar file',exportRecordIcs:'Export calendar',icsExportDone:'Calendar file exported',icsExportEmpty:'No dated records to export',
     icsExportResult:'Exported {n} calendar records, skipped {skipped} undated records',
     dataSafety:'Data safety',dataSafetyHint:'Shike data is stored in this browser. Export backups regularly for important records.',
+    calendarImportGuideTitle:'How to import calendars',calendarImportGuide:'This is a manual standard calendar file import: in Google Calendar, use Settings then Import and export; Apple Calendar can open the .ics file or import it in the Calendar app; Outlook can import or subscribe to a calendar from an .ics file.',
+    recordCountLabel:'Current records',exportableCountLabel:'Calendar exportable',undatedCountLabel:'Undated records',lastBackupLabel:'Last backup',
+    neverBackedUp:'No backup yet',backupSuggested:'You have several records. Export a JSON backup.',backupLooksOk:'Few records so far. Back up when needed.',
+    backupVsCalendarHint:'JSON backups restore Shike data; .ics files import into third-party calendars. They are different files.',
+    exportJsonBackup:'Export JSON backup',importJsonBackup:'Import JSON backup',
+    reminderNoticeTitle:'Reminder notes',reminderNoticeText:'Web reminders depend on the browser environment. After the page is closed, long-term reminders are not guaranteed. Add Shike to your desktop and open it regularly; export important schedules as .ics to your system calendar.',
+    installPwa:'Add to desktop',pwaInstallHint:'If the browser does not show an install button, use the browser menu to add to desktop or install the app.',
+    demoRouteTitle:'From one sentence to calendar',demoRouteText:'Turn one sentence into a moment, then export it to your calendar.',
+    demoRouteStep1:'Enter one sentence: meeting tomorrow at 3pm',demoRouteStep2:'Create a record and calendar dot',demoRouteStep3:'Export .ics to your system calendar',demoRouteStep4:'Export JSON backup to protect data',
+    importPreviewTitle:'Import preview',sourceTypeLabel:'File type',sourceNewBackup:'New Shike backup',sourceLegacyArray:'Legacy array backup',sourceLegacyRecords:'Legacy records backup',
+    schemaVersionLabel:'schemaVersion',exportedAtLabel:'Exported at',totalImportLabel:'Records in file',validImportLabel:'Valid records',invalidImportLabel:'Invalid records',
+    missingIdLabel:'Missing id',duplicateIdLabel:'Duplicate id',conflictIdLabel:'Conflicting id',importModeLabel:'Import mode',appendImportMode:'Append import',
+    confirmImport:'Confirm import',cancelImport:'Cancel',
     importData:'Import',clearData:'Clear all',backup:'Backup',
     localDataHint:'Data is saved in this browser by default and can be moved with a backup file.',
     exportDone:'Backup exported',importDone:'Imported',importFailed:'Invalid file format',storageError:'Storage is full',
@@ -1148,6 +1221,19 @@ var I18N={
     exportIcs:'全カレンダーファイルを書き出す',exportRecordIcs:'カレンダー出力',icsExportDone:'カレンダーファイルを書き出しました',icsExportEmpty:'出力できる日付付き記録がありません',
     icsExportResult:'{n} 件のカレンダー記録を書き出し、日付なし {skipped} 件をスキップしました',
     dataSafety:'データ保護',dataSafetyHint:'時刻のデータはこのブラウザに保存されます。重要な記録は定期的にバックアップしてください。',
+    calendarImportGuideTitle:'カレンダーへの取り込み',calendarImportGuide:'これは標準カレンダーファイルの手動インポートです。Google Calendar は設定からインポートとエクスポート、Apple Calendar は .ics を開くかアプリ内で取り込み、Outlook は .ics ファイルを選択します。',
+    recordCountLabel:'現在の記録数',exportableCountLabel:'カレンダー出力数',undatedCountLabel:'日付なし記録数',lastBackupLabel:'前回バックアップ',
+    neverBackedUp:'未バックアップ',backupSuggested:'記録が増えています。JSON バックアップをおすすめします。',backupLooksOk:'記録はまだ少なめです。必要に応じてバックアップしてください。',
+    backupVsCalendarHint:'JSON バックアップは時刻データの復元用、.ics は外部カレンダーへの取り込み用です。用途が異なります。',
+    exportJsonBackup:'JSON バックアップ出力',importJsonBackup:'JSON バックアップ取込',
+    reminderNoticeTitle:'リマインド説明',reminderNoticeText:'Web 版のリマインドはブラウザ環境に依存します。ページを閉じた後の長期リマインドは保証されません。時刻をデスクトップに追加し、定期的に開いて確認してください。重要な予定は .ics でシステムカレンダーへ出力することをおすすめします。',
+    installPwa:'デスクトップに追加',pwaInstallHint:'ブラウザにインストールボタンが出ない場合は、ブラウザメニューからデスクトップ追加またはアプリのインストールを選んでください。',
+    demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
+    demoRouteStep1:'一文を入力：明日の午後3時に会議',demoRouteStep2:'記録を作成しカレンダーに表示',demoRouteStep3:'.ics をシステムカレンダーへ出力',demoRouteStep4:'JSON バックアップでデータを保護',
+    importPreviewTitle:'インポート確認',sourceTypeLabel:'ファイル種類',sourceNewBackup:'新しい時刻バックアップ',sourceLegacyArray:'旧配列バックアップ',sourceLegacyRecords:'旧 records バックアップ',
+    schemaVersionLabel:'schemaVersion',exportedAtLabel:'出力時間',totalImportLabel:'取込予定数',validImportLabel:'有効記録',invalidImportLabel:'無効記録',
+    missingIdLabel:'id なし',duplicateIdLabel:'重複 id',conflictIdLabel:'衝突 id',importModeLabel:'取込方式',appendImportMode:'追加取込',
+    confirmImport:'取込を確定',cancelImport:'キャンセル',
     importData:'インポート',clearData:'全削除',backup:'バックアップ',
     localDataHint:'データはこのブラウザに保存され、バックアップファイルで移行できます。',
     exportDone:'バックアップを書き出しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',storageError:'保存容量がいっぱいです',
@@ -1388,6 +1474,23 @@ function buildBackupPayload(){
     records:records.map(cloneRecord)
   };
 }
+function countExportableRecords(){
+  return records.filter(function(r){return !!(r&&r.dateKey);}).length;
+}
+function countUndatedRecords(){
+  return records.filter(function(r){return !(r&&r.dateKey);}).length;
+}
+function markBackupExported(){
+  try{localStorage.setItem(LAST_BACKUP_KEY,new Date().toISOString());}catch(e){}
+}
+function getLastBackupText(){
+  var raw='';
+  try{raw=localStorage.getItem(LAST_BACKUP_KEY)||'';}catch(e){}
+  if(!raw)return t('neverBackedUp');
+  var d=new Date(raw);
+  if(isNaN(d.getTime()))return raw;
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes());
+}
 function isValidImportedRecord(r){
   if(!r||typeof r!=='object'||Array.isArray(r))return false;
   return !!String(r.title||r.rawText||r.note||'').trim();
@@ -1396,9 +1499,11 @@ function parseBackupPayload(raw){
   var data=JSON.parse(raw);
   var arr=Array.isArray(data)?data:(data&&Array.isArray(data.records)?data.records:null);
   if(!arr)throw new Error('invalid_backup');
+  var sourceType=Array.isArray(data)?'legacyArray':((data&&Array.isArray(data.records)&&data.app==='shike')?'newBackup':'legacyRecords');
   return {
     meta:Array.isArray(data)?{}:data,
-    records:arr
+    records:arr,
+    sourceType:sourceType
   };
 }
 function prepareBackupImport(parsed){
@@ -1408,6 +1513,8 @@ function prepareBackupImport(parsed){
   var out=[];
   var summary={
     total:(parsed.records||[]).length,valid:0,invalid:0,missing:0,duplicates:0,conflicts:0,
+    sourceType:parsed.sourceType||'legacyRecords',
+    schemaVersion:(parsed.meta&&parsed.meta.schemaVersion)||'legacy',
     version:(parsed.meta&&parsed.meta.appVersion)||('schema '+((parsed.meta&&parsed.meta.schemaVersion)||'legacy')),
     exportedAt:(parsed.meta&&parsed.meta.exportedAt)||'unknown'
   };
@@ -1427,6 +1534,26 @@ function prepareBackupImport(parsed){
   });
   return {records:out,summary:summary};
 }
+function sourceTypeLabel(sourceType){
+  if(sourceType==='newBackup')return t('sourceNewBackup');
+  if(sourceType==='legacyArray')return t('sourceLegacyArray');
+  return t('sourceLegacyRecords');
+}
+function importPreviewRows(summary){
+  return [
+    [t('sourceTypeLabel'),sourceTypeLabel(summary.sourceType)],
+    ['appVersion',summary.version],
+    [t('schemaVersionLabel'),summary.schemaVersion],
+    [t('exportedAtLabel'),summary.exportedAt],
+    [t('totalImportLabel'),summary.total],
+    [t('validImportLabel'),summary.valid],
+    [t('invalidImportLabel'),summary.invalid],
+    [t('missingIdLabel'),summary.missing],
+    [t('duplicateIdLabel'),summary.duplicates],
+    [t('conflictIdLabel'),summary.conflicts],
+    [t('importModeLabel'),t('appendImportMode')]
+  ];
+}
 function buildImportConfirmMessage(summary){
   return tf('importConfirm',{n:summary.valid})+'\n'+tf('importConfirmDetail',{
     n:summary.valid,
@@ -1438,6 +1565,42 @@ function buildImportConfirmMessage(summary){
     invalid:summary.invalid
   });
 }
+var pendingImportPreview=null;
+function renderImportPreview(prepared){
+  pendingImportPreview=prepared||null;
+  var card=$('importPreviewCard');
+  if(!card)return;
+  if(!prepared){
+    card.classList.add('hidden');
+    card.innerHTML='';
+    return;
+  }
+  var rows=importPreviewRows(prepared.summary).map(function(row){
+    return '<div class="detail-row"><span class="detail-label">'+escHtml(row[0])+'</span><span class="detail-value">'+escHtml(String(row[1]))+'</span></div>';
+  }).join('');
+  card.classList.remove('hidden');
+  card.innerHTML=
+    '<div class="draft-item-title">'+escHtml(t('importPreviewTitle'))+'</div>'+
+    rows+
+    '<div style="display:flex;gap:8px;margin-top:10px;">'+
+      '<button class="import-btn" onclick="confirmImportPreview()">'+escHtml(t('confirmImport'))+'</button>'+
+      '<button class="import-btn" onclick="cancelImportPreview()">'+escHtml(t('cancelImport'))+'</button>'+
+    '</div>';
+}
+function cancelImportPreview(){
+  pendingImportPreview=null;
+  renderImportPreview(null);
+  var a=$('restoreFileInput');if(a)a.value='';
+  var b=$('restoreFileInputMy');if(b)b.value='';
+}
+function confirmImportPreview(){
+  if(!pendingImportPreview)return;
+  var prepared=pendingImportPreview;
+  pendingImportPreview=null;
+  renderImportPreview(null);
+  mergePreparedImport(prepared);
+  renderMy();
+}
 function mergePreparedImport(prepared){
   var before=records.map(cloneRecord);
   try{
@@ -1445,6 +1608,7 @@ function mergePreparedImport(prepared){
     ensureUniqueRecordIds(records);
     if(!saveRecords())throw new Error('save_failed');
     renderCurrent();
+    renderMy();
     showToast(tf('importResult',{added:prepared.records.length,skipped:prepared.summary.invalid}),'success');
     return {added:prepared.records.length,skipped:prepared.summary.invalid};
   }catch(e){
@@ -1453,6 +1617,17 @@ function mergePreparedImport(prepared){
     showToast(t('importFailed'),'error');
     return {added:0,skipped:prepared.summary.valid+prepared.summary.invalid,error:e};
   }
+}
+function exportBackupFile(){
+  try{
+    var blob=new Blob([JSON.stringify(buildBackupPayload(),null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download='shike-backup-'+ymdForFile(new Date())+'.json';a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},0);
+    markBackupExported();
+    renderMy();
+    showToast(t('exportDone'),'success');
+  }catch(e){showToast(t('importFailed'),'error');}
 }
 
 /* ========== Calendar export (.ics) ========== */
@@ -2587,7 +2762,11 @@ function renderMy(){
   // Version
   $('appVersion').textContent=APP_VERSION;
   $('appUpdatedAt').textContent=APP_UPDATED_AT;
-  if($('dataSafetyHint'))$('dataSafetyHint').textContent=t('dataSafetyHint')+' '+t('allRecords')+'：'+stat;
+  if($('safetyRecordCount'))$('safetyRecordCount').textContent=stat;
+  if($('safetyExportableCount'))$('safetyExportableCount').textContent=countExportableRecords();
+  if($('safetyUndatedCount'))$('safetyUndatedCount').textContent=countUndatedRecords();
+  if($('safetyLastBackup'))$('safetyLastBackup').textContent=getLastBackupText();
+  if($('safetyStatusHint'))$('safetyStatusHint').textContent=(stat>=5&&!localStorage.getItem(LAST_BACKUP_KEY))?t('backupSuggested'):t('backupLooksOk');
   // Username input
   $('usernameInput').value=settings.username||'';
   // Theme
@@ -2621,6 +2800,14 @@ function updateNotifyStatus(){
   else if(Notification.permission==='denied'){s.textContent=t('notifyDenied');item.style.display='none';}
   else{s.textContent=t('notifyOff');item.style.display='flex';}
 }
+
+var deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  var item=$('installPwaItem');
+  if(item)item.style.display='flex';
+});
 
 var notifyTimer=null;
 function startNotificationChecker(){
@@ -3201,6 +3388,14 @@ function init(){
       else if(p==='denied')showToast(t('notifyDeniedToast'),'warn');
     }).catch(function(){showToast(t('notifyUnsupported'),'warn');updateNotifyStatus();});
   });
+  b('installPwaBtn','click',function(){
+    if(!deferredInstallPrompt){showToast(t('pwaInstallHint'),'warn');return;}
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.finally(function(){
+      deferredInstallPrompt=null;
+      var item=$('installPwaItem');if(item)item.style.display='none';
+    });
+  });
   b('replayBtn','click',function(){
     switchPage('home');
     setTimeout(function(){settings.openingSeen=false;saveSettings(settings);initOpeningAnimation();},300);
@@ -3215,31 +3410,25 @@ function init(){
   b('loadExampleBtn','click',function(){
     $('importTextInput').value='下周一体检\n月底还信用卡\n每天睡前涂润唇膏\n7月8日妈妈生日\n明天下午三点开会\n待会喝水';
   });
-  b('exportBtn','click',function(){
-    try{
-      var blob=new Blob([JSON.stringify(buildBackupPayload(),null,2)],{type:'application/json'});
-      var url=URL.createObjectURL(blob);
-      var a=document.createElement('a');a.href=url;a.download='shike-backup-'+ymdForFile(new Date())+'.json';a.click();
-      setTimeout(function(){URL.revokeObjectURL(url);},0);
-      showToast(t('exportDone'),'success');
-    }catch(e){showToast(t('importFailed'),'error');}
-  });
+  b('exportBtn','click',exportBackupFile);
+  b('exportBackupBtnMy','click',exportBackupFile);
   b('exportIcsBtn','click',exportIcsFile);
-  b('restoreFileInput','change',function(e){
+  function handleBackupFileInput(e){
     var f=e.target.files&&e.target.files[0];if(!f)return;
     var fr=new FileReader();fr.onload=function(ev){
       try{
         var parsed=parseBackupPayload(ev.target.result);
         var prepared=prepareBackupImport(parsed);
         if(prepared.summary.valid){
-          showConfirm(t('importData'),buildImportConfirmMessage(prepared.summary),t('confirm'),t('cancel'),function(){
-            mergePreparedImport(prepared);
-          });
+          renderImportPreview(prepared);
+          switchPage('import');
         }else showToast(t('importFailed'),'error');
       }catch(err){showToast(t('importFailed'),'error');}
       e.target.value='';
     };fr.readAsText(f);
-  });
+  }
+  b('restoreFileInput','change',handleBackupFileInput);
+  b('restoreFileInputMy','change',handleBackupFileInput);
   b('clearBtn','click',function(){
     showConfirm(t('clearData'),t('clearConfirm'),t('confirm'),t('cancel'),function(){
       records=[];saveRecords();switchPage('home');renderHome();showToast('已清空','success');

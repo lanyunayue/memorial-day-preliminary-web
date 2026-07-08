@@ -174,10 +174,10 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
   assert(style.includes('@keyframes spritePulse'), 'subtle pulse animation should exist');
 });
 
-add('version and service worker cache are ready for v0.8.1 candidate', () => {
-  assert(script.includes("APP_VERSION='v0.8.1'"), 'APP_VERSION should be v0.8.1');
-  assert(script.includes("APP_UPDATED_AT='2026-07-09 20:35'"), 'APP_UPDATED_AT should be updated');
-  assert(sw.includes("CACHE_NAME = 'shike-v081-v27'"), 'service worker cache should be v081');
+add('version and service worker cache are ready for v0.8.2 candidate', () => {
+  assert(script.includes("APP_VERSION='v0.8.2'"), 'APP_VERSION should be v0.8.2');
+  assert(script.includes("APP_UPDATED_AT='2026-07-09 22:10'"), 'APP_UPDATED_AT should be updated');
+  assert(sw.includes("CACHE_NAME = 'shike-v082-v28'"), 'service worker cache should be v082');
 });
 
 add('all languages include sprite i18n keys', () => {

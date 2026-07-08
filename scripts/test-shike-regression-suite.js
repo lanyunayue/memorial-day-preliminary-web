@@ -48,6 +48,26 @@ const tests = [
     name: 'Backup hardening',
     script: 'test-shike-backup-hardening.js',
     expected: 'Backup hardening regression passed: 11/11'
+  },
+  {
+    name: 'ICS deep',
+    script: 'test-shike-ics-deep.js',
+    expected: 'ICS deep regression passed: 14/14'
+  },
+  {
+    name: 'Data safety center',
+    script: 'test-shike-data-safety-center.js',
+    expected: 'Data safety center regression passed: 9/9'
+  },
+  {
+    name: 'Import preview',
+    script: 'test-shike-import-preview.js',
+    expected: 'Import preview regression passed: 10/10'
+  },
+  {
+    name: 'PWA notice',
+    script: 'test-shike-pwa-notice.js',
+    expected: 'PWA notice regression passed: 6/6'
   }
 ];
 
