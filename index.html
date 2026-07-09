@@ -1030,8 +1030,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.8';
-var APP_UPDATED_AT='2026-07-09 13:34';
+var APP_VERSION='v0.8.9';
+var APP_UPDATED_AT='2026-07-09 14:03';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -3237,6 +3237,21 @@ function shouldUseBatchCapture(text){
 function getBatchDraftKey(line){
   return String(line||'').replace(/\s+/g,' ').trim().toLowerCase();
 }
+function getRecordDuplicateKey(record){
+  record=record||{};
+  return [
+    getBatchDraftKey(record.title||record.rawText||record.sourceText||''),
+    record.dateKey||'',
+    record.timeText||'',
+    record.repeat||'none',
+    record.recordKind||''
+  ].join('|');
+}
+function isDraftExistingDuplicate(draft){
+  if(!draft||!draft.parsed)return false;
+  var key=getRecordDuplicateKey(draft.parsed);
+  return records.some(function(record){return getRecordDuplicateKey(record)===key;});
+}
 function prepareBatchCaptureDrafts(text){
   var seen={};
   var drafts=[];
@@ -3279,6 +3294,7 @@ function renderDrafts(){
     if(parsed.dateText)html+='<span class="draft-chip">'+escHtml(parsed.dateText)+'</span>';
     if(parsed.timeText)html+='<span class="draft-chip">'+escHtml(parsed.timeText)+'</span>';
     html+='<span class="draft-chip">'+({reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[parsed.recordKind]||'')+'</span>';
+    if(isDraftExistingDuplicate(d))html+='<span class="draft-chip">已存在</span>';
     html+='</div><div class="draft-item-actions"><button class="draft-save" onclick="saveDraft('+i+')">'+t('save')+'</button><button class="draft-discard" onclick="editDraft('+i+')">修改</button><button class="draft-discard" onclick="discardDraft('+i+')">'+t('cancel')+'</button></div></div>';
   });
   html+='<button class="draft-save-all" onclick="saveAllDrafts()">全部保存</button>';
@@ -3286,6 +3302,7 @@ function renderDrafts(){
 }
 function saveDraft(i){
   var d=importDrafts[i];if(!d)return;
+  if(isDraftExistingDuplicate(d)){importDrafts.splice(i,1);renderDrafts();showToast('已跳过重复草稿','warn');return;}
   saveParsedRecord(d.parsed,d.text);
   importDrafts.splice(i,1);renderDrafts();showToast(t('saved'),'success');
 }
@@ -3304,7 +3321,11 @@ function editDraft(i){
   }
 }
 function saveAllDrafts(){
-  importDrafts.forEach(function(d){saveParsedRecord(d.parsed,d.text);});
+  var saved=0,skipped=0;
+  importDrafts.forEach(function(d){
+    if(isDraftExistingDuplicate(d)){skipped++;return;}
+    saveParsedRecord(d.parsed,d.text);saved++;
+  });
   importDrafts=[];renderDrafts();showToast(t('saved'),'success');
   switchPage('home');
 }
