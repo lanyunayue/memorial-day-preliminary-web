@@ -265,21 +265,24 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   transition:transform .22s cubic-bezier(.22,.61,.36,1),box-shadow .15s;
   box-shadow:var(--card-shadow);margin-bottom:0;position:relative;z-index:2;
 }
-.record-swipe.swiped .record-card{transform:translateX(-156px);}
+.record-swipe.swiped .record-card{transform:translateX(-212px);}
 .record-card:active{transform:scale(.98);}
-.record-swipe.swiped .record-card:active{transform:translateX(-156px) scale(.99);}
+.record-swipe.swiped .record-card:active{transform:translateX(-212px) scale(.99);}
 .swipe-actions{
-  position:absolute;right:0;top:0;bottom:0;z-index:1;display:flex;align-items:stretch;
-  width:156px;border-radius:var(--radius);overflow:hidden;background:var(--bg-soft);
+  position:absolute;right:0;top:0;bottom:0;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);
+  width:252px;border-radius:var(--radius);overflow:hidden;background:var(--bg-soft);
   border:1px solid var(--ink-line);
 }
-.swipe-action{flex:1;font-size:12px;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;border-left:1px solid var(--ink-line);}
-.swipe-action:first-child{border-left:none;}
+.swipe-action{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;border-left:1px solid var(--ink-line);border-top:1px solid var(--ink-line);min-width:0;}
+.swipe-action:nth-child(3n+1){border-left:none;}
+.swipe-action:nth-child(-n+3){border-top:none;}
 .swipe-action.danger{color:#b5433a;}
 .swipe-action:active{background:var(--bg-elev);color:var(--ink);}
+.record-more-btn{display:none;}
 @media (hover:hover) and (pointer:fine){
-  .record-swipe:hover .record-card{transform:translateX(-96px);}
-  .record-swipe:hover .swipe-actions{width:156px;}
+  .record-swipe:hover .record-card{transform:translateX(-128px);}
+  .record-swipe:hover .swipe-actions{width:252px;}
+  .record-more-btn{display:inline-flex;}
 }
 .rc-main{flex:1;min-width:0;}
 .rc-title{font-size:15px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -1188,8 +1191,8 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.9.6';
-var APP_UPDATED_AT='2026-07-10 10:20';
+var APP_VERSION='v0.9.7';
+var APP_UPDATED_AT='2026-07-10 10:55';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -1248,10 +1251,10 @@ var I18N={
     draftExisting:'已存在',draftDuplicateSkipped:'已跳过重复草稿',batchSaveAll:'全部保存',
     batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     exampleRecordsTitle:'示例记录',exampleRecordsText:'首次体验时可一键生成 5 条示例记录，不覆盖真实数据。',
-    feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',copyEmail:'复制',feedbackCopied:'邮箱已复制',
+    feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',copyEmail:'复制',feedbackCopied:'邮箱已复制',copyRecord:'复制',recordCopied:'记录已复制',moreActions:'更多',
     futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
-    releaseNote1:'新增功能中心，集中示例、演示、更新和反馈入口。',releaseNote2:'首页继续保持轻量，把说明性内容收进“我的”。',releaseNote3:'数据安全和日历导出可以从功能中心直达。',releaseNote4:'小熊助手快捷动作仍可快速跳转。',releaseNote5:'保留原有功能，不改变记录和解析逻辑。',
+    releaseNote1:'记录卡片操作增强，编辑、删除、置顶更集中。',releaseNote2:'新增复制记录文本，方便发给别人或临时保存。',releaseNote3:'有日期的记录可从卡片直接导出 .ics。',releaseNote4:'纪念类记录可从卡片生成纪念卡。',releaseNote5:'手机左滑和桌面更多操作保持一致。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteExportAction:'导出日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主动的智能助手能力正在规划中。',
     demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
     demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
@@ -1335,10 +1338,10 @@ var I18N={
     draftExisting:'已存在',draftDuplicateSkipped:'已略過重複草稿',batchSaveAll:'全部保存',
     batchSavedOnly:'已保存 {saved} 條',batchSavedResult:'已保存 {saved} 條，略過 {skipped} 條重複',batchSkippedOnly:'沒有新增，已略過 {skipped} 條重複',
     exampleRecordsTitle:'示例記錄',exampleRecordsText:'首次體驗時可一鍵生成 5 條示例記錄，不覆蓋真實資料。',
-    feedbackTitle:'建議與回饋',feedbackText:'遇到問題或有建議，可以發郵件告訴我。',copyEmail:'複製',feedbackCopied:'郵箱已複製',
+    feedbackTitle:'建議與回饋',feedbackText:'遇到問題或有建議，可以發郵件告訴我。',copyEmail:'複製',feedbackCopied:'郵箱已複製',copyRecord:'複製',recordCopied:'記錄已複製',moreActions:'更多',
     futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、備份、日曆和回饋入口收在這裡。',featureHubDemo:'體驗示例',featureHubDemoSub:'生成 5 條示例',featureHubRoute:'演示路線',featureHubRouteSub:'從輸入到匯出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次變化',featureHubSafety:'資料安全',featureHubSafetySub:'JSON 備份',featureHubCalendar:'日曆匯出',featureHubCalendarSub:'匯出 .ics',featureHubFeedback:'建議回饋',featureHubFeedbackSub:'郵件聯絡',featureHubFuture:'未來計劃',featureHubFutureSub:'能力預告',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
     releaseTitle:'更新說明',releaseOk:'我知道了',releaseMeta:'目前版本 {version} · {time}',
-    releaseNote1:'新增功能中心，集中示例、演示、更新和回饋入口。',releaseNote2:'首頁繼續保持輕量，把說明內容收進「我的」。',releaseNote3:'資料安全和日曆匯出可以從功能中心直達。',releaseNote4:'小熊助手快捷動作仍可快速跳轉。',releaseNote5:'保留原有功能，不改變記錄和解析邏輯。',
+    releaseNote1:'記錄卡片操作增強，編輯、刪除、置頂更集中。',releaseNote2:'新增複製記錄文字，方便分享或暫存。',releaseNote3:'有日期的記錄可從卡片直接匯出 .ics。',releaseNote4:'紀念類記錄可從卡片生成紀念卡。',releaseNote5:'手機左滑和桌面更多操作保持一致。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteExportAction:'匯出日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主動的智慧助手能力正在規劃中。',
     demoRouteTitle:'從一句話到日曆',demoRouteText:'把一句話整理成時刻，再匯出到你常用的日曆。',
     demoRouteStep1:'輸入一句話：明天下午三點開會',demoRouteStep2:'生成記錄並進入日曆',demoRouteStep3:'匯出 .ics 到系統日曆',demoRouteStep4:'匯出 JSON 備份保護資料',
@@ -1422,10 +1425,10 @@ var I18N={
     draftExisting:'Existing',draftDuplicateSkipped:'Duplicate draft skipped',batchSaveAll:'Save all',
     batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     exampleRecordsTitle:'Example records',exampleRecordsText:'Create 5 example records for first-time review without overwriting real data.',
-    feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',copyEmail:'Copy',feedbackCopied:'Email copied',
+    feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',copyEmail:'Copy',feedbackCopied:'Email copied',copyRecord:'Copy',recordCopied:'Record copied',moreActions:'More',
     futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
-    releaseNote1:'Feature hub now gathers examples, demo route, updates, and feedback.',releaseNote2:'Home stays lighter while help content lives under Me.',releaseNote3:'Data safety and calendar export are reachable from the hub.',releaseNote4:'The bear assistant keeps fast navigation actions.',releaseNote5:'Existing records and parsing behavior are unchanged.',
+    releaseNote1:'Record card actions are more complete and consistent.',releaseNote2:'Copy record text is available from cards.',releaseNote3:'Dated records can export a single .ics from the card.',releaseNote4:'Anniversary records can generate a memorial card.',releaseNote5:'Mobile swipe and desktop more actions now match better.',
     spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteExportAction:'Export calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',spriteResetAction:'Reset position',spriteFutureHint:'More proactive assistant abilities are being planned.',
     demoRouteTitle:'From one sentence to calendar',demoRouteText:'Turn one sentence into a moment, then export it to your calendar.',
     demoRouteStep1:'Enter one sentence: meeting tomorrow at 3pm',demoRouteStep2:'Create a record and calendar dot',demoRouteStep3:'Export .ics to your system calendar',demoRouteStep4:'Export JSON backup to protect data',
@@ -1509,10 +1512,10 @@ var I18N={
     draftExisting:'既存',draftDuplicateSkipped:'重複下書きをスキップしました',batchSaveAll:'すべて保存',
     batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     exampleRecordsTitle:'サンプル記録',exampleRecordsText:'初回確認用に 5 件のサンプルを作成できます。実データは上書きしません。',
-    feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',
+    feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',copyRecord:'コピー',recordCopied:'記録をコピーしました',moreActions:'その他',
     futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
     releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
-    releaseNote1:'機能センターでサンプル、デモ、更新、フィードバックをまとめました。',releaseNote2:'ホームは軽く保ち、説明はマイに整理しました。',releaseNote3:'データ保護とカレンダー出力へすぐ移動できます。',releaseNote4:'小熊アシスタントの快捷移動はそのまま使えます。',releaseNote5:'既存の記録と解析ロジックは変更していません。',
+    releaseNote1:'記録カードの操作を強化しました。',releaseNote2:'カードから記録テキストをコピーできます。',releaseNote3:'日付付き記録は単体 .ics を出力できます。',releaseNote4:'記念日記録は記念カードを生成できます。',releaseNote5:'モバイルのスワイプとデスクトップ操作を揃えました。',
     spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteExportAction:'カレンダー出力',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',spriteResetAction:'位置をリセット',spriteFutureHint:'より能動的な助手機能を計画中です。',
     demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
     demoRouteStep1:'一文を入力：明日の午後3時に会議',demoRouteStep2:'記録を作成しカレンダーに表示',demoRouteStep3:'.ics をシステムカレンダーへ出力',demoRouteStep4:'JSON バックアップでデータを保護',
@@ -2293,6 +2296,36 @@ function exportRecordIcsFile(id){
   downloadTextFile('shike-record-'+safeFilePart(r.title)+'.ics',cal.text,'text/calendar;charset=utf-8');
   showToast(t('icsExportDone'),'success');
   return cal;
+}
+function recordTextForCopy(r){
+  if(!r)return '';
+  var parts=[r.title||r.rawText||''];
+  var meta=[];
+  if(r.dateText)meta.push(r.dateText);
+  if(r.timeText)meta.push(r.timeText);
+  if(r.repeat&&r.repeat!=='none')meta.push(repeatLabel(r.repeat));
+  if(meta.length)parts.push(meta.join(' · '));
+  if(r.note||r.subtitle)parts.push(r.note||r.subtitle);
+  return parts.filter(Boolean).join('\n');
+}
+function copyRecordText(id){
+  var r=records.find(function(x){return x.id===id;});
+  if(!r)return;
+  var text=recordTextForCopy(r);
+  function done(){showToast(t('recordCopied'),'success');closeSwipeCards(null);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(function(){fallbackCopyRecordText(text);done();});
+  }else{
+    fallbackCopyRecordText(text);done();
+  }
+}
+function fallbackCopyRecordText(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.setAttribute('readonly','');
+  ta.style.position='fixed';ta.style.left='-9999px';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand&&document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
 }
 
 /* ========== Demo records ========== */
@@ -3494,10 +3527,13 @@ function renderRecordCard(r){
   if(r.timeText)meta.push(r.timeText);
   if(r.repeat&&r.repeat!=='none')meta.push(repeatLabel(r.repeat));
   var pin=r.pinned?'<button class="rc-icon-btn rc-pin" aria-label="'+t('unpin')+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">●</button>':'<button class="rc-icon-btn rc-pin not-pinned" aria-label="'+t('setPin')+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">○</button>';
-  var actions='<div class="swipe-actions" aria-label="'+t('details')+'">'+
-    '<button class="swipe-action" onclick="event.stopPropagation();openEditDrawer(\''+r.id+'\')">'+t('edit')+'</button>'+
-    '<button class="swipe-action danger" onclick="event.stopPropagation();deleteRecord(\''+r.id+'\')">'+t('delete')+'</button>'+
-    '<button class="swipe-action" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
+  var actions='<div class="swipe-actions card-action-menu" aria-label="'+t('moreActions')+'">'+
+    '<button class="swipe-action card-action-edit" aria-label="'+t('edit')+'" onclick="event.stopPropagation();openEditDrawer(\''+r.id+'\')">'+t('edit')+'</button>'+
+    '<button class="swipe-action card-action-copy" aria-label="'+t('copyRecord')+'" onclick="event.stopPropagation();copyRecordText(\''+r.id+'\')">'+t('copyRecord')+'</button>'+
+    '<button class="swipe-action card-action-pin" aria-label="'+(r.pinned?t('unpin'):t('setPin'))+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
+    (r.dateKey?'<button class="swipe-action card-action-ics" aria-label="'+t('exportRecordIcs')+'" onclick="event.stopPropagation();exportRecordIcsFile(\''+r.id+'\')">'+t('exportRecordIcs')+'</button>':'')+
+    (r.recordKind==='anniversary'?'<button class="swipe-action card-action-memorial" aria-label="'+t('saveCardImage')+'" onclick="event.stopPropagation();exportAnniversaryCardPng(\''+r.id+'\')">'+t('saveCardImage')+'</button>':'')+
+    '<button class="swipe-action danger card-action-delete" aria-label="'+t('delete')+'" onclick="event.stopPropagation();deleteRecord(\''+r.id+'\')">'+t('delete')+'</button>'+
   '</div>';
   return '<div class="record-swipe" data-record-id="'+r.id+'">'+actions+'<div class="record-card" onclick="openDetail(\''+r.id+'\')">'+
     '<div class="rc-main">'+
@@ -3508,8 +3544,15 @@ function renderRecordCard(r){
       '</div>'+
     '</div>'+
     '<div class="rc-countdown '+cdCls+'">'+escHtml(cdText)+'</div>'+
-    '<div class="rc-actions">'+pin+'</div>'+
+    '<div class="rc-actions">'+pin+'<button class="rc-icon-btn record-more-btn" aria-label="'+t('moreActions')+'" onclick="event.stopPropagation();toggleRecordActions(\''+r.id+'\')">⋯</button></div>'+
   '</div></div>';
+}
+function toggleRecordActions(id){
+  var card=document.querySelector('.record-swipe[data-record-id="'+id+'"]');
+  if(!card)return;
+  var open=!card.classList.contains('swiped');
+  closeSwipeCards(open?card:null);
+  card.classList.toggle('swiped',open);
 }
 function closeSwipeCards(except){
   document.querySelectorAll('.record-swipe.swiped').forEach(function(card){
@@ -4159,6 +4202,7 @@ function togglePin(id){
   if(!r)return;
   r.pinned=!r.pinned;r.updatedAt=Date.now();
   saveRecords();renderCurrent();
+  showToast(r.pinned?t('setPin'):t('unpin'),'success');
 }
 function toggleCardStyle(id){
   var r=records.find(function(x){return x.id===id;});

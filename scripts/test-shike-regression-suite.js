@@ -183,6 +183,11 @@ const tests = [
     name: 'Feature hub cleanup',
     script: 'test-shike-feature-hub-cleanup.js',
     expected: 'Feature hub cleanup regression passed: 22/22'
+  },
+  {
+    name: 'Record actions polish',
+    script: 'test-shike-record-actions-polish.js',
+    expected: 'Record actions polish regression passed: 35/35'
   }
 ];
 

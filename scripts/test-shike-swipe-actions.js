@@ -37,7 +37,7 @@ add('swipe css has hidden rail and smooth reveal', () => {
     assert(style.includes(token), `${token} css missing`);
   });
   assert(style.includes('overflow:hidden'), 'swipe wrapper should prevent horizontal overflow');
-  assert(style.includes('translateX(-156px)'), 'swiped card should translate left');
+  assert(style.includes('translateX(-212px)'), 'swiped card should translate left');
 });
 
 add('desktop hover fallback exists', () => {
