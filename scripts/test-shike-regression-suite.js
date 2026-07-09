@@ -108,6 +108,11 @@ const tests = [
     name: 'Keyboard capture',
     script: 'test-shike-keyboard-capture.js',
     expected: 'Keyboard capture regression passed: 7/7'
+  },
+  {
+    name: 'Batch capture inbox',
+    script: 'test-shike-batch-capture-inbox.js',
+    expected: 'Batch capture inbox regression passed: 8/8'
   }
 ];
 

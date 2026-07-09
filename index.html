@@ -1030,8 +1030,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.5';
-var APP_UPDATED_AT='2026-07-09 11:35';
+var APP_VERSION='v0.8.6';
+var APP_UPDATED_AT='2026-07-09 12:24';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -2791,6 +2791,7 @@ function directSaveFromInput(){
   var inp=$('quickInput');
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
+  if(captureBatchFromInput(text))return;
   var parsed=normalizeCapturePreviewParsed(text,parseReminderText(text));
   inputSaveLocked=true;
   saveParsedRecord(parsed,text);
@@ -3227,6 +3228,31 @@ function renderAll(){
 
 /* ========== Import page ========== */
 var importDrafts=[];
+function getBatchCaptureLines(text){
+  return String(text||'').split(/\r?\n+/).map(function(s){return s.trim();}).filter(Boolean);
+}
+function shouldUseBatchCapture(text){
+  return getBatchCaptureLines(text).length>=2;
+}
+function prepareBatchCaptureDrafts(text){
+  return getBatchCaptureLines(text).map(function(line){
+    return {text:line,parsed:normalizeCapturePreviewParsed(line,parseReminderText(line))};
+  }).filter(function(d){return d.parsed&&d.parsed.title;});
+}
+function captureBatchFromInput(text){
+  if(!shouldUseBatchCapture(text))return false;
+  var drafts=prepareBatchCaptureDrafts(text);
+  if(!drafts.length)return false;
+  importDrafts=drafts;
+  pendingParsePreview=null;
+  var inp=$('quickInput');
+  if(inp){inp.value='';autoResizeInput();}
+  renderParsePreview();
+  switchPage('import');
+  renderImport();
+  showToast('已整理 '+drafts.length+' 条草稿','success');
+  return true;
+}
 function renderImport(){
   // Render existing drafts if any
   renderDrafts();
@@ -3456,6 +3482,7 @@ function saveFromInput(){
   var inp=$('quickInput');
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
+  if(captureBatchFromInput(text))return;
   if(isParsePreviewEnabled()){
     if(isPendingPreviewForText(text)){confirmParsePreview();return;}
     if(!showParsePreview(text)){showToast(t('emptyInput'),'warn');}
@@ -3932,8 +3959,7 @@ function init(){
   // Import handlers
   b('parseImportBtn','click',function(){
     var txt=$('importTextInput').value||'';
-    var lines=txt.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
-    importDrafts=lines.map(function(line){return{text:line,parsed:parseReminderText(line)};}).filter(function(d){return d.parsed&&d.parsed.title;});
+    importDrafts=prepareBatchCaptureDrafts(txt);
     renderDrafts();
   });
   b('loadExampleBtn','click',function(){
