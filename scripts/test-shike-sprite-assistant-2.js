@@ -46,9 +46,9 @@ add('mobile constrained style exists', style.includes('@media (max-width:767px)'
 add('z-index stays below bottom nav', /\.time-sprite\{[\s\S]*z-index:58/.test(style) && /\.nav\{[\s\S]*z-index:60/.test(style));
 add('quick actions call existing navigation', ["switchPage('home')", "switchPage('import')", "switchPage('calendar')", "jumpToMySection('calendarExportSection')", "jumpToMySection('dataSafetySection')", 'showReleaseNotes(true)'].every((snippet) => script.includes(snippet)));
 add('no heavy 3d library is introduced', !/three(\.min)?\.js|babylon|model-viewer|webgl/i.test(html));
-add('version is v0.9.8', script.includes("APP_VERSION='v0.9.8'"));
-add('updated timestamp is v098 timestamp', script.includes("APP_UPDATED_AT='2026-07-10 03:29'"));
-add('service worker cache is v098', sw.includes("CACHE_NAME = 'shike-v098-v44'"));
+add('version is v1.0.0-rc', script.includes("APP_VERSION='v1.0.0-rc'"));
+add('updated timestamp is v098 timestamp', script.includes("APP_UPDATED_AT='2026-07-10 03:44'"));
+add('service worker cache is v098', sw.includes("CACHE_NAME = 'shike-v100rc-v45'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {

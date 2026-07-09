@@ -46,9 +46,11 @@ add('index references manifest and theme metadata', () => {
 });
 
 add('app version and service worker cache version align', () => {
-  const appVersion = matchOne(indexHtml, /var APP_VERSION='v(\d+)\.(\d+)\.(\d+)'/, 'APP_VERSION should be present');
-  const swCache = matchOne(sw, /CACHE_NAME\s*=\s*'shike-v(\d{3})-v(\d+)'/, 'CACHE_NAME should be present');
-  const expectedToken = `${appVersion[1]}${appVersion[2]}${appVersion[3]}`;
+  const appVersion = matchOne(indexHtml, /var APP_VERSION='(v(?:\d+\.\d+\.\d+|1\.0\.0-rc))'/, 'APP_VERSION should be present');
+  const swCache = matchOne(sw, /CACHE_NAME\s*=\s*'shike-(v(?:\d{3}|100rc))-v(\d+)'/, 'CACHE_NAME should be present');
+  const expectedToken = appVersion[1] === 'v1.0.0-rc'
+    ? 'v100rc'
+    : `v${appVersion[1].replace(/^v/, '').split('.').join('')}`;
   assertEqual(swCache[1], expectedToken, 'service worker cache version token should match APP_VERSION');
 });
 
