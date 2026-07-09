@@ -48,7 +48,8 @@ add('sprite does not promise real agent capabilities', () => {
 });
 
 add('example action is no longer a duplicate visible entry', () => {
-  assert(script.includes("demoBtn.classList.add('hidden')"), 'sprite demo entry should stay hidden');
+  assert(html.includes('id="timeSpriteDemoBtn"'), 'sprite demo shortcut should exist');
+  assert(script.includes("jumpToMySection('experienceExampleSection')"), 'sprite demo shortcut should jump to My example section');
 });
 
 for (const check of checks) {

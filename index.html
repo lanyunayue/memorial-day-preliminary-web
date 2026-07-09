@@ -361,24 +361,32 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   position:fixed;right:16px;bottom:calc(78px + var(--safe-bottom));z-index:58;
   display:flex;flex-direction:column;align-items:flex-end;gap:8px;
   pointer-events:none;
+  touch-action:none;
 }
 .time-sprite *{box-sizing:border-box;}
 .time-sprite-orb{
-  pointer-events:auto;width:54px;height:54px;border-radius:50%;
+  pointer-events:auto;width:56px;height:56px;border-radius:999px;
   display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,#fff,color-mix(in srgb,var(--bg-elev) 82%,#fff));
+  position:relative;overflow:visible;
+  background:linear-gradient(145deg,#fff 0%,#fffaf3 48%,color-mix(in srgb,var(--bg-elev) 82%,#fff) 100%);
   border:1px solid color-mix(in srgb,var(--ink-line) 80%,transparent);
-  color:var(--ink);box-shadow:0 10px 28px rgba(44,37,32,.16);
+  color:var(--ink);box-shadow:0 10px 28px rgba(44,37,32,.16),inset 0 1px 0 rgba(255,255,255,.88);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  transition:transform .2s,box-shadow .2s,background .2s;
-  animation:spriteFloat 4.8s ease-in-out infinite;
+  transition:transform .2s,box-shadow .2s,background .2s,filter .2s;
+  animation:spriteFloat 4.8s ease-in-out infinite,spriteBreathe 3.6s ease-in-out infinite;
+  cursor:grab;
 }
-.time-sprite-orb:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(44,37,32,.18);}
-.time-sprite-orb:active{transform:scale(.94);}
+.time-sprite-orb:hover{transform:translateY(-2px) rotate(-1deg);box-shadow:0 14px 32px rgba(44,37,32,.18),inset 0 1px 0 rgba(255,255,255,.9);filter:saturate(1.03);}
+.time-sprite-orb:active{transform:scale(.94);cursor:grabbing;}
+.time-sprite.dragging .time-sprite-orb{cursor:grabbing;animation:none;}
 .time-sprite-orb::after{
   content:'';position:absolute;width:62px;height:62px;border-radius:50%;
   border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);
   animation:spritePulse 3.8s ease-in-out infinite;pointer-events:none;
+}
+.time-sprite-shadow{
+  position:absolute;left:50%;bottom:-5px;width:34px;height:8px;border-radius:999px;
+  background:rgba(70,54,42,.16);filter:blur(4px);transform:translateX(-50%);
 }
 .time-sprite-mark{
   width:28px;height:28px;border-radius:50%;
@@ -386,13 +394,17 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   font-family:var(--font-serif);font-size:15px;font-weight:700;
   background:var(--accent-bg);color:var(--accent);
 }
-.time-sprite-bear{position:relative;width:36px;height:34px;display:block;}
-.bear-face{position:absolute;left:3px;right:3px;bottom:1px;height:29px;border-radius:48% 48% 46% 46%;background:#fff;box-shadow:inset 0 -4px 8px rgba(120,98,82,.08);}
-.bear-ear{position:absolute;top:0;width:13px;height:13px;border-radius:50%;background:#fff;border:1px solid rgba(90,72,58,.08);}
+.time-sprite-bear{position:relative;width:40px;height:39px;display:block;filter:drop-shadow(0 5px 8px rgba(80,64,48,.12));}
+.bear-body{position:absolute;left:8px;right:8px;bottom:0;height:17px;border-radius:48% 48% 42% 42%;background:linear-gradient(180deg,#fff,#f8f0e7);box-shadow:inset 0 -4px 8px rgba(120,98,82,.08);}
+.bear-face{position:absolute;left:3px;right:3px;bottom:7px;height:29px;border-radius:48% 48% 46% 46%;background:radial-gradient(circle at 30% 20%,#fff 0 35%,#fffaf2 75%,#f7efe7 100%);box-shadow:inset 0 -4px 8px rgba(120,98,82,.08);}
+.bear-face::after{content:'';position:absolute;left:50%;top:18px;width:14px;height:8px;border-radius:50%;background:rgba(240,224,210,.72);transform:translateX(-50%);}
+.bear-ear{position:absolute;top:0;width:14px;height:14px;border-radius:50%;background:#fff;border:1px solid rgba(90,72,58,.08);box-shadow:inset 0 -3px 5px rgba(120,98,82,.07);}
+.bear-ear::after{content:'';position:absolute;inset:4px;border-radius:50%;background:#f6e8de;}
 .bear-ear.left{left:2px}.bear-ear.right{right:2px}
 .bear-eye{position:absolute;top:12px;width:4px;height:4px;border-radius:50%;background:var(--ink);animation:spriteBlink 5.2s infinite;}
 .bear-eye.left{left:10px}.bear-eye.right{right:10px}
-.bear-nose{position:absolute;left:50%;top:18px;width:6px;height:4px;border-radius:50%;background:color-mix(in srgb,var(--ink) 70%,transparent);transform:translateX(-50%);}
+.bear-nose{position:absolute;left:50%;top:18px;width:6px;height:4px;border-radius:50%;background:color-mix(in srgb,var(--ink) 70%,transparent);transform:translateX(-50%);z-index:1;}
+.bear-highlight{position:absolute;left:10px;top:8px;width:9px;height:6px;border-radius:50%;background:rgba(255,255,255,.8);transform:rotate(-25deg);}
 .time-sprite-panel{
   pointer-events:auto;width:min(292px,calc(100vw - 32px));
   background:color-mix(in srgb,var(--bg-elev) 92%,transparent);
@@ -420,11 +432,17 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 }
 .time-sprite-action.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
 .time-sprite-action.hidden{display:none;}
+.time-sprite-reset{font-size:12px;color:var(--ink-mute);background:transparent;border:0;padding:4px 0;}
+.time-sprite-future{margin-top:10px;padding-top:9px;border-top:1px solid var(--ink-line);font-size:12px;line-height:1.45;color:var(--ink-mute);}
+body.theme-night .time-sprite-orb{background:linear-gradient(145deg,#fff,#efe9df);color:#2a241f;border-color:rgba(255,255,255,.3);}
+body.theme-night .time-sprite-panel{background:color-mix(in srgb,var(--bg-elev) 94%,#fff 6%);}
+body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
 @keyframes spritePulse{
   0%,70%,100%{transform:scale(.92);opacity:0;}
   12%,42%{transform:scale(1);opacity:.55;}
 }
 @keyframes spriteFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes spriteBreathe{0%,100%{filter:saturate(1)}50%{filter:saturate(1.05) brightness(1.02)}}
 @keyframes spriteBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
 
 /* ========== Drawer ========== */
@@ -738,6 +756,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 @media (min-width:768px){
   .app,.nav{max-width:860px;}
   .time-sprite{right:max(22px,calc((100vw - 860px)/2 + 22px));bottom:calc(82px + var(--safe-bottom));}
+  .time-sprite-orb{width:62px;height:62px;}
+  .time-sprite-bear{width:44px;height:42px;}
   .topbar{padding-left:28px;padding-right:28px;}
   .home-hero,.content{padding-left:28px;padding-right:28px;}
   .my-header{padding-left:28px;padding-right:28px;}
@@ -774,6 +794,11 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 @media (min-width:1280px){
   .app,.nav{max-width:1080px;}
   .time-sprite{right:max(32px,calc((100vw - 1080px)/2 + 32px));}
+}
+@media (max-width:767px){
+  .time-sprite-orb{width:50px;height:50px;}
+  .time-sprite-bear{width:35px;height:34px;}
+  .time-sprite-panel{width:min(280px,calc(100vw - 28px));}
 }
 
 /* Page transitions */
@@ -1122,13 +1147,17 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
       <button class="time-sprite-action" id="timeSpriteTodayBtn" data-i18n="spriteTodayAction">看今天</button>
       <button class="time-sprite-action" id="timeSpriteBatchBtn" data-i18n="spriteBatchAction">整理一段</button>
       <button class="time-sprite-action" id="timeSpriteCalendarBtn" data-i18n="spriteCalendarAction">看日历</button>
+      <button class="time-sprite-action" id="timeSpriteExportBtn" data-i18n="spriteExportAction">导出日历</button>
       <button class="time-sprite-action" id="timeSpriteBackupBtn" data-i18n="spriteBackupAction">备份</button>
       <button class="time-sprite-action" id="timeSpriteUpdateBtn" data-i18n="spriteUpdateAction">更新</button>
       <button class="time-sprite-action" id="timeSpriteDemoBtn" data-i18n="spriteDemoAction">体验示例</button>
     </div>
+    <button class="time-sprite-reset" id="timeSpriteResetBtn" data-i18n="spriteResetAction">重置位置</button>
+    <div class="time-sprite-future" id="timeSpriteFuture" data-i18n="spriteFutureHint">更主动的智能助手能力正在规划中。</div>
   </div>
   <button class="time-sprite-orb" id="timeSpriteToggle" aria-label="打开时刻精灵" aria-expanded="false" aria-controls="timeSpritePanel">
-    <span class="time-sprite-bear" aria-hidden="true"><span class="bear-ear left"></span><span class="bear-ear right"></span><span class="bear-face"><span class="bear-eye left"></span><span class="bear-eye right"></span><span class="bear-nose"></span></span></span>
+    <span class="time-sprite-shadow" aria-hidden="true"></span>
+    <span class="time-sprite-bear" aria-hidden="true"><span class="bear-ear left"></span><span class="bear-ear right"></span><span class="bear-body"></span><span class="bear-face"><span class="bear-highlight"></span><span class="bear-eye left"></span><span class="bear-eye right"></span><span class="bear-nose"></span></span></span>
   </button>
 </div>
 <script>
@@ -1136,12 +1165,15 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.9.4';
-var APP_UPDATED_AT='2026-07-09 23:23';
+var APP_VERSION='v0.9.5';
+var APP_UPDATED_AT='2026-07-10 09:40';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
 var ASSISTANT_COLLAPSED_KEY='shike_assistant_collapsed';
+var SPRITE_POS_KEY='shike_sprite_pos';
+var SPRITE_COLLAPSED_KEY='shike_sprite_collapsed';
+var SPRITE_LAST_TIP_KEY='shike_sprite_last_tip';
 var DEMO_ROUTE_COLLAPSED_KEY='shike_demo_route_collapsed';
 var RELEASE_NOTE_SEEN_KEY='shike_seen_release_note_version';
 var LAST_GOOD_RECORDS_KEY='shike_records_last_good_v1';
@@ -1169,6 +1201,7 @@ var I18N={
     spriteTodayMessage:'今天有 {n} 个时刻在等你。',
     spriteQuietMessage:'我会在这里帮你留意最近的时刻。',
     spriteTodayLine:'今日 {n} 条',spriteNextLine:'最近：{title} · {when}',
+    spriteTip1:'我可以帮你把一句话变成时刻。',spriteTip2:'今天有什么安排，可以先看看首页。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要记录记得导出备份。',spriteTip5:'有日期的记录可以导出到系统日历。',
     navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
@@ -1196,7 +1229,7 @@ var I18N={
     futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
     releaseNote1:'首页更简洁，示例入口移到“我的”。',releaseNote2:'记录卡片支持左滑快捷操作。',releaseNote3:'时刻精灵升级为可展开的小助手。',releaseNote4:'新增建议与反馈入口。',releaseNote5:'新版本首次进入会显示本说明。',
-    spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',
+    spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteExportAction:'导出日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主动的智能助手能力正在规划中。',
     demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
     demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
     importPreviewTitle:'导入预览',sourceTypeLabel:'文件类型',sourceNewBackup:'新版时刻备份',sourceLegacyArray:'旧版数组备份',sourceLegacyRecords:'旧版 records 备份',
@@ -1255,6 +1288,7 @@ var I18N={
     spriteTodayMessage:'今天有 {n} 個時刻在等你。',
     spriteQuietMessage:'我會在這裡幫你留意最近的時刻。',
     spriteTodayLine:'今日 {n} 條',spriteNextLine:'最近：{title} · {when}',
+    spriteTip1:'我可以幫你把一句話變成時刻。',spriteTip2:'今天有什麼安排，可以先看看首頁。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要記錄記得匯出備份。',spriteTip5:'有日期的記錄可以匯出到系統日曆。',
     navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
@@ -1282,7 +1316,7 @@ var I18N={
     futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
     releaseTitle:'更新說明',releaseOk:'我知道了',releaseMeta:'目前版本 {version} · {time}',
     releaseNote1:'首頁更簡潔，示例入口移到「我的」。',releaseNote2:'記錄卡片支援左滑快捷操作。',releaseNote3:'時刻精靈升級為可展開的小助手。',releaseNote4:'新增建議與回饋入口。',releaseNote5:'新版本首次進入會顯示本說明。',
-    spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',
+    spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteExportAction:'匯出日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主動的智慧助手能力正在規劃中。',
     demoRouteTitle:'從一句話到日曆',demoRouteText:'把一句話整理成時刻，再匯出到你常用的日曆。',
     demoRouteStep1:'輸入一句話：明天下午三點開會',demoRouteStep2:'生成記錄並進入日曆',demoRouteStep3:'匯出 .ics 到系統日曆',demoRouteStep4:'匯出 JSON 備份保護資料',
     importPreviewTitle:'匯入預覽',sourceTypeLabel:'檔案類型',sourceNewBackup:'新版時刻備份',sourceLegacyArray:'舊版陣列備份',sourceLegacyRecords:'舊版 records 備份',
@@ -1341,6 +1375,7 @@ var I18N={
     spriteTodayMessage:'You have {n} moments today.',
     spriteQuietMessage:'I will keep an eye on your upcoming moments here.',
     spriteTodayLine:'Today {n}',spriteNextLine:'Next: {title} · {when}',
+    spriteTip1:'I can turn one sentence into a Shike moment.',spriteTip2:'Start with Home to see what is due today.',spriteTip3:'A paragraph of chat can be organized in batch.',spriteTip4:'Export backups for important records.',spriteTip5:'Dated records can be exported to your system calendar.',
     navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
@@ -1368,7 +1403,7 @@ var I18N={
     futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
     releaseNote1:'Home is cleaner, with examples moved to Me.',releaseNote2:'Record cards support swipe actions.',releaseNote3:'The Shike sprite is now a small expandable assistant.',releaseNote4:'Feedback now has a clear entry.',releaseNote5:'Release notes appear once for each new version.',
-    spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',
+    spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteExportAction:'Export calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',spriteResetAction:'Reset position',spriteFutureHint:'More proactive assistant abilities are being planned.',
     demoRouteTitle:'From one sentence to calendar',demoRouteText:'Turn one sentence into a moment, then export it to your calendar.',
     demoRouteStep1:'Enter one sentence: meeting tomorrow at 3pm',demoRouteStep2:'Create a record and calendar dot',demoRouteStep3:'Export .ics to your system calendar',demoRouteStep4:'Export JSON backup to protect data',
     importPreviewTitle:'Import preview',sourceTypeLabel:'File type',sourceNewBackup:'New Shike backup',sourceLegacyArray:'Legacy array backup',sourceLegacyRecords:'Legacy records backup',
@@ -1427,6 +1462,7 @@ var I18N={
     spriteTodayMessage:'今日は {n} 件の時刻があります。',
     spriteQuietMessage:'ここで近い時刻をそっと見守ります。',
     spriteTodayLine:'今日 {n} 件',spriteNextLine:'次：{title} · {when}',
+    spriteTip1:'一文を時刻に変えるお手伝いができます。',spriteTip2:'今日の予定はまずホームで確認できます。',spriteTip3:'チャットの一段落もまとめて整理できます。',spriteTip4:'大事な記録はバックアップを書き出しましょう。',spriteTip5:'日付付き記録はシステムカレンダーへ書き出せます。',
     navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
@@ -1454,7 +1490,7 @@ var I18N={
     futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
     releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
     releaseNote1:'ホームを整理し、サンプル入口をマイへ移動しました。',releaseNote2:'記録カードにスワイプ操作を追加しました。',releaseNote3:'時刻アシスタントを小さな相棒らしく更新しました。',releaseNote4:'フィードバック入口を追加しました。',releaseNote5:'新しい版では初回だけ更新内容を表示します。',
-    spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',
+    spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteExportAction:'カレンダー出力',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',spriteResetAction:'位置をリセット',spriteFutureHint:'より能動的な助手機能を計画中です。',
     demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
     demoRouteStep1:'一文を入力：明日の午後3時に会議',demoRouteStep2:'記録を作成しカレンダーに表示',demoRouteStep3:'.ics をシステムカレンダーへ出力',demoRouteStep4:'JSON バックアップでデータを保護',
     importPreviewTitle:'インポート確認',sourceTypeLabel:'ファイル種類',sourceNewBackup:'新しい時刻バックアップ',sourceLegacyArray:'旧配列バックアップ',sourceLegacyRecords:'旧 records バックアップ',
@@ -2316,9 +2352,13 @@ function addDemoRecords(){
 
 /* ========== Time Sprite ========== */
 var timeSpriteCollapsed=true;
+var timeSpriteDragState=null;
+var timeSpriteSuppressClick=false;
+var timeSpriteManualTip='';
 function readTimeSpriteCollapsed(){
   try{
-    var saved=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
+    var saved=localStorage.getItem(SPRITE_COLLAPSED_KEY);
+    if(saved===null)saved=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
     if(saved==='true')return true;
     if(saved==='false')return false;
   }catch(e){}
@@ -2326,8 +2366,75 @@ function readTimeSpriteCollapsed(){
 }
 function saveTimeSpriteCollapsed(value){
   timeSpriteCollapsed=!!value;
-  try{localStorage.setItem(ASSISTANT_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');}catch(e){}
+  try{
+    localStorage.setItem(SPRITE_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');
+    localStorage.setItem(ASSISTANT_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');
+  }catch(e){}
   renderTimeSprite();
+}
+function getTimeSpriteTips(){
+  return [t('spriteTip1'),t('spriteTip2'),t('spriteTip3'),t('spriteTip4'),t('spriteTip5')].filter(Boolean);
+}
+function showTimeSpriteGreeting(){
+  var tips=getTimeSpriteTips();
+  if(!tips.length)return;
+  var index=0;
+  try{
+    var saved=parseInt(localStorage.getItem(SPRITE_LAST_TIP_KEY)||'0',10);
+    index=isNaN(saved)?0:(saved+1)%tips.length;
+    localStorage.setItem(SPRITE_LAST_TIP_KEY,String(index));
+  }catch(e){}
+  timeSpriteManualTip=tips[index];
+  var message=$('timeSpriteMessage');if(message)message.textContent=timeSpriteManualTip;
+}
+function readTimeSpritePosition(){
+  try{
+    var raw=localStorage.getItem(SPRITE_POS_KEY);
+    if(!raw)return null;
+    var pos=JSON.parse(raw);
+    if(typeof pos.left==='number'&&typeof pos.top==='number')return pos;
+  }catch(e){}
+  return null;
+}
+function clampTimeSpritePosition(left,top){
+  var root=$('timeSprite');
+  var w=root&&root.offsetWidth?root.offsetWidth:320;
+  var h=root&&root.offsetHeight?root.offsetHeight:80;
+  var margin=10;
+  var maxLeft=Math.max(margin,window.innerWidth-w-margin);
+  var safeBottom=0;
+  if(typeof getComputedStyle==='function')safeBottom=varNumber(getComputedStyle(document.documentElement).getPropertyValue('--safe-bottom'));
+  var maxTop=Math.max(margin,window.innerHeight-h-margin-safeBottom);
+  return {left:Math.min(Math.max(margin,left),maxLeft),top:Math.min(Math.max(margin,top),maxTop)};
+}
+function varNumber(value){
+  var n=parseFloat(value);
+  return isNaN(n)?0:n;
+}
+function applyTimeSpritePosition(pos){
+  var root=$('timeSprite');if(!root)return;
+  if(!pos){
+    root.style.left='';
+    root.style.top='';
+    root.style.right='';
+    root.style.bottom='';
+    return;
+  }
+  var safe=clampTimeSpritePosition(pos.left,pos.top);
+  root.style.left=safe.left+'px';
+  root.style.top=safe.top+'px';
+  root.style.right='auto';
+  root.style.bottom='auto';
+}
+function saveTimeSpritePosition(pos){
+  var safe=clampTimeSpritePosition(pos.left,pos.top);
+  try{localStorage.setItem(SPRITE_POS_KEY,JSON.stringify(safe));}catch(e){}
+  applyTimeSpritePosition(safe);
+}
+function resetTimeSpritePosition(){
+  try{localStorage.removeItem(SPRITE_POS_KEY);}catch(e){}
+  applyTimeSpritePosition(null);
+  showToast(t('updated'),'success');
 }
 function getTimeSpriteRecordDate(r){
   return getRecordTargetDateTime(r,{allowPast:r&&r.recordKind==='anniversary'});
@@ -2372,11 +2479,11 @@ function renderTimeSprite(){
   var calBtn=$('timeSpriteCalendarBtn');if(calBtn)calBtn.textContent=t('spriteCalendarAction');
   var backupBtn=$('timeSpriteBackupBtn');if(backupBtn)backupBtn.textContent=t('spriteBackupAction');
   var updateBtn=$('timeSpriteUpdateBtn');if(updateBtn)updateBtn.textContent=t('spriteUpdateAction');
+  var exportBtn=$('timeSpriteExportBtn');if(exportBtn)exportBtn.textContent=t('spriteExportAction');
+  var resetBtn=$('timeSpriteResetBtn');if(resetBtn)resetBtn.textContent=t('spriteResetAction');
+  var future=$('timeSpriteFuture');if(future)future.textContent=t('spriteFutureHint');
   var demoBtn=$('timeSpriteDemoBtn');
-  if(demoBtn){
-    demoBtn.textContent=t('spriteDemoAction');
-    demoBtn.classList.add('hidden');
-  }
+  if(demoBtn)demoBtn.textContent=t('spriteDemoAction');
   var items=getTimeSpriteUpcomingItems();
   var nowTs=Date.now();
   var soon=items.filter(function(item){return item.time>=nowTs&&item.time<=nowTs+3*86400000;}).length;
@@ -2386,7 +2493,7 @@ function renderTimeSprite(){
   else if(soon>0)msg=tf('spriteSoonMessage',{n:soon});
   else if(todayCount>0)msg=tf('spriteTodayMessage',{n:todayCount});
   else if(!hasDemoRecords()&&records.length<2)msg=t('spriteDemoMessage');
-  var message=$('timeSpriteMessage');if(message)message.textContent=msg;
+  var message=$('timeSpriteMessage');if(message)message.textContent=timeSpriteManualTip||msg;
   var metaParts=[];
   if(todayCount>0)metaParts.push(tf('spriteTodayLine',{n:todayCount}));
   if(items[0])metaParts.push(tf('spriteNextLine',{title:items[0].record.title||t('appName'),when:formatTimeSpriteWhen(items[0])}));
@@ -2394,7 +2501,13 @@ function renderTimeSprite(){
 }
 function initTimeSprite(){
   timeSpriteCollapsed=readTimeSpriteCollapsed();
-  b('timeSpriteToggle','click',function(){saveTimeSpriteCollapsed(!timeSpriteCollapsed);});
+  applyTimeSpritePosition(readTimeSpritePosition());
+  initTimeSpriteDrag();
+  b('timeSpriteToggle','click',function(){
+    if(timeSpriteSuppressClick){timeSpriteSuppressClick=false;return;}
+    saveTimeSpriteCollapsed(!timeSpriteCollapsed);
+    if(!timeSpriteCollapsed)showTimeSpriteGreeting();
+  });
   b('timeSpriteClose','click',function(){saveTimeSpriteCollapsed(true);});
   b('timeSpriteInputBtn','click',function(){
     saveTimeSpriteCollapsed(true);
@@ -2402,15 +2515,50 @@ function initTimeSprite(){
     setTimeout(function(){var inp=$('quickInput');if(inp)inp.focus();},60);
   });
   b('timeSpriteDemoBtn','click',function(){
-    addDemoRecords();
-    saveTimeSpriteCollapsed(false);
+    jumpToMySection('experienceExampleSection');
+    saveTimeSpriteCollapsed(true);
   });
   b('timeSpriteTodayBtn','click',function(){switchPage('home');saveTimeSpriteCollapsed(true);});
   b('timeSpriteBatchBtn','click',function(){switchPage('import');var input=$('importTextInput');if(input)setTimeout(function(){input.focus();},60);saveTimeSpriteCollapsed(true);});
   b('timeSpriteCalendarBtn','click',function(){switchPage('calendar');saveTimeSpriteCollapsed(true);});
+  b('timeSpriteExportBtn','click',function(){jumpToMySection('calendarExportSection');saveTimeSpriteCollapsed(true);});
   b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataSafetySection');saveTimeSpriteCollapsed(true);});
   b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true);saveTimeSpriteCollapsed(false);});
+  b('timeSpriteResetBtn','click',resetTimeSpritePosition);
   renderTimeSprite();
+}
+function initTimeSpriteDrag(){
+  var toggle=$('timeSpriteToggle'),root=$('timeSprite');
+  if(!toggle||!root||!toggle.addEventListener)return;
+  toggle.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0)return;
+    var rect=root.getBoundingClientRect();
+    timeSpriteDragState={id:e.pointerId,startX:e.clientX,startY:e.clientY,left:rect.left,top:rect.top,moved:false};
+    if(toggle.setPointerCapture)try{toggle.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  toggle.addEventListener('pointermove',function(e){
+    if(!timeSpriteDragState||timeSpriteDragState.id!==e.pointerId)return;
+    var dx=e.clientX-timeSpriteDragState.startX;
+    var dy=e.clientY-timeSpriteDragState.startY;
+    if(Math.abs(dx)+Math.abs(dy)>4)timeSpriteDragState.moved=true;
+    if(!timeSpriteDragState.moved)return;
+    root.classList.add('dragging');
+    applyTimeSpritePosition({left:timeSpriteDragState.left+dx,top:timeSpriteDragState.top+dy});
+    e.preventDefault();
+  });
+  function endDrag(e){
+    if(!timeSpriteDragState||timeSpriteDragState.id!==e.pointerId)return;
+    root.classList.remove('dragging');
+    if(timeSpriteDragState.moved){
+      var rect=root.getBoundingClientRect();
+      saveTimeSpritePosition({left:rect.left,top:rect.top});
+      timeSpriteSuppressClick=true;
+    }
+    timeSpriteDragState=null;
+  }
+  toggle.addEventListener('pointerup',endDrag);
+  toggle.addEventListener('pointercancel',endDrag);
+  window.addEventListener('resize',function(){applyTimeSpritePosition(readTimeSpritePosition());});
 }
 
 /* ========== NLP Parser ========== */

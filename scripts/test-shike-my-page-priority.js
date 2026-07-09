@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const root = 'E:\\lifetime-web-v094-my-page-priority';
+const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
@@ -39,8 +39,8 @@ add('No duplicate feedbackSection', () => { const c=(mySection.match(/id="feedba
 add('No duplicate dataSafetySection', () => { const c=(mySection.match(/id="dataSafetySection"/g)||[]).length; assert(c===1,`expected 1 dataSafetySection, got ${c}`); });
 add('No undefined visible', () => { assert(!mySection.includes('>undefined<'),'undefined visible'); assert(!mySection.includes('>null<'),'null visible'); });
 add('No garbled chars', () => { assert(!mySection.includes('\uFFFD'),'replacement char found'); });
-add('APP_VERSION = v0.9.4', () => { assert(html.includes("APP_VERSION='v0.9.4'"),'APP_VERSION not v0.9.4'); });
-add('SW cache = shike-v094-v40', () => { assert(sw.includes('shike-v094-v40'),'cache not v094'); assert(!sw.includes('shike-v093-v39'),'old cache v093 still present'); });
+add('APP_VERSION = v0.9.5', () => { assert(html.includes("APP_VERSION='v0.9.5'"),'APP_VERSION not v0.9.5'); });
+add('SW cache = shike-v095-v41', () => { assert(sw.includes('shike-v095-v41'),'cache not v095'); assert(!sw.includes('shike-v094-v40'),'old cache v094 still present'); });
 add('Featured CSS classes exist', () => { assert(html.includes('setting-group-featured'),'setting-group-featured missing'); assert(html.includes('feature-chips'),'feature-chips missing'); assert(html.includes('feature-chip'),'feature-chip missing'); });
 add('Personalize description exists', () => { assert(mySection.includes('data-i18n="personalizeDesc"'),'personalizeDesc missing'); assert(mySection.includes('让时刻更像你的助手'),'desc text missing'); });
 add('Feature chips cover 4 areas', () => { assert(mySection.includes('data-i18n="chipTheme"'),'chipTheme missing'); assert(mySection.includes('data-i18n="chipLanguage"'),'chipLanguage missing'); assert(mySection.includes('data-i18n="chipSprite"'),'chipSprite missing'); assert(mySection.includes('data-i18n="chipDisplay"'),'chipDisplay missing'); });

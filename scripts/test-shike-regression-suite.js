@@ -173,6 +173,11 @@ const tests = [
     name: 'My page priority',
     script: 'test-shike-my-page-priority.js',
     expected: 'My page priority regression passed: 24/24'
+  },
+  {
+    name: 'Sprite assistant 2',
+    script: 'test-shike-sprite-assistant-2.js',
+    expected: 'Sprite assistant 2 regression passed: 34/34'
   }
 ];
 

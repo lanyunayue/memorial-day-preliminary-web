@@ -69,7 +69,7 @@ function node(id) {
   return elements[id];
 }
 
-['timeSprite', 'timeSpriteToggle', 'timeSpriteClose', 'timeSpriteTitle', 'timeSpriteInputBtn', 'timeSpriteDemoBtn', 'timeSpriteMessage', 'timeSpriteMeta', 'quickInput'].forEach(node);
+['timeSprite', 'timeSpriteToggle', 'timeSpriteClose', 'timeSpriteTitle', 'timeSpriteInputBtn', 'timeSpriteTodayBtn', 'timeSpriteBatchBtn', 'timeSpriteCalendarBtn', 'timeSpriteExportBtn', 'timeSpriteBackupBtn', 'timeSpriteUpdateBtn', 'timeSpriteDemoBtn', 'timeSpriteResetBtn', 'timeSpriteFuture', 'timeSpriteMessage', 'timeSpriteMeta', 'quickInput'].forEach(node);
 
 const store = {};
 const sandbox = {
@@ -177,15 +177,15 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
   assert(style.includes('@keyframes spriteBlink'), 'subtle blink animation should exist');
 });
 
-add('version and service worker cache are ready for v0.9.4 candidate', () => {
-  assert(script.includes("APP_VERSION='v0.9.4'"), 'APP_VERSION should be v0.9.4');
-  assert(script.includes("APP_UPDATED_AT='2026-07-09 23:23'"), 'APP_UPDATED_AT should be updated');
-  assert(sw.includes("CACHE_NAME = 'shike-v094-v40'"), 'service worker cache should be v093');
+add('version and service worker cache are ready for v0.9.5 candidate', () => {
+  assert(script.includes("APP_VERSION='v0.9.5'"), 'APP_VERSION should be v0.9.5');
+  assert(script.includes("APP_UPDATED_AT='2026-07-10 09:40'"), 'APP_UPDATED_AT should be updated');
+  assert(sw.includes("CACHE_NAME = 'shike-v095-v41'"), 'service worker cache should be v095');
 });
 
 add('all languages include sprite i18n keys', () => {
   const I18N = getGlobal('I18N');
-  const keys = ['spriteName', 'spriteOpen', 'spriteClose', 'spriteInputAction', 'spriteTodayAction', 'spriteBatchAction', 'spriteCalendarAction', 'spriteBackupAction', 'spriteUpdateAction', 'spriteEmptyMessage', 'spriteDemoMessage', 'spriteSoonMessage', 'spriteTodayMessage', 'spriteQuietMessage', 'spriteTodayLine', 'spriteNextLine'];
+  const keys = ['spriteName', 'spriteOpen', 'spriteClose', 'spriteInputAction', 'spriteTodayAction', 'spriteBatchAction', 'spriteCalendarAction', 'spriteExportAction', 'spriteBackupAction', 'spriteUpdateAction', 'spriteResetAction', 'spriteFutureHint', 'spriteTip1', 'spriteTip2', 'spriteTip3', 'spriteTip4', 'spriteTip5', 'spriteEmptyMessage', 'spriteDemoMessage', 'spriteSoonMessage', 'spriteTodayMessage', 'spriteQuietMessage', 'spriteTodayLine', 'spriteNextLine'];
   Object.keys(I18N).forEach((lang) => {
     keys.forEach((key) => assert(Object.prototype.hasOwnProperty.call(I18N[lang], key), `${lang}:${key}`));
   });
@@ -204,7 +204,7 @@ add('empty state invites one-sentence input', () => {
   setGlobal('records', []);
   call('renderTimeSprite');
   assert(node('timeSpriteMessage').textContent.includes(u('\\u4e00\\u53e5\\u8bdd')), 'empty message should mention one sentence');
-  assert(node('timeSpriteDemoBtn').classList.contains('hidden'), 'demo button should stay hidden after example entry moved to My');
+  assert(!node('timeSpriteDemoBtn').classList.contains('hidden'), 'demo button should be visible as a sprite quick action');
 });
 
 add('records render today count and nearest item', () => {
@@ -219,7 +219,7 @@ add('demo state hides duplicate example action', () => {
   store[getGlobal('DEMO_FLAG_KEY')] = 'true';
   setGlobal('records', [sampleRecord()]);
   call('renderTimeSprite');
-  assert(node('timeSpriteDemoBtn').classList.contains('hidden'), 'demo button should hide when examples already exist');
+  assert(!node('timeSpriteDemoBtn').classList.contains('hidden'), 'demo button should remain a jump shortcut');
 });
 
 const failures = [];
