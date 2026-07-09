@@ -151,7 +151,7 @@ async function main() {
   await client.navigate(APP_URL);
 
   const version = await client.evaluate(`({appVersion:APP_VERSION, cacheFetch:typeof fetchWeather, route:!!document.getElementById('demoRouteBlock')})`);
-  add('app loads v0.9.0 route shell', version.appVersion === 'v0.9.0' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
+  add('app loads v0.9.1 route shell', version.appVersion === 'v0.9.1' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
 
   const overflows = [];
   for (const width of VIEWPORTS) {

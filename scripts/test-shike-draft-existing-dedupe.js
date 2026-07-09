@@ -40,7 +40,7 @@ add('rendered draft shows existing marker', () => {
   const end = script.indexOf('function saveDraft', start);
   const code = script.slice(start, end);
   assert(code.includes('isDraftExistingDuplicate(d)'), 'renderDrafts should check duplicate drafts');
-  assert(code.includes('已存在'), 'duplicate draft marker should render');
+  assert(code.includes("t('draftExisting')"), 'duplicate draft marker should render via i18n');
 });
 
 add('single draft save skips existing duplicate', () => {
@@ -48,7 +48,7 @@ add('single draft save skips existing duplicate', () => {
   const end = script.indexOf('function discardDraft', start);
   const code = script.slice(start, end);
   assert(code.includes('if(isDraftExistingDuplicate(d))'), 'saveDraft should guard duplicates');
-  assert(code.includes('已跳过重复草稿'), 'saveDraft should notify duplicate skip');
+  assert(code.includes("t('draftDuplicateSkipped')"), 'saveDraft should notify duplicate skip via i18n');
   assert(code.indexOf('isDraftExistingDuplicate(d)') < code.indexOf('saveParsedRecord'), 'duplicate check should happen before saving');
 });
 

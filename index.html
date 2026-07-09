@@ -1051,8 +1051,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.9.0';
-var APP_UPDATED_AT='2026-07-09 20:47';
+var APP_VERSION='v0.9.1';
+var APP_UPDATED_AT='2026-07-09 21:39';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -1103,6 +1103,8 @@ var I18N={
     exportJsonBackup:'导出 JSON 备份',importJsonBackup:'导入 JSON 备份',
     reminderNoticeTitle:'提醒说明',reminderNoticeText:'网页版提醒依赖浏览器环境。页面关闭后，长期提醒不一定可靠；建议将时刻添加到桌面并定期打开查看，重要日程建议导出 .ics 到系统日历。',
     installPwa:'添加到桌面',pwaInstallHint:'如果浏览器没有显示安装按钮，可使用浏览器菜单中的“添加到桌面”或“安装应用”。',
+    draftExisting:'已存在',draftDuplicateSkipped:'已跳过重复草稿',batchSaveAll:'全部保存',
+    batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
     demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
     importPreviewTitle:'导入预览',sourceTypeLabel:'文件类型',sourceNewBackup:'新版时刻备份',sourceLegacyArray:'旧版数组备份',sourceLegacyRecords:'旧版 records 备份',
@@ -1181,6 +1183,8 @@ var I18N={
     exportJsonBackup:'匯出 JSON 備份',importJsonBackup:'匯入 JSON 備份',
     reminderNoticeTitle:'提醒說明',reminderNoticeText:'網頁版提醒依賴瀏覽器環境。頁面關閉後，長期提醒不一定可靠；建議將時刻加入桌面並定期打開查看，重要日程建議匯出 .ics 到系統日曆。',
     installPwa:'加入桌面',pwaInstallHint:'如果瀏覽器沒有顯示安裝按鈕，可使用瀏覽器選單中的「加入桌面」或「安裝應用」。',
+    draftExisting:'已存在',draftDuplicateSkipped:'已略過重複草稿',batchSaveAll:'全部保存',
+    batchSavedOnly:'已保存 {saved} 條',batchSavedResult:'已保存 {saved} 條，略過 {skipped} 條重複',batchSkippedOnly:'沒有新增，已略過 {skipped} 條重複',
     demoRouteTitle:'從一句話到日曆',demoRouteText:'把一句話整理成時刻，再匯出到你常用的日曆。',
     demoRouteStep1:'輸入一句話：明天下午三點開會',demoRouteStep2:'生成記錄並進入日曆',demoRouteStep3:'匯出 .ics 到系統日曆',demoRouteStep4:'匯出 JSON 備份保護資料',
     importPreviewTitle:'匯入預覽',sourceTypeLabel:'檔案類型',sourceNewBackup:'新版時刻備份',sourceLegacyArray:'舊版陣列備份',sourceLegacyRecords:'舊版 records 備份',
@@ -1259,6 +1263,8 @@ var I18N={
     exportJsonBackup:'Export JSON backup',importJsonBackup:'Import JSON backup',
     reminderNoticeTitle:'Reminder notes',reminderNoticeText:'Web reminders depend on the browser environment. After the page is closed, long-term reminders are not guaranteed. Add Shike to your desktop and open it regularly; export important schedules as .ics to your system calendar.',
     installPwa:'Add to desktop',pwaInstallHint:'If the browser does not show an install button, use the browser menu to add to desktop or install the app.',
+    draftExisting:'Existing',draftDuplicateSkipped:'Duplicate draft skipped',batchSaveAll:'Save all',
+    batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     demoRouteTitle:'From one sentence to calendar',demoRouteText:'Turn one sentence into a moment, then export it to your calendar.',
     demoRouteStep1:'Enter one sentence: meeting tomorrow at 3pm',demoRouteStep2:'Create a record and calendar dot',demoRouteStep3:'Export .ics to your system calendar',demoRouteStep4:'Export JSON backup to protect data',
     importPreviewTitle:'Import preview',sourceTypeLabel:'File type',sourceNewBackup:'New Shike backup',sourceLegacyArray:'Legacy array backup',sourceLegacyRecords:'Legacy records backup',
@@ -1337,6 +1343,8 @@ var I18N={
     exportJsonBackup:'JSON バックアップ出力',importJsonBackup:'JSON バックアップ取込',
     reminderNoticeTitle:'リマインド説明',reminderNoticeText:'Web 版のリマインドはブラウザ環境に依存します。ページを閉じた後の長期リマインドは保証されません。時刻をデスクトップに追加し、定期的に開いて確認してください。重要な予定は .ics でシステムカレンダーへ出力することをおすすめします。',
     installPwa:'デスクトップに追加',pwaInstallHint:'ブラウザにインストールボタンが出ない場合は、ブラウザメニューからデスクトップ追加またはアプリのインストールを選んでください。',
+    draftExisting:'既存',draftDuplicateSkipped:'重複下書きをスキップしました',batchSaveAll:'すべて保存',
+    batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
     demoRouteStep1:'一文を入力：明日の午後3時に会議',demoRouteStep2:'記録を作成しカレンダーに表示',demoRouteStep3:'.ics をシステムカレンダーへ出力',demoRouteStep4:'JSON バックアップでデータを保護',
     importPreviewTitle:'インポート確認',sourceTypeLabel:'ファイル種類',sourceNewBackup:'新しい時刻バックアップ',sourceLegacyArray:'旧配列バックアップ',sourceLegacyRecords:'旧 records バックアップ',
@@ -3501,15 +3509,15 @@ function renderDrafts(){
     if(parsed.dateText)html+='<span class="draft-chip">'+escHtml(parsed.dateText)+'</span>';
     if(parsed.timeText)html+='<span class="draft-chip">'+escHtml(parsed.timeText)+'</span>';
     html+='<span class="draft-chip">'+({reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[parsed.recordKind]||'')+'</span>';
-    if(isDraftExistingDuplicate(d))html+='<span class="draft-chip">已存在</span>';
+    if(isDraftExistingDuplicate(d))html+='<span class="draft-chip">'+escHtml(t('draftExisting'))+'</span>';
     html+='</div><div class="draft-item-actions"><button class="draft-save" onclick="saveDraft('+i+')">'+t('save')+'</button><button class="draft-discard" onclick="editDraft('+i+')">修改</button><button class="draft-discard" onclick="discardDraft('+i+')">'+t('cancel')+'</button></div></div>';
   });
-  html+='<button class="draft-save-all" onclick="saveAllDrafts()">全部保存</button>';
+  html+='<button class="draft-save-all" onclick="saveAllDrafts()">'+escHtml(t('batchSaveAll'))+'</button>';
   c.innerHTML=html;
 }
 function saveDraft(i){
   var d=importDrafts[i];if(!d)return;
-  if(isDraftExistingDuplicate(d)){importDrafts.splice(i,1);renderDrafts();showToast('已跳过重复草稿','warn');return;}
+  if(isDraftExistingDuplicate(d)){importDrafts.splice(i,1);renderDrafts();showToast(t('draftDuplicateSkipped'),'warn');return;}
   saveParsedRecord(d.parsed,d.text);
   importDrafts.splice(i,1);renderDrafts();showToast(t('saved'),'success');
 }
@@ -3533,7 +3541,9 @@ function saveAllDrafts(){
     if(isDraftExistingDuplicate(d)){skipped++;return;}
     saveParsedRecord(d.parsed,d.text);saved++;
   });
-  importDrafts=[];renderDrafts();showToast(t('saved'),'success');
+  importDrafts=[];renderDrafts();
+  var msg=saved&&skipped?tf('batchSavedResult',{saved:saved,skipped:skipped}):(saved?tf('batchSavedOnly',{saved:saved}):(skipped?tf('batchSkippedOnly',{skipped:skipped}):t('saved')));
+  showToast(msg,saved?'success':'warn');
   switchPage('home');
 }
 

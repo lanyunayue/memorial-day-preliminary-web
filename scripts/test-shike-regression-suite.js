@@ -133,6 +133,11 @@ const tests = [
     name: 'Draft existing dedupe',
     script: 'test-shike-draft-existing-dedupe.js',
     expected: 'Draft existing dedupe regression passed: 6/6'
+  },
+  {
+    name: 'Batch save feedback',
+    script: 'test-shike-batch-save-feedback.js',
+    expected: 'Batch save feedback regression passed: 6/6'
   }
 ];
 
