@@ -32,8 +32,8 @@ add('release note lifecycle functions exist', () => {
 });
 
 add('release notes include current version and updated time', () => {
-  assert(script.includes("APP_VERSION='v0.9.7'"), 'APP_VERSION should be v0.9.7');
-  assert(script.includes("APP_UPDATED_AT='2026-07-10 10:55'"), 'APP_UPDATED_AT should be updated');
+  assert(script.includes("APP_VERSION='v0.9.8'"), 'APP_VERSION should be v0.9.8');
+  assert(script.includes("APP_UPDATED_AT='2026-07-10 03:29'"), 'APP_UPDATED_AT should be updated');
   assert(script.includes("tf('releaseMeta',{version:APP_VERSION,time:APP_UPDATED_AT})"), 'release meta should use version and time');
 });
 

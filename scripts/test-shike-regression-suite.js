@@ -188,6 +188,11 @@ const tests = [
     name: 'Record actions polish',
     script: 'test-shike-record-actions-polish.js',
     expected: 'Record actions polish regression passed: 35/35'
+  },
+  {
+    name: 'Release feedback center',
+    script: 'test-shike-release-feedback-center.js',
+    expected: 'Release feedback center regression passed: 17/17'
   }
 ];
 
