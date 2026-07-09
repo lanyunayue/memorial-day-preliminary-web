@@ -437,6 +437,16 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 body.theme-night .time-sprite-orb{background:linear-gradient(145deg,#fff,#efe9df);color:#2a241f;border-color:rgba(255,255,255,.3);}
 body.theme-night .time-sprite-panel{background:color-mix(in srgb,var(--bg-elev) 94%,#fff 6%);}
 body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
+.feature-hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px;}
+.feature-hub-item{
+  min-height:48px;border-radius:14px;border:1px solid var(--ink-line);
+  background:var(--bg-soft);color:var(--ink);padding:9px 10px;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+  text-align:left;font-size:13px;line-height:1.25;
+}
+.feature-hub-item span{font-size:11px;color:var(--ink-mute);}
+.feature-hub-item:active{transform:scale(.98);}
+@media (min-width:900px){.feature-hub-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.feature-hub-item{min-height:54px;}}
 @keyframes spritePulse{
   0%,70%,100%{transform:scale(.92);opacity:0;}
   12%,42%{transform:scale(1);opacity:.55;}
@@ -997,6 +1007,19 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
           <div class="my-switch" id="weatherSwitch"></div>
         </div>
       </div>
+      <div class="setting-group" id="featureHubSection">
+        <div class="setting-group-title" data-i18n="featureHubTitle">功能中心</div>
+        <p class="setting-note" data-i18n="featureHubText">把示例、演示、更新、备份、日历和反馈入口收在这里。</p>
+        <div class="feature-hub-grid">
+          <button class="feature-hub-item" id="featureHubDemoBtn" data-feature-action="demo"><strong data-i18n="featureHubDemo">体验示例</strong><span data-i18n="featureHubDemoSub">生成 5 条示例</span></button>
+          <button class="feature-hub-item" id="featureHubRouteBtn" data-feature-action="route"><strong data-i18n="featureHubRoute">演示路线</strong><span data-i18n="featureHubRouteSub">从输入到导出</span></button>
+          <button class="feature-hub-item" id="featureHubUpdateBtn" data-feature-action="updates"><strong data-i18n="featureHubUpdates">版本更新</strong><span data-i18n="featureHubUpdatesSub">查看本次变化</span></button>
+          <button class="feature-hub-item" id="featureHubSafetyBtn" data-feature-action="safety"><strong data-i18n="featureHubSafety">数据安全</strong><span data-i18n="featureHubSafetySub">JSON 备份</span></button>
+          <button class="feature-hub-item" id="featureHubCalendarBtn" data-feature-action="calendar"><strong data-i18n="featureHubCalendar">日历导出</strong><span data-i18n="featureHubCalendarSub">导出 .ics</span></button>
+          <button class="feature-hub-item" id="featureHubFeedbackBtn" data-feature-action="feedback"><strong data-i18n="featureHubFeedback">建议反馈</strong><span data-i18n="featureHubFeedbackSub">邮件联系</span></button>
+          <button class="feature-hub-item" id="featureHubFutureBtn" data-feature-action="future"><strong data-i18n="featureHubFuture">未来计划</strong><span data-i18n="featureHubFutureSub">能力预告</span></button>
+        </div>
+      </div>
       <div class="setting-group" id="calendarExportSection">
         <div class="setting-group-title" data-i18n="calendarExport">日历导出</div>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="calendarExportHint">生成标准 .ics 文件，可导入 Google Calendar、Apple Calendar 或 Outlook。</p>
@@ -1027,7 +1050,7 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
         <p class="setting-note" data-i18n="exampleRecordsText">首次体验时可一键生成 5 条示例记录，不覆盖真实数据。</p>
         <button class="import-btn" id="demoBtnMy" style="width:100%;" data-i18n="demoAction">体验示例</button>
       </div>
-      <div class="setting-group">
+      <div class="setting-group" id="demoRouteSection">
         <div class="setting-group-title" data-i18n="reminderNoticeTitle">提醒说明</div>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:0 0 10px;" data-i18n="reminderNoticeText">网页版提醒依赖浏览器环境。页面关闭后，长期提醒不一定可靠；建议将时刻添加到桌面并定期打开查看，重要日程建议导出 .ics 到系统日历。</p>
         <div class="setting-item"><span class="setting-item-label" data-i18n="notifyPerm">通知权限</span><span class="setting-item-value" id="notifyStatus">--</span></div>
@@ -1165,8 +1188,8 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.9.5';
-var APP_UPDATED_AT='2026-07-10 09:40';
+var APP_VERSION='v0.9.6';
+var APP_UPDATED_AT='2026-07-10 10:20';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -1226,9 +1249,9 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     exampleRecordsTitle:'示例记录',exampleRecordsText:'首次体验时可一键生成 5 条示例记录，不覆盖真实数据。',
     feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',copyEmail:'复制',feedbackCopied:'邮箱已复制',
-    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
+    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
-    releaseNote1:'首页更简洁，示例入口移到“我的”。',releaseNote2:'记录卡片支持左滑快捷操作。',releaseNote3:'时刻精灵升级为可展开的小助手。',releaseNote4:'新增建议与反馈入口。',releaseNote5:'新版本首次进入会显示本说明。',
+    releaseNote1:'新增功能中心，集中示例、演示、更新和反馈入口。',releaseNote2:'首页继续保持轻量，把说明性内容收进“我的”。',releaseNote3:'数据安全和日历导出可以从功能中心直达。',releaseNote4:'小熊助手快捷动作仍可快速跳转。',releaseNote5:'保留原有功能，不改变记录和解析逻辑。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteExportAction:'导出日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主动的智能助手能力正在规划中。',
     demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
     demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
@@ -1313,9 +1336,9 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 條',batchSavedResult:'已保存 {saved} 條，略過 {skipped} 條重複',batchSkippedOnly:'沒有新增，已略過 {skipped} 條重複',
     exampleRecordsTitle:'示例記錄',exampleRecordsText:'首次體驗時可一鍵生成 5 條示例記錄，不覆蓋真實資料。',
     feedbackTitle:'建議與回饋',feedbackText:'遇到問題或有建議，可以發郵件告訴我。',copyEmail:'複製',feedbackCopied:'郵箱已複製',
-    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
+    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、備份、日曆和回饋入口收在這裡。',featureHubDemo:'體驗示例',featureHubDemoSub:'生成 5 條示例',featureHubRoute:'演示路線',featureHubRouteSub:'從輸入到匯出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次變化',featureHubSafety:'資料安全',featureHubSafetySub:'JSON 備份',featureHubCalendar:'日曆匯出',featureHubCalendarSub:'匯出 .ics',featureHubFeedback:'建議回饋',featureHubFeedbackSub:'郵件聯絡',featureHubFuture:'未來計劃',featureHubFutureSub:'能力預告',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
     releaseTitle:'更新說明',releaseOk:'我知道了',releaseMeta:'目前版本 {version} · {time}',
-    releaseNote1:'首頁更簡潔，示例入口移到「我的」。',releaseNote2:'記錄卡片支援左滑快捷操作。',releaseNote3:'時刻精靈升級為可展開的小助手。',releaseNote4:'新增建議與回饋入口。',releaseNote5:'新版本首次進入會顯示本說明。',
+    releaseNote1:'新增功能中心，集中示例、演示、更新和回饋入口。',releaseNote2:'首頁繼續保持輕量，把說明內容收進「我的」。',releaseNote3:'資料安全和日曆匯出可以從功能中心直達。',releaseNote4:'小熊助手快捷動作仍可快速跳轉。',releaseNote5:'保留原有功能，不改變記錄和解析邏輯。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteExportAction:'匯出日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主動的智慧助手能力正在規劃中。',
     demoRouteTitle:'從一句話到日曆',demoRouteText:'把一句話整理成時刻，再匯出到你常用的日曆。',
     demoRouteStep1:'輸入一句話：明天下午三點開會',demoRouteStep2:'生成記錄並進入日曆',demoRouteStep3:'匯出 .ics 到系統日曆',demoRouteStep4:'匯出 JSON 備份保護資料',
@@ -1400,9 +1423,9 @@ var I18N={
     batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     exampleRecordsTitle:'Example records',exampleRecordsText:'Create 5 example records for first-time review without overwriting real data.',
     feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',copyEmail:'Copy',feedbackCopied:'Email copied',
-    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
+    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
-    releaseNote1:'Home is cleaner, with examples moved to Me.',releaseNote2:'Record cards support swipe actions.',releaseNote3:'The Shike sprite is now a small expandable assistant.',releaseNote4:'Feedback now has a clear entry.',releaseNote5:'Release notes appear once for each new version.',
+    releaseNote1:'Feature hub now gathers examples, demo route, updates, and feedback.',releaseNote2:'Home stays lighter while help content lives under Me.',releaseNote3:'Data safety and calendar export are reachable from the hub.',releaseNote4:'The bear assistant keeps fast navigation actions.',releaseNote5:'Existing records and parsing behavior are unchanged.',
     spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteExportAction:'Export calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',spriteResetAction:'Reset position',spriteFutureHint:'More proactive assistant abilities are being planned.',
     demoRouteTitle:'From one sentence to calendar',demoRouteText:'Turn one sentence into a moment, then export it to your calendar.',
     demoRouteStep1:'Enter one sentence: meeting tomorrow at 3pm',demoRouteStep2:'Create a record and calendar dot',demoRouteStep3:'Export .ics to your system calendar',demoRouteStep4:'Export JSON backup to protect data',
@@ -1487,9 +1510,9 @@ var I18N={
     batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     exampleRecordsTitle:'サンプル記録',exampleRecordsText:'初回確認用に 5 件のサンプルを作成できます。実データは上書きしません。',
     feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',
-    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
+    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
     releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
-    releaseNote1:'ホームを整理し、サンプル入口をマイへ移動しました。',releaseNote2:'記録カードにスワイプ操作を追加しました。',releaseNote3:'時刻アシスタントを小さな相棒らしく更新しました。',releaseNote4:'フィードバック入口を追加しました。',releaseNote5:'新しい版では初回だけ更新内容を表示します。',
+    releaseNote1:'機能センターでサンプル、デモ、更新、フィードバックをまとめました。',releaseNote2:'ホームは軽く保ち、説明はマイに整理しました。',releaseNote3:'データ保護とカレンダー出力へすぐ移動できます。',releaseNote4:'小熊アシスタントの快捷移動はそのまま使えます。',releaseNote5:'既存の記録と解析ロジックは変更していません。',
     spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteExportAction:'カレンダー出力',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',spriteResetAction:'位置をリセット',spriteFutureHint:'より能動的な助手機能を計画中です。',
     demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
     demoRouteStep1:'一文を入力：明日の午後3時に会議',demoRouteStep2:'記録を作成しカレンダーに表示',demoRouteStep3:'.ics をシステムカレンダーへ出力',demoRouteStep4:'JSON バックアップでデータを保護',
@@ -3962,6 +3985,21 @@ function copyFeedbackEmail(){
     window.location.href='mailto:'+email;
   }
 }
+function openFeatureHubAction(action){
+  if(action==='demo'){jumpToMySection('experienceExampleSection');return;}
+  if(action==='route'){
+    jumpToMySection('demoRouteSection');
+    var sec=$('demoRouteSection');
+    var details=sec&&sec.querySelector?sec.querySelector('details'):null;
+    if(details)details.open=true;
+    return;
+  }
+  if(action==='updates'){showReleaseNotes(true);return;}
+  if(action==='safety'){jumpToMySection('dataSafetySection');return;}
+  if(action==='calendar'){jumpToMySection('calendarExportSection');return;}
+  if(action==='feedback'){jumpToMySection('feedbackSection');return;}
+  if(action==='future'){jumpToMySection('futurePlanSection');return;}
+}
 
 var deferredInstallPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
@@ -4582,6 +4620,9 @@ function init(){
   b('releaseOkBtn','click',closeReleaseNotes);
   b('releaseMask','click',function(e){if(e.target===$('releaseMask'))closeReleaseNotes();});
   b('copyFeedbackMailBtn','click',function(e){e.preventDefault();copyFeedbackEmail();});
+  document.querySelectorAll('[data-feature-action]').forEach(function(btn){
+    btn.addEventListener('click',function(){openFeatureHubAction(btn.dataset.featureAction);});
+  });
   // Import handlers
   b('parseImportBtn','click',function(){
     var txt=$('importTextInput').value||'';

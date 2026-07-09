@@ -178,6 +178,11 @@ const tests = [
     name: 'Sprite assistant 2',
     script: 'test-shike-sprite-assistant-2.js',
     expected: 'Sprite assistant 2 regression passed: 34/34'
+  },
+  {
+    name: 'Feature hub cleanup',
+    script: 'test-shike-feature-hub-cleanup.js',
+    expected: 'Feature hub cleanup regression passed: 22/22'
   }
 ];
 

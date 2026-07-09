@@ -147,12 +147,12 @@ async function main() {
       notifyRequested:false,weatherCache:null,weatherCacheAt:0,locationDeniedUntil:0
     }));
     localStorage.removeItem('shike_demo_route_collapsed');
-    localStorage.setItem('shike_seen_release_note_version', 'v0.9.5');
+    localStorage.setItem('shike_seen_release_note_version', 'v0.9.6');
   `);
   await client.navigate(APP_URL);
 
   const version = await client.evaluate(`({appVersion:APP_VERSION, cacheFetch:typeof fetchWeather, route:!!document.getElementById('demoRouteBlock')})`);
-  add('app loads v0.9.5 route shell', version.appVersion === 'v0.9.5' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
+  add('app loads v0.9.6 route shell', version.appVersion === 'v0.9.6' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
 
   const guard = await client.evaluate(`
     (() => {
@@ -218,7 +218,7 @@ async function main() {
       return {home, swipe, my, release, sprite};
     })()
   `);
-  add('v0.9.5 product polish surfaces work at runtime', polish.home.exampleHidden && polish.home.demoHidden && polish.home.hasInput && polish.home.hasToday && polish.swipe.hasWrapper && polish.swipe.hasEdit && polish.swipe.hasDanger && polish.my.demo && polish.my.feedback && polish.my.future && polish.release.shown && polish.release.bullets >= 5 && polish.sprite.bear && polish.sprite.today && polish.sprite.batch && polish.sprite.calendar && polish.sprite.backup && polish.sprite.update, JSON.stringify(polish));
+  add('v0.9.6 product polish surfaces work at runtime', polish.home.exampleHidden && polish.home.demoHidden && polish.home.hasInput && polish.home.hasToday && polish.swipe.hasWrapper && polish.swipe.hasEdit && polish.swipe.hasDanger && polish.my.demo && polish.my.feedback && polish.my.future && polish.release.shown && polish.release.bullets >= 5 && polish.sprite.bear && polish.sprite.today && polish.sprite.batch && polish.sprite.calendar && polish.sprite.backup && polish.sprite.update, JSON.stringify(polish));
 
   const overflows = [];
   for (const width of VIEWPORTS) {
