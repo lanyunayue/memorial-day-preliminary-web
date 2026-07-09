@@ -68,6 +68,21 @@ const tests = [
     name: 'PWA notice',
     script: 'test-shike-pwa-notice.js',
     expected: 'PWA notice regression passed: 6/6'
+  },
+  {
+    name: 'Timeline',
+    script: 'test-shike-timeline.js',
+    expected: 'Timeline regression passed: 10/10'
+  },
+  {
+    name: 'Card export',
+    script: 'test-shike-card-export.js',
+    expected: 'Card export regression passed: 10/10'
+  },
+  {
+    name: 'Today overview',
+    script: 'test-shike-today-overview.js',
+    expected: 'Today overview regression passed: 8/8'
   }
 ];
 

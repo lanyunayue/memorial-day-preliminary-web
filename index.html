@@ -439,6 +439,34 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 }
 .form-input:focus,.form-select:focus{border-color:var(--accent);}
 .all-search-input{margin-bottom:10px;}
+.today-overview{
+  margin:14px 0 2px;padding:12px 14px;border-radius:14px;
+  background:color-mix(in srgb,var(--bg-elev) 84%,transparent);
+  border:1px solid var(--ink-line);box-shadow:var(--card-shadow);
+}
+.today-overview-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.today-overview-kicker{font-size:11px;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase;}
+.today-overview-count{font-family:var(--font-serif);font-size:18px;color:var(--ink);}
+.today-overview-lines{display:flex;flex-direction:column;gap:5px;font-size:13px;line-height:1.5;color:var(--ink-soft);}
+.today-overview-line{display:flex;gap:8px;align-items:baseline;min-width:0;}
+.today-overview-label{flex:0 0 auto;color:var(--ink-mute);font-size:12px;}
+.today-overview-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+.timeline-panel{margin:0 0 16px;padding:14px;border-radius:16px;background:var(--bg-elev);border:1px solid var(--ink-line);box-shadow:var(--card-shadow);}
+.timeline-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.timeline-title{font-family:var(--font-serif);font-size:17px;font-weight:600;letter-spacing:.04em;}
+.timeline-sub{font-size:12px;color:var(--ink-mute);}
+.timeline-groups{display:grid;gap:10px;}
+.timeline-group{padding:10px 0;border-top:1px solid var(--ink-line);}
+.timeline-group:first-child{border-top:none;padding-top:0;}
+.timeline-group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px;}
+.timeline-group-title{font-size:13px;font-weight:600;color:var(--ink);}
+.timeline-group-count{font-size:11px;color:var(--ink-mute);}
+.timeline-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-radius:8px;cursor:pointer;color:var(--ink-soft);font-size:13px;}
+.timeline-item:active{background:var(--bg-soft);}
+.timeline-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:0 0 auto;}
+.timeline-item-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.timeline-item-meta{flex:0 0 auto;color:var(--ink-mute);font-size:12px;}
+.timeline-empty{font-size:12px;color:var(--ink-mute);line-height:1.5;}
 .cal-quick-add{display:flex;gap:8px;margin-top:12px;}
 .cal-quick-input{flex:1;min-width:0;}
 .cal-quick-btn{flex:0 0 auto;padding:0 16px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;}
@@ -710,6 +738,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
           <button class="demo-btn" id="demoBtn" data-i18n="demoAction">体验示例</button>
         </div>
       </div>
+      <div id="todayOverviewBlock"></div>
     </div>
 
     <div class="content" id="homeContent">
@@ -753,6 +782,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <span class="radio-chip" data-filter="habit" data-i18n="habit">习惯</span>
         <span class="radio-chip" data-filter="note" data-i18n="note">备忘</span>
       </div>
+      <div id="timelineBlock"></div>
       <div id="allList"></div>
     </div>
   </div>
@@ -967,8 +997,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.2';
-var APP_UPDATED_AT='2026-07-09 22:10';
+var APP_VERSION='v0.8.3';
+var APP_UPDATED_AT='2026-07-09 23:45';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -984,6 +1014,12 @@ var I18N={
     inputPlaceholder:'试着写下需要记住的事情',inputHint:'可识别时间、重复和纪念日，保存后自动进入日历',
     demoPrefix:'不知道写什么？',demoAction:'体验示例',demoAlready:'示例已经在这里了',
     demoAdded:'已添加 {n} 条示例记录，可以在首页、全部和日历查看',
+    todayOverview:'今日概览',todayOverviewCount:'今天 {n} 个时刻',overviewNext:'最近',overviewAnniv:'纪念',
+    overviewEmpty:'还没有时刻。试试输入“明天下午三点开会”。',overviewNoNext:'暂时没有即将到来的安排',overviewNoAnniv:'还没有纪念日',
+    timelineTitle:'时间旅程线',timelineSub:'按时间看见你的安排',timelineToday:'今天',timelineTomorrow:'明天',timelineWeek:'本周',timelineFuture:'未来',timelineUndated:'无日期',
+    timelineTodayCopy:'有 {n} 个时刻正在靠近',timelineTomorrowCopy:'有 {n} 个安排等待你',timelineWeekCopy:'还有 {n} 件事可以提前准备',timelineFutureCopy:'这些日子值得慢慢等',timelineUndatedCopy:'这些想法还没有落到具体日期',
+    timelineEmptyToday:'今天暂时很安静',timelineEmptyTomorrow:'明天还没有安排',timelineEmptyWeek:'本周剩余时间暂无记录',timelineEmptyFuture:'未来还没有日期安排',timelineEmptyUndated:'无日期想法会出现在这里',
+    saveCardImage:'保存卡片',cardExportDone:'卡片图片已生成',cardExportUnsupported:'当前浏览器暂不支持导出图片，可以截图保存。',
     spriteName:'时刻精灵',spriteOpen:'打开时刻精灵',spriteClose:'收起时刻精灵',
     spriteInputAction:'写一句',spriteDemoAction:'体验示例',
     spriteEmptyMessage:'把一句话交给我，我帮你整理成一个时刻。',
@@ -1056,6 +1092,12 @@ var I18N={
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
     demoPrefix:'不知道寫什麼？',demoAction:'體驗示例',demoAlready:'示例已經在這裡了',
     demoAdded:'已新增 {n} 條示例記錄，可以在首頁、全部和日曆查看',
+    todayOverview:'今日概覽',todayOverviewCount:'今天 {n} 個時刻',overviewNext:'最近',overviewAnniv:'紀念',
+    overviewEmpty:'還沒有時刻。試試輸入「明天下午三點開會」。',overviewNoNext:'暫時沒有即將到來的安排',overviewNoAnniv:'還沒有紀念日',
+    timelineTitle:'時間旅程線',timelineSub:'按時間看見你的安排',timelineToday:'今天',timelineTomorrow:'明天',timelineWeek:'本週',timelineFuture:'未來',timelineUndated:'無日期',
+    timelineTodayCopy:'有 {n} 個時刻正在靠近',timelineTomorrowCopy:'有 {n} 個安排等待你',timelineWeekCopy:'還有 {n} 件事可以提前準備',timelineFutureCopy:'這些日子值得慢慢等',timelineUndatedCopy:'這些想法還沒有落到具體日期',
+    timelineEmptyToday:'今天暫時很安靜',timelineEmptyTomorrow:'明天還沒有安排',timelineEmptyWeek:'本週剩餘時間暫無記錄',timelineEmptyFuture:'未來還沒有日期安排',timelineEmptyUndated:'無日期想法會出現在這裡',
+    saveCardImage:'保存卡片',cardExportDone:'卡片圖片已生成',cardExportUnsupported:'目前瀏覽器暫不支援匯出圖片，可以截圖保存。',
     spriteName:'時刻精靈',spriteOpen:'打開時刻精靈',spriteClose:'收起時刻精靈',
     spriteInputAction:'寫一句',spriteDemoAction:'體驗示例',
     spriteEmptyMessage:'把一句話交給我，我幫你整理成一個時刻。',
@@ -1128,6 +1170,12 @@ var I18N={
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
     demoPrefix:'Not sure what to add?',demoAction:'Try examples',demoAlready:'The examples are already here',
     demoAdded:'Added {n} example records. View them on Home, All, and Calendar.',
+    todayOverview:'Today overview',todayOverviewCount:'{n} moments today',overviewNext:'Next',overviewAnniv:'Anniversary',
+    overviewEmpty:'No moments yet. Try “meeting tomorrow at 3pm”.',overviewNoNext:'No upcoming schedule yet',overviewNoAnniv:'No anniversaries yet',
+    timelineTitle:'Time journey',timelineSub:'See your moments by time',timelineToday:'Today',timelineTomorrow:'Tomorrow',timelineWeek:'This week',timelineFuture:'Future',timelineUndated:'Undated',
+    timelineTodayCopy:'{n} moments are close today',timelineTomorrowCopy:'{n} arrangements are waiting',timelineWeekCopy:'{n} things can be prepared this week',timelineFutureCopy:'These days are worth waiting for',timelineUndatedCopy:'These ideas do not have dates yet',
+    timelineEmptyToday:'Today is quiet for now',timelineEmptyTomorrow:'Tomorrow has no arrangement yet',timelineEmptyWeek:'No more records this week',timelineEmptyFuture:'No future dated records yet',timelineEmptyUndated:'Undated ideas will appear here',
+    saveCardImage:'Save card',cardExportDone:'Card image generated',cardExportUnsupported:'This browser cannot export images yet. You can save a screenshot instead.',
     spriteName:'Shike sprite',spriteOpen:'Open Shike sprite',spriteClose:'Collapse Shike sprite',
     spriteInputAction:'Write one',spriteDemoAction:'Try examples',
     spriteEmptyMessage:'Give me one sentence, and I will turn it into a moment.',
@@ -1200,6 +1248,12 @@ var I18N={
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
     demoPrefix:'何を書くか迷ったら',demoAction:'例を試す',demoAlready:'例はすでに追加されています',
     demoAdded:'{n} 件のサンプル記録を追加しました。ホーム・一覧・カレンダーで確認できます',
+    todayOverview:'今日の概要',todayOverviewCount:'今日は {n} 件',overviewNext:'次',overviewAnniv:'記念',
+    overviewEmpty:'まだ時刻がありません。「明日の午後3時に会議」と入力してみてください。',overviewNoNext:'近い予定はまだありません',overviewNoAnniv:'記念日はまだありません',
+    timelineTitle:'時間の旅路',timelineSub:'時間順に時刻を見る',timelineToday:'今日',timelineTomorrow:'明日',timelineWeek:'今週',timelineFuture:'未来',timelineUndated:'日付なし',
+    timelineTodayCopy:'今日近づいている時刻が {n} 件あります',timelineTomorrowCopy:'明日待っている予定が {n} 件あります',timelineWeekCopy:'今週準備できることが {n} 件あります',timelineFutureCopy:'ゆっくり待ちたい日々です',timelineUndatedCopy:'まだ日付のないアイデアです',
+    timelineEmptyToday:'今日は今のところ静かです',timelineEmptyTomorrow:'明日の予定はまだありません',timelineEmptyWeek:'今週残りの記録はありません',timelineEmptyFuture:'未来の日付付き記録はまだありません',timelineEmptyUndated:'日付なしの考えはここに出ます',
+    saveCardImage:'カード保存',cardExportDone:'カード画像を生成しました',cardExportUnsupported:'このブラウザでは画像を書き出せません。スクリーンショットで保存できます。',
     spriteName:'時刻アシスタント',spriteOpen:'時刻アシスタントを開く',spriteClose:'時刻アシスタントを閉じる',
     spriteInputAction:'一文を書く',spriteDemoAction:'例を試す',
     spriteEmptyMessage:'一文を渡してください。時刻として整理します。',
@@ -1765,6 +1819,95 @@ function downloadTextFile(filename,content,type){
   a.download=filename;
   a.click();
   setTimeout(function(){URL.revokeObjectURL(url);},0);
+}
+function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,maxLines){
+  var words=String(text||'').split('');
+  var line='',lines=[];
+  words.forEach(function(ch){
+    var test=line+ch;
+    if(ctx.measureText(test).width>maxWidth&&line){
+      lines.push(line);line=ch;
+    }else line=test;
+  });
+  if(line)lines.push(line);
+  if(maxLines&&lines.length>maxLines){
+    lines=lines.slice(0,maxLines);
+    lines[lines.length-1]=lines[lines.length-1].replace(/.{1,2}$/,'…');
+  }
+  lines.forEach(function(l,i){ctx.fillText(l,x,y+i*lineHeight);});
+  return y+lines.length*lineHeight;
+}
+function canvasRoundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+function exportAnniversaryCardPng(id){
+  var r=records.find(function(x){return x.id===id;});
+  if(!r||r.recordKind!=='anniversary')return null;
+  var canvas=document.createElement('canvas');
+  if(!canvas||!canvas.getContext){showToast(t('cardExportUnsupported'),'warn');return null;}
+  var ctx=canvas.getContext('2d');
+  if(!ctx){showToast(t('cardExportUnsupported'),'warn');return null;}
+  var scale=2,w=720,h=960;
+  canvas.width=w*scale;canvas.height=h*scale;
+  ctx.scale(scale,scale);
+  var bodyStyle=getComputedStyle(document.body);
+  var bg=(bodyStyle.getPropertyValue('--bg')||'#f7f3ed').trim();
+  var elev=(bodyStyle.getPropertyValue('--bg-elev')||'#fdfaf5').trim();
+  var ink=(bodyStyle.getPropertyValue('--ink')||'#2c2520').trim();
+  var mute=(bodyStyle.getPropertyValue('--ink-mute')||'#8a8178').trim();
+  var accent=(bodyStyle.getPropertyValue('--accent')||'#b8553f').trim();
+  ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+  var grad=ctx.createLinearGradient(0,0,w,h);
+  grad.addColorStop(0,elev);grad.addColorStop(1,bg);
+  ctx.fillStyle=grad;canvasRoundRect(ctx,52,60,w-104,h-120,28);ctx.fill();
+  ctx.strokeStyle='rgba(44,37,32,.10)';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle=accent;ctx.globalAlpha=.10;ctx.beginPath();ctx.arc(w-120,140,92,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  ctx.fillStyle=accent;ctx.font='24px serif';ctx.fillText(t('anniversary'),92,130);
+  ctx.fillStyle=ink;ctx.font='bold 52px serif';
+  var nextY=drawWrappedText(ctx,r.title||t('appName'),92,235,w-184,64,2);
+  var d=getNextVisibleDate(r);
+  var dateText=d?(d.getFullYear()+'.'+pad2(d.getMonth()+1)+'.'+pad2(d.getDate())):(r.dateText||'');
+  ctx.fillStyle=mute;ctx.font='24px sans-serif';ctx.fillText(dateText,92,nextY+28);
+  var cd=formatLiveCountdown(r);
+  ctx.fillStyle=accent;ctx.font='bold 56px serif';
+  drawWrappedText(ctx,cd?cd.text:'',92,nextY+112,w-184,64,2);
+  if(r.subtitle||r.note){
+    ctx.fillStyle=mute;ctx.font='24px sans-serif';
+    drawWrappedText(ctx,r.subtitle||r.note,92,650,w-184,34,3);
+  }
+  ctx.fillStyle=ink;ctx.font='bold 26px serif';ctx.fillText(t('appName'),92,830);
+  ctx.fillStyle=mute;ctx.font='18px sans-serif';ctx.fillText('shike.app · '+new Date().toLocaleDateString(),92,862);
+  function saveBlob(blob){
+    if(!blob){showToast(t('cardExportUnsupported'),'warn');return;}
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    a.download='shike-card-'+safeFilePart(r.title)+'.png';
+    a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},0);
+    showToast(t('cardExportDone'),'success');
+  }
+  if(canvas.toBlob)canvas.toBlob(saveBlob,'image/png');
+  else{
+    try{
+      var data=canvas.toDataURL('image/png');
+      var bin=atob(data.split(',')[1]);
+      var arr=new Uint8Array(bin.length);
+      for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+      saveBlob(new Blob([arr],{type:'image/png'}));
+    }catch(e){showToast(t('cardExportUnsupported'),'warn');}
+  }
+  return canvas;
 }
 function exportIcsFile(){
   try{
@@ -2334,6 +2477,143 @@ function setHoursZero(d){var x=new Date(d);x.setHours(0,0,0,0);return x;}
 function repeatLabel(rep){
   return{daily:'每日',weekly:'每周',monthly:'每月',yearly:'每年',none:''}[rep]||'';
 }
+function formatRecordShortDate(r){
+  if(!r)return'';
+  return [r.dateText,r.timeText].filter(Boolean).join(' ')||r.rawText||'';
+}
+function getNextVisibleDate(r){
+  if(!r)return null;
+  var d=getRecordTargetDateTime(r,{allowPast:true});
+  if(!d)return null;
+  if(r.recordKind==='anniversary'&&(r.repeat==='yearly'||!r.repeat||r.repeat==='none')){
+    var now=new Date();
+    var today=setHoursZero(now);
+    var next=new Date(now.getFullYear(),d.getMonth(),d.getDate());
+    if(setHoursZero(next).getTime()<today.getTime())next.setFullYear(next.getFullYear()+1);
+    return next;
+  }
+  if(r.repeat==='daily'){
+    var daily=new Date();
+    daily.setHours(d.getHours(),d.getMinutes(),0,0);
+    if(daily.getTime()<Date.now())daily.setDate(daily.getDate()+1);
+    return daily;
+  }
+  return d;
+}
+function daysUntilDate(d){
+  if(!d)return null;
+  var today=setHoursZero(new Date());
+  var target=setHoursZero(d);
+  return Math.round((target.getTime()-today.getTime())/86400000);
+}
+function formatOverviewRecord(r,anniv){
+  if(!r)return'';
+  var d=getNextVisibleDate(r);
+  var parts=[r.title||r.rawText||t('appName')];
+  if(anniv&&d){
+    var diff=daysUntilDate(d);
+    if(diff===0)parts.push(t('today'));
+    else parts.push(tf('dayCountdown',{d:diff}));
+  }else{
+    var meta=formatRecordShortDate(r);
+    if(meta)parts.push(meta);
+  }
+  return parts.join(' · ');
+}
+function getTodayOverviewData(){
+  var today=setHoursZero(new Date());
+  var todayCount=0;
+  var upcoming=[];
+  var anniversaries=[];
+  records.forEach(function(r){
+    var d=getNextVisibleDate(r);
+    if(d&&setHoursZero(d).getTime()===today.getTime())todayCount++;
+    if(d&&r.recordKind!=='anniversary'&&setHoursZero(d).getTime()>=today.getTime())upcoming.push({record:r,date:d});
+    if(r.recordKind==='anniversary'&&d)anniversaries.push({record:r,date:d});
+  });
+  upcoming.sort(function(a,b){return a.date-b.date;});
+  anniversaries.sort(function(a,b){return a.date-b.date;});
+  return {todayCount:todayCount,next:upcoming[0]&&upcoming[0].record,anniversary:anniversaries[0]&&anniversaries[0].record};
+}
+function renderTodayOverview(){
+  var el=$('todayOverviewBlock');if(!el)return;
+  if(!records.length){
+    el.innerHTML='<div class="today-overview">'+
+      '<div class="today-overview-title"><span class="today-overview-kicker">'+t('todayOverview')+'</span><span class="today-overview-count">0</span></div>'+
+      '<div class="today-overview-lines"><div class="today-overview-line"><span class="today-overview-value">'+t('overviewEmpty')+'</span></div>'+
+      '<button class="demo-btn" onclick="addDemoRecords()">'+t('demoAction')+'</button></div>'+
+    '</div>';
+    return;
+  }
+  var data=getTodayOverviewData();
+  el.innerHTML='<div class="today-overview">'+
+    '<div class="today-overview-title"><span class="today-overview-kicker">'+t('todayOverview')+'</span><span class="today-overview-count">'+tf('todayOverviewCount',{n:data.todayCount})+'</span></div>'+
+    '<div class="today-overview-lines">'+
+      '<div class="today-overview-line"><span class="today-overview-label">'+t('overviewNext')+'</span><span class="today-overview-value">'+escHtml(data.next?formatOverviewRecord(data.next,false):t('overviewNoNext'))+'</span></div>'+
+      '<div class="today-overview-line"><span class="today-overview-label">'+t('overviewAnniv')+'</span><span class="today-overview-value">'+escHtml(data.anniversary?formatOverviewRecord(data.anniversary,true):t('overviewNoAnniv'))+'</span></div>'+
+    '</div></div>';
+}
+function getTimelineGroups(){
+  var today=setHoursZero(new Date());
+  var tomorrow=new Date(today);tomorrow.setDate(today.getDate()+1);
+  var weekEnd=new Date(today);weekEnd.setDate(today.getDate()+6);
+  var groups={
+    today:[],tomorrow:[],week:[],future:[],undated:[]
+  };
+  records.forEach(function(r){
+    var d=getNextVisibleDate(r);
+    if(!d){groups.undated.push(r);return;}
+    var day=setHoursZero(d);
+    if(day.getTime()===today.getTime())groups.today.push(r);
+    else if(day.getTime()===tomorrow.getTime())groups.tomorrow.push(r);
+    else if(day.getTime()>tomorrow.getTime()&&day.getTime()<=weekEnd.getTime())groups.week.push(r);
+    else groups.future.push(r);
+  });
+  Object.keys(groups).forEach(function(k){
+    groups[k].sort(function(a,b){
+      var da=getNextVisibleDate(a),db=getNextVisibleDate(b);
+      if(da&&db)return da-db;
+      return(b.updatedAt||b.createdAt||0)-(a.updatedAt||a.createdAt||0);
+    });
+  });
+  return groups;
+}
+function timelineMetaForRecord(r){
+  var d=getNextVisibleDate(r);
+  if(!d)return r.recordKind?({reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[r.recordKind]||''):'';
+  return formatRecordShortDate(r)||dateTextFromDate(d);
+}
+function renderTimelineItem(r){
+  return '<div class="timeline-item" onclick="openDetail(\''+r.id+'\')">'+
+    '<span class="timeline-dot"></span>'+
+    '<span class="timeline-item-title">'+escHtml(r.title||r.rawText||'')+'</span>'+
+    '<span class="timeline-item-meta">'+escHtml(timelineMetaForRecord(r))+'</span>'+
+  '</div>';
+}
+function renderTimelineGroup(key,title,copyKey,emptyKey,items){
+  var html='<div class="timeline-group" data-timeline-group="'+key+'">'+
+    '<div class="timeline-group-head"><span class="timeline-group-title">'+title+'</span><span class="timeline-group-count">'+tf(copyKey,{n:items.length})+'</span></div>';
+  if(items.length){
+    items.slice(0,3).forEach(function(r){html+=renderTimelineItem(r);});
+  }else{
+    html+='<div class="timeline-empty">'+t(emptyKey)+'</div>';
+  }
+  html+='</div>';
+  return html;
+}
+function renderTimeline(){
+  var el=$('timelineBlock');if(!el)return;
+  var g=getTimelineGroups();
+  el.innerHTML='<div class="timeline-panel" id="timeJourney">'+
+    '<div class="timeline-head"><div><div class="timeline-title">'+t('timelineTitle')+'</div><div class="timeline-sub">'+t('timelineSub')+'</div></div><div class="card-section-count">'+records.length+'</div></div>'+
+    '<div class="timeline-groups">'+
+      renderTimelineGroup('today',t('timelineToday'),'timelineTodayCopy','timelineEmptyToday',g.today)+
+      renderTimelineGroup('tomorrow',t('timelineTomorrow'),'timelineTomorrowCopy','timelineEmptyTomorrow',g.tomorrow)+
+      renderTimelineGroup('week',t('timelineWeek'),'timelineWeekCopy','timelineEmptyWeek',g.week)+
+      renderTimelineGroup('future',t('timelineFuture'),'timelineFutureCopy','timelineEmptyFuture',g.future)+
+      renderTimelineGroup('undated',t('timelineUndated'),'timelineUndatedCopy','timelineEmptyUndated',g.undated)+
+    '</div></div>';
+}
 
 /* ========== Clock ========== */
 var clockTimer=null;
@@ -2419,6 +2699,7 @@ function renderHeroCard(r,compact){
   if(r.subtitle)sub='<div class="hero-subtitle-text">'+escHtml(r.subtitle)+'</div>';
   var acts='';
   if(r.recordKind==='reminder')acts+='<button class="hero-act" onclick="openDetail(\''+r.id+'\')">'+t('details')+'</button>';
+  if(r.recordKind==='anniversary')acts+='<button class="hero-act" onclick="exportAnniversaryCardPng(\''+r.id+'\')">'+t('saveCardImage')+'</button>';
   acts+='<button class="hero-act" onclick="togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>';
   var pinIcon=r.pinned?'<span class="hero-pin">●</span>':'';
   var minH=compact?'min-height:140px;':'';
@@ -2463,6 +2744,7 @@ function renderHome(){
   updateLayoutState();
   // Clock visible in topbar for has-records, big clock visible for empty
   updateHomeClock();
+  renderTodayOverview();
 
   var list=records.slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   // Hero cards: pinned or cardStyle==='large' or anniversary
@@ -2692,6 +2974,7 @@ function renderAll(){
   if(allSearchQuery)list=list.filter(function(r){return recordMatchesAllSearch(r,allSearchQuery);});
   $('allCount').textContent=list.length;
   var c=$('allList');
+  renderTimeline();
   if(list.length===0){c.innerHTML='<div class="mini-empty">'+(allSearchQuery?t('noSearchResult'):t('emptyHint'))+'</div>';return;}
   var html='';
   list.forEach(function(r){
@@ -2996,7 +3279,8 @@ function openDetail(id){
     '<div class="detail-row"><span class="detail-label">置顶</span><span class="detail-value">'+(r.pinned?'是':'否')+'</span></div>'+
     '<div class="detail-row"><span class="detail-label">记录时间</span><span class="detail-value">'+new Date(r.createdAt).toLocaleDateString()+'</span></div>'+
   '</div>';
-  var footer=(r.dateKey?'<button class="btn-secondary" onclick="exportRecordIcsFile(\''+id+'\')">'+t('exportRecordIcs')+'</button>':'')+
+  var footer=(r.recordKind==='anniversary'?'<button class="btn-secondary" onclick="exportAnniversaryCardPng(\''+id+'\')">'+t('saveCardImage')+'</button>':'')+
+    (r.dateKey?'<button class="btn-secondary" onclick="exportRecordIcsFile(\''+id+'\')">'+t('exportRecordIcs')+'</button>':'')+
     '<button class="btn-cancel" onclick="closeDrawer()">'+t('close')+'</button>'+
     '<button class="btn-secondary" onclick="togglePin(\''+id+'\');openDetail(\''+id+'\');">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
     '<button class="btn-primary" onclick="openEditDrawer(\''+id+'\')">'+t('edit')+'</button>';
