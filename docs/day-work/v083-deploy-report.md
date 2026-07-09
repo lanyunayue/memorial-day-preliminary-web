@@ -2,34 +2,29 @@
 
 Date: 2026-07-09
 
-## 1. Result
+## Result
 
-Deployment result: failed before remote update.
+Deployment result: success.
 
-Reason: local Git could not connect to `github.com:443` for `git push`.
+Online URL: `https://lanyunayue.github.io/memorial-day-preliminary-web/`
 
-No online deployment was completed.
+## Version
 
-## 2. Candidate
-
-- Worktree: `D:\lifetime-v083-visible-feature-pack`
-- Branch: `rematch-v083-visible-feature-pack`
-- Candidate HEAD before deploy attempt: `5f60f7e43d85836909fa1cedced6408c30091aee`
-- Version: `v0.8.3`
+- Online app version: `v0.8.3`
 - Service worker cache: `shike-v083-v29`
+- Main deploy commit before this report update: `185d7f56f57de78b72f144a21c2d11d28be1a1aa`
 
-## 3. Predeploy Audit
+## Backup Tag
 
-Predeploy audit passed:
+Backup tag:
 
-- branch: `rematch-v083-visible-feature-pack`
-- HEAD: `5f60f7e43d85836909fa1cedced6408c30091aee`
-- base: `0e1a5a90a6fff1c0016e483490e97d049c9ab0cf`
-- no uncommitted changes in the candidate worktree
+- `shike-web-stable-before-v083-visible-feature-pack`
+- points to v0.8.2 stable commit `0e1a5a90a6fff1c0016e483490e97d049c9ab0cf`
+- pushed to origin successfully
 
-## 4. Predeploy Tests
+## Predeploy Tests
 
-Commands run:
+Commands run before push:
 
 ```powershell
 node scripts/test-shike-regression-suite.js
@@ -61,83 +56,45 @@ Results:
 - PWA notice: 6/6
 - PWA assets: 8/8
 
-Full NLP script was not present, so no fresh NLP 104/104 result is claimed.
+Full NLP script was not present, so this report does not claim a fresh NLP 104/104 result.
 
-## 5. Runtime Validation
+## Online Verification
 
-Local headless Edge validation passed:
-
-- 375, 390, 414, 768, 1024, 1366, 1440 px
-- no blank screen
-- no horizontal overflow
-- today overview visible
-- time journey visible
-- anniversary PNG export returns canvas
-- time sprite works
-- demo examples generate 5 records
-- search works
-- calendar dot visible
-- import preview usable
-- My page data safety, `.ics`, and PWA notice visible
-- night theme readable
-- desktop width is not phone-narrow
-- no obvious JavaScript errors
-
-Result: 26/26.
-
-## 6. Deploy Attempt
-
-The backup tag was created locally:
-
-- `shike-web-stable-before-v083-visible-feature-pack`
-- points to `0e1a5a90a6fff1c0016e483490e97d049c9ab0cf`
-
-Pushing the tag failed:
-
-```text
-fatal: unable to access 'https://github.com/lanyunayue/memorial-day-preliminary-web.git/': Recv failure: Connection was reset
-```
-
-After local fast-forward merge, main tests passed, but pushing tag and main failed:
-
-```text
-fatal: unable to access 'https://github.com/lanyunayue/memorial-day-preliminary-web.git/': Failed to connect to github.com port 443 after 21029 ms: Couldn't connect to server
-```
-
-`Test-NetConnection github.com -Port 443` also failed with `TcpTestSucceeded: False`.
-
-## 7. Rollback
-
-Because deployment did not complete, local `main` was reset back to the local backup tag:
-
-```powershell
-git reset --hard shike-web-stable-before-v083-visible-feature-pack
-```
-
-Local `main` is back to:
-
-- `0e1a5a90a6fff1c0016e483490e97d049c9ab0cf`
-- version: `v0.8.2`
-- service worker cache: `shike-v082-v28`
-
-Online verification after failure:
+Static online verification:
 
 - root URL HTTP 200
-- online still contains `APP_VERSION='v0.8.2'`
-- online does not contain `APP_VERSION='v0.8.3'`
+- root HTML contains `APP_VERSION='v0.8.3'`
+- `sw.js` contains `shike-v083-v29`
 
-## 8. v0.8.4 Status
+Headless Edge online verification:
 
-v0.8.4 was not started because the instructions require v0.8.3 to be online successfully first.
+- 375 px v0.8.3 visible: pass
+- 375 px no horizontal overflow: pass
+- 1366 px v0.8.3 visible: pass
+- 1366 px no horizontal overflow: pass
+- today overview visible: pass
+- demo examples generate 5 records: pass
+- time journey visible: pass
+- anniversary card image entry visible: pass
+- calendar dot visible: pass
+- My page data safety, `.ics`, PWA notice visible: pass
+- no obvious JavaScript runtime errors: pass
 
-## 9. Recommendation
+Result: 9/9.
 
-Do not continue v0.8.4 until Git push connectivity is restored and v0.8.3 is deployed successfully.
+## Notes
 
-Next safe step:
+During the first deploy attempt, local Git connectivity to `github.com:443` failed. After connectivity recovered, the tag and main push succeeded. No rollback was needed for the successful deployment.
 
-1. Restore GitHub HTTPS connectivity.
-2. Re-run v0.8.3 deploy from `D:\lifetime-v083-visible-feature-pack`.
-3. Confirm online `APP_VERSION='v0.8.3'`.
-4. Only then create `D:\lifetime-v084-smart-capture`.
+## Rollback
+
+If v0.8.3 needs rollback:
+
+```powershell
+git switch main
+git reset --hard shike-web-stable-before-v083-visible-feature-pack
+git push --force-with-lease origin main
+```
+
+Then verify the root URL returns v0.8.2 and `sw.js` returns `shike-v082-v28`.
 
