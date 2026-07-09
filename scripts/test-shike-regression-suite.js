@@ -83,6 +83,26 @@ const tests = [
     name: 'Today overview',
     script: 'test-shike-today-overview.js',
     expected: 'Today overview regression passed: 8/8'
+  },
+  {
+    name: 'Parse preview',
+    script: 'test-shike-parse-preview.js',
+    expected: 'Parse preview regression passed: 10/10'
+  },
+  {
+    name: 'Correction chips',
+    script: 'test-shike-correction-chips.js',
+    expected: 'Correction chips regression passed: 10/10'
+  },
+  {
+    name: 'Later inbox',
+    script: 'test-shike-later-inbox.js',
+    expected: 'Later inbox regression passed: 10/10'
+  },
+  {
+    name: 'Example chips',
+    script: 'test-shike-example-chips.js',
+    expected: 'Example chips regression passed: 7/7'
   }
 ];
 

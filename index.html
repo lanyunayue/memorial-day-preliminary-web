@@ -467,6 +467,36 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 .timeline-item-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .timeline-item-meta{flex:0 0 auto;color:var(--ink-mute);font-size:12px;}
 .timeline-empty{font-size:12px;color:var(--ink-mute);line-height:1.5;}
+.example-chips{display:flex;gap:7px;overflow-x:auto;padding:8px 0 2px;margin-top:2px;scrollbar-width:none;}
+.example-chips::-webkit-scrollbar{display:none;}
+.example-chip,.preview-chip,.later-action{
+  flex:0 0 auto;padding:6px 10px;border-radius:18px;background:var(--bg-soft);
+  color:var(--ink-soft);border:1px solid var(--ink-line);font-size:12px;line-height:1.2;
+}
+.parse-preview{
+  margin-top:10px;padding:12px;border-radius:14px;background:var(--bg-elev);
+  border:1px solid var(--ink-line);box-shadow:var(--card-shadow);
+}
+.parse-preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.parse-preview-title{font-size:13px;font-weight:600;color:var(--ink);}
+.parse-preview-toggle{font-size:12px;color:var(--ink-mute);display:flex;align-items:center;gap:6px;}
+.parse-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.parse-preview-field{padding:8px;border-radius:10px;background:var(--bg-soft);min-width:0;}
+.parse-preview-label{font-size:10px;color:var(--ink-mute);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+.parse-preview-value{font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.preview-chip-row{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0;}
+.preview-chip.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.parse-preview-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.parse-preview-actions .import-btn{padding:8px 10px;}
+.later-inbox{margin-top:16px;padding:12px;border-radius:14px;background:var(--bg-elev);border:1px solid var(--ink-line);box-shadow:var(--card-shadow);}
+.later-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
+.later-title{font-family:var(--font-serif);font-size:16px;font-weight:600;}
+.later-count{font-size:12px;color:var(--ink-mute);}
+.later-note{font-size:12px;color:var(--ink-mute);line-height:1.5;margin-bottom:8px;}
+.later-item{padding:8px 0;border-top:1px solid var(--ink-line);}
+.later-item:first-of-type{border-top:none;}
+.later-item-title{font-size:13px;color:var(--ink);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.later-actions{display:flex;gap:6px;flex-wrap:wrap;}
 .cal-quick-add{display:flex;gap:8px;margin-top:12px;}
 .cal-quick-input{flex:1;min-width:0;}
 .cal-quick-btn{flex:0 0 auto;padding:0 16px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;}
@@ -733,6 +763,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
           <span class="voice-status" id="voiceStatus"></span>
         </div>
         <div class="input-hint" data-i18n="inputHint">可识别时间、重复和纪念日，保存后自动进入日历</div>
+        <div class="example-chips" id="exampleChips"></div>
+        <div id="parsePreviewBlock"></div>
         <div class="demo-hint">
           <span class="demo-prefix" data-i18n="demoPrefix">不知道写什么？</span>
           <button class="demo-btn" id="demoBtn" data-i18n="demoAction">体验示例</button>
@@ -801,6 +833,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         </label>
       </div>
       <div id="importDraftList"></div>
+      <div id="laterInboxBlock"></div>
       <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--ink-line);">
         <div class="card-section-title" style="font-size:15px;margin-bottom:10px;" data-i18n="backup">数据备份</div>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="localDataHint">数据默认保存在当前浏览器，可通过备份文件迁移。</p>
@@ -997,8 +1030,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.3';
-var APP_UPDATED_AT='2026-07-09 23:45';
+var APP_VERSION='v0.8.4';
+var APP_UPDATED_AT='2026-07-10 00:35';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -1414,6 +1447,7 @@ function getHolidayInfo(date){
 function pad2(n){return n<10?'0'+n:''+n;}
 function daysInMonthOf(year,monthIndex){return new Date(year,monthIndex+1,0).getDate();}
 function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(s){return escHtml(String(s||'')).replace(/'/g,'&#39;');}
 function $(id){return document.getElementById(id);}
 function genId(){return 'r_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);}
 function showToast(msg,type){
@@ -2614,6 +2648,202 @@ function renderTimeline(){
       renderTimelineGroup('undated',t('timelineUndated'),'timelineUndatedCopy','timelineEmptyUndated',g.undated)+
     '</div></div>';
 }
+var PARSE_PREVIEW_KEY='shike_parse_preview_enabled';
+var pendingParsePreview=null;
+var parsePreviewTimer=null;
+var exampleChipTexts=['明天下午三点开会','每月15号还信用卡','7月8日妈妈生日','每天睡前涂润唇膏','周末整理房间'];
+function isParsePreviewEnabled(){
+  try{return localStorage.getItem(PARSE_PREVIEW_KEY)!=='false';}catch(e){return true;}
+}
+function setParsePreviewEnabled(enabled){
+  try{localStorage.setItem(PARSE_PREVIEW_KEY,enabled?'true':'false');}catch(e){}
+  renderParsePreview();
+}
+function cloneParsedRecord(parsed){
+  return Object.assign({},parsed||{});
+}
+function shouldTreatAsUndatedIdea(text,parsed){
+  if(!text||!parsed)return false;
+  if(hasExplicitDateInput(text)||parsed.repeat&&parsed.repeat!=='none')return false;
+  return /想法|备忘|清单|灵感|笔记/.test(text);
+}
+function normalizeCapturePreviewParsed(text,parsed){
+  if(!parsed||!parsed.title){
+    return {title:text,dateText:'',dateKey:'',timeText:'',recordKind:'note',repeat:'none',repeatText:'',rawText:text,relativeMinutes:null,monthEnd:false};
+  }
+  if(shouldTreatAsUndatedIdea(text,parsed)){
+    parsed=cloneParsedRecord(parsed);
+    parsed.dateText='';parsed.dateKey='';parsed.timeText='';
+    parsed.recordKind='note';parsed.repeat='none';parsed.repeatText='';parsed.relativeMinutes=null;
+  }
+  return parsed;
+}
+function parsePreviewKindLabel(kind){
+  return {reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[kind]||kind||'';
+}
+function parsePreviewRepeatLabel(rep){
+  return repeatLabel(rep||'none')||'不重复';
+}
+function parsePreviewCalendarState(parsed){
+  return parsed&&parsed.dateKey?'可加入':'无日期';
+}
+function parsePreviewIcsState(parsed){
+  return parsed&&parsed.dateKey?'可导出 .ics':'不可导出';
+}
+function buildPreviewField(label,value){
+  return '<div class="parse-preview-field"><div class="parse-preview-label">'+label+'</div><div class="parse-preview-value">'+escHtml(value||'--')+'</div></div>';
+}
+function renderPreviewChips(title,group,current,items){
+  var html='<div class="preview-chip-row" data-correction-group="'+group+'"><span class="parse-preview-label" style="align-self:center;">'+title+'</span>';
+  items.forEach(function(item){
+    html+='<button class="preview-chip'+(item.value===current?' active':'')+'" onclick="applyPreviewCorrection(\''+group+'\',\''+item.value+'\')">'+item.label+'</button>';
+  });
+  html+='</div>';
+  return html;
+}
+function renderParsePreview(){
+  var el=$('parsePreviewBlock');if(!el)return;
+  if(!isParsePreviewEnabled()){
+    el.innerHTML='<div class="parse-preview"><div class="parse-preview-head"><div class="parse-preview-title">解析预览已关闭</div><label class="parse-preview-toggle"><input type="checkbox" onchange="setParsePreviewEnabled(this.checked)"> 开启解析预览</label></div></div>';
+    return;
+  }
+  if(!pendingParsePreview){el.innerHTML='';return;}
+  var p=pendingParsePreview.parsed||{};
+  var html='<div class="parse-preview" id="parsePreviewCard">'+
+    '<div class="parse-preview-head"><div class="parse-preview-title">我理解为</div><label class="parse-preview-toggle"><input type="checkbox" checked onchange="setParsePreviewEnabled(this.checked)"> 解析预览</label></div>'+
+    '<div class="parse-preview-grid">'+
+      buildPreviewField('类型',parsePreviewKindLabel(p.recordKind))+
+      buildPreviewField('标题',p.title)+
+      buildPreviewField('日期',[p.dateText,p.timeText].filter(Boolean).join(' '))+
+      buildPreviewField('重复',parsePreviewRepeatLabel(p.repeat))+
+      buildPreviewField('日历',parsePreviewCalendarState(p))+
+      buildPreviewField('导出',parsePreviewIcsState(p))+
+    '</div>'+
+    renderPreviewChips('类型','kind',p.recordKind,[{label:t('reminder'),value:'reminder'},{label:t('anniversary'),value:'anniversary'},{label:t('habit'),value:'habit'},{label:t('note'),value:'note'}])+
+    renderPreviewChips('重复','repeat',p.repeat||'none',[{label:'不重复',value:'none'},{label:'每天',value:'daily'},{label:'每月',value:'monthly'},{label:'每年',value:'yearly'}])+
+    renderPreviewChips('日期','date',p._dateChoice||'keep',[{label:'保持解析结果',value:'keep'},{label:t('today'),value:'today'},{label:t('tomorrow'),value:'tomorrow'},{label:'无日期',value:'none'}])+
+    renderPreviewChips('时间','time',p._timeChoice||'keep',[{label:'保持解析结果',value:'keep'},{label:'无时间',value:'none'},{label:'上午 9:00',value:'morning'},{label:'下午 3:00',value:'afternoon'},{label:'晚上 8:00',value:'evening'}])+
+    '<div class="parse-preview-actions">'+
+      '<button class="import-btn" onclick="confirmParsePreview()">确认创建</button>'+
+      '<button class="import-btn" onclick="continueEditingPreview()">继续修改</button>'+
+      '<button class="import-btn" onclick="confirmParsePreview()">直接保存</button>'+
+    '</div>'+
+  '</div>';
+  el.innerHTML=html;
+}
+function showParsePreview(rawText){
+  var text=(rawText||'').trim();
+  if(!text){pendingParsePreview=null;renderParsePreview();return null;}
+  pendingParsePreview=null;
+  renderParsePreview();
+  var parsed=normalizeCapturePreviewParsed(text,parseReminderText(text));
+  pendingParsePreview={raw:text,parsed:cloneParsedRecord(parsed)};
+  renderParsePreview();
+  return pendingParsePreview;
+}
+function applyPreviewCorrection(group,value){
+  if(!pendingParsePreview)return;
+  var p=pendingParsePreview.parsed;
+  if(group==='kind'){
+    p.recordKind=value;
+    if(value==='anniversary'&&(!p.repeat||p.repeat==='none'))p.repeat='yearly';
+    if(value!=='anniversary'&&p.repeat==='yearly')p.repeat='none';
+    p.cardStyle=value==='anniversary'?'large':'normal';
+  }else if(group==='repeat'){
+    p.repeat=value;
+    if(value==='yearly')p.recordKind='anniversary';
+  }else if(group==='date'){
+    p._dateChoice=value;
+    var today=setHoursZero(new Date());
+    if(value==='today'){p.dateKey=dateKeyFromDate(today);p.dateText=t('today');}
+    else if(value==='tomorrow'){var tm=new Date(today);tm.setDate(today.getDate()+1);p.dateKey=dateKeyFromDate(tm);p.dateText=t('tomorrow');}
+    else if(value==='none'){p.dateKey='';p.dateText='';}
+  }else if(group==='time'){
+    p._timeChoice=value;
+    if(value==='none')p.timeText='';
+    else if(value==='morning')p.timeText='09:00';
+    else if(value==='afternoon')p.timeText='15:00';
+    else if(value==='evening')p.timeText='20:00';
+  }
+  renderParsePreview();
+}
+function confirmParsePreview(){
+  if(!pendingParsePreview)return;
+  var inp=$('quickInput');
+  var p=cloneParsedRecord(pendingParsePreview.parsed);
+  delete p._dateChoice;delete p._timeChoice;
+  saveParsedRecord(p,pendingParsePreview.raw);
+  pendingParsePreview=null;
+  if(inp){inp.value='';autoResizeInput();}
+  renderParsePreview();
+  showToast(t('saved'),'success');
+  switchPage('home');renderHome();startCountdownTicker();
+}
+function continueEditingPreview(){
+  var inp=$('quickInput');
+  if(inp){inp.focus();autoResizeInput();}
+}
+function directSaveFromInput(){
+  if(inputSaveLocked)return;
+  var inp=$('quickInput');
+  var text=(inp.value||'').trim();
+  if(!text){showToast(t('emptyInput'),'warn');return;}
+  var parsed=normalizeCapturePreviewParsed(text,parseReminderText(text));
+  inputSaveLocked=true;
+  saveParsedRecord(parsed,text);
+  inp.value='';autoResizeInput();
+  pendingParsePreview=null;renderParsePreview();
+  showToast(t('saved'),'success');
+  switchPage('home');renderHome();startCountdownTicker();
+  setTimeout(function(){inputSaveLocked=false;},500);
+}
+function renderExampleChips(){
+  var el=$('exampleChips');if(!el)return;
+  el.innerHTML=exampleChipTexts.map(function(text){
+    return '<button class="example-chip" onclick="useExampleChip(\''+escAttr(text)+'\')">'+escHtml(text)+'</button>';
+  }).join('');
+}
+function useExampleChip(text){
+  var inp=$('quickInput');if(!inp)return;
+  inp.value=text;autoResizeInput();
+  if(isParsePreviewEnabled())showParsePreview(text);
+  inp.focus();
+}
+function getUndatedRecords(){
+  return records.filter(function(r){return !r.dateKey;}).sort(function(a,b){return(b.updatedAt||b.createdAt||0)-(a.updatedAt||a.createdAt||0);});
+}
+function setRecordDateQuick(id,mode){
+  var r=records.find(function(x){return x.id===id;});if(!r)return;
+  if(mode==='none'){r.dateKey='';r.dateText='';}
+  else{
+    var d=setHoursZero(new Date());
+    if(mode==='tomorrow')d.setDate(d.getDate()+1);
+    r.dateKey=dateKeyFromDate(d);
+    r.dateText=mode==='tomorrow'?t('tomorrow'):t('today');
+  }
+  r.updatedAt=Date.now();
+  saveRecords();renderImport();renderTimeline();renderTodayOverview();showToast(t('updated'),'success');
+}
+function renderLaterInbox(){
+  var el=$('laterInboxBlock');if(!el)return;
+  var items=getUndatedRecords();
+  var html='<div class="later-inbox" id="laterInbox">'+
+    '<div class="later-head"><div class="later-title">稍后整理</div><div class="later-count">'+items.length+' 条无日期</div></div>'+
+    '<div class="later-note">这些想法还没有落到具体日期，可以之后再补充。</div>';
+  if(items.length){
+    items.slice(0,3).forEach(function(r){
+      html+='<div class="later-item"><div class="later-item-title">'+escHtml(r.title||r.rawText||'')+'</div>'+
+        '<div class="later-actions">'+
+          '<button class="later-action" onclick="openDetail(\''+r.id+'\')">查看</button>'+
+          '<button class="later-action" onclick="setRecordDateQuick(\''+r.id+'\',\'today\')">设为今天</button>'+
+          '<button class="later-action" onclick="setRecordDateQuick(\''+r.id+'\',\'tomorrow\')">设为明天</button>'+
+          '<button class="later-action" onclick="setRecordDateQuick(\''+r.id+'\',\'none\')">保持无日期</button>'+
+        '</div></div>';
+    });
+  }else html+='<div class="timeline-empty">没有需要稍后整理的记录。</div>';
+  html+='</div>';
+  el.innerHTML=html;
+}
 
 /* ========== Clock ========== */
 var clockTimer=null;
@@ -2744,6 +2974,8 @@ function renderHome(){
   updateLayoutState();
   // Clock visible in topbar for has-records, big clock visible for empty
   updateHomeClock();
+  renderExampleChips();
+  renderParsePreview();
   renderTodayOverview();
 
   var list=records.slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
@@ -2995,6 +3227,7 @@ var importDrafts=[];
 function renderImport(){
   // Render existing drafts if any
   renderDrafts();
+  renderLaterInbox();
 }
 function renderDrafts(){
   var c=$('importDraftList');
@@ -3207,7 +3440,8 @@ function saveParsedRecord(parsed,rawText){
     coverImage:null,coverPreset:0,subtitle:'',pinned:false,
     cardStyle:parsed.recordKind==='anniversary'?'large':'normal',
     accentColor:'',displayMode:'auto',
-    relativeMinutes:parsed.relativeMinutes
+    relativeMinutes:parsed.relativeMinutes,
+    sourceText:rawText||parsed.rawText||parsed.title
   };
   item=normalizeRecord(item);
   records.unshift(item);
@@ -3219,14 +3453,11 @@ function saveFromInput(){
   var inp=$('quickInput');
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
-  var parsed=parseReminderText(text);
-  if(!parsed||!parsed.title){showToast(t('emptyInput'),'warn');return;}
-  inputSaveLocked=true;
-  saveParsedRecord(parsed,text);
-  inp.value='';autoResizeInput();
-  showToast(t('saved'),'success');
-  switchPage('home');renderHome();startCountdownTicker();
-  setTimeout(function(){inputSaveLocked=false;},500);
+  if(isParsePreviewEnabled()){
+    if(!showParsePreview(text)){showToast(t('emptyInput'),'warn');}
+    return;
+  }
+  directSaveFromInput();
 }
 function deleteRecord(id){
   var r=records.find(function(x){return x.id===id;});
@@ -3611,7 +3842,13 @@ function init(){
   // Input
   var inp=$('quickInput');
   autoResizeInput();
-  inp.addEventListener('input',autoResizeInput);
+  inp.addEventListener('input',function(){
+    autoResizeInput();
+    if(parsePreviewTimer)clearTimeout(parsePreviewTimer);
+    parsePreviewTimer=setTimeout(function(){
+      if(isParsePreviewEnabled())showParsePreview(inp.value||'');
+    },300);
+  });
   inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveFromInput();}});
   b('saveBtn','click',saveFromInput);
   b('demoBtn','click',addDemoRecords);
