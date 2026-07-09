@@ -113,6 +113,11 @@ const tests = [
     name: 'Batch capture inbox',
     script: 'test-shike-batch-capture-inbox.js',
     expected: 'Batch capture inbox regression passed: 8/8'
+  },
+  {
+    name: 'Draft edit handoff',
+    script: 'test-shike-draft-edit-handoff.js',
+    expected: 'Draft edit handoff regression passed: 6/6'
   }
 ];
 

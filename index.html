@@ -1030,8 +1030,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.6';
-var APP_UPDATED_AT='2026-07-09 12:24';
+var APP_VERSION='v0.8.7';
+var APP_UPDATED_AT='2026-07-09 13:06';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -3269,7 +3269,7 @@ function renderDrafts(){
     if(parsed.dateText)html+='<span class="draft-chip">'+escHtml(parsed.dateText)+'</span>';
     if(parsed.timeText)html+='<span class="draft-chip">'+escHtml(parsed.timeText)+'</span>';
     html+='<span class="draft-chip">'+({reminder:t('reminder'),anniversary:t('anniversary'),habit:t('habit'),note:t('note')}[parsed.recordKind]||'')+'</span>';
-    html+='</div><div class="draft-item-actions"><button class="draft-save" onclick="saveDraft('+i+')">'+t('save')+'</button><button class="draft-discard" onclick="discardDraft('+i+')">'+t('cancel')+'</button></div></div>';
+    html+='</div><div class="draft-item-actions"><button class="draft-save" onclick="saveDraft('+i+')">'+t('save')+'</button><button class="draft-discard" onclick="editDraft('+i+')">修改</button><button class="draft-discard" onclick="discardDraft('+i+')">'+t('cancel')+'</button></div></div>';
   });
   html+='<button class="draft-save-all" onclick="saveAllDrafts()">全部保存</button>';
   c.innerHTML=html;
@@ -3280,6 +3280,19 @@ function saveDraft(i){
   importDrafts.splice(i,1);renderDrafts();showToast(t('saved'),'success');
 }
 function discardDraft(i){importDrafts.splice(i,1);renderDrafts();}
+function editDraft(i){
+  var d=importDrafts[i];if(!d)return;
+  importDrafts.splice(i,1);
+  renderDrafts();
+  switchPage('home');
+  var inp=$('quickInput');
+  if(inp){
+    inp.value=d.text||((d.parsed&&d.parsed.rawText)||'');
+    autoResizeInput();
+    inp.focus();
+    if(isParsePreviewEnabled())showParsePreview(inp.value||'');
+  }
+}
 function saveAllDrafts(){
   importDrafts.forEach(function(d){saveParsedRecord(d.parsed,d.text);});
   importDrafts=[];renderDrafts();showToast(t('saved'),'success');
