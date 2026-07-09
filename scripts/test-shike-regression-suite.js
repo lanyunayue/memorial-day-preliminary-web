@@ -103,6 +103,11 @@ const tests = [
     name: 'Example chips',
     script: 'test-shike-example-chips.js',
     expected: 'Example chips regression passed: 7/7'
+  },
+  {
+    name: 'Keyboard capture',
+    script: 'test-shike-keyboard-capture.js',
+    expected: 'Keyboard capture regression passed: 7/7'
   }
 ];
 
