@@ -1030,8 +1030,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.4';
-var APP_UPDATED_AT='2026-07-10 00:35';
+var APP_VERSION='v0.8.5';
+var APP_UPDATED_AT='2026-07-09 11:35';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -2659,6 +2659,9 @@ function setParsePreviewEnabled(enabled){
   try{localStorage.setItem(PARSE_PREVIEW_KEY,enabled?'true':'false');}catch(e){}
   renderParsePreview();
 }
+function isPendingPreviewForText(text){
+  return !!(pendingParsePreview&&pendingParsePreview.raw===(text||'').trim());
+}
 function cloneParsedRecord(parsed){
   return Object.assign({},parsed||{});
 }
@@ -2726,7 +2729,7 @@ function renderParsePreview(){
     '<div class="parse-preview-actions">'+
       '<button class="import-btn" onclick="confirmParsePreview()">确认创建</button>'+
       '<button class="import-btn" onclick="continueEditingPreview()">继续修改</button>'+
-      '<button class="import-btn" onclick="confirmParsePreview()">直接保存</button>'+
+      '<button class="import-btn" onclick="directSaveFromInput()">直接保存</button>'+
     '</div>'+
   '</div>';
   el.innerHTML=html;
@@ -3454,6 +3457,7 @@ function saveFromInput(){
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
   if(isParsePreviewEnabled()){
+    if(isPendingPreviewForText(text)){confirmParsePreview();return;}
     if(!showParsePreview(text)){showToast(t('emptyInput'),'warn');}
     return;
   }
@@ -3849,7 +3853,11 @@ function init(){
       if(isParsePreviewEnabled())showParsePreview(inp.value||'');
     },300);
   });
-  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveFromInput();}});
+  inp.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();directSaveFromInput();return;}
+    if(e.key==='Escape'&&pendingParsePreview){e.preventDefault();pendingParsePreview=null;renderParsePreview();return;}
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveFromInput();}
+  });
   b('saveBtn','click',saveFromInput);
   b('demoBtn','click',addDemoRecords);
   initTimeSprite();
