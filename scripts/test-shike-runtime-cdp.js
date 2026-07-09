@@ -147,11 +147,12 @@ async function main() {
       notifyRequested:false,weatherCache:null,weatherCacheAt:0,locationDeniedUntil:0
     }));
     localStorage.removeItem('shike_demo_route_collapsed');
+    localStorage.setItem('shike_seen_release_note_version', 'v0.9.3');
   `);
   await client.navigate(APP_URL);
 
   const version = await client.evaluate(`({appVersion:APP_VERSION, cacheFetch:typeof fetchWeather, route:!!document.getElementById('demoRouteBlock')})`);
-  add('app loads v0.9.2 route shell', version.appVersion === 'v0.9.2' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
+  add('app loads v0.9.3 route shell', version.appVersion === 'v0.9.3' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
 
   const guard = await client.evaluate(`
     (() => {
@@ -175,6 +176,49 @@ async function main() {
     })()
   `);
   add('unsaved work beforeunload guard only blocks dirty state', guard.cleanBefore === false && guard.cleanPrevented === false && guard.cleanDispatch === true && guard.dirtyBefore === true && guard.dirtyPrevented === true && guard.dirtyDispatch === false, JSON.stringify(guard));
+
+  const polish = await client.evaluate(`
+    (() => {
+      switchPage('home');
+      const home = {
+        exampleHidden: getComputedStyle(document.getElementById('exampleChips')).display === 'none',
+        demoHidden: getComputedStyle(document.getElementById('demoRouteBlock')).display === 'none',
+        hasInput: !!document.getElementById('quickInput'),
+        hasToday: !!document.getElementById('todayOverviewBlock')
+      };
+      records=[{id:'r1',title:'明天下午三点开会',dateText:'明天',dateKey:'2026-07-10',timeText:'15:00',recordKind:'reminder',repeat:'none',rawText:'明天下午三点开会',createdAt:Date.now(),updatedAt:Date.now()}];
+      renderAll();
+      const swipe = {
+        hasWrapper: !!document.querySelector('.record-swipe'),
+        hasEdit: !!document.querySelector('.swipe-action'),
+        hasDanger: !!document.querySelector('.swipe-action.danger')
+      };
+      switchPage('my');
+      const my = {
+        demo: !!document.getElementById('demoBtnMy'),
+        feedback: document.getElementById('feedbackMailLink') && document.getElementById('feedbackMailLink').getAttribute('href') === 'mailto:308138249@qq.com',
+        future: !!document.getElementById('futurePlanSection')
+      };
+      const releaseShown = showReleaseNotes(true);
+      const release = {
+        shown: releaseShown,
+        title: document.getElementById('releaseTitle').textContent,
+        bullets: document.querySelectorAll('#releaseList li').length
+      };
+      closeReleaseNotes();
+      saveTimeSpriteCollapsed(false);
+      const sprite = {
+        bear: !!document.querySelector('.time-sprite-bear'),
+        today: !!document.getElementById('timeSpriteTodayBtn'),
+        batch: !!document.getElementById('timeSpriteBatchBtn'),
+        calendar: !!document.getElementById('timeSpriteCalendarBtn'),
+        backup: !!document.getElementById('timeSpriteBackupBtn'),
+        update: !!document.getElementById('timeSpriteUpdateBtn')
+      };
+      return {home, swipe, my, release, sprite};
+    })()
+  `);
+  add('v0.9.3 product polish surfaces work at runtime', polish.home.exampleHidden && polish.home.demoHidden && polish.home.hasInput && polish.home.hasToday && polish.swipe.hasWrapper && polish.swipe.hasEdit && polish.swipe.hasDanger && polish.my.demo && polish.my.feedback && polish.my.future && polish.release.shown && polish.release.bullets >= 5 && polish.sprite.bear && polish.sprite.today && polish.sprite.batch && polish.sprite.calendar && polish.sprite.backup && polish.sprite.update, JSON.stringify(polish));
 
   const overflows = [];
   for (const width of VIEWPORTS) {
@@ -203,25 +247,19 @@ async function main() {
     (() => {
       localStorage.removeItem('shike_demo_route_collapsed');
       records=[]; saveRecords();
-      demoRouteCollapsed=readDemoRouteCollapsed();
-      switchPage('home');
-      const card = document.querySelector('.demo-route-card');
-      const collapsed = card && card.classList.contains('collapsed');
-      toggleDemoRoute();
-      const expanded = document.querySelector('.demo-route-toggle').getAttribute('aria-expanded') === 'true';
-      const steps = document.querySelectorAll('[data-demo-route-step]').length;
-      persistDemoRouteCollapsed(true);
-      demoRouteCollapsed=false;
-      demoRouteCollapsed=readDemoRouteCollapsed();
+      switchPage('my');
+      const summary = document.querySelector('#page-my summary[data-i18n="demoRouteEntryTitle"]');
+      const details = summary && summary.closest('details');
+      const steps = details ? details.querySelectorAll('li').length : 0;
       return {
-        title: document.querySelector('.demo-route-title').textContent,
-        subtitle: document.querySelector('.demo-route-sub').textContent,
-        collapsed, expanded, steps, remembered: demoRouteCollapsed,
-        stored: localStorage.getItem('shike_demo_route_collapsed')
+        title: summary && summary.textContent,
+        subtitle: details && details.querySelector('p') && details.querySelector('p').textContent,
+        steps,
+        demoButton: !!document.getElementById('demoBtnMy')
       };
     })()
   `);
-  add('route title subtitle and collapse memory work', route.title === '演示路线' && route.subtitle === '从一句话到日历，看看时刻如何整理你的时间。' && route.collapsed && route.expanded && route.steps === 5 && route.remembered && route.stored === 'true', JSON.stringify(route));
+  add('route moved to my page with concise steps', route.title === '演示路线' && route.subtitle === '从一句话到日历，看看时刻如何整理你的时间。' && route.steps >= 5 && route.demoButton, JSON.stringify(route));
 
   const interactions = await client.evaluate(`
     (() => {
@@ -272,26 +310,24 @@ async function main() {
     (() => {
       switchPage('home');
       applyTheme('night');
-      demoRouteCollapsed=false;
-      renderDemoRoute();
-      const card = document.querySelector('.demo-route-card');
-      const title = document.querySelector('.demo-route-title');
-      const cardStyle = getComputedStyle(card);
-      const titleStyle = getComputedStyle(title);
-      const routeReadable = !!card && !!title && cardStyle.backgroundColor !== titleStyle.color;
+      saveTimeSpriteCollapsed(false);
+      const sprite = document.querySelector('.time-sprite-orb');
+      const bear = document.querySelector('.time-sprite-bear');
+      const spriteStyle = getComputedStyle(sprite);
+      const spriteReadable = !!sprite && !!bear && spriteStyle.display !== 'none';
       const coverHtml = renderCoverPicker({coverImage:null, coverPreset:0});
       const backgroundOk = coverHtml.includes('coverUpload') && coverHtml.includes('cover-preset');
       const weatherOk = typeof fetchWeather === 'function' && !!document.getElementById('weatherCard');
       applyLanguage('en');
-      switchPage('home');
-      const enTitle = document.querySelector('.demo-route-title').textContent;
+      switchPage('my');
+      const enTitle = document.querySelector('#page-my summary[data-i18n="demoRouteEntryTitle"]').textContent;
       applyLanguage('zh-CN');
-      switchPage('home');
-      const zhTitle = document.querySelector('.demo-route-title').textContent;
-      return { routeReadable, backgroundOk, weatherOk, enTitle, zhTitle };
+      switchPage('my');
+      const zhTitle = document.querySelector('#page-my summary[data-i18n="demoRouteEntryTitle"]').textContent;
+      return { spriteReadable, backgroundOk, weatherOk, enTitle, zhTitle };
     })()
   `);
-  add('night theme weather background and language switch remain stable', surface.routeReadable && surface.backgroundOk && surface.weatherOk && surface.enTitle === 'Demo route' && surface.zhTitle === '演示路线', JSON.stringify(surface));
+  add('night theme weather background and language switch remain stable', surface.spriteReadable && surface.backgroundOk && surface.weatherOk && surface.enTitle === 'Demo route' && surface.zhTitle === '演示路线', JSON.stringify(surface));
 
   await delay(300);
   const allErrors = client.consoleErrors.concat(client.runtimeErrors).concat(client.logErrors)

@@ -160,9 +160,10 @@ function add(name, run) {
 }
 
 add('static sprite markup exists with accessible controls', () => {
-  ['timeSprite', 'timeSpritePanel', 'timeSpriteToggle', 'timeSpriteClose', 'timeSpriteInputBtn', 'timeSpriteDemoBtn'].forEach((id) => {
+  ['timeSprite', 'timeSpritePanel', 'timeSpriteToggle', 'timeSpriteClose', 'timeSpriteInputBtn', 'timeSpriteTodayBtn', 'timeSpriteBatchBtn', 'timeSpriteCalendarBtn', 'timeSpriteBackupBtn', 'timeSpriteUpdateBtn'].forEach((id) => {
     assert(html.includes(`id="${id}"`), `${id} should exist`);
   });
+  assert(html.includes('time-sprite-bear'), 'bear sprite markup should exist');
   assert(/id="timeSpriteToggle"[^>]+aria-expanded=/.test(html), 'toggle should expose aria-expanded');
   assert(/id="timeSpriteClose"[^>]+aria-label=/.test(html), 'close button should expose aria-label');
 });
@@ -172,17 +173,19 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
   assert(style.includes('bottom:calc(78px + var(--safe-bottom))'), 'mobile sprite should sit above bottom nav');
   assert(style.includes('.time-sprite.collapsed .time-sprite-panel'), 'collapsed panel css should exist');
   assert(style.includes('@keyframes spritePulse'), 'subtle pulse animation should exist');
+  assert(style.includes('@keyframes spriteFloat'), 'subtle float animation should exist');
+  assert(style.includes('@keyframes spriteBlink'), 'subtle blink animation should exist');
 });
 
-add('version and service worker cache are ready for v0.9.2 candidate', () => {
-  assert(script.includes("APP_VERSION='v0.9.2'"), 'APP_VERSION should be v0.9.2');
-  assert(script.includes("APP_UPDATED_AT='2026-07-09 21:51'"), 'APP_UPDATED_AT should be updated');
-  assert(sw.includes("CACHE_NAME = 'shike-v092-v38'"), 'service worker cache should be v092');
+add('version and service worker cache are ready for v0.9.3 candidate', () => {
+  assert(script.includes("APP_VERSION='v0.9.3'"), 'APP_VERSION should be v0.9.3');
+  assert(script.includes("APP_UPDATED_AT='2026-07-09 22:18'"), 'APP_UPDATED_AT should be updated');
+  assert(sw.includes("CACHE_NAME = 'shike-v093-v39'"), 'service worker cache should be v093');
 });
 
 add('all languages include sprite i18n keys', () => {
   const I18N = getGlobal('I18N');
-  const keys = ['spriteName', 'spriteOpen', 'spriteClose', 'spriteInputAction', 'spriteDemoAction', 'spriteEmptyMessage', 'spriteDemoMessage', 'spriteSoonMessage', 'spriteTodayMessage', 'spriteQuietMessage', 'spriteTodayLine', 'spriteNextLine'];
+  const keys = ['spriteName', 'spriteOpen', 'spriteClose', 'spriteInputAction', 'spriteTodayAction', 'spriteBatchAction', 'spriteCalendarAction', 'spriteBackupAction', 'spriteUpdateAction', 'spriteEmptyMessage', 'spriteDemoMessage', 'spriteSoonMessage', 'spriteTodayMessage', 'spriteQuietMessage', 'spriteTodayLine', 'spriteNextLine'];
   Object.keys(I18N).forEach((lang) => {
     keys.forEach((key) => assert(Object.prototype.hasOwnProperty.call(I18N[lang], key), `${lang}:${key}`));
   });
@@ -201,7 +204,7 @@ add('empty state invites one-sentence input', () => {
   setGlobal('records', []);
   call('renderTimeSprite');
   assert(node('timeSpriteMessage').textContent.includes(u('\\u4e00\\u53e5\\u8bdd')), 'empty message should mention one sentence');
-  assert(!node('timeSpriteDemoBtn').classList.contains('hidden'), 'demo button should be visible before examples');
+  assert(node('timeSpriteDemoBtn').classList.contains('hidden'), 'demo button should stay hidden after example entry moved to My');
 });
 
 add('records render today count and nearest item', () => {

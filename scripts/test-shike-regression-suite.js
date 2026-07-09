@@ -143,6 +143,31 @@ const tests = [
     name: 'Unsaved work guard',
     script: 'test-shike-unsaved-work-guard.js',
     expected: 'Unsaved work guard regression passed: 6/6'
+  },
+  {
+    name: 'Home simplification',
+    script: 'test-shike-home-simplification.js',
+    expected: 'Home simplification regression passed: 6/6'
+  },
+  {
+    name: 'Release notes',
+    script: 'test-shike-release-notes.js',
+    expected: 'Release notes regression passed: 6/6'
+  },
+  {
+    name: 'Feedback entry',
+    script: 'test-shike-feedback-entry.js',
+    expected: 'Feedback entry regression passed: 6/6'
+  },
+  {
+    name: 'Swipe actions',
+    script: 'test-shike-swipe-actions.js',
+    expected: 'Swipe actions regression passed: 6/6'
+  },
+  {
+    name: 'Sprite upgrade',
+    script: 'test-shike-sprite-upgrade.js',
+    expected: 'Sprite upgrade regression passed: 6/6'
   }
 ];
 

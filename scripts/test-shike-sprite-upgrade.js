@@ -1,0 +1,64 @@
+const fs = require('fs');
+const path = require('path');
+
+const root = path.resolve(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+const checks = [];
+const failures = [];
+function add(name, run) { checks.push({ name, run }); }
+
+add('sprite visual is character-based', () => {
+  ['time-sprite-bear', 'bear-ear', 'bear-face', 'bear-eye', 'bear-nose'].forEach((token) => {
+    assert(html.includes(token) || style.includes(token), `${token} missing`);
+  });
+});
+
+add('sprite animation is subtle and CSS-only', () => {
+  assert(style.includes('@keyframes spriteFloat'), 'float animation missing');
+  assert(style.includes('@keyframes spriteBlink'), 'blink animation missing');
+  assert(!html.includes('<canvas'), 'sprite should not use canvas');
+  assert(!html.includes('three'), 'sprite should not use 3D engine');
+});
+
+add('sprite assistant actions exist', () => {
+  ['timeSpriteInputBtn', 'timeSpriteTodayBtn', 'timeSpriteBatchBtn', 'timeSpriteCalendarBtn', 'timeSpriteBackupBtn', 'timeSpriteUpdateBtn'].forEach((id) => {
+    assert(html.includes(`id="${id}"`), `${id} missing`);
+  });
+});
+
+add('sprite actions call existing product flows', () => {
+  assert(script.includes("b('timeSpriteTodayBtn','click',function(){switchPage('home')"), 'today action missing');
+  assert(script.includes("b('timeSpriteBatchBtn','click',function(){switchPage('import')"), 'batch action missing');
+  assert(script.includes("b('timeSpriteCalendarBtn','click',function(){switchPage('calendar')"), 'calendar action missing');
+  assert(script.includes("b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataSafetySection')"), 'backup action missing');
+  assert(script.includes("b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true)"), 'update action missing');
+});
+
+add('sprite does not promise real agent capabilities', () => {
+  ['大模型', '自动同步', '股票', '新闻', '全能 Agent', '真实 Agent'].forEach((text) => {
+    assert(!html.includes(text), `forbidden promise text present: ${text}`);
+  });
+});
+
+add('example action is no longer a duplicate visible entry', () => {
+  assert(script.includes("demoBtn.classList.add('hidden')"), 'sprite demo entry should stay hidden');
+});
+
+for (const check of checks) {
+  try { check.run(); } catch (error) { failures.push(`[${check.name}] ${error.message}`); }
+}
+
+if (failures.length) {
+  console.error(`Sprite upgrade regression failed: ${checks.length - failures.length}/${checks.length} passed`);
+  failures.forEach((failure) => console.error(`- ${failure}`));
+  process.exit(1);
+}
+
+console.log(`Sprite upgrade regression passed: ${checks.length}/${checks.length}`);
