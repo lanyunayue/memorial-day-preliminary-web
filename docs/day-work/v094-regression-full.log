@@ -1,0 +1,70 @@
+﻿[PASS] PWA assets
+  PWA asset regression passed: 8/8
+[PASS] HTML integrity
+  HTML integrity regression passed: 7/7
+[PASS] A11y static
+  A11y static regression passed: 6/6
+[PASS] Demo examples
+  Demo examples regression passed: 6/6
+[PASS] Demo route
+  Demo route regression passed: 18/18
+[PASS] Time sprite
+  Time sprite regression passed: 8/8
+[PASS] Responsive CSS
+  Responsive CSS regression passed: 9/9
+[PASS] I18N placeholders
+  I18N placeholder regression passed: 6/6
+[PASS] ICS export
+  ICS export regression passed: 11/11
+[PASS] Backup hardening
+  Backup hardening regression passed: 11/11
+[PASS] ICS deep
+  ICS deep regression passed: 14/14
+[PASS] Data safety center
+  Data safety center regression passed: 9/9
+[PASS] Import preview
+  Import preview regression passed: 10/10
+[PASS] PWA notice
+  PWA notice regression passed: 6/6
+[PASS] Timeline
+  Timeline regression passed: 10/10
+[PASS] Card export
+  Card export regression passed: 10/10
+[PASS] Today overview
+  Today overview regression passed: 8/8
+[PASS] Parse preview
+  Parse preview regression passed: 10/10
+[PASS] Correction chips
+  Correction chips regression passed: 10/10
+[PASS] Later inbox
+  Later inbox regression passed: 10/10
+[PASS] Example chips
+  Example chips regression passed: 7/7
+[PASS] Keyboard capture
+  Keyboard capture regression passed: 7/7
+[PASS] Batch capture inbox
+  Batch capture inbox regression passed: 8/8
+[PASS] Draft edit handoff
+  Draft edit handoff regression passed: 6/6
+[PASS] Batch dedupe
+  Batch dedupe regression passed: 6/6
+[PASS] Draft existing dedupe
+  Draft existing dedupe regression passed: 6/6
+[PASS] Batch save feedback
+  Batch save feedback regression passed: 6/6
+[PASS] Unsaved work guard
+  Unsaved work guard regression passed: 6/6
+[PASS] Home simplification
+  Home simplification regression passed: 6/6
+[PASS] Release notes
+  Release notes regression passed: 6/6
+[PASS] Feedback entry
+  Feedback entry regression passed: 6/6
+[PASS] Swipe actions
+  Swipe actions regression passed: 6/6
+[PASS] Sprite upgrade
+  Sprite upgrade regression passed: 6/6
+[PASS] My page priority
+  My page priority regression passed: 24/24
+
+Shike clean candidate suite: 34/34 passed in 8392ms

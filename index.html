@@ -552,6 +552,12 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 .cal-quick-btn{flex:0 0 auto;padding:0 16px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;}
 .local-note{margin:0 20px 16px;padding:10px 12px;border-radius:10px;background:var(--bg-soft);color:var(--ink-mute);font-size:12px;line-height:1.6;}
 .setting-note{font-size:12px;color:var(--ink-mute);line-height:1.5;padding:0 4px 8px;}
+.setting-group-featured{background:linear-gradient(135deg,rgba(217,119,87,.06),rgba(106,155,204,.05));border:1px solid rgba(217,119,87,.15);border-radius:14px;padding:14px 12px 10px;margin-bottom:18px;}
+.setting-note-featured{color:var(--ink-soft);margin-bottom:10px;}
+.feature-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:0 4px;}
+.feature-chip{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--bg-elev);color:var(--ink-mute);border:1px solid var(--ink-line);}
+.setting-group-featured .setting-item{background:transparent;padding-left:4px;padding-right:4px;}
+.setting-group-featured .setting-item+.setting-item{border-top:1px solid var(--ink-line);}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .radio-group{display:flex;gap:6px;flex-wrap:wrap;}
 .radio-chip{
@@ -919,6 +925,53 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
     <div class="my-stats" id="myStats"></div>
     <div class="local-note" data-i18n="localDataHint">数据默认保存在当前浏览器，可通过备份文件迁移。</div>
     <div class="settings-list">
+      <div class="setting-group setting-group-featured" id="personalizeSection">
+        <div class="setting-group-title" data-i18n="personalize">个性化</div>
+        <p class="setting-note setting-note-featured" data-i18n="personalizeDesc">调整主题、语言和时刻精灵，让时刻更像你的助手。</p>
+        <div class="feature-chips">
+          <span class="feature-chip" data-i18n="chipTheme">主题</span>
+          <span class="feature-chip" data-i18n="chipLanguage">语言</span>
+          <span class="feature-chip" data-i18n="chipSprite">小精灵</span>
+          <span class="feature-chip" data-i18n="chipDisplay">显示偏好</span>
+        </div>
+        <div class="setting-item">
+          <span class="setting-item-label" data-i18n="username">用户名</span>
+          <input class="setting-item-input" id="usernameInput" placeholder="设置你的名字" data-i18n-ph="usernamePh" style="text-align:right;">
+        </div>
+        <div class="setting-item" style="flex-wrap:wrap;gap:10px;">
+          <span class="setting-item-label" data-i18n="theme">主题</span>
+          <div class="theme-dots" style="flex:1;min-width:100%;margin-top:8px;">
+            <div class="theme-dot t-paper active" data-theme="paper">纸</div>
+            <div class="theme-dot t-mono" data-theme="mono">墨</div>
+            <div class="theme-dot t-coffee" data-theme="coffee">咖</div>
+            <div class="theme-dot t-mist" data-theme="mist">雾</div>
+            <div class="theme-dot t-rose" data-theme="rose">玫</div>
+            <div class="theme-dot t-forest" data-theme="forest">森</div>
+            <div class="theme-dot t-night" data-theme="night">夜</div>
+            <div class="theme-dot t-sakura" data-theme="sakura">樱</div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-item-label" data-i18n="language">语言</span>
+          <div class="radio-group" id="langGroup">
+            <span class="radio-chip active" data-lang="zh-CN">简中</span>
+            <span class="radio-chip" data-lang="zh-TW">繁中</span>
+            <span class="radio-chip" data-lang="en">EN</span>
+            <span class="radio-chip" data-lang="ja">日本</span>
+          </div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-item-label" data-i18n="calendarMode">日历显示</span>
+          <div class="radio-group" id="calModeGroup">
+            <span class="radio-chip active" data-calmode="solar" data-i18n="solar">新历</span>
+            <span class="radio-chip" data-calmode="lunar" data-i18n="lunar">农历</span>
+          </div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-item-label" data-i18n="weather">首页天气</span>
+          <div class="my-switch" id="weatherSwitch"></div>
+        </div>
+      </div>
       <div class="setting-group" id="calendarExportSection">
         <div class="setting-group-title" data-i18n="calendarExport">日历导出</div>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="calendarExportHint">生成标准 .ics 文件，可导入 Google Calendar、Apple Calendar 或 Outlook。</p>
@@ -985,46 +1038,6 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
       <div class="setting-group" id="futurePlanSection">
         <div class="setting-group-title" data-i18n="futurePlanTitle">未来计划</div>
         <p class="setting-note" data-i18n="futurePlanText">会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。</p>
-      </div>
-      <div class="setting-group">
-        <div class="setting-group-title" data-i18n="personalize">个性化</div>
-        <div class="setting-item">
-          <span class="setting-item-label" data-i18n="username">用户名</span>
-          <input class="setting-item-input" id="usernameInput" placeholder="设置你的名字" data-i18n-ph="usernamePh" style="text-align:right;">
-        </div>
-        <div class="setting-item" style="flex-wrap:wrap;gap:10px;">
-          <span class="setting-item-label" data-i18n="theme">主题</span>
-          <div class="theme-dots" style="flex:1;min-width:100%;margin-top:8px;">
-            <div class="theme-dot t-paper active" data-theme="paper">纸</div>
-            <div class="theme-dot t-mono" data-theme="mono">墨</div>
-            <div class="theme-dot t-coffee" data-theme="coffee">咖</div>
-            <div class="theme-dot t-mist" data-theme="mist">雾</div>
-            <div class="theme-dot t-rose" data-theme="rose">玫</div>
-            <div class="theme-dot t-forest" data-theme="forest">森</div>
-            <div class="theme-dot t-night" data-theme="night">夜</div>
-            <div class="theme-dot t-sakura" data-theme="sakura">樱</div>
-          </div>
-        </div>
-        <div class="setting-item">
-          <span class="setting-item-label" data-i18n="language">语言</span>
-          <div class="radio-group" id="langGroup">
-            <span class="radio-chip active" data-lang="zh-CN">简中</span>
-            <span class="radio-chip" data-lang="zh-TW">繁中</span>
-            <span class="radio-chip" data-lang="en">EN</span>
-            <span class="radio-chip" data-lang="ja">日本</span>
-          </div>
-        </div>
-        <div class="setting-item">
-          <span class="setting-item-label" data-i18n="calendarMode">日历显示</span>
-          <div class="radio-group" id="calModeGroup">
-            <span class="radio-chip active" data-calmode="solar" data-i18n="solar">新历</span>
-            <span class="radio-chip" data-calmode="lunar" data-i18n="lunar">农历</span>
-          </div>
-        </div>
-        <div class="setting-item">
-          <span class="setting-item-label" data-i18n="weather">首页天气</span>
-          <div class="my-switch" id="weatherSwitch"></div>
-        </div>
       </div>
       <div class="setting-group">
         <div class="setting-group-title" data-i18n="about">关于</div>
@@ -1123,8 +1136,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.9.3';
-var APP_UPDATED_AT='2026-07-09 22:18';
+var APP_VERSION='v0.9.4';
+var APP_UPDATED_AT='2026-07-09 23:23';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -1180,7 +1193,7 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     exampleRecordsTitle:'示例记录',exampleRecordsText:'首次体验时可一键生成 5 条示例记录，不覆盖真实数据。',
     feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',copyEmail:'复制',feedbackCopied:'邮箱已复制',
-    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',
+    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
     releaseNote1:'首页更简洁，示例入口移到“我的”。',releaseNote2:'记录卡片支持左滑快捷操作。',releaseNote3:'时刻精灵升级为可展开的小助手。',releaseNote4:'新增建议与反馈入口。',releaseNote5:'新版本首次进入会显示本说明。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',
@@ -1266,7 +1279,7 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 條',batchSavedResult:'已保存 {saved} 條，略過 {skipped} 條重複',batchSkippedOnly:'沒有新增，已略過 {skipped} 條重複',
     exampleRecordsTitle:'示例記錄',exampleRecordsText:'首次體驗時可一鍵生成 5 條示例記錄，不覆蓋真實資料。',
     feedbackTitle:'建議與回饋',feedbackText:'遇到問題或有建議，可以發郵件告訴我。',copyEmail:'複製',feedbackCopied:'郵箱已複製',
-    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',
+    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
     releaseTitle:'更新說明',releaseOk:'我知道了',releaseMeta:'目前版本 {version} · {time}',
     releaseNote1:'首頁更簡潔，示例入口移到「我的」。',releaseNote2:'記錄卡片支援左滑快捷操作。',releaseNote3:'時刻精靈升級為可展開的小助手。',releaseNote4:'新增建議與回饋入口。',releaseNote5:'新版本首次進入會顯示本說明。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',
@@ -1352,7 +1365,7 @@ var I18N={
     batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     exampleRecordsTitle:'Example records',exampleRecordsText:'Create 5 example records for first-time review without overwriting real data.',
     feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',copyEmail:'Copy',feedbackCopied:'Email copied',
-    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',
+    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
     releaseNote1:'Home is cleaner, with examples moved to Me.',releaseNote2:'Record cards support swipe actions.',releaseNote3:'The Shike sprite is now a small expandable assistant.',releaseNote4:'Feedback now has a clear entry.',releaseNote5:'Release notes appear once for each new version.',
     spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',
@@ -1438,7 +1451,7 @@ var I18N={
     batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     exampleRecordsTitle:'サンプル記録',exampleRecordsText:'初回確認用に 5 件のサンプルを作成できます。実データは上書きしません。',
     feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',
-    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',
+    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
     releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
     releaseNote1:'ホームを整理し、サンプル入口をマイへ移動しました。',releaseNote2:'記録カードにスワイプ操作を追加しました。',releaseNote3:'時刻アシスタントを小さな相棒らしく更新しました。',releaseNote4:'フィードバック入口を追加しました。',releaseNote5:'新しい版では初回だけ更新内容を表示します。',
     spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',

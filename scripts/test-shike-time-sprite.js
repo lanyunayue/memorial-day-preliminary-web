@@ -177,10 +177,10 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
   assert(style.includes('@keyframes spriteBlink'), 'subtle blink animation should exist');
 });
 
-add('version and service worker cache are ready for v0.9.3 candidate', () => {
-  assert(script.includes("APP_VERSION='v0.9.3'"), 'APP_VERSION should be v0.9.3');
-  assert(script.includes("APP_UPDATED_AT='2026-07-09 22:18'"), 'APP_UPDATED_AT should be updated');
-  assert(sw.includes("CACHE_NAME = 'shike-v093-v39'"), 'service worker cache should be v093');
+add('version and service worker cache are ready for v0.9.4 candidate', () => {
+  assert(script.includes("APP_VERSION='v0.9.4'"), 'APP_VERSION should be v0.9.4');
+  assert(script.includes("APP_UPDATED_AT='2026-07-09 23:23'"), 'APP_UPDATED_AT should be updated');
+  assert(sw.includes("CACHE_NAME = 'shike-v094-v40'"), 'service worker cache should be v093');
 });
 
 add('all languages include sprite i18n keys', () => {
