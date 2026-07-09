@@ -1051,8 +1051,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.9.1';
-var APP_UPDATED_AT='2026-07-09 21:39';
+var APP_VERSION='v0.9.2';
+var APP_UPDATED_AT='2026-07-09 21:51';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -3546,6 +3546,24 @@ function saveAllDrafts(){
   showToast(msg,saved?'success':'warn');
   switchPage('home');
 }
+function hasUnsavedWork(){
+  var quick=$('quickInput');
+  var importText=$('importTextInput');
+  return !!(
+    (quick&&(quick.value||'').trim())||
+    (importText&&(importText.value||'').trim())||
+    (importDrafts&&importDrafts.length)||
+    pendingParsePreview
+  );
+}
+function registerUnsavedWorkGuard(){
+  window.addEventListener('beforeunload',function(e){
+    if(!hasUnsavedWork())return;
+    e.preventDefault();
+    e.returnValue='';
+    return '';
+  });
+}
 
 /* ========== My page ========== */
 function renderMy(){
@@ -4123,6 +4141,7 @@ function init(){
   applyTheme(settings.theme);
   applyLanguage(settings.language);
   updateLayoutState();
+  registerUnsavedWorkGuard();
   // Weather
   if(settings.weatherEnabled)document.body.classList.add('weather-on');
   // Opening

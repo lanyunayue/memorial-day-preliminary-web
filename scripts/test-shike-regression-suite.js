@@ -138,6 +138,11 @@ const tests = [
     name: 'Batch save feedback',
     script: 'test-shike-batch-save-feedback.js',
     expected: 'Batch save feedback regression passed: 6/6'
+  },
+  {
+    name: 'Unsaved work guard',
+    script: 'test-shike-unsaved-work-guard.js',
+    expected: 'Unsaved work guard regression passed: 6/6'
   }
 ];
 

@@ -151,7 +151,30 @@ async function main() {
   await client.navigate(APP_URL);
 
   const version = await client.evaluate(`({appVersion:APP_VERSION, cacheFetch:typeof fetchWeather, route:!!document.getElementById('demoRouteBlock')})`);
-  add('app loads v0.9.1 route shell', version.appVersion === 'v0.9.1' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
+  add('app loads v0.9.2 route shell', version.appVersion === 'v0.9.2' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
+
+  const guard = await client.evaluate(`
+    (() => {
+      const quick=document.getElementById('quickInput');
+      const cleanBefore=hasUnsavedWork();
+      const cleanEvent=new Event('beforeunload',{cancelable:true});
+      const cleanDispatch=window.dispatchEvent(cleanEvent);
+      quick.value='remember this';
+      const dirtyBefore=hasUnsavedWork();
+      const dirtyEvent=new Event('beforeunload',{cancelable:true});
+      const dirtyDispatch=window.dispatchEvent(dirtyEvent);
+      quick.value='';
+      return {
+        cleanBefore,
+        cleanPrevented:cleanEvent.defaultPrevented,
+        cleanDispatch,
+        dirtyBefore,
+        dirtyPrevented:dirtyEvent.defaultPrevented,
+        dirtyDispatch
+      };
+    })()
+  `);
+  add('unsaved work beforeunload guard only blocks dirty state', guard.cleanBefore === false && guard.cleanPrevented === false && guard.cleanDispatch === true && guard.dirtyBefore === true && guard.dirtyPrevented === true && guard.dirtyDispatch === false, JSON.stringify(guard));
 
   const overflows = [];
   for (const width of VIEWPORTS) {
