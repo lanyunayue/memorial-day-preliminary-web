@@ -25,6 +25,11 @@ const tests = [
     expected: 'Demo examples regression passed: 6/6'
   },
   {
+    name: 'Demo route',
+    script: 'test-shike-demo-route.js',
+    expected: 'Demo route regression passed: 18/18'
+  },
+  {
     name: 'Time sprite',
     script: 'test-shike-time-sprite.js',
     expected: 'Time sprite regression passed: 8/8'

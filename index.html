@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>时刻 - 你的贴心记事助手</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b7355'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='white' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
@@ -451,6 +452,24 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 .today-overview-line{display:flex;gap:8px;align-items:baseline;min-width:0;}
 .today-overview-label{flex:0 0 auto;color:var(--ink-mute);font-size:12px;}
 .today-overview-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+.demo-route-card{
+  margin:10px 0 2px;padding:12px 14px;border-radius:14px;
+  background:color-mix(in srgb,var(--bg-elev) 88%,transparent);
+  border:1px solid var(--ink-line);box-shadow:var(--card-shadow);
+}
+.demo-route-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.demo-route-title{font-family:var(--font-serif);font-size:16px;font-weight:600;color:var(--ink);letter-spacing:.03em;}
+.demo-route-sub{font-size:12px;color:var(--ink-mute);line-height:1.5;margin-top:3px;}
+.demo-route-toggle{flex:0 0 auto;padding:7px 10px;border-radius:10px;background:var(--bg-soft);color:var(--ink-soft);font-size:12px;border:1px solid var(--ink-line);}
+.demo-route-body{margin-top:12px;display:grid;gap:9px;}
+.demo-route-card.collapsed .demo-route-body{display:none;}
+.demo-route-step{display:grid;grid-template-columns:28px 1fr;gap:9px;padding:10px;border-radius:12px;background:var(--bg-soft);border:1px solid var(--ink-line);}
+.demo-route-step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--bg);font-size:12px;font-weight:600;}
+.demo-route-step-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.demo-route-copy{font-size:12px;color:var(--ink-mute);line-height:1.6;}
+.demo-route-example{font-size:12px;color:var(--ink);line-height:1.55;margin-top:5px;white-space:pre-line;}
+.demo-route-actions{margin-top:8px;display:flex;gap:7px;flex-wrap:wrap;}
+.demo-route-actions .import-btn{padding:7px 10px;font-size:12px;}
 .timeline-panel{margin:0 0 16px;padding:14px;border-radius:16px;background:var(--bg-elev);border:1px solid var(--ink-line);box-shadow:var(--card-shadow);}
 .timeline-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
 .timeline-title{font-family:var(--font-serif);font-size:17px;font-weight:600;letter-spacing:.04em;}
@@ -771,6 +790,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         </div>
       </div>
       <div id="todayOverviewBlock"></div>
+      <div id="demoRouteBlock"></div>
     </div>
 
     <div class="content" id="homeContent">
@@ -858,7 +878,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
     <div class="my-stats" id="myStats"></div>
     <div class="local-note" data-i18n="localDataHint">数据默认保存在当前浏览器，可通过备份文件迁移。</div>
     <div class="settings-list">
-      <div class="setting-group">
+      <div class="setting-group" id="calendarExportSection">
         <div class="setting-group-title" data-i18n="calendarExport">日历导出</div>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="calendarExportHint">生成标准 .ics 文件，可导入 Google Calendar、Apple Calendar 或 Outlook。</p>
         <button class="import-btn" id="exportIcsBtn" style="width:100%;" data-i18n="exportIcs">导出全部日历文件</button>
@@ -867,7 +887,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
           <div data-i18n="calendarImportGuide">这是手动导入标准日历文件：Google Calendar 在设置里选择“导入和导出”；Apple Calendar 可直接打开 .ics 或在日历 App 导入；Outlook 在导入/订阅日历中选择 .ics 文件。</div>
         </details>
       </div>
-      <div class="setting-group">
+      <div class="setting-group" id="dataSafetySection">
         <div class="setting-group-title" data-i18n="dataSafety">数据安全</div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="recordCountLabel">当前记录数</span><span class="setting-item-value" id="safetyRecordCount">0</span></div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="exportableCountLabel">可导出日历数</span><span class="setting-item-value" id="safetyExportableCount">0</span></div>
@@ -897,13 +917,14 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
       </div>
       <div class="setting-group">
         <details>
-          <summary class="setting-group-title" style="cursor:pointer;" data-i18n="demoRouteTitle">从一句话到日历</summary>
-          <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:8px 0 0;" data-i18n="demoRouteText">把一句话整理成时刻，再导出到你常用的日历。</p>
+          <summary class="setting-group-title" style="cursor:pointer;" data-i18n="demoRouteEntryTitle">演示路线</summary>
+          <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:8px 0 0;" data-i18n="demoRouteEntrySub">从一句话到日历，看看时刻如何整理你的时间。</p>
           <ol style="font-size:12px;color:var(--ink-soft);line-height:1.8;margin:8px 0 0 18px;padding:0;">
-            <li data-i18n="demoRouteStep1">输入一句话：明天下午三点开会</li>
-            <li data-i18n="demoRouteStep2">生成记录并进入日历</li>
-            <li data-i18n="demoRouteStep3">导出 .ics 到系统日历</li>
-            <li data-i18n="demoRouteStep4">导出 JSON 备份保护数据</li>
+            <li data-i18n="demoRouteOneTitle">一句话创建</li>
+            <li data-i18n="demoRouteBatchTitle">批量整理</li>
+            <li data-i18n="demoRouteDedupeTitle">去重保护</li>
+            <li data-i18n="demoRouteCalendarTitle">接入日历</li>
+            <li data-i18n="demoRouteSafetyTitle">数据安全</li>
           </ol>
         </details>
       </div>
@@ -1030,12 +1051,13 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.9';
-var APP_UPDATED_AT='2026-07-09 14:03';
+var APP_VERSION='v0.9.0';
+var APP_UPDATED_AT='2026-07-09 20:47';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
 var ASSISTANT_COLLAPSED_KEY='shike_assistant_collapsed';
+var DEMO_ROUTE_COLLAPSED_KEY='shike_demo_route_collapsed';
 var LAST_GOOD_RECORDS_KEY='shike_records_last_good_v1';
 var LAST_BACKUP_KEY='shike_last_backup_at';
 var BACKUP_SCHEMA_VERSION=2;
@@ -1355,6 +1377,111 @@ var I18N={
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
   }
 };
+var DEMO_ROUTE_I18N={
+  'zh-CN':{
+    demoRouteEntryTitle:'演示路线',
+    demoRouteEntrySub:'从一句话到日历，看看时刻如何整理你的时间。',
+    demoRouteExpand:'展开',
+    demoRouteCollapse:'收起',
+    demoRouteEmptyHint:'也可以先点体验示例。',
+    demoRouteOneTitle:'一句话创建',
+    demoRouteOneCopy:'把聊天或脑子里的一句话直接写进来。',
+    demoRouteOneExample:'明天下午三点开会',
+    demoRouteOneAction:'填入示例',
+    demoRouteBatchTitle:'批量整理',
+    demoRouteBatchCopy:'粘贴一段通知，先生成候选草稿，再勾选保存。',
+    demoRouteBatchExample:'明天下午三点开会\n每月15号还信用卡\n7月8日妈妈生日\n每天睡前涂润唇膏',
+    demoRouteBatchAction:'打开批量整理',
+    demoRouteDedupeTitle:'去重保护',
+    demoRouteDedupeCopy:'重复的行、已存在的记录不会反复写入。同一件事只保留一次。',
+    demoRouteDedupePoint1:'批量内部重复会去重。',
+    demoRouteDedupePoint2:'已存在记录会被识别，避免重复保存。',
+    demoRouteCalendarTitle:'接入日历',
+    demoRouteCalendarCopy:'带日期的记录可以导出 .ics，导入 Google Calendar、Apple Calendar 或 Outlook。',
+    demoRouteCalendarAction:'查看日历导出',
+    demoRouteSafetyTitle:'数据安全',
+    demoRouteSafetyCopy:'时刻数据保存在当前浏览器。重要记录建议定期导出 JSON 备份。',
+    demoRouteSafetyAction:'查看数据安全'
+  },
+  'zh-TW':{
+    demoRouteEntryTitle:'演示路線',
+    demoRouteEntrySub:'從一句話到日曆，看看時刻如何整理你的時間。',
+    demoRouteExpand:'展開',
+    demoRouteCollapse:'收起',
+    demoRouteEmptyHint:'也可以先點體驗示例。',
+    demoRouteOneTitle:'一句話建立',
+    demoRouteOneCopy:'把聊天或腦子裡的一句話直接寫進來。',
+    demoRouteOneExample:'明天下午三點開會',
+    demoRouteOneAction:'填入示例',
+    demoRouteBatchTitle:'批次整理',
+    demoRouteBatchCopy:'貼上一段通知，先生成候選草稿，再勾選保存。',
+    demoRouteBatchExample:'明天下午三點開會\n每月15號還信用卡\n7月8日媽媽生日\n每天睡前塗潤唇膏',
+    demoRouteBatchAction:'打開批次整理',
+    demoRouteDedupeTitle:'去重保護',
+    demoRouteDedupeCopy:'重複的行、已存在的記錄不會反覆寫入。同一件事只保留一次。',
+    demoRouteDedupePoint1:'批次內部重複會去重。',
+    demoRouteDedupePoint2:'已存在記錄會被識別，避免重複保存。',
+    demoRouteCalendarTitle:'接入日曆',
+    demoRouteCalendarCopy:'帶日期的記錄可以匯出 .ics，匯入 Google Calendar、Apple Calendar 或 Outlook。',
+    demoRouteCalendarAction:'查看日曆匯出',
+    demoRouteSafetyTitle:'資料安全',
+    demoRouteSafetyCopy:'時刻資料保存在目前瀏覽器。重要記錄建議定期匯出 JSON 備份。',
+    demoRouteSafetyAction:'查看資料安全'
+  },
+  'en':{
+    demoRouteEntryTitle:'Demo route',
+    demoRouteEntrySub:'From one sentence to calendar, see how Shike organizes your time.',
+    demoRouteExpand:'Expand',
+    demoRouteCollapse:'Collapse',
+    demoRouteEmptyHint:'You can also try examples first.',
+    demoRouteOneTitle:'Create from one sentence',
+    demoRouteOneCopy:'Write down one sentence from chat or from your mind.',
+    demoRouteOneExample:'明天下午三点开会',
+    demoRouteOneAction:'Fill example',
+    demoRouteBatchTitle:'Batch organize',
+    demoRouteBatchCopy:'Paste a notice, create candidate drafts first, then choose what to save.',
+    demoRouteBatchExample:'明天下午三点开会\n每月15号还信用卡\n7月8日妈妈生日\n每天睡前涂润唇膏',
+    demoRouteBatchAction:'Open batch organize',
+    demoRouteDedupeTitle:'Duplicate protection',
+    demoRouteDedupeCopy:'Repeated lines and existing records will not be written again. One thing is kept once.',
+    demoRouteDedupePoint1:'Duplicates inside a batch are removed.',
+    demoRouteDedupePoint2:'Existing records are detected before saving again.',
+    demoRouteCalendarTitle:'Connect to calendar',
+    demoRouteCalendarCopy:'Dated records can be exported as .ics for Google Calendar, Apple Calendar, or Outlook import.',
+    demoRouteCalendarAction:'View calendar export',
+    demoRouteSafetyTitle:'Data safety',
+    demoRouteSafetyCopy:'Shike data stays in this browser. Export JSON backups regularly for important records.',
+    demoRouteSafetyAction:'View data safety'
+  },
+  'ja':{
+    demoRouteEntryTitle:'デモルート',
+    demoRouteEntrySub:'一文からカレンダーへ。時刻が時間を整理する流れを確認できます。',
+    demoRouteExpand:'開く',
+    demoRouteCollapse:'閉じる',
+    demoRouteEmptyHint:'先にサンプルを試すこともできます。',
+    demoRouteOneTitle:'一文で作成',
+    demoRouteOneCopy:'チャットや頭の中の一文をそのまま書き込みます。',
+    demoRouteOneExample:'明天下午三点开会',
+    demoRouteOneAction:'サンプルを入力',
+    demoRouteBatchTitle:'一括整理',
+    demoRouteBatchCopy:'通知文を貼り付け、候補下書きを作ってから選んで保存します。',
+    demoRouteBatchExample:'明天下午三点开会\n每月15号还信用卡\n7月8日妈妈生日\n每天睡前涂润唇膏',
+    demoRouteBatchAction:'一括整理を開く',
+    demoRouteDedupeTitle:'重複保護',
+    demoRouteDedupeCopy:'重複行や既存の記録は繰り返し書き込まれません。同じ予定は一度だけ残します。',
+    demoRouteDedupePoint1:'一括内の重複は整理されます。',
+    demoRouteDedupePoint2:'既存の記録を識別し、重複保存を避けます。',
+    demoRouteCalendarTitle:'カレンダーへ',
+    demoRouteCalendarCopy:'日付付きの記録は .ics で出力し、Google Calendar、Apple Calendar、Outlook に取り込めます。',
+    demoRouteCalendarAction:'カレンダー出力を見る',
+    demoRouteSafetyTitle:'データ保護',
+    demoRouteSafetyCopy:'時刻のデータはこのブラウザに保存されます。重要な記録は定期的に JSON バックアップしてください。',
+    demoRouteSafetyAction:'データ保護を見る'
+  }
+};
+Object.keys(I18N).forEach(function(lang){
+  Object.assign(I18N[lang],DEMO_ROUTE_I18N[lang]||DEMO_ROUTE_I18N['zh-CN']);
+});
 var LANG='zh-CN';
 function t(key){var d=I18N[LANG]||I18N['zh-CN'];return d[key]||key;}
 function tf(key,vars){var s=t(key);if(vars){for(var k in vars){s=s.replace('{'+k+'}',vars[k]);}}return s;}
@@ -2587,6 +2714,85 @@ function renderTodayOverview(){
       '<div class="today-overview-line"><span class="today-overview-label">'+t('overviewAnniv')+'</span><span class="today-overview-value">'+escHtml(data.anniversary?formatOverviewRecord(data.anniversary,true):t('overviewNoAnniv'))+'</span></div>'+
     '</div></div>';
 }
+var demoRouteCollapsed=true;
+function readDemoRouteCollapsed(){
+  try{
+    var v=localStorage.getItem(DEMO_ROUTE_COLLAPSED_KEY);
+    if(v==='false')return false;
+    if(v==='true')return true;
+  }catch(e){}
+  return true;
+}
+function persistDemoRouteCollapsed(value){
+  demoRouteCollapsed=!!value;
+  try{localStorage.setItem(DEMO_ROUTE_COLLAPSED_KEY,demoRouteCollapsed?'true':'false');}catch(e){}
+}
+function toggleDemoRoute(){
+  persistDemoRouteCollapsed(!demoRouteCollapsed);
+  renderDemoRoute();
+}
+function demoRouteStep(num,title,copy,example,actionText,action){
+  var button=actionText?'<div class="demo-route-actions"><button class="import-btn" onclick="'+action+'">'+escHtml(actionText)+'</button></div>':'';
+  var sample=example?'<div class="demo-route-example">'+escHtml(example)+'</div>':'';
+  return '<div class="demo-route-step" data-demo-route-step="'+num+'">'+
+    '<div class="demo-route-step-num">'+num+'</div>'+
+    '<div><div class="demo-route-step-title">'+escHtml(title)+'</div>'+
+    '<div class="demo-route-copy">'+copy+'</div>'+sample+button+'</div>'+
+  '</div>';
+}
+function renderDemoRoute(){
+  var el=$('demoRouteBlock');if(!el)return;
+  var collapsed=demoRouteCollapsed;
+  var dedupeCopy=escHtml(t('demoRouteDedupeCopy'))+
+    '<ul style="margin:6px 0 0 18px;padding:0;">'+
+    '<li>'+escHtml(t('demoRouteDedupePoint1'))+'</li>'+
+    '<li>'+escHtml(t('demoRouteDedupePoint2'))+'</li></ul>';
+  var body=
+    demoRouteStep(1,t('demoRouteOneTitle'),escHtml(t('demoRouteOneCopy')),t('demoRouteOneExample'),t('demoRouteOneAction'),'fillDemoRouteSentence()')+
+    demoRouteStep(2,t('demoRouteBatchTitle'),escHtml(t('demoRouteBatchCopy')),t('demoRouteBatchExample'),t('demoRouteBatchAction'),'openDemoRouteBatch()')+
+    demoRouteStep(3,t('demoRouteDedupeTitle'),dedupeCopy,'','','')+
+    demoRouteStep(4,t('demoRouteCalendarTitle'),escHtml(t('demoRouteCalendarCopy')),'',t('demoRouteCalendarAction'),'jumpDemoRouteCalendarExport()')+
+    demoRouteStep(5,t('demoRouteSafetyTitle'),escHtml(t('demoRouteSafetyCopy')),'',t('demoRouteSafetyAction'),'jumpDemoRouteDataSafety()');
+  var hint=records.length?'':'<div class="demo-route-copy">'+escHtml(t('demoRouteEmptyHint'))+'</div>';
+  el.innerHTML='<section class="demo-route-card '+(collapsed?'collapsed':'')+'" aria-label="'+escAttr(t('demoRouteEntryTitle'))+'">'+
+    '<div class="demo-route-head">'+
+      '<div><div class="demo-route-title">'+escHtml(t('demoRouteEntryTitle'))+'</div><div class="demo-route-sub">'+escHtml(t('demoRouteEntrySub'))+'</div></div>'+
+      '<button class="demo-route-toggle" id="demoRouteToggle" onclick="toggleDemoRoute()" aria-expanded="'+(!collapsed)+'">'+(collapsed?t('demoRouteExpand'):t('demoRouteCollapse'))+'</button>'+
+    '</div>'+
+    '<div class="demo-route-body" id="demoRouteBody">'+hint+body+'</div>'+
+  '</section>';
+}
+function fillDemoRouteSentence(){
+  switchPage('home');
+  demoRouteCollapsed=false;
+  persistDemoRouteCollapsed(false);
+  var inp=$('quickInput');
+  if(inp){
+    inp.value=t('demoRouteOneExample');
+    autoResizeInput();
+    if(isParsePreviewEnabled())showParsePreview(inp.value);
+    inp.focus();
+  }
+  renderDemoRoute();
+}
+function openDemoRouteBatch(){
+  demoRouteCollapsed=false;
+  persistDemoRouteCollapsed(false);
+  switchPage('import');
+  var input=$('importTextInput');
+  if(input)input.value=t('demoRouteBatchExample');
+  importDrafts=prepareBatchCaptureDrafts(t('demoRouteBatchExample'));
+  renderImport();
+}
+function jumpToMySection(sectionId){
+  switchPage('my');
+  setTimeout(function(){
+    var el=$(sectionId);
+    if(el&&el.scrollIntoView)el.scrollIntoView({block:'start',behavior:'smooth'});
+  },50);
+}
+function jumpDemoRouteCalendarExport(){jumpToMySection('calendarExportSection');}
+function jumpDemoRouteDataSafety(){jumpToMySection('dataSafetySection');}
 function getTimelineGroups(){
   var today=setHoursZero(new Date());
   var tomorrow=new Date(today);tomorrow.setDate(today.getDate()+1);
@@ -2981,6 +3187,7 @@ function renderHome(){
   renderExampleChips();
   renderParsePreview();
   renderTodayOverview();
+  renderDemoRoute();
 
   var list=records.slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   // Hero cards: pinned or cardStyle==='large' or anniversary
@@ -3901,6 +4108,7 @@ function init(){
   if(!settings.firstVisitAt){settings.firstVisitAt=Date.now();saveSettings(settings);}
   // Load data
   loadRecords();
+  demoRouteCollapsed=readDemoRouteCollapsed();
   // Apply settings
   applyTheme(settings.theme);
   applyLanguage(settings.language);
