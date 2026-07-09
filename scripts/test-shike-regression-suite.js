@@ -118,6 +118,11 @@ const tests = [
     name: 'Draft edit handoff',
     script: 'test-shike-draft-edit-handoff.js',
     expected: 'Draft edit handoff regression passed: 6/6'
+  },
+  {
+    name: 'Batch dedupe',
+    script: 'test-shike-batch-dedupe.js',
+    expected: 'Batch dedupe regression passed: 6/6'
   }
 ];
 

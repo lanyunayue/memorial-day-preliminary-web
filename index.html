@@ -1030,8 +1030,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
-var APP_VERSION='v0.8.7';
-var APP_UPDATED_AT='2026-07-09 13:06';
+var APP_VERSION='v0.8.8';
+var APP_UPDATED_AT='2026-07-09 13:34';
 var STORAGE_KEY='shike_records_v1';
 var SETTINGS_KEY='shike_settings_v1';
 var DEMO_FLAG_KEY='shike_demo_records_added_v1';
@@ -3234,10 +3234,20 @@ function getBatchCaptureLines(text){
 function shouldUseBatchCapture(text){
   return getBatchCaptureLines(text).length>=2;
 }
+function getBatchDraftKey(line){
+  return String(line||'').replace(/\s+/g,' ').trim().toLowerCase();
+}
 function prepareBatchCaptureDrafts(text){
-  return getBatchCaptureLines(text).map(function(line){
-    return {text:line,parsed:normalizeCapturePreviewParsed(line,parseReminderText(line))};
-  }).filter(function(d){return d.parsed&&d.parsed.title;});
+  var seen={};
+  var drafts=[];
+  getBatchCaptureLines(text).forEach(function(line){
+    var key=getBatchDraftKey(line);
+    if(!key||seen[key])return;
+    seen[key]=true;
+    var parsed=normalizeCapturePreviewParsed(line,parseReminderText(line));
+    if(parsed&&parsed.title)drafts.push({text:line,parsed:parsed});
+  });
+  return drafts;
 }
 function captureBatchFromInput(text){
   if(!shouldUseBatchCapture(text))return false;
