@@ -41,16 +41,16 @@ var I18N={
     recordCountLabel:'当前记录数',exportableCountLabel:'可导出日历数',undatedCountLabel:'无日期记录数',lastBackupLabel:'上次备份',
     neverBackedUp:'尚未备份',backupSuggested:'记录较多，建议导出 JSON 备份。',backupLooksOk:'记录不多，按需要备份即可。',
     backupVsCalendarHint:'JSON 备份用于恢复时刻数据；.ics 用于导入第三方日历，两者不是一回事。',
-    exportJsonBackup:'导出 JSON 备份',importJsonBackup:'导入 JSON 备份',
+    exportJsonBackup:'导出 JSON 备份',importJsonBackup:'导入 JSON 备份',storageEngineLabel:'数据仓库',quarantineCountLabel:'隔离记录',exportQuarantine:'导出隔离数据',indexedDbMode:'IndexedDB 主仓库',legacyFallbackMode:'本地缓存回退',
     reminderNoticeTitle:'提醒说明',reminderNoticeText:'网页版提醒依赖浏览器环境。页面关闭后，长期提醒不一定可靠；建议将时刻添加到桌面并定期打开查看，重要日程建议导出 .ics 到系统日历。',
     installPwa:'添加到桌面',pwaInstallHint:'如果浏览器没有显示安装按钮，可使用浏览器菜单中的“添加到桌面”或“安装应用”。',
     draftExisting:'已存在',draftDuplicateSkipped:'已跳过重复草稿',batchSaveAll:'全部保存',
     batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     exampleRecordsTitle:'示例记录',exampleRecordsText:'首次体验时可一键生成 5 条示例记录，不覆盖真实数据。',
     feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',writeEmail:'写邮件',copyEmail:'复制',feedbackCopied:'邮箱已复制',copyFeedbackTemplate:'复制反馈模板',feedbackTemplateCopied:'反馈模板已复制',feedbackTemplateLabel:'反馈时可以带上这些信息：',feedbackTemplateText:'遇到的问题：\n使用场景：\n浏览器/设备：\n希望改进：',feedbackNoUpload:'这里不接表单后端，也不会上传你的本地数据。',copyRecord:'复制',recordCopied:'记录已复制',moreActions:'更多',
-    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',futurePlan1:'更主动的助手能力。',futurePlan2:'更好的日历衔接。',futurePlan3:'更丰富的提醒方式。',futurePlan4:'更安全的数据保护。',futurePlan5:'多设备体验探索。',productPositionTitle:'产品定位',productPositionText:'时刻不是替代日历，而是帮你把聊天、通知和脑子里的一句话，先整理成有时间感的记录，再连接日历导出、备份和提醒说明。',capabilityChecklistTitle:'产品能力清单',capabilityChecklistText:'当前版本主要能力集中在本地记录、整理、导出和演示路径上。',capabilityOneSentence:'一句话输入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 备份',capabilityIcsExport:'.ics 导出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保护',capabilitySprite:'小熊助手',capabilityRecordActions:'记录快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'反馈入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',releaseCenterTitle:'更新记录',releaseCenterText:'最近版本变化集中放在这里，首次打开时仍会弹出本次更新。',releaseCenterV110:'模块化架构',releaseCenterV100rc:'正式稳定版',releaseCenterV098:'更新中心与反馈闭环',releaseCenterV097:'记录卡片操作增强',releaseCenterV096:'首页精简与功能中心',releaseCenterV095:'时刻精灵 2.0',releaseCenterV094:'个性化前置',releaseCenterV093:'产品体验打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
+    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',futurePlan1:'更主动的助手能力。',futurePlan2:'更好的日历衔接。',futurePlan3:'更丰富的提醒方式。',futurePlan4:'更安全的数据保护。',futurePlan5:'多设备体验探索。',productPositionTitle:'产品定位',productPositionText:'时刻不是替代日历，而是帮你把聊天、通知和脑子里的一句话，先整理成有时间感的记录，再连接日历导出、备份和提醒说明。',capabilityChecklistTitle:'产品能力清单',capabilityChecklistText:'当前版本主要能力集中在本地记录、整理、导出和演示路径上。',capabilityOneSentence:'一句话输入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 备份',capabilityIcsExport:'.ics 导出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保护',capabilitySprite:'小熊助手',capabilityRecordActions:'记录快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'反馈入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',releaseCenterTitle:'更新记录',releaseCenterText:'最近版本变化集中放在这里，首次打开时仍会弹出本次更新。',releaseCenterV120:'本地优先数据',releaseCenterV110:'模块化架构',releaseCenterV100rc:'正式稳定版',releaseCenterV098:'更新中心与反馈闭环',releaseCenterV097:'记录卡片操作增强',releaseCenterV096:'首页精简与功能中心',releaseCenterV095:'时刻精灵 2.0',releaseCenterV094:'个性化前置',releaseCenterV093:'产品体验打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
-    releaseNote1:'模块化入口分开配置、存储适配、记录、日历和视图边界。',releaseNote2:'index.html 只保留页面结构与外部资源入口，现有交互由兼容层继续提供。',releaseNote3:'Service Worker 预缓存新增模块，离线入口继续可用。',releaseNote4:'数据结构和 parser 输出保持兼容，旧备份仍可导入；继续避免对未上线能力做承诺。',releaseNote5:'更新中心记录 v1.1.0 模块化架构。',
+    releaseNote1:'IndexedDB 成为主数据仓库，localStorage 保留为快速缓存和故障回退。',releaseNote2:'首次启动先生成迁移快照，再校验、写入并核对记录数量。',releaseNote3:'损坏记录会进入隔离区，可查看数量并导出，不会被自动删除。',releaseNote4:'JSON 备份增加校验信息，旧备份继续兼容；parser 输出保持不变，并继续避免对未上线能力做承诺。',releaseNote5:'更新中心记录 v1.2.0 本地优先数据引擎。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteExportAction:'导出日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主动的智能助手能力正在规划中。',
     demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
     demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
@@ -60,7 +60,7 @@ var I18N={
     confirmImport:'确认导入',cancelImport:'取消',
     importData:'导入数据',clearData:'清空数据',backup:'数据备份',
     localDataHint:'数据默认保存在当前浏览器，可通过备份文件迁移。',
-    exportDone:'备份文件已导出',importDone:'导入成功',importFailed:'文件格式错误',storageError:'存储空间已满',
+    exportDone:'备份文件已导出',exportFailed:'导出失败',importDone:'导入成功',importFailed:'文件格式错误',storageError:'存储空间已满',
     importConfirm:'将导入 {n} 条记录（合并到现有数据）',
     importConfirmDetail:'将追加导入 {n} 条记录。文件版本：{version}。导出时间：{exportedAt}。缺失 id：{missing}，重复 id：{duplicates}，现有冲突：{conflicts}，无效记录：{invalid}。确认后会合并到当前数据，不会清空现有记录。',
     importResult:'导入成功，新增 {added} 条，跳过 {skipped} 条无效记录',
@@ -128,16 +128,16 @@ var I18N={
     recordCountLabel:'目前記錄數',exportableCountLabel:'可匯出日曆數',undatedCountLabel:'無日期記錄數',lastBackupLabel:'上次備份',
     neverBackedUp:'尚未備份',backupSuggested:'記錄較多，建議匯出 JSON 備份。',backupLooksOk:'記錄不多，按需要備份即可。',
     backupVsCalendarHint:'JSON 備份用於恢復時刻資料；.ics 用於匯入第三方日曆，兩者不是一回事。',
-    exportJsonBackup:'匯出 JSON 備份',importJsonBackup:'匯入 JSON 備份',
+    exportJsonBackup:'匯出 JSON 備份',importJsonBackup:'匯入 JSON 備份',storageEngineLabel:'資料倉庫',quarantineCountLabel:'隔離記錄',exportQuarantine:'匯出隔離資料',indexedDbMode:'IndexedDB 主倉庫',legacyFallbackMode:'本地快取回退',
     reminderNoticeTitle:'提醒說明',reminderNoticeText:'網頁版提醒依賴瀏覽器環境。頁面關閉後，長期提醒不一定可靠；建議將時刻加入桌面並定期打開查看，重要日程建議匯出 .ics 到系統日曆。',
     installPwa:'加入桌面',pwaInstallHint:'如果瀏覽器沒有顯示安裝按鈕，可使用瀏覽器選單中的「加入桌面」或「安裝應用」。',
     draftExisting:'已存在',draftDuplicateSkipped:'已略過重複草稿',batchSaveAll:'全部保存',
     batchSavedOnly:'已保存 {saved} 條',batchSavedResult:'已保存 {saved} 條，略過 {skipped} 條重複',batchSkippedOnly:'沒有新增，已略過 {skipped} 條重複',
     exampleRecordsTitle:'示例記錄',exampleRecordsText:'首次體驗時可一鍵生成 5 條示例記錄，不覆蓋真實資料。',
     feedbackTitle:'建議與回饋',feedbackText:'遇到問題或有建議，可以發郵件告訴我。',writeEmail:'寫郵件',copyEmail:'複製',feedbackCopied:'郵箱已複製',copyFeedbackTemplate:'複製回饋模板',feedbackTemplateCopied:'回饋模板已複製',feedbackTemplateLabel:'回饋時可以帶上這些資訊：',feedbackTemplateText:'遇到的問題：\n使用場景：\n瀏覽器/裝置：\n希望改進：',feedbackNoUpload:'這裡不接表單後端，也不會上傳你的本地資料。',copyRecord:'複製',recordCopied:'記錄已複製',moreActions:'更多',
-    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',futurePlan1:'更主動的助手能力。',futurePlan2:'更好的日曆銜接。',futurePlan3:'更豐富的提醒方式。',futurePlan4:'更安全的資料保護。',futurePlan5:'多裝置體驗探索。',productPositionTitle:'產品定位',productPositionText:'時刻不是替代日曆，而是幫你把聊天、通知和腦子裡的一句話，先整理成有時間感的記錄，再連接日曆匯出、備份和提醒說明。',capabilityChecklistTitle:'產品能力清單',capabilityChecklistText:'目前版本主要能力集中在本地記錄、整理、匯出和演示路徑上。',capabilityOneSentence:'一句話輸入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 備份',capabilityIcsExport:'.ics 匯出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保護',capabilitySprite:'小熊助手',capabilityRecordActions:'記錄快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'回饋入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、備份、日曆和回饋入口收在這裡。',featureHubDemo:'體驗示例',featureHubDemoSub:'生成 5 條示例',featureHubRoute:'演示路線',featureHubRouteSub:'從輸入到匯出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次變化',featureHubSafety:'資料安全',featureHubSafetySub:'JSON 備份',featureHubCalendar:'日曆匯出',featureHubCalendarSub:'匯出 .ics',featureHubFeedback:'建議回饋',featureHubFeedbackSub:'郵件聯絡',featureHubFuture:'未來計劃',featureHubFutureSub:'能力預告',releaseCenterTitle:'更新記錄',releaseCenterText:'最近版本變化集中放在這裡，首次打開時仍會彈出本次更新。',releaseCenterV110:'模組化架構',releaseCenterV100rc:'正式穩定版',releaseCenterV098:'更新中心與回饋閉環',releaseCenterV097:'記錄卡片操作增強',releaseCenterV096:'首頁精簡與功能中心',releaseCenterV095:'時刻精靈 2.0',releaseCenterV094:'個人化前置',releaseCenterV093:'產品體驗打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
+    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',futurePlan1:'更主動的助手能力。',futurePlan2:'更好的日曆銜接。',futurePlan3:'更豐富的提醒方式。',futurePlan4:'更安全的資料保護。',futurePlan5:'多裝置體驗探索。',productPositionTitle:'產品定位',productPositionText:'時刻不是替代日曆，而是幫你把聊天、通知和腦子裡的一句話，先整理成有時間感的記錄，再連接日曆匯出、備份和提醒說明。',capabilityChecklistTitle:'產品能力清單',capabilityChecklistText:'目前版本主要能力集中在本地記錄、整理、匯出和演示路徑上。',capabilityOneSentence:'一句話輸入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 備份',capabilityIcsExport:'.ics 匯出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保護',capabilitySprite:'小熊助手',capabilityRecordActions:'記錄快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'回饋入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、備份、日曆和回饋入口收在這裡。',featureHubDemo:'體驗示例',featureHubDemoSub:'生成 5 條示例',featureHubRoute:'演示路線',featureHubRouteSub:'從輸入到匯出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次變化',featureHubSafety:'資料安全',featureHubSafetySub:'JSON 備份',featureHubCalendar:'日曆匯出',featureHubCalendarSub:'匯出 .ics',featureHubFeedback:'建議回饋',featureHubFeedbackSub:'郵件聯絡',featureHubFuture:'未來計劃',featureHubFutureSub:'能力預告',releaseCenterTitle:'更新記錄',releaseCenterText:'最近版本變化集中放在這裡，首次打開時仍會彈出本次更新。',releaseCenterV120:'本地優先資料',releaseCenterV110:'模組化架構',releaseCenterV100rc:'正式穩定版',releaseCenterV098:'更新中心與回饋閉環',releaseCenterV097:'記錄卡片操作增強',releaseCenterV096:'首頁精簡與功能中心',releaseCenterV095:'時刻精靈 2.0',releaseCenterV094:'個人化前置',releaseCenterV093:'產品體驗打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
     releaseTitle:'更新說明',releaseOk:'我知道了',releaseMeta:'目前版本 {version} · {time}',
-    releaseNote1:'模組化入口分開設定、儲存適配、記錄、日曆與視圖邊界。',releaseNote2:'index.html 只保留頁面結構與外部資源入口，現有互動由相容層繼續提供。',releaseNote3:'Service Worker 預快取新增模組，離線入口仍可使用。',releaseNote4:'資料結構與 parser 輸出保持相容，舊備份仍可匯入。',releaseNote5:'更新中心記錄 v1.1.0 模組化架構。',
+    releaseNote1:'IndexedDB 成為主資料倉庫，localStorage 保留為快速快取與故障回退。',releaseNote2:'首次啟動先建立遷移快照，再校驗、寫入並核對記錄數量。',releaseNote3:'損壞記錄會進入隔離區，可查看數量並匯出，不會自動刪除。',releaseNote4:'JSON 備份增加校驗資訊，舊備份仍相容；parser 輸出保持不變。',releaseNote5:'更新中心記錄 v1.2.0 本地優先資料引擎。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteExportAction:'匯出日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主動的智慧助手能力正在規劃中。',
     demoRouteTitle:'從一句話到日曆',demoRouteText:'把一句話整理成時刻，再匯出到你常用的日曆。',
     demoRouteStep1:'輸入一句話：明天下午三點開會',demoRouteStep2:'生成記錄並進入日曆',demoRouteStep3:'匯出 .ics 到系統日曆',demoRouteStep4:'匯出 JSON 備份保護資料',
@@ -147,7 +147,7 @@ var I18N={
     confirmImport:'確認匯入',cancelImport:'取消',
     importData:'匯入資料',clearData:'清空資料',backup:'資料備份',
     localDataHint:'資料預設保存在目前瀏覽器，可透過備份檔案遷移。',
-    exportDone:'備份檔案已匯出',importDone:'匯入成功',importFailed:'檔案格式錯誤',storageError:'儲存空間已滿',
+    exportDone:'備份檔案已匯出',exportFailed:'匯出失敗',importDone:'匯入成功',importFailed:'檔案格式錯誤',storageError:'儲存空間已滿',
     importConfirm:'將匯入 {n} 條記錄（合併到現有資料）',
     importConfirmDetail:'將追加匯入 {n} 條記錄。檔案版本：{version}。匯出時間：{exportedAt}。缺失 id：{missing}，重複 id：{duplicates}，現有衝突：{conflicts}，無效記錄：{invalid}。確認後會合併到目前資料，不會清空現有記錄。',
     importResult:'匯入成功，新增 {added} 條，略過 {skipped} 條無效記錄',
@@ -215,16 +215,16 @@ var I18N={
     recordCountLabel:'Current records',exportableCountLabel:'Calendar exportable',undatedCountLabel:'Undated records',lastBackupLabel:'Last backup',
     neverBackedUp:'No backup yet',backupSuggested:'You have several records. Export a JSON backup.',backupLooksOk:'Few records so far. Back up when needed.',
     backupVsCalendarHint:'JSON backups restore Shike data; .ics files import into third-party calendars. They are different files.',
-    exportJsonBackup:'Export JSON backup',importJsonBackup:'Import JSON backup',
+    exportJsonBackup:'Export JSON backup',importJsonBackup:'Import JSON backup',storageEngineLabel:'Data repository',quarantineCountLabel:'Quarantined records',exportQuarantine:'Export quarantine',indexedDbMode:'IndexedDB primary',legacyFallbackMode:'Local cache fallback',
     reminderNoticeTitle:'Reminder notes',reminderNoticeText:'Web reminders depend on the browser environment. After the page is closed, long-term reminders are not guaranteed. Add Shike to your desktop and open it regularly; export important schedules as .ics to your system calendar.',
     installPwa:'Add to desktop',pwaInstallHint:'If the browser does not show an install button, use the browser menu to add to desktop or install the app.',
     draftExisting:'Existing',draftDuplicateSkipped:'Duplicate draft skipped',batchSaveAll:'Save all',
     batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     exampleRecordsTitle:'Example records',exampleRecordsText:'Create 5 example records for first-time review without overwriting real data.',
     feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',writeEmail:'Email',copyEmail:'Copy',feedbackCopied:'Email copied',copyFeedbackTemplate:'Copy feedback template',feedbackTemplateCopied:'Feedback template copied',feedbackTemplateLabel:'Useful details to include:',feedbackTemplateText:'Issue:\nUse case:\nBrowser/device:\nWhat you hope improves:',feedbackNoUpload:'No backend form is connected here, and your local data is not uploaded.',copyRecord:'Copy',recordCopied:'Record copied',moreActions:'More',
-    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',futurePlan1:'More proactive assistant abilities.',futurePlan2:'Better calendar handoff.',futurePlan3:'Richer reminder options.',futurePlan4:'Safer data protection.',futurePlan5:'Multi-device experience exploration.',productPositionTitle:'Product position',productPositionText:'Shike is not a calendar replacement. It helps turn one sentence from chat, notifications, or your mind into time-aware records, then connects them to calendar export, backup, and reminder notes.',capabilityChecklistTitle:'Product capability checklist',capabilityChecklistText:'This version focuses on local records, organization, export, and the demo path.',capabilityOneSentence:'One-sentence input',capabilityLocalSave:'Local save',capabilityJsonBackup:'JSON backup',capabilityIcsExport:'.ics export',capabilityBatchOrganize:'Batch organize',capabilityDedupe:'Dedupe protection',capabilitySprite:'Bear assistant',capabilityRecordActions:'Record quick actions',capabilityUpdateCenter:'Update center',capabilityFeedback:'Feedback entry',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',releaseCenterTitle:'Update history',releaseCenterText:'Recent version changes live here. First open still shows the current release note.',releaseCenterV110:'Modular architecture',releaseCenterV100rc:'Stable release',releaseCenterV098:'Update center and feedback loop',releaseCenterV097:'Record card action polish',releaseCenterV096:'Home cleanup and feature hub',releaseCenterV095:'Time sprite 2.0',releaseCenterV094:'Personalization moved forward',releaseCenterV093:'Product experience polish',viewCurrentRelease:'View this update',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
+    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',futurePlan1:'More proactive assistant abilities.',futurePlan2:'Better calendar handoff.',futurePlan3:'Richer reminder options.',futurePlan4:'Safer data protection.',futurePlan5:'Multi-device experience exploration.',productPositionTitle:'Product position',productPositionText:'Shike is not a calendar replacement. It helps turn one sentence from chat, notifications, or your mind into time-aware records, then connects them to calendar export, backup, and reminder notes.',capabilityChecklistTitle:'Product capability checklist',capabilityChecklistText:'This version focuses on local records, organization, export, and the demo path.',capabilityOneSentence:'One-sentence input',capabilityLocalSave:'Local save',capabilityJsonBackup:'JSON backup',capabilityIcsExport:'.ics export',capabilityBatchOrganize:'Batch organize',capabilityDedupe:'Dedupe protection',capabilitySprite:'Bear assistant',capabilityRecordActions:'Record quick actions',capabilityUpdateCenter:'Update center',capabilityFeedback:'Feedback entry',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',releaseCenterTitle:'Update history',releaseCenterText:'Recent version changes live here. First open still shows the current release note.',releaseCenterV120:'Local-first data',releaseCenterV110:'Modular architecture',releaseCenterV100rc:'Stable release',releaseCenterV098:'Update center and feedback loop',releaseCenterV097:'Record card action polish',releaseCenterV096:'Home cleanup and feature hub',releaseCenterV095:'Time sprite 2.0',releaseCenterV094:'Personalization moved forward',releaseCenterV093:'Product experience polish',viewCurrentRelease:'View this update',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
-    releaseNote1:'The modular entry separates configuration, storage adapters, records, calendar, and view boundaries.',releaseNote2:'index.html now keeps page structure and external resource entry points while the compatibility layer preserves behavior.',releaseNote3:'The service worker precaches the new modules so the offline entry remains available.',releaseNote4:'The record schema and parser output remain compatible, and legacy backups remain importable.',releaseNote5:'The update center records the v1.1.0 modular architecture release.',
+    releaseNote1:'IndexedDB is now the primary repository while localStorage remains a fast cache and failure fallback.',releaseNote2:'First startup creates a migration snapshot before validation, writing, and count verification.',releaseNote3:'Damaged records enter quarantine where they can be counted and exported without automatic deletion.',releaseNote4:'JSON backups add integrity metadata, legacy backups remain compatible, and parser output is unchanged.',releaseNote5:'The update center records the v1.2.0 local-first data engine release.',
     spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteExportAction:'Export calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',spriteResetAction:'Reset position',spriteFutureHint:'More proactive assistant abilities are being planned.',
     demoRouteTitle:'From one sentence to calendar',demoRouteText:'Turn one sentence into a moment, then export it to your calendar.',
     demoRouteStep1:'Enter one sentence: meeting tomorrow at 3pm',demoRouteStep2:'Create a record and calendar dot',demoRouteStep3:'Export .ics to your system calendar',demoRouteStep4:'Export JSON backup to protect data',
@@ -234,7 +234,7 @@ var I18N={
     confirmImport:'Confirm import',cancelImport:'Cancel',
     importData:'Import',clearData:'Clear all',backup:'Backup',
     localDataHint:'Data is saved in this browser by default and can be moved with a backup file.',
-    exportDone:'Backup exported',importDone:'Imported',importFailed:'Invalid file format',storageError:'Storage is full',
+    exportDone:'Backup exported',exportFailed:'Export failed',importDone:'Imported',importFailed:'Invalid file format',storageError:'Storage is full',
     importConfirm:'Import {n} records and merge them with current data',
     importConfirmDetail:'Append {n} records. File version: {version}. Exported at: {exportedAt}. Missing ids: {missing}, duplicate ids: {duplicates}, existing conflicts: {conflicts}, invalid records: {invalid}. Current data will not be cleared.',
     importResult:'Imported {added} records, skipped {skipped} invalid records',
@@ -302,16 +302,16 @@ var I18N={
     recordCountLabel:'現在の記録数',exportableCountLabel:'カレンダー出力数',undatedCountLabel:'日付なし記録数',lastBackupLabel:'前回バックアップ',
     neverBackedUp:'未バックアップ',backupSuggested:'記録が増えています。JSON バックアップをおすすめします。',backupLooksOk:'記録はまだ少なめです。必要に応じてバックアップしてください。',
     backupVsCalendarHint:'JSON バックアップは時刻データの復元用、.ics は外部カレンダーへの取り込み用です。用途が異なります。',
-    exportJsonBackup:'JSON バックアップ出力',importJsonBackup:'JSON バックアップ取込',
+    exportJsonBackup:'JSON バックアップ出力',importJsonBackup:'JSON バックアップ取込',storageEngineLabel:'データ保管庫',quarantineCountLabel:'隔離記録',exportQuarantine:'隔離データ出力',indexedDbMode:'IndexedDB メイン',legacyFallbackMode:'ローカルキャッシュ回退',
     reminderNoticeTitle:'リマインド説明',reminderNoticeText:'Web 版のリマインドはブラウザ環境に依存します。ページを閉じた後の長期リマインドは保証されません。時刻をデスクトップに追加し、定期的に開いて確認してください。重要な予定は .ics でシステムカレンダーへ出力することをおすすめします。',
     installPwa:'デスクトップに追加',pwaInstallHint:'ブラウザにインストールボタンが出ない場合は、ブラウザメニューからデスクトップ追加またはアプリのインストールを選んでください。',
     draftExisting:'既存',draftDuplicateSkipped:'重複下書きをスキップしました',batchSaveAll:'すべて保存',
     batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     exampleRecordsTitle:'サンプル記録',exampleRecordsText:'初回確認用に 5 件のサンプルを作成できます。実データは上書きしません。',
     feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',writeEmail:'メール',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',copyFeedbackTemplate:'テンプレートをコピー',feedbackTemplateCopied:'フィードバックテンプレートをコピーしました',feedbackTemplateLabel:'送るときはこの情報が役立ちます：',feedbackTemplateText:'問題：\n利用場面：\nブラウザ/端末：\n改善してほしいこと：',feedbackNoUpload:'ここではフォームのバックエンドに接続せず、ローカルデータもアップロードしません。',copyRecord:'コピー',recordCopied:'記録をコピーしました',moreActions:'その他',
-    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',futurePlan1:'より能動的な助手機能。',futurePlan2:'よりよいカレンダー連携。',futurePlan3:'より豊かなリマインド方式。',futurePlan4:'より安全なデータ保護。',futurePlan5:'複数端末体験の探索。',productPositionTitle:'製品の位置づけ',productPositionText:'時刻はカレンダーの代替ではありません。チャット、通知、頭の中の一文を時間感のある記録に整え、カレンダー出力、バックアップ、リマインド説明につなげます。',capabilityChecklistTitle:'製品能力チェックリスト',capabilityChecklistText:'この版はローカル記録、整理、出力、デモ経路に集中しています。',capabilityOneSentence:'一文入力',capabilityLocalSave:'ローカル保存',capabilityJsonBackup:'JSON バックアップ',capabilityIcsExport:'.ics 出力',capabilityBatchOrganize:'一括整理',capabilityDedupe:'重複保護',capabilitySprite:'くま助手',capabilityRecordActions:'記録クイック操作',capabilityUpdateCenter:'更新センター',capabilityFeedback:'フィードバック入口',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',releaseCenterTitle:'更新履歴',releaseCenterText:'最近の版の変更をここにまとめます。初回表示では今回の更新も表示されます。',releaseCenterV110:'モジュール化構成',releaseCenterV100rc:'正式安定版',releaseCenterV098:'更新センターとフィードバック',releaseCenterV097:'記録カード操作の強化',releaseCenterV096:'ホーム整理と機能センター',releaseCenterV095:'時刻スプライト 2.0',releaseCenterV094:'カスタマイズを前面へ',releaseCenterV093:'製品体験の調整',viewCurrentRelease:'今回の更新を見る',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
+    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',futurePlan1:'より能動的な助手機能。',futurePlan2:'よりよいカレンダー連携。',futurePlan3:'より豊かなリマインド方式。',futurePlan4:'より安全なデータ保護。',futurePlan5:'複数端末体験の探索。',productPositionTitle:'製品の位置づけ',productPositionText:'時刻はカレンダーの代替ではありません。チャット、通知、頭の中の一文を時間感のある記録に整え、カレンダー出力、バックアップ、リマインド説明につなげます。',capabilityChecklistTitle:'製品能力チェックリスト',capabilityChecklistText:'この版はローカル記録、整理、出力、デモ経路に集中しています。',capabilityOneSentence:'一文入力',capabilityLocalSave:'ローカル保存',capabilityJsonBackup:'JSON バックアップ',capabilityIcsExport:'.ics 出力',capabilityBatchOrganize:'一括整理',capabilityDedupe:'重複保護',capabilitySprite:'くま助手',capabilityRecordActions:'記録クイック操作',capabilityUpdateCenter:'更新センター',capabilityFeedback:'フィードバック入口',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',releaseCenterTitle:'更新履歴',releaseCenterText:'最近の版の変更をここにまとめます。初回表示では今回の更新も表示されます。',releaseCenterV120:'ローカル優先データ',releaseCenterV110:'モジュール化構成',releaseCenterV100rc:'正式安定版',releaseCenterV098:'更新センターとフィードバック',releaseCenterV097:'記録カード操作の強化',releaseCenterV096:'ホーム整理と機能センター',releaseCenterV095:'時刻スプライト 2.0',releaseCenterV094:'カスタマイズを前面へ',releaseCenterV093:'製品体験の調整',viewCurrentRelease:'今回の更新を見る',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
     releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
-    releaseNote1:'モジュール入口で設定、保存アダプター、記録、カレンダー、ビューの境界を分けました。',releaseNote2:'index.html は画面構造と外部リソース入口を残し、既存動作は互換レイヤーが維持します。',releaseNote3:'Service Worker が新しいモジュールを事前キャッシュし、オフライン入口を維持します。',releaseNote4:'データ構造と parser 出力は互換性を保ち、旧バックアップも読み込めます。',releaseNote5:'更新センターに v1.1.0 のモジュール化構成を記録しました。',
+    releaseNote1:'IndexedDB を主データ保管庫にし、localStorage は高速キャッシュと障害時の回退として残します。',releaseNote2:'初回起動で移行前スナップショットを作り、検証、書込み、件数照合を行います。',releaseNote3:'壊れた記録は隔離され、件数確認と出力ができ、自動削除されません。',releaseNote4:'JSON バックアップに整合性情報を追加し、旧形式と parser 出力の互換性を保ちます。',releaseNote5:'更新センターに v1.2.0 のローカル優先データ基盤を記録しました。',
     spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteExportAction:'カレンダー出力',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',spriteResetAction:'位置をリセット',spriteFutureHint:'より能動的な助手機能を計画中です。',
     demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
     demoRouteStep1:'一文を入力：明日の午後3時に会議',demoRouteStep2:'記録を作成しカレンダーに表示',demoRouteStep3:'.ics をシステムカレンダーへ出力',demoRouteStep4:'JSON バックアップでデータを保護',
@@ -321,7 +321,7 @@ var I18N={
     confirmImport:'取込を確定',cancelImport:'キャンセル',
     importData:'インポート',clearData:'全削除',backup:'バックアップ',
     localDataHint:'データはこのブラウザに保存され、バックアップファイルで移行できます。',
-    exportDone:'バックアップを書き出しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',storageError:'保存容量がいっぱいです',
+    exportDone:'バックアップを書き出しました',exportFailed:'出力に失敗しました',importDone:'インポートしました',importFailed:'ファイル形式が正しくありません',storageError:'保存容量がいっぱいです',
     importConfirm:'{n}件の記録を既存データに統合してインポートします',
     importConfirmDetail:'{n} 件を追加インポートします。ファイル版：{version}。出力時間：{exportedAt}。ID なし：{missing}、重複 ID：{duplicates}、既存衝突：{conflicts}、無効記録：{invalid}。現在の記録は削除されません。',
     importResult:'インポートしました。追加 {added} 件、無効スキップ {skipped} 件',
@@ -604,6 +604,7 @@ function isWeChat(){return /MicroMessenger/i.test(navigator.userAgent);}
 /* ========== Storage ========== */
 var records=[];
 var RECOVERY_KEY='shike_records_recovery_v1';
+var MAX_BACKUP_FILE_SIZE=5*1024*1024;
 function backupCorruptedRecords(raw){
   if(!raw)return;
   try{
@@ -613,6 +614,13 @@ function backupCorruptedRecords(raw){
 function loadRecords(){
   var raw='';
   try{
+    if(Array.isArray(window.ShikePreloadedRecords)){
+      records=window.ShikePreloadedRecords.map(cloneRecord);
+      window.ShikePreloadedRecords=null;
+      records.forEach(function(r){migrateRecord(r);});
+      ensureUniqueRecordIds(records);
+      return;
+    }
     raw=ShikeLegacyStorage.getRaw(STORAGE_KEY);
     if(!raw){records=[];return;}
     var parsed=JSON.parse(raw);
@@ -653,6 +661,7 @@ function saveRecords(){
     ensureUniqueRecordIds(records);
     if(!ShikeLegacyStorage.setJson(STORAGE_KEY,records))throw new Error('records_write_failed');
     saveLastGoodRecords(records);
+    if(window.ShikeLocalFirst)ShikeLocalFirst.persist(records).catch(function(){});
     return true;
   }
   catch(e){showToast(t('storageError')||'存储空间已满','error');return false;}
@@ -685,13 +694,16 @@ function cloneRecord(r){
   return JSON.parse(JSON.stringify(r||{}));
 }
 function buildBackupPayload(){
+  var backupRecords=records.map(cloneRecord);
   return {
     app:'shike',
     appVersion:APP_VERSION,
     schemaVersion:BACKUP_SCHEMA_VERSION,
     exportedAt:new Date().toISOString(),
-    recordCount:records.length,
-    records:records.map(cloneRecord)
+    recordCount:backupRecords.length,
+    checksum:ShikeDataIntegrity.checksumRecords(backupRecords),
+    records:backupRecords,
+    settings:cloneRecord(settings)
   };
 }
 function countExportableRecords(){
@@ -719,6 +731,7 @@ function parseBackupPayload(raw){
   var data=JSON.parse(raw);
   var arr=Array.isArray(data)?data:(data&&Array.isArray(data.records)?data.records:null);
   if(!arr)throw new Error('invalid_backup');
+  if(data&&data.checksum&&data.checksum!==ShikeDataIntegrity.checksumRecords(arr))throw new Error('backup_checksum_mismatch');
   var sourceType=Array.isArray(data)?'legacyArray':((data&&Array.isArray(data.records)&&data.app==='shike')?'newBackup':'legacyRecords');
   return {
     meta:Array.isArray(data)?{}:data,
@@ -731,6 +744,7 @@ function prepareBackupImport(parsed){
   records.forEach(function(r){if(r&&r.id)existing[r.id]=true;});
   var seenInput={},used=Object.assign({},existing);
   var out=[];
+  var quarantined=[];
   var summary={
     total:(parsed.records||[]).length,valid:0,invalid:0,missing:0,duplicates:0,conflicts:0,
     sourceType:parsed.sourceType||'legacyRecords',
@@ -738,8 +752,8 @@ function prepareBackupImport(parsed){
     version:(parsed.meta&&parsed.meta.appVersion)||('schema '+((parsed.meta&&parsed.meta.schemaVersion)||'legacy')),
     exportedAt:(parsed.meta&&parsed.meta.exportedAt)||'unknown'
   };
-  (parsed.records||[]).forEach(function(raw){
-    if(!isValidImportedRecord(raw)){summary.invalid++;return;}
+  (parsed.records||[]).forEach(function(raw,index){
+    if(!isValidImportedRecord(raw)){summary.invalid++;quarantined.push({id:'q_import_'+Date.now().toString(36)+'_'+index,reason:'invalid_import_record',raw:raw,quarantinedAt:new Date().toISOString(),schemaVersion:2});return;}
     var r=cloneRecord(raw);
     var originalId=r.id;
     if(!originalId)summary.missing++;
@@ -752,7 +766,7 @@ function prepareBackupImport(parsed){
     summary.valid++;
     out.push(r);
   });
-  return {records:out,summary:summary};
+  return {records:out,quarantined:quarantined,summary:summary};
 }
 function sourceTypeLabel(sourceType){
   if(sourceType==='newBackup')return t('sourceNewBackup');
@@ -827,6 +841,7 @@ function mergePreparedImport(prepared){
     records=records.concat(prepared.records);
     ensureUniqueRecordIds(records);
     if(!saveRecords())throw new Error('save_failed');
+    if(window.ShikeLocalFirst&&prepared.quarantined&&prepared.quarantined.length)ShikeLocalFirst.quarantine(prepared.quarantined).catch(function(){});
     renderCurrent();
     renderMy();
     showToast(tf('importResult',{added:prepared.records.length,skipped:prepared.summary.invalid}),'success');
@@ -848,6 +863,13 @@ function exportBackupFile(){
     renderMy();
     showToast(t('exportDone'),'success');
   }catch(e){showToast(t('importFailed'),'error');}
+}
+function exportQuarantinedData(){
+  if(!window.ShikeLocalFirst)return;
+  ShikeLocalFirst.getQuarantined().then(function(items){
+    var payload={app:'shike',appVersion:APP_VERSION,schemaVersion:2,exportedAt:new Date().toISOString(),recordCount:items.length,records:items};
+    downloadTextFile('shike-quarantine-'+ymdForFile(new Date())+'.json',JSON.stringify(payload,null,2),'application/json;charset=utf-8');
+  }).catch(function(){showToast(t('exportFailed'),'error');});
 }
 
 /* ========== Calendar export (.ics) ========== */
@@ -2781,6 +2803,9 @@ function renderMy(){
   if($('safetyExportableCount'))$('safetyExportableCount').textContent=countExportableRecords();
   if($('safetyUndatedCount'))$('safetyUndatedCount').textContent=countUndatedRecords();
   if($('safetyLastBackup'))$('safetyLastBackup').textContent=getLastBackupText();
+  var storageStatus=window.ShikeLocalFirst?ShikeLocalFirst.getStatus():{mode:'legacy-fallback',quarantineCount:0};
+  if($('storageEngineStatus'))$('storageEngineStatus').textContent=storageStatus.mode==='indexeddb'?t('indexedDbMode'):t('legacyFallbackMode');
+  if($('quarantineCount'))$('quarantineCount').textContent=storageStatus.quarantineCount||0;
   if($('safetyStatusHint'))$('safetyStatusHint').textContent=(stat>=5&&!localStorage.getItem(LAST_BACKUP_KEY))?t('backupSuggested'):t('backupLooksOk');
   // Username input
   $('usernameInput').value=settings.username||'';
@@ -3491,9 +3516,11 @@ function init(){
   });
   b('exportBtn','click',exportBackupFile);
   b('exportBackupBtnMy','click',exportBackupFile);
+  b('exportQuarantineBtn','click',exportQuarantinedData);
   b('exportIcsBtn','click',exportIcsFile);
   function handleBackupFileInput(e){
     var f=e.target.files&&e.target.files[0];if(!f)return;
+    if(f.size>MAX_BACKUP_FILE_SIZE){showToast(t('importFailed'),'error');e.target.value='';return;}
     var fr=new FileReader();fr.onload=function(ev){
       try{
         var parsed=parseBackupPayload(ev.target.result);
@@ -3575,7 +3602,10 @@ function showUpdateHint(){
   });
   setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},15000);
 }
-window.addEventListener('DOMContentLoaded',init);
+window.addEventListener('DOMContentLoaded',function(){
+  if(!window.ShikeLocalFirst){init();return;}
+  ShikeLocalFirst.bootstrap().then(function(result){window.ShikePreloadedRecords=result.records;init();}).catch(function(){init();});
+});
 window.addEventListener('error',function(e){
   // Silent catch for non-critical errors
   console.warn('Shike error:',e.message);

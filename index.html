@@ -244,6 +244,7 @@
           <summary class="setting-group-title" style="cursor:pointer;" data-i18n="releaseCenterTitle">更新记录</summary>
           <p class="setting-note" data-i18n="releaseCenterText">最近版本变化集中放在这里，首次打开时仍会弹出本次更新。</p>
           <div class="release-center-list" id="releaseCenterList">
+            <div class="release-center-item"><strong>v1.2.0</strong><span data-i18n="releaseCenterV120">本地优先数据</span></div>
             <div class="release-center-item"><strong>v1.1.0</strong><span data-i18n="releaseCenterV110">模块化架构</span></div>
             <div class="release-center-item"><strong>v1.0.0</strong><span data-i18n="releaseCenterV100rc">正式稳定版</span></div>
             <div class="release-center-item"><strong>v0.9.8</strong><span data-i18n="releaseCenterV098">更新中心与反馈闭环</span></div>
@@ -271,10 +272,13 @@
         <div class="setting-item"><span class="setting-item-label" data-i18n="exportableCountLabel">可导出日历数</span><span class="setting-item-value" id="safetyExportableCount">0</span></div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="undatedCountLabel">无日期记录数</span><span class="setting-item-value" id="safetyUndatedCount">0</span></div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="lastBackupLabel">上次备份</span><span class="setting-item-value" id="safetyLastBackup">尚未备份</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="storageEngineLabel">数据仓库</span><span class="setting-item-value" id="storageEngineStatus">--</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="quarantineCountLabel">隔离记录</span><span class="setting-item-value" id="quarantineCount">0</span></div>
         <p id="dataSafetyHint" style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:8px 0 10px;" data-i18n="dataSafetyHint">时刻的数据保存在当前浏览器。重要记录建议定期导出备份。</p>
         <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="backupVsCalendarHint">JSON 备份用于恢复时刻数据；.ics 用于导入第三方日历，两者不是一回事。</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="import-btn" id="exportBackupBtnMy" data-i18n="exportJsonBackup">导出 JSON 备份</button>
+          <button class="import-btn" id="exportQuarantineBtn" data-i18n="exportQuarantine">导出隔离数据</button>
           <label class="import-btn" style="cursor:pointer;" data-i18n="importJsonBackup">导入 JSON 备份
             <input type="file" accept=".json" id="restoreFileInputMy" style="display:none">
           </label>
@@ -441,6 +445,9 @@
 <script src="./src/utilities/sanitize.js"></script>
 <script src="./src/utilities/ids.js"></script>
 <script src="./src/storage/legacy-storage.js"></script>
+<script src="./src/storage/data-integrity.js"></script>
+<script src="./src/storage/indexeddb-storage.js"></script>
+<script src="./src/storage/local-first-bridge.js"></script>
 <script src="./src/legacy-app.js"></script>
 <script type="module" src="./src/app.js"></script>
 </body>

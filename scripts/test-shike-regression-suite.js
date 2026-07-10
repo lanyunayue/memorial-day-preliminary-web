@@ -218,6 +218,31 @@ const tests = [
     name: 'Offline assets',
     script: 'test-shike-offline-assets.js',
     expected: 'Offline asset regression passed: 10/10'
+  },
+  {
+    name: 'IndexedDB repository',
+    script: 'test-shike-indexeddb-repository.js',
+    expected: 'IndexedDB repository regression passed: 12/12'
+  },
+  {
+    name: 'Storage migration',
+    script: 'test-shike-storage-migration.js',
+    expected: 'Storage migration regression passed: 14/14'
+  },
+  {
+    name: 'Data integrity',
+    script: 'test-shike-data-integrity.js',
+    expected: 'Data integrity regression passed: 16/16'
+  },
+  {
+    name: 'Corruption quarantine',
+    script: 'test-shike-corruption-quarantine.js',
+    expected: 'Corruption quarantine regression passed: 10/10'
+  },
+  {
+    name: 'V2 backup',
+    script: 'test-shike-v2-backup.js',
+    expected: 'V2 backup regression passed: 13/13'
   }
 ];
 

@@ -1,6 +1,6 @@
 const CDP_URL=process.env.SHIKE_CDP_URL||'http://127.0.0.1:9224';
 const APP_URL=process.env.SHIKE_APP_URL||'http://127.0.0.1:8090/index.html';
-const EXPECTED_VERSION=process.env.SHIKE_EXPECTED_VERSION||'v1.1.0';
+const EXPECTED_VERSION=process.env.SHIKE_EXPECTED_VERSION||'v1.2.0';
 const delay=(ms)=>new Promise((resolve)=>setTimeout(resolve,ms));
 
 async function main(){

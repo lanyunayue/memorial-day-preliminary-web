@@ -1,8 +1,8 @@
-// Service Worker for 时刻 (Shike) - v1.1.0
-var CACHE_NAME = 'shike-v110-v47';
+// Service Worker for 时刻 (Shike) - v1.2.0
+var CACHE_NAME = 'shike-v120-v48';
 var PRECACHE_URLS = [
   './','./index.html','./manifest.json','./assets/styles/app.css',
-  './src/config/version.js','./src/config/constants.js','./src/utilities/sanitize.js','./src/utilities/ids.js','./src/storage/legacy-storage.js','./src/legacy-app.js','./src/app.js',
+  './src/config/version.js','./src/config/constants.js','./src/utilities/sanitize.js','./src/utilities/ids.js','./src/storage/legacy-storage.js','./src/storage/data-integrity.js','./src/storage/indexeddb-storage.js','./src/storage/local-first-bridge.js','./src/legacy-app.js','./src/app.js',
   './src/core/event-bus.js','./src/core/state.js','./src/core/errors.js','./src/core/router.js',
   './src/storage/repository.js','./src/storage/migrations.js','./src/storage/backup.js',
   './src/records/record-service.js','./src/records/record-normalizer.js','./src/records/dedupe.js','./src/records/recurrence.js',
