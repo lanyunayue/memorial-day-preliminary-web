@@ -595,6 +595,7 @@ function closeReleaseNotes(){
   if(mask)mask.classList.remove('show');
   if(box)box.classList.remove('show');
   markReleaseNotesSeen();
+  setTimeout(function(){window.scrollTo(0,0);},50);
 }
 function maybeShowReleaseNotes(){
   setTimeout(function(){showReleaseNotes(false);},700);
@@ -3343,7 +3344,7 @@ function showOpening(){
 function hideOpening(){
   var op=$('opening');
   op.classList.add('hide');op.classList.remove('show');
-  setTimeout(function(){op.style.display='none';},500);
+  setTimeout(function(){op.style.display='none';window.scrollTo(0,0);},500);
   markOpeningSeen();
   maybeShowReleaseNotes();
 }
@@ -3390,6 +3391,9 @@ function applyLanguage(lang){
 /* ========== Init ========== */
 function b(id,ev,fn){var el=$(id);if(el)el.addEventListener(ev,fn);}
 function init(){
+  // Prevent browser from auto-restoring previous scroll position
+  if('scrollRestoration' in history)history.scrollRestoration='manual';
+  window.scrollTo(0,0);
   // First visit
   if(!settings.firstVisitAt){settings.firstVisitAt=Date.now();saveSettings(settings);}
   // Load data
@@ -3587,10 +3591,14 @@ function init(){
     }
   }catch(e){}
   // Focus input when empty
-  if(!hasAnyRecord()){setTimeout(function(){inp&&inp.focus();},600);}
+  // Auto-focus removed: was causing mobile keyboard pop-up and scroll jump on first load
+  // User must explicitly tap the input to focus it
   startNotificationChecker();
   // Initial render
   renderHome();
+  // Ensure scroll at top after initial render
+  requestAnimationFrame(function(){window.scrollTo(0,0);});
+  setTimeout(function(){window.scrollTo(0,0);},150);
 }
 function showUpdateHint(){
   var old=document.querySelector('.update-hint');if(old)return;

@@ -268,7 +268,17 @@ const tests = [
     name: 'Agent security',
     script: 'test-shike-agent-security.js',
     expected: 'Agent security regression passed: 12/12'
-  }
+  },
+  {
+    name: 'Home initial layout',
+    script: 'test-shike-home-initial-layout.js',
+    expected: 'Home initial layout regression passed'
+  },
+  {
+    name: 'Sprite create intent',
+    script: 'test-shike-sprite-create-intent.js',
+    expected: 'Sprite create intent tests passed'
+  },
 ];
 
 [
