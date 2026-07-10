@@ -1,5 +1,5 @@
 // test-shike-home-initial-layout.js
-// Static tests for homepage initial layout fixes (v1.3.1 hotfix)
+// Static tests for homepage initial layout fixes (v1.3.2)
 const fs = require('fs');
 const path = require('path');
 
@@ -87,12 +87,12 @@ add('release dialog does not use body overflow:hidden', () => {
   assert(!legacyApp.includes("document.body.style.overflow='hidden'"), 'no body overflow hidden in release notes');
 });
 
-add('APP_VERSION is v1.3.1', () => {
-  assert(versionJs.includes("APP_VERSION='v1.3.1'"), 'version.js has v1.3.1');
+add('APP_VERSION is v1.3.2', () => {
+  assert(versionJs.includes("APP_VERSION='v1.3.2'"), 'version.js has v1.3.2');
 });
 
-add('SW cache is shike-v131-v50', () => {
-  assert(swJs.includes('shike-v131-v50'), 'sw.js cache shike-v131-v50');
+add('SW cache is shike-v132-v51', () => {
+  assert(swJs.includes('shike-v132-v51'), 'sw.js cache shike-v132-v51');
 });
 
 add('sprite-create-intent module exports normalize function', () => {
@@ -157,7 +157,11 @@ add('No padding transition on .app to avoid jump', () => {
 
 add('create_record calls renderCurrent after save', () => {
   const toolDefs = fs.readFileSync(path.join(root, 'src/agent/tools/tool-definitions.js'), 'utf8');
-  assert(toolDefs.includes('saveParsedRecord(parsed,sourceText);renderCurrent();'), 'create_record calls renderCurrent to refresh UI');
+  assert(toolDefs.includes('saveParsedRecord(parsed,sourceText)'), 'create_record calls saveParsedRecord');
+  assert(toolDefs.includes('renderCurrent();'), 'create_record calls renderCurrent to refresh UI');
+  const saveIdx = toolDefs.indexOf('saveParsedRecord(parsed,sourceText)');
+  const renderIdx = toolDefs.indexOf('renderCurrent();', saveIdx);
+  assert(renderIdx > saveIdx, 'renderCurrent called after saveParsedRecord');
 });
 
 console.log(`\n========================================`);

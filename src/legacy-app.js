@@ -1,7 +1,7 @@
 /* ================================================================
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
- * ================================================================ */
+ * ================================================================ */
 /* ========== i18n ========== */
 var I18N={
   'zh-CN':{
@@ -2346,61 +2346,150 @@ function renderRecordCard(r){
   if(r.timeText)meta.push(r.timeText);
   if(r.repeat&&r.repeat!=='none')meta.push(repeatLabel(r.repeat));
   var pin=r.pinned?'<button class="rc-icon-btn rc-pin" aria-label="'+t('unpin')+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">●</button>':'<button class="rc-icon-btn rc-pin not-pinned" aria-label="'+t('setPin')+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">○</button>';
-  var actions='<div class="swipe-actions card-action-menu" aria-label="'+t('moreActions')+'">'+
-    '<button class="swipe-action card-action-edit" aria-label="'+t('edit')+'" onclick="event.stopPropagation();openEditDrawer(\''+r.id+'\')">'+t('edit')+'</button>'+
-    '<button class="swipe-action card-action-copy" aria-label="'+t('copyRecord')+'" onclick="event.stopPropagation();copyRecordText(\''+r.id+'\')">'+t('copyRecord')+'</button>'+
-    '<button class="swipe-action card-action-pin" aria-label="'+(r.pinned?t('unpin'):t('setPin'))+'" onclick="event.stopPropagation();togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
-    (r.dateKey?'<button class="swipe-action card-action-ics" aria-label="'+t('exportRecordIcs')+'" onclick="event.stopPropagation();exportRecordIcsFile(\''+r.id+'\')">'+t('exportRecordIcs')+'</button>':'')+
-    (r.recordKind==='anniversary'?'<button class="swipe-action card-action-memorial" aria-label="'+t('saveCardImage')+'" onclick="event.stopPropagation();exportAnniversaryCardPng(\''+r.id+'\')">'+t('saveCardImage')+'</button>':'')+
-    '<button class="swipe-action danger card-action-delete" aria-label="'+t('delete')+'" onclick="event.stopPropagation();deleteRecord(\''+r.id+'\')">'+t('delete')+'</button>'+
+  var swipeActions='<div class="swipe-actions card-action-menu" aria-label="'+t('moreActions')+'">'+
+    '<button class="swipe-action card-action-edit" aria-label="'+t('edit')+'" onclick="event.stopPropagation();closeCardMenus();openEditDrawer(\''+r.id+'\')">'+t('edit')+'</button>'+
+    '<button class="swipe-action card-action-copy" aria-label="'+t('copyRecord')+'" onclick="event.stopPropagation();closeCardMenus();copyRecordText(\''+r.id+'\')">'+t('copyRecord')+'</button>'+
+    '<button class="swipe-action card-action-pin" aria-label="'+(r.pinned?t('unpin'):t('setPin'))+'" onclick="event.stopPropagation();closeCardMenus();togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
+    (r.dateKey?'<button class="swipe-action card-action-ics" aria-label="'+t('exportRecordIcs')+'" onclick="event.stopPropagation();closeCardMenus();exportRecordIcsFile(\''+r.id+'\')">'+t('exportRecordIcs')+'</button>':'')+
+    (r.recordKind==='anniversary'?'<button class="swipe-action card-action-memorial" aria-label="'+t('saveCardImage')+'" onclick="event.stopPropagation();closeCardMenus();exportAnniversaryCardPng(\''+r.id+'\')">'+t('saveCardImage')+'</button>':'')+
+    '<button class="swipe-action danger card-action-delete" aria-label="'+t('delete')+'" onclick="event.stopPropagation();closeCardMenus();deleteRecord(\''+r.id+'\')">'+t('delete')+'</button>'+
   '</div>';
-  return '<div class="record-swipe" data-record-id="'+r.id+'">'+actions+'<div class="record-card" onclick="openDetail(\''+r.id+'\')">'+
+  var moreItems=
+    '<button class="card-more-item" onclick="event.stopPropagation();closeCardMenus();openEditDrawer(\''+r.id+'\')">'+t('edit')+'</button>'+
+    '<button class="card-more-item" onclick="event.stopPropagation();closeCardMenus();togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
+    '<button class="card-more-item" onclick="event.stopPropagation();closeCardMenus();copyRecordText(\''+r.id+'\')">'+t('copyRecord')+'</button>'+
+    (r.dateKey?'<button class="card-more-item" onclick="event.stopPropagation();closeCardMenus();exportRecordIcsFile(\''+r.id+'\')">'+t('exportRecordIcs')+'</button>':'')+
+    (r.recordKind==='anniversary'?'<button class="card-more-item" onclick="event.stopPropagation();closeCardMenus();exportAnniversaryCardPng(\''+r.id+'\')">'+t('saveCardImage')+'</button>':'')+
+    '<div class="card-more-divider"></div>'+
+    '<button class="card-more-item danger" onclick="event.stopPropagation();closeCardMenus();deleteRecord(\''+r.id+'\')">'+t('delete')+'</button>';
+  var editBtn='<button class="rc-icon-btn rc-edit-btn" aria-label="'+t('edit')+'" onclick="event.stopPropagation();openEditDrawer(\''+r.id+'\')">\u270E</button>';
+  var moreBtn='<button class="rc-icon-btn rc-more-btn" aria-label="'+t('moreActions')+'" aria-haspopup="true" aria-expanded="false" onclick="event.stopPropagation();toggleCardMoreMenu(\''+r.id+'\')">\u22EF</button>';
+  var moreMenu='<div class="card-more-menu" data-menu-for="'+r.id+'" role="menu">'+moreItems+'</div>';
+  return '<div class="record-swipe" data-record-id="'+r.id+'">'+swipeActions+moreMenu+'<div class="record-card" onclick="openDetail(\''+r.id+'\')" tabindex="0">'+
     '<div class="rc-main">'+
       '<div class="rc-title">'+escHtml(r.title)+'</div>'+
       '<div class="rc-meta">'+
         '<span class="rc-chip '+kindCls+'">'+kindLabel+'</span>'+
-        (meta.length?'<span>'+escHtml(meta.join(' · '))+'</span>':'')+
+        (meta.length?'<span>'+escHtml(meta.join(' \u00B7 '))+'</span>':'')+
       '</div>'+
     '</div>'+
     '<div class="rc-countdown '+cdCls+'">'+escHtml(cdText)+'</div>'+
-    '<div class="rc-actions">'+pin+'<button class="rc-icon-btn record-more-btn" aria-label="'+t('moreActions')+'" onclick="event.stopPropagation();toggleRecordActions(\''+r.id+'\')">⋯</button></div>'+
+    '<div class="rc-actions">'+editBtn+pin+moreBtn+'</div>'+
   '</div></div>';
 }
+function closeCardMenus(except){
+  document.querySelectorAll('.record-swipe.swiped').forEach(function(card){
+    if(card!==except)card.classList.remove('swiped');
+  });
+  document.querySelectorAll('.card-more-menu.open').forEach(function(menu){
+    if(except&&menu.parentElement===except)return;
+    menu.classList.remove('open');
+    var btn=menu.parentElement&&menu.parentElement.querySelector('.rc-more-btn');
+    if(btn)btn.setAttribute('aria-expanded','false');
+  });
+}
+function closeSwipeCards(except){closeCardMenus(except);}
 function toggleRecordActions(id){
   var card=document.querySelector('.record-swipe[data-record-id="'+id+'"]');
   if(!card)return;
   var open=!card.classList.contains('swiped');
-  closeSwipeCards(open?card:null);
+  closeCardMenus(open?card:null);
   card.classList.toggle('swiped',open);
 }
-function closeSwipeCards(except){
-  document.querySelectorAll('.record-swipe.swiped').forEach(function(card){
-    if(card!==except)card.classList.remove('swiped');
-  });
+function toggleCardMoreMenu(id){
+  var card=document.querySelector('.record-swipe[data-record-id="'+id+'"]');
+  if(!card)return;
+  var menu=card.querySelector('.card-more-menu');
+  var btn=card.querySelector('.rc-more-btn');
+  if(!menu)return;
+  var isOpen=menu.classList.contains('open');
+  closeCardMenus(null);
+  if(!isOpen){
+    menu.classList.add('open');
+    if(btn)btn.setAttribute('aria-expanded','true');
+  }
+}
+function isCoarsePointer(){
+  if(window.matchMedia){
+    return window.matchMedia('(hover:none)').matches||window.matchMedia('(pointer:coarse)').matches;
+  }
+  return false;
+}
+function getSwipeRailWidth(card){
+  var rail=card.querySelector('.swipe-actions');
+  if(!rail)return 240;
+  return rail.offsetWidth||240;
 }
 function initSwipeActions(){
-  var startX=0,startY=0,target=null,tracking=false;
-  document.addEventListener('touchstart',function(e){
+  var startX=0,startY=0,target=null,tracking=false,swiping=false,currentDx=0;
+  document.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse')return;
     target=e.target&&e.target.closest?e.target.closest('.record-swipe'):null;
     if(!target)return;
-    var t=e.touches&&e.touches[0];if(!t)return;
-    startX=t.clientX;startY=t.clientY;tracking=true;
-  },{passive:true});
-  document.addEventListener('touchmove',function(e){
-    if(!tracking||!target)return;
-    var t=e.touches&&e.touches[0];if(!t)return;
-    var dx=t.clientX-startX,dy=t.clientY-startY;
-    if(Math.abs(dx)>32&&Math.abs(dx)>Math.abs(dy)*1.4){
-      if(dx<0){target.classList.add('swiped');closeSwipeCards(target);}
-      else target.classList.remove('swiped');
-      tracking=false;
+    if(e.target.closest('.swipe-action')||e.target.closest('.card-more-menu')||e.target.closest('.rc-icon-btn')){
+      tracking=false;return;
     }
+    startX=e.clientX;startY=e.clientY;tracking=true;swiping=false;currentDx=0;
+    closeCardMenus(target);
+    try{e.target.setPointerCapture&&e.target.setPointerCapture(e.pointerId);}catch(_){}
   },{passive:true});
-  document.addEventListener('touchend',function(){tracking=false;target=null;},{passive:true});
-  document.addEventListener('click',function(e){
-    if(e.target&&e.target.closest&&e.target.closest('.record-swipe'))return;
-    closeSwipeCards(null);
+  document.addEventListener('pointermove',function(e){
+    if(!tracking||!target)return;
+    var dx=e.clientX-startX,dy=e.clientY-startY;
+    if(!swiping){
+      if(Math.abs(dx)>16&&Math.abs(dx)>Math.abs(dy)*1.4){swiping=true;}
+      else if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){tracking=false;return;}
+    }
+    if(swiping){
+      var maxSwipe=getSwipeRailWidth(target);
+      currentDx=Math.max(-maxSwipe,Math.min(0,dx));
+      var cardEl=target.querySelector('.record-card');
+      if(cardEl){
+        var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+        cardEl.style.transition='none';
+        if(reduced){cardEl.style.transition='';cardEl.style.transform=dx<0?'translateX(-'+maxSwipe+'px)':'translateX(0)';}
+        else{cardEl.style.transform='translateX('+currentDx+'px)';}
+      }
+    }
   });
+  document.addEventListener('pointerup',function(e){
+    if(!tracking||!target){tracking=false;swiping=false;return;}
+    var cardEl=target.querySelector('.record-card');
+    var maxSwipe=getSwipeRailWidth(target);
+    if(cardEl){cardEl.style.transition='';cardEl.style.transform='';}
+    if(swiping&&currentDx<0){
+      var threshold=maxSwipe*0.35;
+      if(Math.abs(currentDx)>threshold){target.classList.add('swiped');closeCardMenus(target);}
+      else{target.classList.remove('swiped');}
+    }
+    tracking=false;swiping=false;target=null;currentDx=0;
+  });
+  document.addEventListener('pointercancel',function(){
+    if(target){var ce=target.querySelector('.record-card');if(ce){ce.style.transition='';ce.style.transform='';}target.classList.remove('swiped');}
+    tracking=false;swiping=false;target=null;
+  },{passive:true});
+  document.addEventListener('touchcancel',function(){
+    if(target){var ce=target.querySelector('.record-card');if(ce){ce.style.transition='';ce.style.transform='';}target.classList.remove('swiped');}
+    tracking=false;swiping=false;target=null;
+  },{passive:true});
+  document.addEventListener('click',function(e){
+    if(e.target&&e.target.closest){
+      if(e.target.closest('.card-more-menu'))return;
+      if(e.target.closest('.rc-more-btn'))return;
+      if(e.target.closest('.record-swipe')){
+        var card=e.target.closest('.record-swipe');
+        closeCardMenus(card);
+        return;
+      }
+    }
+    closeCardMenus(null);
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){closeCardMenus(null);}
+  });
+  var _origSwitch=window.switchPage;
+  if(_origSwitch){window.switchPage=function(){closeCardMenus(null);return _origSwitch.apply(this,arguments);};}
+  window.addEventListener('orientationchange',function(){setTimeout(function(){closeCardMenus(null);},100);},{passive:true});
 }
 
 /* ========== Render: Home ========== */
@@ -2645,7 +2734,7 @@ function renderAll(){
   list.forEach(function(r){
     if(r.cardStyle==='large'||r.recordKind==='anniversary')html+=renderHeroCard(r,true);
     else html+=renderRecordCard(r);
-    html+='<div style="display:flex;gap:6px;margin:-4px 0 12px;justify-content:flex-end;">'+
+    html+='<div class="record-extra-actions" style="display:flex;gap:6px;margin:-4px 0 12px;justify-content:flex-end;">'+
       '<button class="cover-btn" style="flex:0 0 auto;padding:6px 12px;font-size:12px;" onclick="toggleCardStyle(\''+r.id+'\')">'+(r.cardStyle==='large'?t('cardNormal'):t('cardLarge'))+'</button>'+
       '<button class="cover-btn" style="flex:0 0 auto;padding:6px 12px;font-size:12px;" onclick="togglePin(\''+r.id+'\')">'+(r.pinned?t('unpin'):t('setPin'))+'</button>'+
       '<button class="cover-btn" style="flex:0 0 auto;padding:6px 12px;font-size:12px;" onclick="openEditDrawer(\''+r.id+'\')">'+t('edit')+'</button>'+

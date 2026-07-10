@@ -279,6 +279,16 @@ const tests = [
     script: 'test-shike-sprite-create-intent.js',
     expected: 'Sprite create intent tests passed'
   },
+  {
+    name: 'Record actions responsive',
+    script: 'test-shike-record-actions-responsive.js',
+    expected: 'Responsive actions tests passed: 45/45'
+  },
+  {
+    name: 'Agent context proactive',
+    script: 'test-shike-agent-context-proactive.js',
+    expected: 'Agent context tests passed: 65/65'
+  },
 ];
 
 [

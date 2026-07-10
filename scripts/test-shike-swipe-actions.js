@@ -35,18 +35,22 @@ add('swipe css has hidden rail and smooth reveal', () => {
     assert(style.includes(token), `${token} css missing`);
   });
   assert(style.includes('overflow:hidden'), 'swipe wrapper should prevent horizontal overflow');
-  assert(style.includes('translateX(-212px)'), 'swiped card should translate left');
+  assert(style.includes('translateX(-240px)'), 'swiped card should translate left 240px');
 });
 
-add('desktop hover fallback exists', () => {
-  assert(style.includes('@media (hover:hover) and (pointer:fine)'), 'desktop hover fallback missing');
-  assert(style.includes('.record-swipe:hover .record-card'), 'hover reveal missing');
+add('desktop responsive pattern uses more menu instead of hover swipe', () => {
+  assert(style.includes('@media (hover:hover) and (pointer:fine)'), 'desktop responsive media query missing');
+  assert(style.includes('.swipe-actions{display:none !important;}'), 'desktop should hide swipe-actions');
+  assert(style.includes('.rc-more-btn{display:inline-flex;}'), 'desktop should show more button');
+  assert(style.includes('.rc-edit-btn{display:inline-flex;}'), 'desktop should show edit button');
+  assert(!style.includes('.record-swipe:hover .record-card'), 'desktop should NOT use hover-to-reveal swipe');
 });
 
-add('touch gesture handler is delegated and thresholded', () => {
+add('pointer gesture handler is delegated and thresholded', () => {
   assert(script.includes('function initSwipeActions()'), 'initSwipeActions missing');
   assert(script.includes("closest('.record-swipe')"), 'delegated target missing');
-  assert(script.includes('Math.abs(dx)>32'), 'horizontal threshold missing');
+  assert(script.includes('pointerdown')&&script.includes('pointermove')&&script.includes('pointerup'), 'pointer events missing');
+  assert(script.includes('Math.abs(dx)>16')||script.includes('Math.abs(dx) > 16'), 'horizontal threshold missing');
   assert(script.includes('Math.abs(dx)>Math.abs(dy)*1.4'), 'vertical scroll guard missing');
 });
 
