@@ -1,5 +1,5 @@
 // test-shike-home-initial-layout.js
-// Static tests for homepage initial layout fixes (v1.3.2)
+// Static tests for homepage initial layout fixes (v1.4.0)
 const fs = require('fs');
 const path = require('path');
 
@@ -87,12 +87,12 @@ add('release dialog does not use body overflow:hidden', () => {
   assert(!legacyApp.includes("document.body.style.overflow='hidden'"), 'no body overflow hidden in release notes');
 });
 
-add('APP_VERSION is v1.3.2', () => {
-  assert(versionJs.includes("APP_VERSION='v1.3.2'"), 'version.js has v1.3.2');
+add('APP_VERSION is v1.4.0', () => {
+  assert(versionJs.includes("APP_VERSION='v1.4.0'"), 'version.js has v1.4.0');
 });
 
-add('SW cache is shike-v132-v51', () => {
-  assert(swJs.includes('shike-v132-v51'), 'sw.js cache shike-v132-v51');
+add('SW cache is shike-v140-v52', () => {
+  assert(swJs.includes('shike-v140-v52'), 'sw.js cache shike-v140-v52');
 });
 
 add('sprite-create-intent module exports normalize function', () => {

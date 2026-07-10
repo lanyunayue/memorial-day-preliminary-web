@@ -10,6 +10,7 @@
     if((match=t.match(/^删除(.+)$/)))return {intent:'delete_record',args:{query:match[1]}};
     if(/打开批量整理|批量整理/.test(t))return {intent:'open_page',args:{page:'import'}};
     if(/打开日历|看日历|日历/.test(t))return {intent:'open_page',args:{page:'calendar'}};
+    if(/打开关注中心|关注中心|打开关注/.test(t))return {intent:'open_page',args:{page:'watch'}};
     if(/导出日历/.test(t))return {intent:'export_calendar',args:{}};
     if(/备份数据|导出备份/.test(t))return {intent:'export_backup',args:{}};
     if(/切换深色主题|深色主题/.test(t))return {intent:'change_theme',args:{theme:'night'}};

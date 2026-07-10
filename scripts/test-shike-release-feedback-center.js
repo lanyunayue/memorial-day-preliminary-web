@@ -13,9 +13,9 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('version and cache are v1.3.2', () => {
-  assert(script.includes("APP_VERSION='v1.3.2'"), 'APP_VERSION should be v1.3.2');
-  assert(sw.includes("shike-v132-v51"), 'sw cache should be shike-v132-v51');
+add('version and cache are v1.4.0', () => {
+  assert(script.includes("APP_VERSION='v1.4.0'"), 'APP_VERSION should be v1.4.0');
+  assert(sw.includes("shike-v140-v52"), 'sw cache should be shike-v140-v52');
 });
 
 add('release center section exists', () => {

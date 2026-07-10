@@ -24,7 +24,7 @@ var I18N={
     spriteQuietMessage:'我会在这里帮你留意最近的时刻。',
     spriteTodayLine:'今日 {n} 条',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以帮你把一句话变成时刻。',spriteTip2:'今天有什么安排，可以先看看首页。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要记录记得导出备份。',spriteTip5:'有日期的记录可以导出到系统日历。',
-    navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
+    navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',navWatch:'关注',watchCenter:'关注中心',watchSubtitle:'本地关键词关注，公开信息聚合',navWatch:'关注',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
     close:'关闭',confirm:'确定',details:'详情',setLarge:'大卡片',setNormal:'普通',setBg:'换背景',
@@ -48,9 +48,9 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     exampleRecordsTitle:'示例记录',exampleRecordsText:'首次体验时可一键生成 5 条示例记录，不覆盖真实数据。',
     feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',writeEmail:'写邮件',copyEmail:'复制',feedbackCopied:'邮箱已复制',copyFeedbackTemplate:'复制反馈模板',feedbackTemplateCopied:'反馈模板已复制',feedbackTemplateLabel:'反馈时可以带上这些信息：',feedbackTemplateText:'遇到的问题：\n使用场景：\n浏览器/设备：\n希望改进：',feedbackNoUpload:'这里不接表单后端，也不会上传你的本地数据。',copyRecord:'复制',recordCopied:'记录已复制',moreActions:'更多',
-    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',futurePlan1:'更主动的助手能力。',futurePlan2:'更好的日历衔接。',futurePlan3:'更丰富的提醒方式。',futurePlan4:'更安全的数据保护。',futurePlan5:'多设备体验探索。',productPositionTitle:'产品定位',productPositionText:'时刻不是替代日历，而是帮你把聊天、通知和脑子里的一句话，先整理成有时间感的记录，再连接日历导出、备份和提醒说明。',capabilityChecklistTitle:'产品能力清单',capabilityChecklistText:'当前版本主要能力集中在本地记录、整理、导出和演示路径上。',capabilityOneSentence:'一句话输入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 备份',capabilityIcsExport:'.ics 导出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保护',capabilitySprite:'小熊助手',capabilityRecordActions:'记录快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'反馈入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',releaseCenterTitle:'更新记录',releaseCenterText:'最近版本变化集中放在这里，首次打开时仍会弹出本次更新。',releaseCenterV130:'本地 Agent Core',releaseCenterV120:'本地优先数据',releaseCenterV110:'模块化架构',releaseCenterV100rc:'正式稳定版',releaseCenterV098:'更新中心与反馈闭环',releaseCenterV097:'记录卡片操作增强',releaseCenterV096:'首页精简与功能中心',releaseCenterV095:'时刻精灵 2.0',releaseCenterV094:'个性化前置',releaseCenterV093:'产品体验打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
+    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',futurePlan1:'更主动的助手能力。',futurePlan2:'更好的日历衔接。',futurePlan3:'更丰富的提醒方式。',futurePlan4:'更安全的数据保护。',futurePlan5:'多设备体验探索。',productPositionTitle:'产品定位',productPositionText:'时刻不是替代日历，而是帮你把聊天、通知和脑子里的一句话，先整理成有时间感的记录，再连接日历导出、备份和提醒说明。',capabilityChecklistTitle:'产品能力清单',capabilityChecklistText:'当前版本主要能力集中在本地记录、整理、导出和演示路径上。',capabilityOneSentence:'一句话输入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 备份',capabilityIcsExport:'.ics 导出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保护',capabilitySprite:'小熊助手',capabilityRecordActions:'记录快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'反馈入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',releaseCenterTitle:'更新记录',releaseCenterText:'最近版本变化集中放在这里，首次打开时仍会弹出本次更新。',releaseCenterV140:'关注中心',releaseCenterV130:'本地 Agent Core',releaseCenterV120:'本地优先数据',releaseCenterV110:'模块化架构',releaseCenterV100rc:'正式稳定版',releaseCenterV098:'更新中心与反馈闭环',releaseCenterV097:'记录卡片操作增强',releaseCenterV096:'首页精简与功能中心',releaseCenterV095:'时刻精灵 2.0',releaseCenterV094:'个性化前置',releaseCenterV093:'产品体验打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
-    releaseNote1:'小熊新增透明的本地 Agent 对话入口，执行前会展示意图、工具和确认级别。',releaseNote2:'搜索、今日概览、打开页面和切主题可直接执行；创建、置顶和导出需要确认。',releaseNote3:'删除记录必须二次确认，工具参数会校验，不能执行用户输入的代码或命令。',releaseNote4:'对话保存在本地 IndexedDB，当前主要使用本地规则，不伪装联网 AI。',releaseNote5:'更新中心记录 v1.3.0 本地 Agent Core。',
+    releaseNote1:'新增关注中心，支持本地关键词关注，聚合公开来源信息。',releaseNote2:'可添加/删除关注关键词，未读状态和新鲜度一目了然。',releaseNote3:'时刻精灵可识别"关注 XXX"意图，添加前需确认。',releaseNote4:'关注项仅保存在本地，当前为公开信息展示，不提供投资建议。',releaseNote5:'更新中心记录 v1.4.0 关注中心。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteExportAction:'导出日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'更主动的智能助手能力正在规划中。',
     demoRouteTitle:'从一句话到日历',demoRouteText:'把一句话整理成时刻，再导出到你常用的日历。',
     demoRouteStep1:'输入一句话：明天下午三点开会',demoRouteStep2:'生成记录并进入日历',demoRouteStep3:'导出 .ics 到系统日历',demoRouteStep4:'导出 JSON 备份保护数据',
@@ -111,7 +111,7 @@ var I18N={
     spriteQuietMessage:'我會在這裡幫你留意最近的時刻。',
     spriteTodayLine:'今日 {n} 條',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以幫你把一句話變成時刻。',spriteTip2:'今天有什麼安排，可以先看看首頁。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要記錄記得匯出備份。',spriteTip5:'有日期的記錄可以匯出到系統日曆。',
-    navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
+    navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',navWatch:'關注',watchCenter:'關注中心',watchSubtitle:'本地關鍵詞關注，公開資訊聚合',navWatch:'關注',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
     close:'關閉',confirm:'確定',details:'詳情',setLarge:'大卡片',setNormal:'普通',setBg:'換背景',
@@ -198,7 +198,7 @@ var I18N={
     spriteQuietMessage:'I will keep an eye on your upcoming moments here.',
     spriteTodayLine:'Today {n}',spriteNextLine:'Next: {title} · {when}',
     spriteTip1:'I can turn one sentence into a Shike moment.',spriteTip2:'Start with Home to see what is due today.',spriteTip3:'A paragraph of chat can be organized in batch.',spriteTip4:'Export backups for important records.',spriteTip5:'Dated records can be exported to your system calendar.',
-    navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
+    navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',navWatch:'Watch',watchCenter:'Watch Center',watchSubtitle:'Local keyword watch, public info aggregation',navWatch:'Watch',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
     close:'Close',confirm:'OK',details:'Details',setLarge:'Large Card',setNormal:'Normal',setBg:'Background',
@@ -222,7 +222,7 @@ var I18N={
     batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     exampleRecordsTitle:'Example records',exampleRecordsText:'Create 5 example records for first-time review without overwriting real data.',
     feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',writeEmail:'Email',copyEmail:'Copy',feedbackCopied:'Email copied',copyFeedbackTemplate:'Copy feedback template',feedbackTemplateCopied:'Feedback template copied',feedbackTemplateLabel:'Useful details to include:',feedbackTemplateText:'Issue:\nUse case:\nBrowser/device:\nWhat you hope improves:',feedbackNoUpload:'No backend form is connected here, and your local data is not uploaded.',copyRecord:'Copy',recordCopied:'Record copied',moreActions:'More',
-    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',futurePlan1:'More proactive assistant abilities.',futurePlan2:'Better calendar handoff.',futurePlan3:'Richer reminder options.',futurePlan4:'Safer data protection.',futurePlan5:'Multi-device experience exploration.',productPositionTitle:'Product position',productPositionText:'Shike is not a calendar replacement. It helps turn one sentence from chat, notifications, or your mind into time-aware records, then connects them to calendar export, backup, and reminder notes.',capabilityChecklistTitle:'Product capability checklist',capabilityChecklistText:'This version focuses on local records, organization, export, and the demo path.',capabilityOneSentence:'One-sentence input',capabilityLocalSave:'Local save',capabilityJsonBackup:'JSON backup',capabilityIcsExport:'.ics export',capabilityBatchOrganize:'Batch organize',capabilityDedupe:'Dedupe protection',capabilitySprite:'Bear assistant',capabilityRecordActions:'Record quick actions',capabilityUpdateCenter:'Update center',capabilityFeedback:'Feedback entry',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',releaseCenterTitle:'Update history',releaseCenterText:'Recent version changes live here. First open still shows the current release note.',releaseCenterV130:'Local Agent Core',releaseCenterV120:'Local-first data',releaseCenterV110:'Modular architecture',releaseCenterV100rc:'Stable release',releaseCenterV098:'Update center and feedback loop',releaseCenterV097:'Record card action polish',releaseCenterV096:'Home cleanup and feature hub',releaseCenterV095:'Time sprite 2.0',releaseCenterV094:'Personalization moved forward',releaseCenterV093:'Product experience polish',viewCurrentRelease:'View this update',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
+    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',futurePlan1:'More proactive assistant abilities.',futurePlan2:'Better calendar handoff.',futurePlan3:'Richer reminder options.',futurePlan4:'Safer data protection.',futurePlan5:'Multi-device experience exploration.',productPositionTitle:'Product position',productPositionText:'Shike is not a calendar replacement. It helps turn one sentence from chat, notifications, or your mind into time-aware records, then connects them to calendar export, backup, and reminder notes.',capabilityChecklistTitle:'Product capability checklist',capabilityChecklistText:'This version focuses on local records, organization, export, and the demo path.',capabilityOneSentence:'One-sentence input',capabilityLocalSave:'Local save',capabilityJsonBackup:'JSON backup',capabilityIcsExport:'.ics export',capabilityBatchOrganize:'Batch organize',capabilityDedupe:'Dedupe protection',capabilitySprite:'Bear assistant',capabilityRecordActions:'Record quick actions',capabilityUpdateCenter:'Update center',capabilityFeedback:'Feedback entry',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',releaseCenterTitle:'Update history',releaseCenterText:'Recent version changes live here. First open still shows the current release note.',releaseCenterV140:'Watch Center',releaseCenterV130:'Local Agent Core',releaseCenterV120:'Local-first data',releaseCenterV110:'Modular architecture',releaseCenterV100rc:'Stable release',releaseCenterV098:'Update center and feedback loop',releaseCenterV097:'Record card action polish',releaseCenterV096:'Home cleanup and feature hub',releaseCenterV095:'Time sprite 2.0',releaseCenterV094:'Personalization moved forward',releaseCenterV093:'Product experience polish',viewCurrentRelease:'View this update',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
     releaseNote1:'The bear now has a transparent local Agent entry that previews intent, tool, and confirmation level.',releaseNote2:'Search, Today, page navigation, and themes can run directly; creation, pinning, and exports require confirmation.',releaseNote3:'Record deletion always requires double confirmation and tool arguments are validated.',releaseNote4:'Conversations stay in local IndexedDB and the assistant clearly identifies its local-rule limits.',releaseNote5:'The update center records the v1.3.0 local Agent Core release.',
     spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteExportAction:'Export calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',spriteResetAction:'Reset position',spriteFutureHint:'More proactive assistant abilities are being planned.',
@@ -285,7 +285,7 @@ var I18N={
     spriteQuietMessage:'ここで近い時刻をそっと見守ります。',
     spriteTodayLine:'今日 {n} 件',spriteNextLine:'次：{title} · {when}',
     spriteTip1:'一文を時刻に変えるお手伝いができます。',spriteTip2:'今日の予定はまずホームで確認できます。',spriteTip3:'チャットの一段落もまとめて整理できます。',spriteTip4:'大事な記録はバックアップを書き出しましょう。',spriteTip5:'日付付き記録はシステムカレンダーへ書き出せます。',
-    navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
+    navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',navWatch:'ウォッチ',watchCenter:'ウォッチセンター',watchSubtitle:'ローカルキーワードウォッチ、公開情報の集約',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
     close:'閉じる',confirm:'OK',details:'詳細',setLarge:'大カード',setNormal:'通常',setBg:'背景',
@@ -309,8 +309,8 @@ var I18N={
     batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     exampleRecordsTitle:'サンプル記録',exampleRecordsText:'初回確認用に 5 件のサンプルを作成できます。実データは上書きしません。',
     feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',writeEmail:'メール',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',copyFeedbackTemplate:'テンプレートをコピー',feedbackTemplateCopied:'フィードバックテンプレートをコピーしました',feedbackTemplateLabel:'送るときはこの情報が役立ちます：',feedbackTemplateText:'問題：\n利用場面：\nブラウザ/端末：\n改善してほしいこと：',feedbackNoUpload:'ここではフォームのバックエンドに接続せず、ローカルデータもアップロードしません。',copyRecord:'コピー',recordCopied:'記録をコピーしました',moreActions:'その他',
-    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',futurePlan1:'より能動的な助手機能。',futurePlan2:'よりよいカレンダー連携。',futurePlan3:'より豊かなリマインド方式。',futurePlan4:'より安全なデータ保護。',futurePlan5:'複数端末体験の探索。',productPositionTitle:'製品の位置づけ',productPositionText:'時刻はカレンダーの代替ではありません。チャット、通知、頭の中の一文を時間感のある記録に整え、カレンダー出力、バックアップ、リマインド説明につなげます。',capabilityChecklistTitle:'製品能力チェックリスト',capabilityChecklistText:'この版はローカル記録、整理、出力、デモ経路に集中しています。',capabilityOneSentence:'一文入力',capabilityLocalSave:'ローカル保存',capabilityJsonBackup:'JSON バックアップ',capabilityIcsExport:'.ics 出力',capabilityBatchOrganize:'一括整理',capabilityDedupe:'重複保護',capabilitySprite:'くま助手',capabilityRecordActions:'記録クイック操作',capabilityUpdateCenter:'更新センター',capabilityFeedback:'フィードバック入口',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',releaseCenterTitle:'更新履歴',releaseCenterText:'最近の版の変更をここにまとめます。初回表示では今回の更新も表示されます。',releaseCenterV130:'ローカル Agent Core',releaseCenterV120:'ローカル優先データ',releaseCenterV110:'モジュール化構成',releaseCenterV100rc:'正式安定版',releaseCenterV098:'更新センターとフィードバック',releaseCenterV097:'記録カード操作の強化',releaseCenterV096:'ホーム整理と機能センター',releaseCenterV095:'時刻スプライト 2.0',releaseCenterV094:'カスタマイズを前面へ',releaseCenterV093:'製品体験の調整',viewCurrentRelease:'今回の更新を見る',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
-    releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
+    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',futurePlan1:'より能動的な助手機能。',futurePlan2:'よりよいカレンダー連携。',futurePlan3:'より豊かなリマインド方式。',futurePlan4:'より安全なデータ保護。',futurePlan5:'複数端末体験の探索。',productPositionTitle:'製品の位置づけ',productPositionText:'時刻はカレンダーの代替ではありません。チャット、通知、頭の中の一文を時間感のある記録に整え、カレンダー出力、バックアップ、リマインド説明につなげます。',capabilityChecklistTitle:'製品能力チェックリスト',capabilityChecklistText:'この版はローカル記録、整理、出力、デモ経路に集中しています。',capabilityOneSentence:'一文入力',capabilityLocalSave:'ローカル保存',capabilityJsonBackup:'JSON バックアップ',capabilityIcsExport:'.ics 出力',capabilityBatchOrganize:'一括整理',capabilityDedupe:'重複保護',capabilitySprite:'くま助手',capabilityRecordActions:'記録クイック操作',capabilityUpdateCenter:'更新センター',capabilityFeedback:'フィードバック入口',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',releaseCenterTitle:'更新履歴',releaseCenterText:'最近の版の変更をここにまとめます。初回表示では今回の更新も表示されます。',releaseCenterV140:'ウォッチセンター',releaseCenterV130:'ローカル Agent Core',releaseCenterV120:'ローカル優先データ',releaseCenterV110:'モジュール化構成',releaseCenterV100rc:'正式安定版',releaseCenterV098:'更新センターとフィードバック',releaseCenterV097:'記録カード操作の強化',releaseCenterV096:'ホーム整理と機能センター',releaseCenterV095:'時刻スプライト 2.0',releaseCenterV094:'カスタマイズを前面へ',releaseCenterV093:'製品体験の調整',viewCurrentRelease:'今回の更新を見る',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
+      releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
     releaseNote1:'くまに透明なローカル Agent 入口を追加し、意図、ツール、確認段階を実行前に表示します。',releaseNote2:'検索、今日、画面移動、テーマは直接実行し、作成、固定、出力は確認が必要です。',releaseNote3:'記録削除は必ず二重確認し、ツール引数を検証します。',releaseNote4:'会話はローカル IndexedDB に保存し、ローカル規則の限界を明示します。',releaseNote5:'更新センターに v1.3.0 のローカル Agent Core を記録しました。',
     spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteExportAction:'カレンダー出力',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',spriteResetAction:'位置をリセット',spriteFutureHint:'より能動的な助手機能を計画中です。',
     demoRouteTitle:'一文からカレンダーへ',demoRouteText:'一文を時刻として整理し、いつものカレンダーへ出力します。',
@@ -2291,6 +2291,32 @@ function switchPage(page){
   window.scrollTo(0,0);
 }
 
+function updateWatchBadge(){
+  var badge=document.getElementById('navWatchBadge');
+  if(!badge||!window.ShikeWatchCenter)return;
+  try{
+    var count=window.ShikeWatchCenter.getUnreadCount();
+    if(count>0){
+      badge.textContent=count>99?'99+':String(count);
+      badge.classList.remove('hidden');
+    }else{
+      badge.classList.add('hidden');
+    }
+  }catch(e){badge.classList.add('hidden');}
+}
+function renderWatchCenter(){
+  var container=$('watchContent')||$('watchContent');
+  if(!container)return;
+  if(window.ShikeWatchCenter && typeof window.ShikeWatchCenter.render==='function'){
+    window.ShikeWatchCenter.render(container);
+  }else{
+    container.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--ink-mute);font-size:13px;">关注中心加载中...</div>';
+  }
+  updateWatchBadge();
+}
+
+function openWatchCenter(){switchPage('watch');}
+
 /* ========== Has records state ========== */
 function hasAnyRecord(){return records.length>0;}
 function updateLayoutState(){
@@ -3364,6 +3390,9 @@ function setVoiceState(state,optMsg){
   statusEl.classList.remove('listening');statusEl.textContent='';
   switch(state){
     case VOICE_IDLE:btn.disabled=false;break;
+    case'watch':
+      if(window.ShikeWatchCenter && typeof window.ShikeWatchCenter.render==='function'){window.ShikeWatchCenter.render($('watchContent') || $('watchContent'));}updateWatchBadge();
+      break;
     case VOICE_STARTING:
       btn.disabled=false;btn.classList.add('listening');
       statusEl.classList.add('listening');statusEl.textContent=optMsg||'正在启动麦克风...';break;
@@ -3479,6 +3508,8 @@ function applyLanguage(lang){
 
 /* ========== Init ========== */
 function b(id,ev,fn){var el=$(id);if(el)el.addEventListener(ev,fn);}
+var capabilityWatchCenter=true;
+
 function init(){
   // Prevent browser from auto-restoring previous scroll position
   if('scrollRestoration' in history)history.scrollRestoration='manual';
@@ -3683,10 +3714,13 @@ function init(){
   // Auto-focus removed: was causing mobile keyboard pop-up and scroll jump on first load
   // User must explicitly tap the input to focus it
   startNotificationChecker();
+    if(typeof showReleaseNotes==='function')showReleaseNotes();
   // Initial render
   renderHome();
   // Ensure scroll at top after initial render
   requestAnimationFrame(function(){window.scrollTo(0,0);});
+  try{if(window.ShikeWatchCenter&&typeof window.ShikeWatchCenter.init==='function')window.ShikeWatchCenter.init();}catch(e){}
+  try{if(window.ShikeWatchCenter&&typeof window.ShikeWatchCenter.onRefresh==='function')window.ShikeWatchCenter.onRefresh(function(){updateWatchBadge();});}catch(e){}
   setTimeout(function(){window.scrollTo(0,0);},150);
 }
 function showUpdateHint(){
