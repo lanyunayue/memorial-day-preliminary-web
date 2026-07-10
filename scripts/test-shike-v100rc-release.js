@@ -15,8 +15,8 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('APP_VERSION = v1.0.0-rc', () => assert(script.includes("APP_VERSION='v1.0.0-rc'"), 'version mismatch'));
-add('sw cache = shike-v100rc-v45', () => assert(sw.includes("shike-v100rc-v45"), 'cache mismatch'));
+add('release lineage has a semantic APP_VERSION', () => assert(/APP_VERSION='v\d+\.\d+\.\d+(?:-[^']+)?'/.test(script), 'version mismatch'));
+add('release lineage has a versioned service worker cache', () => assert(/CACHE_NAME = 'shike-v[\w-]+-v\d+'/.test(sw), 'cache mismatch'));
 add('product position section exists', () => assert(html.includes('id="productPositionSection"') && html.includes('data-i18n="productPositionText"'), 'product position missing'));
 add('does not claim Google Calendar replacement', () => assert(!html.includes('替代 ' + 'Google Calendar') && !html.includes('replace Google Calendar'), 'calendar replacement claim found'));
 add('does not claim Days Matter replacement', () => assert(!html.includes('完全替代 ' + 'Days Matter') && !html.includes('replace Days Matter'), 'Days Matter replacement claim found'));
@@ -25,7 +25,7 @@ add('one-sentence input capability exists', () => assert(html.includes('data-i18
 add('batch organize capability exists', () => assert(html.includes('data-i18n="capabilityBatchOrganize"') && html.includes('id="parseImportBtn"'), 'batch organize missing'));
 add('dedupe protection capability exists', () => assert(html.includes('data-i18n="capabilityDedupe"') && script.includes('dedupe'), 'dedupe missing'));
 add('bear assistant capability exists', () => assert(html.includes('data-i18n="capabilitySprite"') && html.includes('id="timeSprite"'), 'sprite missing'));
-add('update center exists', () => assert(html.includes('id="releaseCenterSection"') && html.includes('v1.0.0-rc'), 'update center missing'));
+add('update center exists', () => assert(html.includes('id="releaseCenterSection"') && html.includes('v1.0.0'), 'update center missing'));
 add('feedback entry exists', () => assert(html.includes('id="feedbackSection"') && html.includes('308138249@qq.com'), 'feedback missing'));
 add('.ics export exists', () => assert(html.includes('data-i18n="capabilityIcsExport"') && html.includes('id="exportIcsBtn"'), '.ics export missing'));
 add('JSON backup exists', () => assert(html.includes('data-i18n="capabilityJsonBackup"') && html.includes('id="exportBackupBtnMy"'), 'JSON backup missing'));
@@ -46,7 +46,7 @@ add('desktop styles exist', () => assert(style.includes('@media (min-width:1024p
 add('no visible undefined marker', () => assert(!html.includes('>undefined<'), 'visible undefined marker'));
 add('no visible null marker', () => assert(!html.includes('>null<'), 'visible null marker'));
 add('no mojibake marker', () => assert(!html.includes('�'), 'mojibake marker'));
-add('release notes and update center mention rc', () => assert(script.includes('v1.0.0-rc') && script.includes('releaseCenterV100rc') && script.includes('未上线能力做承诺'), 'rc release note mismatch'));
+add('release notes keep honest capability wording', () => assert(script.includes('releaseCenterV100rc') && script.includes('未上线能力做承诺'), 'release note honesty mismatch'));
 add('feedback email exists', () => assert(html.includes('href="mailto:308138249@qq.com"') && html.includes('id="copyFeedbackTemplateBtn"'), 'feedback email/template missing'));
 add('experience examples exist', () => assert(html.includes('id="experienceExampleSection"') && html.includes('id="demoBtnMy"'), 'experience examples missing'));
 add('sprite quick actions exist', () => assert(html.includes('id="timeSpriteInputBtn"') && html.includes('id="timeSpriteBatchBtn"') && html.includes('id="timeSpriteUpdateBtn"'), 'sprite quick actions missing'));

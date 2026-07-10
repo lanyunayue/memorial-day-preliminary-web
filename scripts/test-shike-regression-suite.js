@@ -198,6 +198,11 @@ const tests = [
     name: 'v1.0.0-rc release',
     script: 'test-shike-v100rc-release.js',
     expected: 'v1.0.0-rc release regression passed: 40/40'
+  },
+  {
+    name: 'v1.0.0 stable release',
+    script: 'test-shike-v100-stable.js',
+    expected: 'v1.0.0 stable regression passed: 24/24'
   }
 ];
 

@@ -1,5 +1,10 @@
+const fs = require('fs');
+const path = require('path');
+
 const CDP_URL = process.env.SHIKE_CDP_URL || 'http://127.0.0.1:9224';
 const APP_URL = process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/index.html';
+const INDEX_HTML = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf8');
+const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || ((INDEX_HTML.match(/APP_VERSION='([^']+)'/) || [])[1]);
 const VIEWPORTS = [375, 390, 414, 768, 1024, 1366, 1440];
 const PAGES = ['home', 'all', 'calendar', 'import', 'my'];
 
@@ -147,12 +152,12 @@ async function main() {
       notifyRequested:false,weatherCache:null,weatherCacheAt:0,locationDeniedUntil:0
     }));
     localStorage.removeItem('shike_demo_route_collapsed');
-    localStorage.setItem('shike_seen_release_note_version', 'v1.0.0-rc');
+    localStorage.setItem('shike_seen_release_note_version', '${EXPECTED_VERSION}');
   `);
   await client.navigate(APP_URL);
 
   const version = await client.evaluate(`({appVersion:APP_VERSION, cacheFetch:typeof fetchWeather, route:!!document.getElementById('demoRouteBlock')})`);
-  add('app loads v1.0.0-rc route shell', version.appVersion === 'v1.0.0-rc' && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
+  add('app loads declared version route shell', version.appVersion === EXPECTED_VERSION && version.cacheFetch === 'function' && version.route, JSON.stringify(version));
 
   const guard = await client.evaluate(`
     (() => {
@@ -218,7 +223,7 @@ async function main() {
       return {home, swipe, my, release, sprite};
     })()
   `);
-  add('v1.0.0-rc product polish surfaces work at runtime', polish.home.exampleHidden && polish.home.demoHidden && polish.home.hasInput && polish.home.hasToday && polish.swipe.hasWrapper && polish.swipe.hasEdit && polish.swipe.hasDanger && polish.my.demo && polish.my.feedback && polish.my.future && polish.release.shown && polish.release.bullets >= 5 && polish.sprite.bear && polish.sprite.today && polish.sprite.batch && polish.sprite.calendar && polish.sprite.backup && polish.sprite.update, JSON.stringify(polish));
+  add('release product surfaces work at runtime', polish.home.exampleHidden && polish.home.demoHidden && polish.home.hasInput && polish.home.hasToday && polish.swipe.hasWrapper && polish.swipe.hasEdit && polish.swipe.hasDanger && polish.my.demo && polish.my.feedback && polish.my.future && polish.release.shown && polish.release.bullets >= 5 && polish.sprite.bear && polish.sprite.today && polish.sprite.batch && polish.sprite.calendar && polish.sprite.backup && polish.sprite.update, JSON.stringify(polish));
 
   const overflows = [];
   for (const width of VIEWPORTS) {
