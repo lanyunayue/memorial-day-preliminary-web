@@ -1,5 +1,5 @@
 // test-shike-sprite-create-intent.js
-// Runtime tests for sprite create intent normalization (v1.4.0)
+// Runtime tests for sprite create intent normalization (v1.4.1)
 const fs = require('fs');
 const path = require('path');
 
@@ -155,6 +155,10 @@ add('extract produces preview object', () => {
   assert(result.title.indexOf('作业') !== -1, 'title contains 作业: ' + result.title);
   assert(result.isAllDay === true, 'isAllDay true');
   assert(result.sourceText === '今天还有作业要做，帮我登记', 'sourceText preserved');
+
+  const undated = ShikeSpriteCreateIntent.extract('帮我记一下买牛奶');
+  assert(undated.dateKey === null, 'no-date memo keeps dateKey null');
+  assert(undated.recordKind === 'note', 'no-date memo is a note');
 });
 
 add('HTML/script tags do not execute', () => {
@@ -199,9 +203,37 @@ add('parser-adapter.js hash unchanged', () => {
   assert(hash === 'D6298D52D56BEDDFC407B329569FE81F179FCF50652425ED29DDA6FA6EB6BE32', 'parser-adapter hash matches expected');
 });
 
-add('Version is v1.4.0', () => {
+add('Version is v1.4.1', () => {
   const version = fs.readFileSync(path.join(root, 'src/config/version.js'), 'utf8');
-  assert(version.includes("v1.4.0"), 'version.js has v1.4.0');
+  assert(version.includes("v1.4.1"), 'version.js has v1.4.1');
+});
+
+add('Structured confirmation UI is complete and safe', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const ui = fs.readFileSync(path.join(root, 'src/agent/ui.js'), 'utf8');
+  assert(html.includes('id="agentModifyBtn"'), 'confirmation card has a modify button');
+  assert(html.includes('id="agentPlan" hidden'), 'confirmation card starts hidden');
+  assert(ui.includes("textContent='我理解为：'"), 'preview explains the parsed result');
+  assert(ui.includes("'事项：'"), 'preview shows the item');
+  assert(ui.includes("'日期：'"), 'preview shows the date');
+  assert(ui.includes('时间：'), 'preview shows the time');
+  assert(ui.includes('类型：'), 'preview shows the record type');
+  assert(ui.includes("dateKey?'全天':'未指定'"), 'all-day and undated previews are distinguished');
+  assert(ui.includes('if(executing)return;'), 'duplicate confirmation is blocked immediately');
+  assert(ui.includes("button.disabled=executing"), 'action buttons are disabled while saving');
+  assert(ui.includes("addEventListener('click',modify)"), 'modify button is wired');
+  assert(!ui.includes('.innerHTML='), 'agent UI never renders user text through innerHTML');
+});
+
+add('Create tool waits for durable storage before success', () => {
+  const tools = fs.readFileSync(path.join(root, 'src/agent/tools/tool-definitions.js'), 'utf8');
+  const legacy = fs.readFileSync(path.join(root, 'src/legacy-app.js'), 'utf8');
+  assert(tools.includes("execute:async function(a,ctx)"), 'create tool is asynchronous');
+  assert(tools.includes('await window.ShikeLocalFirst.persist(records)'), 'create waits for local-first persistence');
+  assert(tools.includes("throw new Error('records_write_failed')"), 'persistence failure is reported');
+  assert(tools.includes('if(a.title)parsed.title=a.title'), 'draft title edits override the original parse');
+  assert(legacy.includes('if(!saveRecords())'), 'local cache failure is observable');
+  assert(legacy.includes('records=records.filter(function(record){return record.id!==item.id;})'), 'failed local writes roll back the in-memory item');
 });
 
 console.log(`\n========================================`);

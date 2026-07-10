@@ -86,7 +86,7 @@ class CdpClient {
           this.pending.delete(id);
           reject(new Error(`${method} timed out`));
         }
-      }, 8000);
+      }, 30000);
     });
   }
 
@@ -119,10 +119,18 @@ class CdpClient {
   }
 
   async navigate(url) {
-    const loaded = this.waitFor('Page.loadEventFired');
     await this.send('Page.navigate', { url });
-    await loaded;
-    await delay(250);
+    const started = Date.now();
+    while (Date.now() - started < 20000) {
+      try {
+        if (await this.evaluate(`document.readyState === 'complete' && typeof hasUnsavedWork === 'function' && !!window.ShikeLocalFirst && window.ShikeLocalFirst.getStatus().ready && history.scrollRestoration === 'manual'`)) {
+          await delay(250);
+          return;
+        }
+      } catch (_) {}
+      await delay(100);
+    }
+    throw new Error('document readyState timed out');
   }
 
   close() {

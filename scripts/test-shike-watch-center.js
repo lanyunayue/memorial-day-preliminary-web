@@ -16,20 +16,29 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-// 1. Version is v1.4.0
-add('version.js sets APP_VERSION to v1.4.0', () => {
-  assert(versionJs.includes("APP_VERSION='v1.4.0'"), 'APP_VERSION should be v1.4.0');
+// 1. Version is v1.4.1
+add('version.js sets APP_VERSION to v1.4.1', () => {
+  assert(versionJs.includes("APP_VERSION='v1.4.1'"), 'APP_VERSION should be v1.4.1');
 });
 
-// 2. Cache name is shike-v140-v52
-add('sw.js CACHE_NAME is shike-v140-v52', () => {
-  assert(sw.includes("shike-v140-v52"), 'sw cache should be shike-v140-v52');
+// 2. Cache name is shike-v141-v53
+add('sw.js CACHE_NAME is shike-v141-v53', () => {
+  assert(sw.includes("shike-v141-v53"), 'sw cache should be shike-v141-v53');
 });
 
 // 3. Watch page exists in HTML
 add('watch page div exists', () => {
   assert(html.includes('id="page-watch"'), 'page-watch missing from HTML');
   assert(html.includes('id="watchContent"'), 'watchContent container missing');
+});
+
+add('watch page belongs to the main app, not the sprite panel', () => {
+  const watchIndex = html.indexOf('id="page-watch"');
+  const drawerIndex = html.indexOf('<!-- Drawer -->');
+  const spriteIndex = html.indexOf('<!-- Time Sprite -->');
+  assert(watchIndex > html.indexOf('<div class="app"'), 'watch page should follow the app root');
+  assert(watchIndex < drawerIndex, 'watch page should remain inside the main app area');
+  assert(watchIndex < spriteIndex, 'watch page must not be nested inside the time sprite');
 });
 
 // 4. Nav item for watch exists
@@ -55,6 +64,11 @@ add('watch script tags included in index.html', () => {
 add('watch modules in SW PRECACHE_URLS', () => {
   assert(sw.includes('./src/watch/watch-storage.js'), 'watch-storage.js missing from SW precache');
   assert(sw.includes('./src/watch/watch-center.js'), 'watch-center.js missing from SW precache');
+});
+
+add('service worker is valid JavaScript', () => {
+  assert(!sw.includes('\\n'), 'SW must not contain literal \\n tokens between precache entries');
+  new Function(sw);
 });
 
 // 8. ShikeWatchStorage global exists
@@ -216,9 +230,9 @@ add('watch center CSS styles exist', () => {
   assert(style.includes('.nav-badge'), 'nav-badge CSS missing');
 });
 
-// 31. v1.4.0 in release center list in HTML
-add('v1.4.0 appears in release center list', () => {
-  assert(html.includes('>v1.4.0<') || html.includes('v1.4.0'), 'v1.4.0 missing from release center');
+// 31. v1.4.1 in release center list in HTML
+add('v1.4.1 appears in release center list', () => {
+  assert(html.includes('>v1.4.1<') || html.includes('v1.4.1'), 'v1.4.1 missing from release center');
   assert(html.includes('releaseCenterV140') || script.includes('releaseCenterV140'), 'releaseCenterV140 i18n key missing');
 });
 

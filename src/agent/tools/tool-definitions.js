@@ -21,7 +21,7 @@
     throw new Error('record_not_found');
   }
   ns.createTools=function(){return [
-    {name:'create_record',describe:'创建记录',validate:function(a){return !!String(a&&a.text||a&&a.title||'').trim();},execute:function(a,ctx){
+    {name:'create_record',describe:'创建记录',validate:function(a){return !!String(a&&a.text||a&&a.title||'').trim();},execute:async function(a,ctx){
       var text=a.text||a.title||'';var sourceText=a.sourceText||text;var parsed=null;
       if(window.ShikeSpriteCreateIntent){
         parsed=window.ShikeSpriteCreateIntent.extract(sourceText);
@@ -35,7 +35,17 @@
       if(a.dateKey)parsed.dateKey=a.dateKey;
       if(a.timeText)parsed.timeText=a.timeText;
       if(a.temporalPhrase)parsed.temporalPhrase=a.temporalPhrase;
+      if(a.title)parsed.title=a.title;
       var saved=saveParsedRecord(parsed,sourceText);
+      if(!saved)throw new Error('records_write_failed');
+      if(window.ShikeLocalFirst){
+        try{await window.ShikeLocalFirst.persist(records);}
+        catch(error){
+          records=records.filter(function(record){return record.id!==saved.id;});
+          saveRecords();
+          throw new Error('records_write_failed');
+        }
+      }
       if(ns.sessionContext)ns.sessionContext.setLastCreated(saved);
       renderCurrent();
       return {message:'已帮你记住：'+(parsed.title||text),record:saved};

@@ -33,9 +33,9 @@ add('no undefined null or mojibake in hub', !my.includes('>undefined<') && !my.i
 add('feature hub css exists', style.includes('.feature-hub-grid') && style.includes('.feature-hub-item'));
 add('mobile compact grid exists', style.includes('grid-template-columns:repeat(2'));
 add('desktop grid exists', style.includes('@media (min-width:900px)') && style.includes('grid-template-columns:repeat(3'));
-add('version is v1.4.0', script.includes("APP_VERSION='v1.4.0'"));
+add('version is v1.4.1', script.includes("APP_VERSION='v1.4.1'"));
 add('updated timestamp has release format', /APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script));
-add('service worker cache is v132', sw.includes("CACHE_NAME = 'shike-v140-v52'"));
+add('service worker cache is v132', sw.includes("CACHE_NAME = 'shike-v141-v53'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {

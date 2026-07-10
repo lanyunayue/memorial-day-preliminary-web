@@ -244,6 +244,8 @@
           <summary class="setting-group-title" style="cursor:pointer;" data-i18n="releaseCenterTitle">更新记录</summary>
           <p class="setting-note" data-i18n="releaseCenterText">最近版本变化集中放在这里，首次打开时仍会弹出本次更新。</p>
           <div class="release-center-list" id="releaseCenterList">
+            <div class="release-center-item"><strong>v1.4.1</strong><span data-i18n="releaseCenterV141">登记确认与离线修复</span></div>
+            <div class="release-center-item"><strong>v1.4.0</strong><span data-i18n="releaseCenterV140">关注中心</span></div>
             <div class="release-center-item"><strong>v1.3.0</strong><span data-i18n="releaseCenterV130">本地 Agent Core</span></div>
             <div class="release-center-item"><strong>v1.2.0</strong><span data-i18n="releaseCenterV120">本地优先数据</span></div>
             <div class="release-center-item"><strong>v1.1.0</strong><span data-i18n="releaseCenterV110">模块化架构</span></div>
@@ -359,6 +361,14 @@
       </div>
     </div>
   </div>
+
+  <section class="page" id="page-watch" data-version="v1.4.1">
+    <div class="page-header">
+      <h2 data-i18n="watchCenter">关注中心</h2>
+      <p class="page-subtitle" data-i18n="watchSubtitle">本地关键词关注，公开信息聚合</p>
+    </div>
+    <div id="watchContent"></div>
+  </section>
 </div>
 
 <!-- Drawer -->
@@ -446,17 +456,10 @@
       <div class="agent-conversation" id="agentConversation" aria-live="polite"></div>
       <label class="sr-only" for="agentInput">告诉小熊要做什么</label>
       <div class="agent-input-row"><input id="agentInput" maxlength="500" placeholder="告诉小熊要做什么"><button id="agentSendBtn">发送</button></div>
-      <section class="agent-plan" id="agentPlan" hidden aria-live="polite">
+      <section class="agent-plan" id="agentPlan" hidden aria-live="polite" aria-atomic="true">
         <strong id="agentPlanIntent"></strong><span id="agentPlanTool"></span><span id="agentPlanChange"></span>
-        <div class="agent-plan-actions"><button id="agentExecuteBtn">执行</button><button id="agentCancelBtn">取消</button></div>
+        <div class="agent-plan-actions"><button id="agentExecuteBtn">执行</button><button id="agentModifyBtn" hidden>修改</button><button id="agentCancelBtn">取消</button></div>
       </section>
-    <section class="page" id="page-watch" data-version="v1.4.0">
-    <div class="page-header">
-      <h2 data-i18n="watchCenter">关注中心</h2>
-      <p class="page-subtitle" data-i18n="watchSubtitle">本地关键词关注，公开信息聚合</p>
-    </div>
-    <div id="watchContent"></div>
-  </section>
       <div class="agent-footer-actions"><button id="agentClearBtn">清空对话</button><button id="agentExportBtn">导出对话</button></div>
     </details>
     <button class="time-sprite-reset" id="timeSpriteResetBtn" data-i18n="spriteResetAction">重置位置</button>
