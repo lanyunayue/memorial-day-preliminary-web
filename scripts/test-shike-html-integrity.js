@@ -3,8 +3,7 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const scriptMatch = html.match(/<script>([\s\S]*?)<\/script>/);
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -66,15 +65,16 @@ function loadGlobals() {
   };
   sandbox.window = sandbox;
   vm.createContext(sandbox);
-  vm.runInContext(scriptMatch[1], sandbox, { filename: 'index.html' });
+  vm.runInContext(script, sandbox, { filename: 'shike-classic-sources.js' });
   return {
     I18N: vm.runInContext('I18N', sandbox)
   };
 }
 
-add('index contains one inline app script', () => {
-  assert(scriptMatch, 'inline script should exist');
-  assert(matches(/<script>/g, html).length === 1, 'index should contain exactly one inline app script');
+add('index uses external application scripts', () => {
+  assert(matches(/<script\b[^>]*src=/g, html).length >= 6, 'external application scripts should exist');
+  assert(html.includes('type="module" src="./src/app.js"'), 'module entry should exist');
+  assert(!/<script>([\s\S]*?)<\/script>/.test(html), 'executable inline application script should not remain');
 });
 
 add('html id attributes are unique', () => {
@@ -84,9 +84,9 @@ add('html id attributes are unique', () => {
 });
 
 add('literal DOM id lookups point to existing elements', () => {
-  const ids = new Set(matches(/\sid=["']([^"']+)["']/g, html).map((m) => m[1]));
-  const dollarIds = matches(/\$\(['"]([^'"]+)['"]\)/g, scriptMatch[1]).map((m) => m[1]);
-  const bindIds = matches(/\bb\(['"]([^'"]+)['"]/g, scriptMatch[1]).map((m) => m[1]);
+  const ids = new Set(matches(/\sid=["']([^"']+)["']/g, html+'\n'+script).map((m) => m[1]));
+  const dollarIds = matches(/\$\(['"]([^'"]+)['"]\)/g, script).map((m) => m[1]);
+  const bindIds = matches(/\bb\(['"]([^'"]+)['"]/g, script).map((m) => m[1]);
   const missing = unique(dollarIds.concat(bindIds).filter((id) => !ids.has(id)));
   assert(missing.length === 0, `missing literal ids: ${missing.join(', ')}`);
 });
@@ -100,7 +100,7 @@ add('bottom navigation targets existing pages', () => {
 });
 
 add('inline event handler functions exist', () => {
-  const functionNames = new Set(matches(/function\s+([A-Za-z_$][\w$]*)\s*\(/g, scriptMatch[1]).map((m) => m[1]));
+  const functionNames = new Set(matches(/function\s+([A-Za-z_$][\w$]*)\s*\(/g, script).map((m) => m[1]));
   const ignored = new Set(['Date', 'if', 'stopPropagation']);
   const handlerBodies = matches(/<[^>]+\son[a-z]+=["']([^"']+)["'][^>]*>/g, html).map((m) => m[1]);
   const called = unique(handlerBodies.flatMap((body) => matches(/\b([A-Za-z_$][\w$]*)\s*\(/g, body).map((m) => m[1])));
@@ -111,7 +111,7 @@ add('inline event handler functions exist', () => {
 add('i18n keys used by markup and script exist in every language', () => {
   const { I18N } = loadGlobals();
   const markupKeys = matches(/\sdata-i18n(?:-ph)?=["']([^"']+)["']/g, html).map((m) => m[1]);
-  const callKeys = matches(/\b(?:t|tf)\(['"]([^'"]+)['"]/g, scriptMatch[1]).map((m) => m[1]);
+  const callKeys = matches(/\b(?:t|tf)\(['"]([^'"]+)['"]/g, script).map((m) => m[1]);
   const keys = unique(markupKeys.concat(callKeys)).sort();
   const languages = Object.keys(I18N);
   assert(languages.length >= 4, 'expected four language dictionaries');

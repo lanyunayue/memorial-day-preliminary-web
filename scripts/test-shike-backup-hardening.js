@@ -3,8 +3,7 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 
 if (!script) {
   console.error('Cannot find inline script in index.html');
@@ -151,7 +150,7 @@ add('new backup JSON includes metadata', () => {
   setRecords([record({ id: 'a' }), record({ id: 'b', title: u('\\u5988\\u5988\\u751f\\u65e5') })]);
   const payload = call('buildBackupPayload');
   assertEqual(payload.app, 'shike', 'backup app');
-  assertEqual(payload.appVersion, 'v1.0.0', 'backup appVersion');
+  assertEqual(payload.appVersion, 'v1.1.0', 'backup appVersion');
   assertEqual(payload.schemaVersion, 2, 'backup schemaVersion');
   assert(payload.exportedAt, 'backup exportedAt');
   assertEqual(payload.recordCount, 2, 'backup recordCount');

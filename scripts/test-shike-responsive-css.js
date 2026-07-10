@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);

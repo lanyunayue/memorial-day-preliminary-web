@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const markup = html.replace(/<script>[\s\S]*?<\/script>/, '');
 
 function assert(condition, message) {

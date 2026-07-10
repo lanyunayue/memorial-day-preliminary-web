@@ -3,9 +3,8 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -137,8 +136,8 @@ function loadApp() {
 
 add('route entry and version are present', () => {
   assert(html.includes('id="demoRouteBlock"'), 'missing home route container');
-  assert(script.includes("var APP_VERSION='v1.0.0'"), 'APP_VERSION should be v1.0.0');
-  assert(sw.includes("shike-v100-v46"), 'service worker cache should be v097');
+  assert(script.includes("var APP_VERSION='v1.1.0'"), 'APP_VERSION should be v1.1.0');
+  assert(sw.includes("shike-v110-v47"), 'service worker cache should be v097');
 });
 
 add('route title and subtitle match requested copy', () => {
@@ -154,13 +153,13 @@ add('five route steps are defined', () => {
 
 add('route examples are exact and complete', () => {
   ['明天下午三点开会', '每月15号还信用卡', '7月8日妈妈生日', '每天睡前涂润唇膏'].forEach((text) => {
-    assert(html.includes(text), `missing example ${text}`);
+    assert((html+script).includes(text), `missing example ${text}`);
   });
 });
 
 add('route action buttons are defined', () => {
   ['填入示例', '打开批量整理', '查看日历导出', '查看数据安全'].forEach((text) => {
-    assert(html.includes(text), `missing button ${text}`);
+    assert((html+script).includes(text), `missing button ${text}`);
   });
 });
 
@@ -248,11 +247,11 @@ add('route renders no undefined or null visible text', () => {
 });
 
 add('calendar copy is honest manual .ics export', () => {
-  assert(html.includes('带日期的记录可以导出 .ics，导入 Google Calendar、Apple Calendar 或 Outlook。'), 'missing honest calendar copy');
+  assert((html+script).includes('带日期的记录可以导出 .ics，导入 Google Calendar、Apple Calendar 或 Outlook。'), 'missing honest calendar copy');
 });
 
 add('data safety copy states browser local JSON backup', () => {
-  assert(html.includes('时刻数据保存在当前浏览器。重要记录建议定期导出 JSON 备份。'), 'missing data safety copy');
+  assert((html+script).includes('时刻数据保存在当前浏览器。重要记录建议定期导出 JSON 备份。'), 'missing data safety copy');
 });
 
 for (const check of checks) {

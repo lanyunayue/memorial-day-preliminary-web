@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -14,8 +13,8 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('APP_VERSION is v1.0.0', () => assert(script.includes("APP_VERSION='v1.0.0'"), 'version mismatch'));
-add('service worker cache is v46', () => assert(sw.includes("shike-v100-v46"), 'cache mismatch'));
+add('active release has semantic APP_VERSION', () => assert(/APP_VERSION='v\d+\.\d+\.\d+(?:-[^']+)?'/.test(script), 'version mismatch'));
+add('service worker cache is versioned', () => assert(/CACHE_NAME = 'shike-v[\w-]+-v\d+'/.test(sw), 'cache mismatch'));
 add('visible rc version marker is removed', () => assert(!html.includes('v1.0.0-rc'), 'rc version remains'));
 add('product positioning exists', () => assert(html.includes('id="productPositionSection"'), 'positioning missing'));
 add('capability checklist exists', () => assert(html.includes('id="capabilityChecklistSection"'), 'capabilities missing'));
@@ -28,7 +27,7 @@ add('feedback email exists', () => assert(html.includes('mailto:308138249@qq.com
 add('record card quick actions exist', () => assert(script.includes('copyRecordText') && script.includes('togglePin'), 'quick actions missing'));
 add('dedupe remains available', () => assert(script.includes('dedupe'), 'dedupe missing'));
 add('demo examples remain available', () => assert(html.includes('id="demoBtnMy"'), 'demo examples missing'));
-add('calendar dot remains available', () => assert(html.includes('cal-dot'), 'calendar dot missing'));
+add('calendar dot remains available', () => assert((html+style+script).includes('cal-dot'), 'calendar dot missing'));
 add('release center identifies stable release', () => assert(html.includes('<strong>v1.0.0</strong>') && script.includes('正式稳定版'), 'stable release entry missing'));
 add('does not claim cloud sync', () => assert(!/云同步已上线|已实现云同步/.test(html), 'cloud claim found'));
 add('does not claim persistent background reminders', () => assert(!/后台持续提醒|网页关闭后还能主动提醒/.test(html), 'background reminder claim found'));
@@ -36,8 +35,8 @@ add('does not claim trading advice', () => assert(!/智能交易建议|自动买
 add('no undefined text marker', () => assert(!html.includes('>undefined<'), 'undefined marker'));
 add('no null text marker', () => assert(!html.includes('>null<'), 'null marker'));
 add('no replacement-character mojibake', () => assert(!html.includes('\uFFFD'), 'replacement character found'));
-add('mobile responsive guard remains', () => assert(html.includes('@media (max-width:767px)'), 'mobile guard missing'));
-add('desktop responsive guard remains', () => assert(html.includes('@media (min-width:1024px)'), 'desktop guard missing'));
+add('mobile responsive guard remains', () => assert(style.includes('@media (max-width:767px)'), 'mobile guard missing'));
+add('desktop responsive guard remains', () => assert(style.includes('@media (min-width:1024px)'), 'desktop guard missing'));
 
 for (const check of checks) {
   try { check.run(); } catch (error) { failures.push(`[${check.name}] ${error.message}`); }

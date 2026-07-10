@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -40,14 +39,14 @@ add('clicking example does not directly save', () => {
 });
 
 add('mobile horizontal overflow is guarded', () => {
-  assert(html.includes('.example-chips{display:flex'), 'example chip flex style missing');
-  assert(html.includes('overflow-x:auto'), 'example chips should scroll horizontally');
-  assert(html.includes('scrollbar-width:none'), 'example chips should hide scrollbar gently');
+  assert(style.includes('.example-chips{display:flex'), 'example chip flex style missing');
+  assert(style.includes('overflow-x:auto'), 'example chips should scroll horizontally');
+  assert(style.includes('scrollbar-width:none'), 'example chips should hide scrollbar gently');
 });
 
 add('dark theme readability uses theme tokens', () => {
-  assert(html.includes('background:var(--bg-soft)'), 'example chips should use theme background token');
-  assert(html.includes('color:var(--ink-soft)'), 'example chips should use theme color token');
+  assert(style.includes('background:var(--bg-soft)'), 'example chips should use theme background token');
+  assert(style.includes('color:var(--ink-soft)'), 'example chips should use theme color token');
 });
 
 for (const check of checks) {

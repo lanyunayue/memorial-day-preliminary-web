@@ -203,6 +203,21 @@ const tests = [
     name: 'v1.0.0 stable release',
     script: 'test-shike-v100-stable.js',
     expected: 'v1.0.0 stable regression passed: 24/24'
+  },
+  {
+    name: 'Module boundaries',
+    script: 'test-shike-module-boundaries.js',
+    expected: 'Module boundary regression passed: 18/18'
+  },
+  {
+    name: 'Import graph',
+    script: 'test-shike-import-graph.js',
+    expected: 'Import graph regression passed: 12/12'
+  },
+  {
+    name: 'Offline assets',
+    script: 'test-shike-offline-assets.js',
+    expected: 'Offline asset regression passed: 10/10'
   }
 ];
 

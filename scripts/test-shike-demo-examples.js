@@ -3,13 +3,7 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const match = html.match(/<script>([\s\S]*?)<\/script>/);
-
-if (!match) {
-  console.error('Cannot find inline script in index.html');
-  process.exit(1);
-}
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 
 const FIXED_NOW = new Date(2026, 6, 8, 9, 0, 0).getTime();
 
@@ -83,7 +77,7 @@ const sandbox = {
 
 sandbox.window = sandbox;
 vm.createContext(sandbox);
-vm.runInContext(match[1], sandbox, { filename: 'index.html' });
+vm.runInContext(script, sandbox, { filename: 'shike-classic-sources.js' });
 vm.runInContext(
   [
     'updateLayoutState=function(){}',

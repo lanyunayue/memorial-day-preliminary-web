@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const { html: indexHtml, style, script } = require('./load-shike-source').loadShikeSource(root);
 const manifestRaw = fs.readFileSync(path.join(root, 'manifest.json'), 'utf8');
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 
@@ -46,7 +46,7 @@ add('index references manifest and theme metadata', () => {
 });
 
 add('app version and service worker cache version align', () => {
-  const appVersion = matchOne(indexHtml, /var APP_VERSION='(v(?:\d+\.\d+\.\d+|1\.0\.0-rc))'/, 'APP_VERSION should be present');
+  const appVersion = matchOne(script, /var APP_VERSION='(v(?:\d+\.\d+\.\d+|1\.0\.0-rc))'/, 'APP_VERSION should be present');
   const swCache = matchOne(sw, /CACHE_NAME\s*=\s*'shike-(v(?:\d{3}|100rc))-v(\d+)'/, 'CACHE_NAME should be present');
   const expectedToken = appVersion[1] === 'v1.0.0-rc'
     ? 'v100rc'
@@ -65,7 +65,7 @@ add('manifest required fields are stable', () => {
 
 add('manifest colors align with default app theme', () => {
   const metaTheme = parseColor(matchOne(indexHtml, /<meta name="theme-color" content="(#[0-9a-fA-F]{6})">/, 'theme-color meta')[1]);
-  const defaultBg = parseColor(matchOne(indexHtml, /:root\{[^}]*--bg:(#[0-9a-fA-F]{6})/, 'default --bg should be present')[1]);
+  const defaultBg = parseColor(matchOne(style, /:root\{[^}]*--bg:(#[0-9a-fA-F]{6})/, 'default --bg should be present')[1]);
   assertEqual(metaTheme, defaultBg, 'theme-color meta should match default --bg');
   assertEqual(parseColor(manifest.theme_color), defaultBg, 'manifest theme_color should match default --bg');
   assertEqual(parseColor(manifest.background_color), defaultBg, 'manifest background_color should match default --bg');
@@ -88,9 +88,9 @@ add('manifest icons include valid 192 and 512 SVG data uris', () => {
 });
 
 add('service worker registration uses versioned URL and updateViaCache none', () => {
-  assert(indexHtml.includes("var swUrl='sw.js?v='+encodeURIComponent(APP_VERSION);"), 'SW URL should include APP_VERSION');
-  assert(indexHtml.includes("navigator.serviceWorker.register(swUrl,{updateViaCache:'none'})"), 'SW registration should bypass update cache');
-  assert(indexHtml.includes("localStorage.setItem('shike_last_ver',APP_VERSION)"), 'index should remember last app version');
+  assert(script.includes("var swUrl='sw.js?v='+encodeURIComponent(APP_VERSION);"), 'SW URL should include APP_VERSION');
+  assert(script.includes("navigator.serviceWorker.register(swUrl,{updateViaCache:'none'})"), 'SW registration should bypass update cache');
+  assert(script.includes("localStorage.setItem('shike_last_ver',APP_VERSION)"), 'app should remember last app version');
 });
 
 add('service worker lifecycle and fetch strategy remain update-safe', () => {

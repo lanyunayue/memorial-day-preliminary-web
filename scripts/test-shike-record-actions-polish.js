@@ -2,9 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 
 const checks = [];
@@ -33,8 +31,8 @@ add('mobile style exists', style.includes('touch-action:pan-y') && style.include
 add('desktop style exists', style.includes('@media (hover:hover) and (pointer:fine)') && style.includes('.record-more-btn'));
 add('no horizontal overflow style preserved', style.includes('overflow:hidden') && style.includes('body{'));
 add('no visible undefined/null/mojibake', !html.includes('>undefined<') && !html.includes('>null<') && !html.includes('\uFFFD'));
-add('version is v1.0.0', script.includes("APP_VERSION='v1.0.0'"));
-add('service worker cache is v097', sw.includes("CACHE_NAME = 'shike-v100-v46'"));
+add('version is v1.1.0', script.includes("APP_VERSION='v1.1.0'"));
+add('service worker cache is v097', sw.includes("CACHE_NAME = 'shike-v110-v47'"));
 add('batch organize still exists', html.includes('id="page-import"') && html.includes('id="parseImportBtn"'));
 add('dedupe still exists', script.includes('draftDuplicateSkipped') || script.includes('dedupe'));
 add('ics export still exists', script.includes('function exportIcsFile'));

@@ -3,9 +3,7 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 
 let currentNow = new Date(2026, 6, 8, 9, 0, 0).getTime();
@@ -177,10 +175,10 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
   assert(style.includes('@keyframes spriteBlink'), 'subtle blink animation should exist');
 });
 
-add('version and service worker cache are ready for v1.0.0 candidate', () => {
-  assert(script.includes("APP_VERSION='v1.0.0'"), 'APP_VERSION should be v1.0.0');
+add('version and service worker cache are ready for v1.1.0 candidate', () => {
+  assert(script.includes("APP_VERSION='v1.1.0'"), 'APP_VERSION should be v1.1.0');
   assert(/APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script), 'APP_UPDATED_AT should use release timestamp format');
-  assert(sw.includes("CACHE_NAME = 'shike-v100-v46'"), 'service worker cache should be v098');
+  assert(sw.includes("CACHE_NAME = 'shike-v110-v47'"), 'service worker cache should be v098');
 });
 
 add('all languages include sprite i18n keys', () => {

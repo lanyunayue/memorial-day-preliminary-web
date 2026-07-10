@@ -2,9 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 
 const checks = [];
@@ -35,9 +33,9 @@ add('no undefined null or mojibake in hub', !my.includes('>undefined<') && !my.i
 add('feature hub css exists', style.includes('.feature-hub-grid') && style.includes('.feature-hub-item'));
 add('mobile compact grid exists', style.includes('grid-template-columns:repeat(2'));
 add('desktop grid exists', style.includes('@media (min-width:900px)') && style.includes('grid-template-columns:repeat(3'));
-add('version is v1.0.0', script.includes("APP_VERSION='v1.0.0'"));
+add('version is v1.1.0', script.includes("APP_VERSION='v1.1.0'"));
 add('updated timestamp has release format', /APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script));
-add('service worker cache is v098', sw.includes("CACHE_NAME = 'shike-v100-v46'"));
+add('service worker cache is v098', sw.includes("CACHE_NAME = 'shike-v110-v47'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {

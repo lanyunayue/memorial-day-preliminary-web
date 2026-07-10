@@ -3,8 +3,8 @@ const path = require('path');
 
 const CDP_URL = process.env.SHIKE_CDP_URL || 'http://127.0.0.1:9224';
 const APP_URL = process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/index.html';
-const INDEX_HTML = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf8');
-const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || ((INDEX_HTML.match(/APP_VERSION='([^']+)'/) || [])[1]);
+const APP_SOURCE = require('./load-shike-source').loadShikeSource(path.resolve(__dirname, '..'));
+const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || ((APP_SOURCE.script.match(/APP_VERSION='([^']+)'/) || [])[1]);
 const VIEWPORTS = [375, 390, 414, 768, 1024, 1366, 1440];
 const PAGES = ['home', 'all', 'calendar', 'import', 'my'];
 

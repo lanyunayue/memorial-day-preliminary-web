@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-const script = (html.match(/<script>([\s\S]*?)<\/script>/) || [])[1] || '';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -14,9 +13,9 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('version and cache are v1.0.0', () => {
-  assert(script.includes("APP_VERSION='v1.0.0'"), 'APP_VERSION should be v1.0.0');
-  assert(sw.includes("shike-v100-v46"), 'sw cache should be shike-v100-v46');
+add('version and cache are v1.1.0', () => {
+  assert(script.includes("APP_VERSION='v1.1.0'"), 'APP_VERSION should be v1.1.0');
+  assert(sw.includes("shike-v110-v47"), 'sw cache should be shike-v110-v47');
 });
 
 add('release center section exists', () => {
@@ -26,7 +25,7 @@ add('release center section exists', () => {
 });
 
 add('recent version list is visible', () => {
-  ['v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
+  ['v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
     assert(html.includes(version), `${version} missing from release center`);
   });
 });
@@ -110,8 +109,8 @@ add('forbidden launched capability claims are absent', () => {
   });
 });
 
-add('release notes describe v1.0.0', () => {
-  ['产品定位', '产品能力清单', '一句话输入', '未上线能力做承诺', 'v1.0.0'].forEach((token) => {
+add('release notes describe v1.1.0', () => {
+  ['产品定位', '产品能力清单', '一句话输入', '未上线能力做承诺', 'v1.1.0'].forEach((token) => {
     assert(script.includes(token), `release note token missing: ${token}`);
   });
 });
