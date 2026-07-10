@@ -13,9 +13,9 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('version and cache are v1.2.0', () => {
-  assert(script.includes("APP_VERSION='v1.2.0'"), 'APP_VERSION should be v1.2.0');
-  assert(sw.includes("shike-v120-v48"), 'sw cache should be shike-v120-v48');
+add('version and cache are v1.3.0', () => {
+  assert(script.includes("APP_VERSION='v1.3.0'"), 'APP_VERSION should be v1.3.0');
+  assert(sw.includes("shike-v130-v49"), 'sw cache should be shike-v130-v49');
 });
 
 add('release center section exists', () => {
@@ -25,13 +25,13 @@ add('release center section exists', () => {
 });
 
 add('recent version list is visible', () => {
-  ['v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
+  ['v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
     assert(html.includes(version), `${version} missing from release center`);
   });
 });
 
 add('release center content labels exist', () => {
-  ['releaseCenterV100rc', 'releaseCenterV098', 'releaseCenterV097', 'releaseCenterV096', 'releaseCenterV095', 'releaseCenterV094', 'releaseCenterV093'].forEach((key) => {
+  ['releaseCenterV130', 'releaseCenterV120', 'releaseCenterV100rc', 'releaseCenterV098', 'releaseCenterV097', 'releaseCenterV096', 'releaseCenterV095', 'releaseCenterV094', 'releaseCenterV093'].forEach((key) => {
     assert(script.includes(`${key}:`), `${key} i18n missing`);
   });
 });
@@ -109,8 +109,8 @@ add('forbidden launched capability claims are absent', () => {
   });
 });
 
-add('release notes describe v1.2.0', () => {
-  ['IndexedDB', '迁移快照', '隔离区', 'parser', 'v1.2.0'].forEach((token) => {
+add('release notes describe v1.3.0', () => {
+  ['Agent', 'tool', 'double confirmation', 'local-rule', 'v1.3.0'].forEach((token) => {
     assert(script.includes(token), `release note token missing: ${token}`);
   });
 });

@@ -244,6 +244,7 @@
           <summary class="setting-group-title" style="cursor:pointer;" data-i18n="releaseCenterTitle">更新记录</summary>
           <p class="setting-note" data-i18n="releaseCenterText">最近版本变化集中放在这里，首次打开时仍会弹出本次更新。</p>
           <div class="release-center-list" id="releaseCenterList">
+            <div class="release-center-item"><strong>v1.3.0</strong><span data-i18n="releaseCenterV130">本地 Agent Core</span></div>
             <div class="release-center-item"><strong>v1.2.0</strong><span data-i18n="releaseCenterV120">本地优先数据</span></div>
             <div class="release-center-item"><strong>v1.1.0</strong><span data-i18n="releaseCenterV110">模块化架构</span></div>
             <div class="release-center-item"><strong>v1.0.0</strong><span data-i18n="releaseCenterV100rc">正式稳定版</span></div>
@@ -432,6 +433,18 @@
       <button class="time-sprite-action" id="timeSpriteUpdateBtn" data-i18n="spriteUpdateAction">更新</button>
       <button class="time-sprite-action" id="timeSpriteDemoBtn" data-i18n="spriteDemoAction">体验示例</button>
     </div>
+    <details class="agent-workbench" id="agentWorkbench">
+      <summary>对话</summary>
+      <p class="agent-local-note">当前主要使用本地规则，内容不会上传。</p>
+      <div class="agent-conversation" id="agentConversation" aria-live="polite"></div>
+      <label class="sr-only" for="agentInput">告诉小熊要做什么</label>
+      <div class="agent-input-row"><input id="agentInput" maxlength="500" placeholder="告诉小熊要做什么"><button id="agentSendBtn">发送</button></div>
+      <section class="agent-plan" id="agentPlan" hidden aria-live="polite">
+        <strong id="agentPlanIntent"></strong><span id="agentPlanTool"></span><span id="agentPlanChange"></span>
+        <div class="agent-plan-actions"><button id="agentExecuteBtn">执行</button><button id="agentCancelBtn">取消</button></div>
+      </section>
+      <div class="agent-footer-actions"><button id="agentClearBtn">清空对话</button><button id="agentExportBtn">导出对话</button></div>
+    </details>
     <button class="time-sprite-reset" id="timeSpriteResetBtn" data-i18n="spriteResetAction">重置位置</button>
     <div class="time-sprite-future" id="timeSpriteFuture" data-i18n="spriteFutureHint">更主动的智能助手能力正在规划中。</div>
   </div>
@@ -450,5 +463,18 @@
 <script src="./src/storage/local-first-bridge.js"></script>
 <script src="./src/legacy-app.js"></script>
 <script type="module" src="./src/app.js"></script>
+<script src="./src/agent/namespace.js"></script>
+<script src="./src/agent/safety-policy.js"></script>
+<script src="./src/agent/confirmation-policy.js"></script>
+<script src="./src/agent/intent-router.js"></script>
+<script src="./src/agent/context-builder.js"></script>
+<script src="./src/agent/tool-registry.js"></script>
+<script src="./src/agent/tools/tool-definitions.js"></script>
+<script src="./src/agent/planner.js"></script>
+<script src="./src/agent/executor.js"></script>
+<script src="./src/agent/conversation-repository.js"></script>
+<script src="./src/agent/result-formatter.js"></script>
+<script src="./src/agent/agent-core.js"></script>
+<script src="./src/agent/ui.js"></script>
 </body>
 </html>

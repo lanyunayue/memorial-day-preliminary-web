@@ -243,6 +243,31 @@ const tests = [
     name: 'V2 backup',
     script: 'test-shike-v2-backup.js',
     expected: 'V2 backup regression passed: 13/13'
+  },
+  {
+    name: 'Agent core',
+    script: 'test-shike-agent-core.js',
+    expected: 'Agent core regression passed: 15/15'
+  },
+  {
+    name: 'Agent tools',
+    script: 'test-shike-agent-tools.js',
+    expected: 'Agent tools regression passed: 20/20'
+  },
+  {
+    name: 'Agent confirmation',
+    script: 'test-shike-agent-confirmation.js',
+    expected: 'Agent confirmation regression passed: 10/10'
+  },
+  {
+    name: 'Agent conversation',
+    script: 'test-shike-agent-conversation.js',
+    expected: 'Agent conversation regression passed: 8/8'
+  },
+  {
+    name: 'Agent security',
+    script: 'test-shike-agent-security.js',
+    expected: 'Agent security regression passed: 12/12'
   }
 ];
 

@@ -1,0 +1,1 @@
+(function(ns){ns.contextBuilder=Object.freeze({build:function(){return {page:window.currentPage||'home',recordCount:Array.isArray(window.records)?window.records.length:0,language:window.LANG||'zh-CN',localOnly:true};}});})(window.ShikeAgentModules);

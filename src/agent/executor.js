@@ -1,0 +1,1 @@
+(function(ns){ns.executor=Object.freeze({execute:async function(plan,registry){if(!plan||!plan.ok)throw new Error('invalid_plan');var tool=registry.get(plan.tool);if(!tool)throw new Error('tool_not_found');if(!tool.validate(plan.args))throw new Error('invalid_arguments');return await tool.execute(plan.args,plan.context);}});})(window.ShikeAgentModules);
