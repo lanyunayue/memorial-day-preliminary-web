@@ -1,5 +1,5 @@
 ﻿/**
- * v2.0.0-rc5 Product Rescue Release Candidate Tests
+ * v2.0.0-rc5.1 Product Rescue Release Candidate Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -9,14 +9,14 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.0.0-rc5 Product Rescue Tests ===\n');
+console.log('=== v2.0.0-rc5.1 Product Rescue Tests ===\n');
 
 // 1. Version
 console.log('[1] Version');
 const vjs = readSafe(path.join(V,'src/config/version.js'));
-assert(vjs && vjs.includes('v2.0.0-rc5'), 'APP_VERSION is v2.0.0-rc5');
+assert(vjs && vjs.includes('v2.0.0-rc5.1'), 'APP_VERSION is v2.0.0-rc5.1');
 const sw = readSafe(path.join(V,'sw.js'));
-assert(sw && sw.includes('shike-v200rc5-v60'), 'CACHE_NAME is shike-v200rc5-v60');
+assert(sw && sw.includes('shike-v200rc51-v60'), 'CACHE_NAME is shike-v200rc51-v60');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');
@@ -91,5 +91,5 @@ assert(leg && leg.includes('正在规划'), '正在规划 token preserved');
 assert(!leg.includes('更主动的智能助手能力正在规划中'), 'old placeholder removed');
 
 console.log('\n========================================');
-console.log('v2.0.0-rc5 Product Rescue tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.0.0-rc5.1 Product Rescue tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) process.exit(1);

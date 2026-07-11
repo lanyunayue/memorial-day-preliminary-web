@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Snapshot Service Tests
+ * v2.0.0-rc5.1 Snapshot Service Tests
  */
 const fs = require('fs');
 const path = require('path');

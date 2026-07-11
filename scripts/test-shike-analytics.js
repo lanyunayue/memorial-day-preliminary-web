@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Analytics Tests
+ * v2.0.0-rc5.1 Analytics Tests
  */
 const fs = require('fs');
 const path = require('path');

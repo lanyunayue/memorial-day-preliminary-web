@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Sync Client Tests
+ * v2.0.0-rc5.1 Sync Client Tests
  */
 const fs = require('fs');
 const path = require('path');

@@ -1,5 +1,5 @@
 ﻿/**
- * v2.0.0-rc5 Optional Sync Beta Release Candidate Tests
+ * v2.0.0-rc5.1 Optional Sync Beta Release Candidate Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +8,7 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.0.0-rc5 Optional Sync Beta Tests ===\n');
+console.log('=== v2.0.0-rc5.1 Optional Sync Beta Tests ===\n');
 
 const html = readSafe(path.join(V,'index.html'));
 const sw = readSafe(path.join(V,'sw.js'));
@@ -16,8 +16,8 @@ const leg = readSafe(path.join(V,'src/legacy-app.js'));
 const ver = readSafe(path.join(V,'src/config/version.js'));
 
 console.log('[1] Version');
-assert(ver && ver.includes('v2.0.0-rc5'), 'APP_VERSION is v2.0.0-rc5');
-assert(sw && sw.includes('shike-v200rc5-v60'), 'CACHE_NAME is shike-v200rc5-v60');
+assert(ver && ver.includes('v2.0.0-rc5.1'), 'APP_VERSION is v2.0.0-rc5.1');
+assert(sw && sw.includes('shike-v200rc51-v60'), 'CACHE_NAME is shike-v200rc51-v60');
 
 console.log('\n[2] Parser integrity');
 const crypto = require('crypto');
@@ -62,7 +62,7 @@ assert(sw && sw.includes('event-schema.js'), 'event-schema in SW');
 console.log('\n[8] HTML integration');
 assert(html && html.includes('sync-client.js'), 'sync-client script in HTML');
 assert(html && html.includes('analytics-core.js'), 'analytics-core script in HTML');
-assert(html && html.includes('syncContainer'), 'sync panel in HTML');
+assert(!html.includes('syncContainer'),'sync panel removed in quarantine');
 
 console.log('\n[9] Privacy defaults');
 assert(leg && leg.includes('本地模式'), 'local mode messaging');
@@ -75,5 +75,5 @@ assert(leg && leg.includes('syncModeLocal'), 'sync mode local text');
 assert(leg && !leg.includes('sync_beta_launched') && !leg.includes('已部署同步'), 'no fake sync deployment');
 
 console.log('\n========================================');
-console.log('v2.0.0-rc5 Optional Sync Beta tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.0.0-rc5.1 Optional Sync Beta tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) process.exit(1);

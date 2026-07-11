@@ -74,7 +74,7 @@ var I18N={
     reminderCheckNote:'页面打开时会检查提醒；浏览器关闭后的后台提醒后续完善。',
     releaseCenterV200rc4:'v2.0.0-rc5 提醒可靠性',
     navSync:'同步',syncTitle:'同步設定',
-    syncModeLocal:'本地模式：資料僅保存在此裝置',syncModeSync:'加密同步模式',
+    syncQuarantineTitle:'同步安全隔离',syncQuarantineMsg:'加密同步正在进行安全重构，当前仅使用本地模式。你的记录不会上传。',syncQuarantineDetail:'此前版本存在加密设计缺陷，远程同步已暂时禁用。安全重构完成后将重新开放。',syncDisabled:'已禁用（安全隔离）',syncMigrationPending:'正在恢复待同步的本地操作...',syncModeLocal:'本地模式',syncModeSync:'加密同步模式',
     deviceIdentity:'裝置身份',deviceId:'裝置ID',
     syncEndpoint:'同步伺服器',syncLastTime:'上次同步',syncPending:'待同步',
     analyticsConsent:'分析同意',localAnalytics:'本地分析',remoteAnalytics:'遠端分析',
@@ -2348,7 +2348,7 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  else if(page==='sync'){if(window.ShikeSyncStatus)ShikeSyncStatus.render($('syncContainer'));}
+  
   else if(page==='data-safety'){if(window.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(window.ShikeSnapshotService)renderSnapshotList();if(window.ShikeTrashRepository)renderTrashList();}
   else if(page==='reminder-diagnostics'){if(window.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
       
@@ -3594,8 +3594,8 @@ var capabilityUnifiedComposer=true;
 var capabilityV200rc2=true;
 var capabilityV200rc3=true;
 var capabilityV200rc4=true;
-var capabilityV200rc5=true;
-var capabilitySync=true;
+var capabilityV200rc51=true;
+var capabilitySync=false; // quarantined
 var capabilityAnalytics=true;
 var capabilityDeviceIdentity=true;
 var capabilityReminderEngine=true;

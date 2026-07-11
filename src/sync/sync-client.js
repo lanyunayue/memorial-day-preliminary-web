@@ -483,4 +483,17 @@
         isEnabled: isEnabled,
         setEndpoint: setEndpoint
     };
+
+// SECURITY QUARANTINE v2.0.0-rc5.1: Remote sync disabled due to crypto design flaws
+var _orig_push = push;
+var _orig_pull = pull;
+var _orig_setEndpoint = setEndpoint;
+var _orig_enable = enable;
+push = function(){ return Promise.resolve({status:'sync_security_quarantined',count:0}); };
+pull = function(){ return Promise.resolve({status:'sync_security_quarantined',operations:[]}); };
+setEndpoint = function(){ return false; };
+enable = function(){ return false; };
+disable = function(){ return true; };
+isEnabled = function(){ return false; };
+
 })(typeof window !== 'undefined' ? window : this);

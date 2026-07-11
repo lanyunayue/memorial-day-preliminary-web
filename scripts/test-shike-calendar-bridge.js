@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Calendar Bridge Tests
+ * v2.0.0-rc5.1 Calendar Bridge Tests
  */
 const fs = require('fs');
 const path = require('path');

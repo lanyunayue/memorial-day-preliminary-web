@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Upcoming Seven Days Tests
+ * v2.0.0-rc5.1 Upcoming Seven Days Tests
  */
 const fs = require('fs');
 const path = require('path');

@@ -80,16 +80,10 @@
      *
      * @returns {string} `'local'` or `'encrypted-sync'`.
      */
-    function getSyncMode() {
-        try {
-            var mode = localStorage.getItem(MODE_KEY);
-            if (mode === 'local' || mode === 'encrypted-sync') {
-                return mode;
-            }
-            return DEFAULT_MODE;
-        } catch (e) {
-            return DEFAULT_MODE;
-        }
+    function getSyncMode(){
+        // SECURITY QUARANTINE v2.0.0-rc5.1: always disabled
+        try{localStorage.setItem(MODE_KEY,'disabled');}catch(e){}
+        return 'disabled';
     }
 
     /**
@@ -190,6 +184,16 @@
     function getStatus() {
         try {
             var mode = getSyncMode();
+        if(mode === 'disabled'){
+            container.innerHTML = '<div class="sync-quarantine-notice" style="padding:20px;background:rgba(255,165,2,.1);border:1px solid rgba(255,165,2,.3);border-radius:10px;margin:16px 0;"><h3 style="color:#ffa94d;margin:0 0 8px;">同步安全隔离</h3><p style="color:#8b8fa3;font-size:14px;margin:0 0 8px;">加密同步正在进行安全重构，当前仅使用本地模式。你的记录不会上传。</p><p style="color:#8b8fa3;font-size:12px;margin:0;">此前版本存在加密设计缺陷，远程同步已暂时禁用。安全重构完成后将重新开放。</p></div>';
+            if(window.ShikeSyncQuarantineMigration){
+              var st = window.ShikeSyncQuarantineMigration.getStatus();
+              if(st.hasQueue && st.queueLength>0){
+                container.innerHTML += '<div style="padding:12px;background:rgba(108,140,255,.1);border-radius:8px;margin-top:12px;font-size:13px;color:#8b8fa3;">正在恢复待同步的本地操作...</div>';
+              }
+            }
+            return;
+        }
             var clientStatus = { lastSync: null, pending: 0, status: 'idle' };
 
             if (global.ShikeSyncClient) {
@@ -273,6 +277,16 @@
 
             var status = getStatus();
             var mode = getSyncMode();
+        if(mode === 'disabled'){
+            container.innerHTML = '<div class="sync-quarantine-notice" style="padding:20px;background:rgba(255,165,2,.1);border:1px solid rgba(255,165,2,.3);border-radius:10px;margin:16px 0;"><h3 style="color:#ffa94d;margin:0 0 8px;">同步安全隔离</h3><p style="color:#8b8fa3;font-size:14px;margin:0 0 8px;">加密同步正在进行安全重构，当前仅使用本地模式。你的记录不会上传。</p><p style="color:#8b8fa3;font-size:12px;margin:0;">此前版本存在加密设计缺陷，远程同步已暂时禁用。安全重构完成后将重新开放。</p></div>';
+            if(window.ShikeSyncQuarantineMigration){
+              var st = window.ShikeSyncQuarantineMigration.getStatus();
+              if(st.hasQueue && st.queueLength>0){
+                container.innerHTML += '<div style="padding:12px;background:rgba(108,140,255,.1);border-radius:8px;margin-top:12px;font-size:13px;color:#8b8fa3;">正在恢复待同步的本地操作...</div>';
+              }
+            }
+            return;
+        }
             var identity = getIdentity();
             var currentDeviceId = identity ? identity.deviceId : null;
             var devices = getDeviceList();

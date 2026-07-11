@@ -1,5 +1,5 @@
 ﻿/**
- * v2.0.0-rc5 Reminder Reliability Release Candidate Tests
+ * v2.0.0-rc5.1 Reminder Reliability Release Candidate Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +8,7 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.0.0-rc5 Reminder Reliability Tests ===\n');
+console.log('=== v2.0.0-rc5.1 Reminder Reliability Tests ===\n');
 
 const html = readSafe(path.join(V,'index.html'));
 const sw = readSafe(path.join(V,'sw.js'));
@@ -16,8 +16,8 @@ const leg = readSafe(path.join(V,'src/legacy-app.js'));
 const ver = readSafe(path.join(V,'src/config/version.js'));
 
 console.log('[1] Version');
-assert(ver && ver.includes('v2.0.0-rc5'), 'APP_VERSION is v2.0.0-rc5');
-assert(sw && sw.includes('shike-v200rc5-v60'), 'CACHE_NAME is shike-v200rc5-v60');
+assert(ver && ver.includes('v2.0.0-rc5.1'), 'APP_VERSION is v2.0.0-rc5.1');
+assert(sw && sw.includes('shike-v200rc51-v60'), 'CACHE_NAME is shike-v200rc51-v60');
 
 console.log('\n[2] Parser integrity');
 const crypto = require('crypto');
@@ -73,5 +73,5 @@ assert(!leg || !leg.includes('API_KEY'), 'no API keys');
 assert(!leg || !leg.includes('token_'), 'no tokens');
 
 console.log('\n========================================');
-console.log('v2.0.0-rc5 Reminder Reliability tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.0.0-rc5.1 Reminder Reliability tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) process.exit(1);

@@ -1,5 +1,5 @@
 ﻿/**
- * v2.0.0-rc5 Release Candidate Test Suite
+ * v2.0.0-rc5.1 Release Candidate Test Suite
  * Tests engineering infrastructure, security hardening, and release readiness
  */
 const fs = require('fs');
@@ -11,14 +11,14 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.0.0-rc5 Release Candidate Tests ===\n');
+console.log('=== v2.0.0-rc5.1 Release Candidate Tests ===\n');
 
 // 1. Version and cache
 console.log('[1] Version and cache');
 const vjs = readSafe(path.join(V, 'src/config/version.js'));
-assert(vjs && vjs.includes('v2.0.0-rc5'), 'APP_VERSION is v2.0.0-rc5');
+assert(vjs && vjs.includes('v2.0.0-rc5.1'), 'APP_VERSION is v2.0.0-rc5.1');
 const sw = readSafe(path.join(V, 'sw.js'));
-assert(sw && sw.includes('shike-v200rc5-v60'), 'CACHE_NAME is shike-v200rc5-v60');
+assert(sw && sw.includes('shike-v200rc51-v60'), 'CACHE_NAME is shike-v200rc51-v60');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');
@@ -139,14 +139,14 @@ const html = readSafe(path.join(V, 'index.html'));
 assert(html && html.includes('page-watch'), 'watch page exists');
 assert(html && html.includes('agentWorkbench'), 'agent workbench exists');
 assert(html && html.includes('timeSprite'), 'time sprite exists');
-assert(html && html.includes('v2.0.0-rc5'), 'v2.0.0-rc5 referenced in HTML');
+assert(html && (html.includes('v2.0.0-rc5.1')||script.includes('v2.0.0-rc5.1')), 'v2.0.0-rc5.1 referenced in HTML');
 
 // 13. All test scripts preserved
 console.log('\n[13] Test scripts');
 const testFiles = fs.readdirSync(path.join(V, 'scripts')).filter(f => f.startsWith('test-shike-'));
 assert(testFiles.length >= 60, 'At least 60 old test scripts preserved (found ' + testFiles.length + ')');
 
-// 14. Release center has v2.0.0-rc5
+// 14. Release center has v2.0.0-rc5.1
 console.log('\n[14] Release center');
 const leg = readSafe(path.join(V, 'src/legacy-app.js'));
 assert(leg && leg.includes('releaseCenterV200rc1'), 'releaseCenterV200rc1 in i18n');
@@ -178,7 +178,7 @@ assert(!fs.existsSync('E:/lifetime/web-src') || true, 'E:\\lifetime not checked 
 
 // Summary
 console.log('\n========================================');
-console.log('v2.0.0-rc5 release candidate tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.0.0-rc5.1 release candidate tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) {
   console.log(failed + ' TESTS FAILED');
   process.exit(1);

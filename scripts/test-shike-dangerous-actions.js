@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Dangerous Actions Tests
+ * v2.0.0-rc5.1 Dangerous Actions Tests
  */
 const fs = require('fs');
 const path = require('path');

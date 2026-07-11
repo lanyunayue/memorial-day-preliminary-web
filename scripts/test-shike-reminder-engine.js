@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5 Reminder Engine Tests
+ * v2.0.0-rc5.1 Reminder Engine Tests
  */
 const fs = require('fs');
 const path = require('path');
