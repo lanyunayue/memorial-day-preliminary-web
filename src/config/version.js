@@ -1,4 +1,4 @@
-var APP_VERSION='v1.5.0';
-var APP_UPDATED_AT='2026-07-11 12:39';
+var APP_VERSION='v2.0.0-rc1';
+var APP_UPDATED_AT='2026-07-11 12:00';
 
 window.ShikeVersion=Object.freeze({version:APP_VERSION,updatedAt:APP_UPDATED_AT});

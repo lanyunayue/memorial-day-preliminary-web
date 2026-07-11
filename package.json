@@ -1,0 +1,18 @@
+{
+  "name": "shike-web",
+  "version": "2.0.0-rc1",
+  "description": "时刻 - 你的贴心记事助手 (Release Candidate)",
+  "private": true,
+  "scripts": {
+    "lint": "node scripts/lint-check.js",
+    "format:check": "node scripts/format-check.js",
+    "test:unit": "node scripts/test-unit-runner.js",
+    "test:legacy": "node scripts/test-shike-regression-suite.js",
+    "test:e2e": "node scripts/test-e2e-runner.js",
+    "test:a11y": "node scripts/test-a11y-runner.js",
+    "test:security": "node scripts/test-security-runner.js",
+    "test:all": "npm run test:unit && npm run test:legacy && npm run test:security && npm run lint"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

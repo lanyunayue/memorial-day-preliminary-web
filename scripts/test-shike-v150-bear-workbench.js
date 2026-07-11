@@ -18,8 +18,8 @@ function add(name,condition){checks.push({name,condition});}
 function sha(value){return crypto.createHash('sha256').update(String(value).replace(/\r\n/g,'\n')).digest('hex');}
 function extractFunction(source,name){source=String(source).replace(/\r\n/g,'\n');const start=source.indexOf(`function ${name}(`);if(start<0)throw new Error(`missing ${name}`);const open=source.indexOf('{',start);let depth=0,quote=null,escaped=false;for(let i=open;i<source.length;i++){const c=source[i];if(quote){if(escaped)escaped=false;else if(c==='\\')escaped=true;else if(c===quote)quote=null;continue;}if(c==='"'||c==="'"||c==='`'){quote=c;continue;}if(c==='{')depth++;if(c==='}'&&--depth===0)return source.slice(start,i+1);}throw new Error(`unclosed ${name}`);}
 
-add('version v1.5.0',read('src/config/version.js').includes("APP_VERSION='v1.5.0'"));
-add('cache v54',sw.includes("CACHE_NAME = 'shike-v150-v54'"));
+add('version v2.0.0-rc1',read('src/config/version.js').includes("APP_VERSION='v2.0.0-rc1'"));
+add('cache v54',sw.includes("CACHE_NAME = 'shike-v200rc1-v55'"));
 add('release notes module',html.includes('./src/config/release-notes.js')&&sw.includes('./src/config/release-notes.js'));
 ['idle','blink','wave','listening','thinking','searching','planning','waiting-confirmation','working','speaking','success','warning','error','sleeping','dragging'].forEach((state)=>add(`state ${state}`,files.state.includes(`${state}:`)||files.state.includes(`'${state}':`)));
 add('explicit enter and exit phases',files.state.includes("emit('exit'")&&files.state.includes("emit('enter'"));

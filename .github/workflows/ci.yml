@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci || echo "No dependencies to install"
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+      - name: Format check
+        run: npm run format:check
+        continue-on-error: true
+      - name: Unit tests
+        run: npm run test:unit
+      - name: Legacy regression
+        run: npm run test:legacy
+      - name: Security checks
+        run: npm run test:security
+      - name: Static asset validation
+        run: node scripts/test-shike-offline-assets.js
+      - name: Service Worker validation
+        run: node scripts/test-shike-pwa-assets.js

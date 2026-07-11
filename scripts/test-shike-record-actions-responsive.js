@@ -145,11 +145,11 @@ add('40. dark theme styles exist', () => {
 add('41. reduced-motion support exists', () => {
   assert(style.includes('prefers-reduced-motion')||script.includes('prefers-reduced-motion'), 'reduced-motion support missing');
 });
-add('42. APP_VERSION = v1.5.0', () => {
-  assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v1.5.0"), 'APP_VERSION should be v1.5.0');
+add('42. APP_VERSION = v2.0.0-rc1', () => {
+  assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v2.0.0-rc1"), 'APP_VERSION should be v2.0.0-rc1');
 });
-add('43. cache name shike-v150-v54', () => {
-  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v150-v54'), 'CACHE_NAME should be shike-v150-v54');
+add('43. cache name shike-v200rc1-v55', () => {
+  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v200rc1-v55'), 'CACHE_NAME should be shike-v200rc1-v55');
 });
 add('44. original swipe functionality not regressed', () => {
   assert(script.includes('record-swipe')&&script.includes('swiped')&&script.includes('translateX'), 'core swipe functionality preserved');
