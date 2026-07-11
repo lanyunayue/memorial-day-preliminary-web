@@ -1,9 +1,9 @@
 # v1.5.0 时刻精灵工作台候选报告
 
-候选日期：2026-07-11  
-分支：`rematch-v150-bear-workbench`  
-基线：`origin/main@afa00169eefc4b8276f4d1ae1746890b164976c9`  
-版本：`v1.5.0`  
+候选日期：2026-07-11
+分支：`rematch-v150-bear-workbench`
+基线：`origin/main@afa00169eefc4b8276f4d1ae1746890b164976c9`
+版本：`v1.5.0`
 缓存：`shike-v150-v54`
 
 ## 一句话总结

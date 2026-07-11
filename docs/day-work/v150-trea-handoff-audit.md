@@ -1,7 +1,7 @@
 # v1.5.0 TREA 交接审计
 
-审计日期：2026-07-11  
-目标工作区：`E:\lifetime-web-v150-bear-workbench`  
+审计日期：2026-07-11
+目标工作区：`E:\lifetime-web-v150-bear-workbench`
 目标分支：`rematch-v150-bear-workbench`
 
 ## 结论
