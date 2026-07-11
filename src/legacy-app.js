@@ -67,6 +67,12 @@ var I18N={
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'记录从此刻开始',daysText:'这是你来到时刻的第 {n} 天',userDaysText:'{name}，这是你来到时刻的第 {n} 天',
     nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',navDataSafety:'数据安全',dataSafetyTitle:'数据安全',dataSafetySubtitle:'保护你的数据安全',trashTitle:'回收站',trashEmpty:'回收站为空',restoreRecord:'恢复',permanentlyDelete:'永久删除',emptyTrash:'清空回收站',snapshotTitle:'数据快照',createSnapshot:'创建快照',restoreSnapshot:'恢复快照',deleteSnapshot:'删除快照',storagePersistence:'存储持久化',requestPersist:'请求持久化',undoText:'撤销',releaseCenterV200rc3:'v2.0.0-rc3 数据安全',
+    navReminderDiag:'提醒诊断',reminderDiagTitle:'提醒诊断',
+    testNotification:'测试通知',testDelayedReminder:'测试 1 分钟提醒',exportCalendar:'导出日历',
+    pushBetaStatus:'推送 Beta 状态',pushBetaLocal:'仅本地 - 云推送未部署',
+    reminderAdvice:'仅依靠本地网页无法保证浏览器完全关闭后准时提醒。',
+    reminderCheckNote:'页面打开时会检查提醒；浏览器关闭后的后台提醒后续完善。',
+    releaseCenterV200rc4:'v2.0.0-rc4 提醒可靠性',
     today:'今天',tomorrow:'明天',dayAfter:'后天',minCountdown:'还有 {n} 分钟',hourCountdown:'还有 {h} 小时 {m} 分钟',
     dayCountdown:'还有 {d} 天',tomorrowTime:'明天 {t}',overdueMin:'已过 {n} 分钟',overdueHour:'已过 {h} 小时',
     overdueDay:'已过 {d} 天',now:'此刻',pinned:'置顶',coverRemove:'移除图片',coverUpload:'自选图片',
@@ -154,6 +160,12 @@ var I18N={
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'記錄從此刻開始',daysText:'這是你來到時刻的第 {n} 天',userDaysText:'{name}，這是你來到時刻的第 {n} 天',
     nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',navDataSafety:'資料安全',dataSafetyTitle:'資料安全',dataSafetySubtitle:'保護你的資料安全',trashTitle:'回收站',trashEmpty:'回收站為空',restoreRecord:'恢復',permanentlyDelete:'永久刪除',emptyTrash:'清空回收站',snapshotTitle:'資料快照',createSnapshot:'建立快照',restoreSnapshot:'恢復快照',deleteSnapshot:'刪除快照',storagePersistence:'儲存持久化',requestPersist:'請求持久化',undoText:'撤銷',releaseCenterV200rc3:'v2.0.0-rc3 資料安全',
+    navReminderDiag:'提醒診斷',reminderDiagTitle:'提醒診斷',
+    testNotification:'測試通知',testDelayedReminder:'測試 1 分鐘提醒',exportCalendar:'匯出日曆',
+    pushBetaStatus:'推送 Beta 狀態',pushBetaLocal:'僅本地 - 雲推送未部署',
+    reminderAdvice:'僅依靠本地網頁無法保證瀏覽器完全關閉後準時提醒。',
+    reminderCheckNote:'頁面開啟時會檢查提醒；瀏覽器關閉後的系統級提醒後續完善。',
+    releaseCenterV200rc4:'v2.0.0-rc4 提醒可靠性',
     today:'今天',tomorrow:'明天',dayAfter:'後天',minCountdown:'還有 {n} 分鐘',hourCountdown:'還有 {h} 小時 {m} 分鐘',
     dayCountdown:'還有 {d} 天',tomorrowTime:'明天 {t}',overdueMin:'已過 {n} 分鐘',overdueHour:'已過 {h} 小時',
     overdueDay:'已過 {d} 天',now:'此刻',pinned:'置頂',coverRemove:'移除圖片',coverUpload:'自選圖片',
@@ -241,6 +253,12 @@ var I18N={
     clockFormat:'{month} {day}, {year} {hour}:{min}',
     emptyGreeting:'Your journey starts here',daysText:'Day {n} with Shike',userDaysText:'{name}, day {n} with Shike',
     nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',navDataSafety:'Safety',dataSafetyTitle:'Data Safety',dataSafetySubtitle:'Protect your data',trashTitle:'Trash',trashEmpty:'Trash is empty',restoreRecord:'Restore',permanentlyDelete:'Delete Forever',emptyTrash:'Empty Trash',snapshotTitle:'Snapshots',createSnapshot:'Create Snapshot',restoreSnapshot:'Restore',deleteSnapshot:'Delete',storagePersistence:'Storage Persistence',requestPersist:'Request Persistence',undoText:'Undo',releaseCenterV200rc3:'v2.0.0-rc3 Data Safety',
+    navReminderDiag:'Reminders',reminderDiagTitle:'Reminder Diagnostics',
+    testNotification:'Test Notification',testDelayedReminder:'Test 1-min Reminder',exportCalendar:'Export Calendar',
+    pushBetaStatus:'Push Beta Status',pushBetaLocal:'Local only - cloud push not deployed',
+    reminderAdvice:'Local web pages cannot guarantee timely reminders when browser is fully closed.',
+    reminderCheckNote:'Reminders are checked when page is open; system-level reminders for closed browser will be added later.',
+    releaseCenterV200rc4:'v2.0.0-rc4 Reminder Reliability',
     today:'Today',tomorrow:'Tomorrow',dayAfter:'Day after',minCountdown:'{n} min left',hourCountdown:'{h}h {m}m left',
     dayCountdown:'{d} days left',tomorrowTime:'Tomorrow {t}',overdueMin:'{n} min overdue',overdueHour:'{h}h overdue',
     overdueDay:'{d} days overdue',now:'Now',pinned:'Pinned',coverRemove:'Remove image',coverUpload:'Upload image',
@@ -328,6 +346,12 @@ var I18N={
     clockFormat:'{year}年{month}月{day}日 {hour}:{min}',
     emptyGreeting:'記録は今この瞬間から始まります',daysText:'時刻を使い始めて{n}日目',userDaysText:'{name}さん、時刻を使い始めて{n}日目',
     nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',navDataSafety:'安全',dataSafetyTitle:'データ安全',dataSafetySubtitle:'データを守る',trashTitle:'ゴミ箱',trashEmpty:'ゴミ箱は空です',restoreRecord:'復元',permanentlyDelete:'完全に削除',emptyTrash:'ゴミ箱を空にする',snapshotTitle:'スナップショット',createSnapshot:'作成',restoreSnapshot:'復元',deleteSnapshot:'削除',storagePersistence:'ストレージ永続化',requestPersist:'永続化を要求',undoText:'元に戻す',releaseCenterV200rc3:'v2.0.0-rc3 データ安全',
+    navReminderDiag:'リマインダー',reminderDiagTitle:'リマインダー診断',
+    testNotification:'テスト通知',testDelayedReminder:'1分テスト',exportCalendar:'カレンダー書き出し',
+    pushBetaStatus:'プッシュ Beta 状態',pushBetaLocal:'ローカルのみ - クラウドプッシュ未デプロイ',
+    reminderAdvice:'ローカルウェブページのみでは、ブラウザ完全終了後の正確なリマインドを保証できません。',
+    reminderCheckNote:'ページが開いている時にリマインドをチェックします。ブラウザ終了後のシステムレベルリマインドは今後対応予定です。',
+    releaseCenterV200rc4:'v2.0.0-rc4 リマインダー信頼性',
     today:'今日',tomorrow:'明日',dayAfter:'明後日',minCountdown:'あと{n}分',hourCountdown:'あと{h}時間{m}分',
     dayCountdown:'あと{d}日',tomorrowTime:'明日 {t}',overdueMin:'{n}分経過',overdueHour:'{h}時間経過',
     overdueDay:'{d}日経過',now:'今',pinned:'固定',coverRemove:'画像削除',coverUpload:'画像アップロード',
@@ -2288,7 +2312,8 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  else if(page==='data-safety'){if(global.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(global.ShikeSnapshotService)renderSnapshotList();if(global.ShikeTrashRepository)renderTrashList();}
+  else if(page==='reminder-diagnostics'){if(global.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
+      if(page==='data-safety'){if(global.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(global.ShikeSnapshotService)renderSnapshotList();if(global.ShikeTrashRepository)renderTrashList();}
       if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
   renderTimeSprite();
   window.scrollTo(0,0);
@@ -3530,6 +3555,10 @@ var capabilityPermissionCenter=true;
 var capabilityUnifiedComposer=true;
 var capabilityV200rc2=true;
 var capabilityV200rc3=true;
+var capabilityV200rc4=true;
+var capabilityReminderEngine=true;
+var capabilityCalendarBridge=true;
+var capabilityReminderDiagnostics=true;
 var capabilityDataSafety=true;
 var capabilityTrash=true;
 var capabilityUndo=true;
@@ -3662,7 +3691,9 @@ function init(){
   b('demoBtnMy','click',addDemoRecords);
   initSwipeActions();
   initTimeSprite();
-  try{if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='function')window.ShikePermissionCenter.init();}catch(e){}
+  try{if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='function')window.ShikePermissionCenter.init();
+  // Start reminder scheduler
+  if(global.ShikeReminderScheduler){ShikeReminderScheduler.start(60000);}}catch(e){}
   // Nav
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(){switchPage(n.dataset.page);});

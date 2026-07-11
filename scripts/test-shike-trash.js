@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc3 Trash Repository Tests
+ * v2.0.0-rc4 Trash Repository Tests
  */
 const fs = require('fs');
 const path = require('path');

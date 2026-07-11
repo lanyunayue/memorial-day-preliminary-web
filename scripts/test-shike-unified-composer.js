@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc3 Unified Composer Tests
+ * v2.0.0-rc4 Unified Composer Tests
  */
 const fs = require('fs');
 const path = require('path');

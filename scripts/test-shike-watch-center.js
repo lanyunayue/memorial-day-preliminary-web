@@ -16,14 +16,14 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-// 1. Version is v2.0.0-rc3
-add('version.js sets APP_VERSION to v2.0.0-rc3', () => {
-  assert(versionJs.includes("APP_VERSION='v2.0.0-rc3'"), 'APP_VERSION should be v2.0.0-rc3');
+// 1. Version is v2.0.0-rc4
+add('version.js sets APP_VERSION to v2.0.0-rc4', () => {
+  assert(versionJs.includes("APP_VERSION='v2.0.0-rc4'"), 'APP_VERSION should be v2.0.0-rc4');
 });
 
-// 2. Cache name is shike-v200rc3-v57
-add('sw.js CACHE_NAME is shike-v200rc3-v57', () => {
-  assert(sw.includes("shike-v200rc3-v57"), 'sw cache should be shike-v200rc3-v57');
+// 2. Cache name is shike-v200rc4-v58
+add('sw.js CACHE_NAME is shike-v200rc4-v58', () => {
+  assert(sw.includes("shike-v200rc4-v58"), 'sw cache should be shike-v200rc4-v58');
 });
 
 // 3. Watch page exists in HTML
@@ -232,9 +232,9 @@ add('watch center CSS styles exist', () => {
   assert(style.includes('.nav-badge'), 'nav-badge CSS missing');
 });
 
-// 31. v2.0.0-rc3 in release center list in HTML
-add('v2.0.0-rc3 appears in release center list', () => {
-  assert(html.includes('>v2.0.0-rc3<') || html.includes('v2.0.0-rc3'), 'v2.0.0-rc3 missing from release center');
+// 31. v2.0.0-rc4 in release center list in HTML
+add('v2.0.0-rc4 appears in release center list', () => {
+  assert(html.includes('>v2.0.0-rc4<') || html.includes('v2.0.0-rc4'), 'v2.0.0-rc4 missing from release center');
   assert(html.includes('releaseCenterV140') || script.includes('releaseCenterV140'), 'releaseCenterV140 i18n key missing');
 });
 

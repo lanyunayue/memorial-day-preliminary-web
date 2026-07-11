@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc3 First User Experience Tests
+ * v2.0.0-rc4 First User Experience Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -36,11 +36,11 @@ assert(html && html.includes('placeholder'), 'input has placeholder');
 
 // 5. Version visible
 console.log('[5] Version visible');
-assert(html && html.includes('v2.0.0-rc3'), 'v2.0.0-rc3 visible in HTML');
+assert(html && html.includes('v2.0.0-rc4'), 'v2.0.0-rc4 visible in HTML');
 
 // 6. Cache
 console.log('\n[6] Cache');
-assert(sw && sw.includes('shike-v200rc3-v57'), 'CACHE_NAME is shike-v200rc3-v57');
+assert(sw && sw.includes('shike-v200rc4-v58'), 'CACHE_NAME is shike-v200rc4-v58');
 
 // 7. Watch center empty state
 console.log('\n[7] Watch center empty state');
