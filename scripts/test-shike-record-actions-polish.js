@@ -31,8 +31,8 @@ add('mobile style exists', style.includes('touch-action:pan-y') && style.include
 add('desktop style exists', style.includes('@media (hover:hover) and (pointer:fine)') && style.includes('.rc-more-btn{display:inline-flex;}'));
 add('no horizontal overflow style preserved', style.includes('overflow:hidden') && style.includes('body{'));
 add('no visible undefined/null/mojibake', !html.includes('>undefined<') && !html.includes('>null<') && !html.includes('\uFFFD'));
-add('version is v2.0.0-rc1', script.includes("APP_VERSION='v2.0.0-rc1'"));
-add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc1-v55'"));
+add('version is v2.0.0-rc2', script.includes("APP_VERSION='v2.0.0-rc2'"));
+add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc2-v56'"));
 add('batch organize still exists', html.includes('id="page-import"') && html.includes('id="parseImportBtn"'));
 add('dedupe still exists', script.includes('draftDuplicateSkipped') || script.includes('dedupe'));
 add('ics export still exists', script.includes('function exportIcsFile'));
