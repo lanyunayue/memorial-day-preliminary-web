@@ -577,6 +577,7 @@ function markReleaseNotesSeen(){
   try{localStorage.setItem(RELEASE_NOTE_SEEN_KEY,APP_VERSION);}catch(e){}
 }
 function getReleaseNotes(){
+  if(window.ShikeReleaseNotes){var notes=window.ShikeReleaseNotes[LANG]||window.ShikeReleaseNotes['zh-CN'];if(notes)return notes.slice();}
   return [t('releaseNote1'),t('releaseNote2'),t('releaseNote3'),t('releaseNote4'),t('releaseNote5')];
 }
 function showReleaseNotes(force){

@@ -7,6 +7,9 @@
   var WATCH_ITEMS_KEY='shike_watch_items_v1';
   var WATCH_READ_KEY='shike_watch_read_v1';
   var WATCH_LAST_REFRESH_KEY='shike_watch_last_refresh_v1';
+  var WATCH_FEEDS_KEY='shike_watch_feeds_v1';
+  var WATCH_SOURCES_KEY='shike_watch_sources_v1';
+  var WATCH_CACHE_KEY='shike_watch_cache_v1';
 
   function safeGet(key){
     try{
@@ -94,6 +97,16 @@
   function setLastRefresh(ts){
     safeSet(WATCH_LAST_REFRESH_KEY,ts||Date.now());
   }
+  function getFeeds(){var feeds=safeGet(WATCH_FEEDS_KEY);return Array.isArray(feeds)?feeds.filter(function(feed){return feed&&feed.id&&feed.url;}):[];}
+  function addFeed(url,name){
+    var feeds=getFeeds(),lower=String(url).toLowerCase();var existing=feeds.find(function(feed){return String(feed.url).toLowerCase()===lower;});if(existing)return{duplicate:true,item:existing};
+    var item={id:'rss_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),url:String(url),name:String(name||'自定义 RSS').slice(0,60),createdAt:Date.now()};feeds.push(item);safeSet(WATCH_FEEDS_KEY,feeds.slice(-20));return{duplicate:false,item:item};
+  }
+  function removeFeed(id){var feeds=getFeeds(),next=feeds.filter(function(feed){return feed.id!==id;});safeSet(WATCH_FEEDS_KEY,next);return next.length!==feeds.length;}
+  function getEnabledSources(){var sources=safeGet(WATCH_SOURCES_KEY);return Array.isArray(sources)?sources:['wikipedia','wikidata','github'];}
+  function setEnabledSources(sources){return safeSet(WATCH_SOURCES_KEY,(sources||[]).filter(function(value,index,all){return all.indexOf(value)===index;}).slice(0,12));}
+  function getCachedFeed(){var value=safeGet(WATCH_CACHE_KEY);return value&&Array.isArray(value.items)?value:{items:[],savedAt:0,errors:[]};}
+  function setCachedFeed(items,errors){var safeItems=(items||[]).slice(0,120);return safeSet(WATCH_CACHE_KEY,{items:safeItems,savedAt:Date.now(),errors:(errors||[]).slice(0,20)});}
 
   global.ShikeWatchStorage=Object.freeze({
     getWatchItems:getWatchItems,
@@ -106,6 +119,13 @@
     isRead:isRead,
     getUnreadCount:getUnreadCount,
     getLastRefresh:getLastRefresh,
-    setLastRefresh:setLastRefresh
+    setLastRefresh:setLastRefresh,
+    getFeeds:getFeeds,
+    addFeed:addFeed,
+    removeFeed:removeFeed,
+    getEnabledSources:getEnabledSources,
+    setEnabledSources:setEnabledSources,
+    getCachedFeed:getCachedFeed,
+    setCachedFeed:setCachedFeed
   });
 })(typeof window!=='undefined'?window:this);

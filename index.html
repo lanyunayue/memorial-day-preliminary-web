@@ -12,7 +12,8 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b7355'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='white' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="./assets/styles/app.css">
 </head>
 <body data-theme="paper">
@@ -244,7 +245,8 @@
           <summary class="setting-group-title" style="cursor:pointer;" data-i18n="releaseCenterTitle">更新记录</summary>
           <p class="setting-note" data-i18n="releaseCenterText">最近版本变化集中放在这里，首次打开时仍会弹出本次更新。</p>
           <div class="release-center-list" id="releaseCenterList">
-            <div class="release-center-item"><strong>v1.4.1</strong><span data-i18n="releaseCenterV141">登记确认与离线修复</span></div>
+        <div class="release-center-item"><strong>v1.5.0</strong><span>自适应精灵工作台与公开资料检索</span></div>
+        <div class="release-center-item"><strong>v1.4.1</strong><span data-i18n="releaseCenterV141">登记确认与离线修复</span></div>
             <div class="release-center-item"><strong>v1.4.0</strong><span data-i18n="releaseCenterV140">关注中心</span></div>
             <div class="release-center-item"><strong>v1.3.0</strong><span data-i18n="releaseCenterV130">本地 Agent Core</span></div>
             <div class="release-center-item"><strong>v1.2.0</strong><span data-i18n="releaseCenterV120">本地优先数据</span></div>
@@ -362,7 +364,7 @@
     </div>
   </div>
 
-  <section class="page" id="page-watch" data-version="v1.4.1">
+  <section class="page" id="page-watch" data-version="v1.5.0">
     <div class="page-header">
       <h2 data-i18n="watchCenter">关注中心</h2>
       <p class="page-subtitle" data-i18n="watchSubtitle">本地关键词关注，公开信息聚合</p>
@@ -435,7 +437,7 @@
 <div class="time-sprite collapsed" id="timeSprite" aria-live="polite">
   <div class="time-sprite-panel" id="timeSpritePanel">
     <div class="time-sprite-head">
-      <div class="time-sprite-title" id="timeSpriteTitle" data-i18n="spriteName">时刻精灵</div>
+      <div><div class="time-sprite-title" id="timeSpriteTitle" data-i18n="spriteName">时刻精灵</div><div class="sprite-state-label" id="spriteStateLabel">时刻精灵已就绪</div></div>
       <button class="time-sprite-close" id="timeSpriteClose" aria-label="收起时刻精灵">×</button>
     </div>
     <div class="time-sprite-message" id="timeSpriteMessage"></div>
@@ -450,27 +452,80 @@
       <button class="time-sprite-action" id="timeSpriteUpdateBtn" data-i18n="spriteUpdateAction">更新</button>
       <button class="time-sprite-action" id="timeSpriteDemoBtn" data-i18n="spriteDemoAction">体验示例</button>
     </div>
-    <details class="agent-workbench" id="agentWorkbench">
-      <summary>对话</summary>
-      <p class="agent-local-note">当前主要使用本地规则，内容不会上传。</p>
-      <div class="agent-conversation" id="agentConversation" aria-live="polite"></div>
-      <label class="sr-only" for="agentInput">告诉小熊要做什么</label>
-      <div class="agent-input-row"><input id="agentInput" maxlength="500" placeholder="告诉小熊要做什么"><button id="agentSendBtn">发送</button></div>
-      <section class="agent-plan" id="agentPlan" hidden aria-live="polite" aria-atomic="true">
-        <strong id="agentPlanIntent"></strong><span id="agentPlanTool"></span><span id="agentPlanChange"></span>
-        <div class="agent-plan-actions"><button id="agentExecuteBtn">执行</button><button id="agentModifyBtn" hidden>修改</button><button id="agentCancelBtn">取消</button></div>
+    <details class="agent-workbench" id="agentWorkbench" open>
+      <summary><span>精灵工作台</span><span class="agent-mode-badge" id="agentModeBadge">本地操作</span></summary>
+      <div class="agent-tabs" role="tablist" aria-label="工作台视图">
+        <button class="agent-tab active" id="agentTabChat" data-agent-tab="chat" role="tab" aria-selected="true">对话</button>
+        <button class="agent-tab" id="agentTabOverview" data-agent-tab="overview" role="tab" aria-selected="false">概览</button>
+        <button class="agent-tab" id="agentTabSettings" data-agent-tab="settings" role="tab" aria-selected="false">设置</button>
+      </div>
+      <section class="agent-tab-panel active" id="agentPanelChat" data-agent-panel="chat" role="tabpanel">
+        <p class="agent-local-note">应用操作只在本机执行；知识问答会查询标明来源的公开资料。</p>
+        <div class="agent-conversation" id="agentConversation" aria-live="polite"></div>
+        <section class="agent-retrieval-progress" id="agentRetrievalProgress" hidden aria-live="polite">
+          <span class="agent-progress-dot"></span><span id="agentRetrievalStatus">正在查询公开来源</span>
+        </section>
+        <section class="agent-answer" id="agentAnswer" hidden aria-live="polite">
+          <div class="agent-answer-head"><strong>整理结果</strong><span id="agentAnswerUpdated"></span></div>
+          <div class="agent-answer-text" id="agentAnswerText"></div>
+          <div class="agent-source-list" id="agentSourceList"></div>
+          <div class="agent-answer-actions">
+            <button id="agentReplaySearchBtn">重新查询</button><button id="agentOpenSearchBtn">打开网页搜索</button><button id="agentSpeakBtn" title="朗读当前回答">播放</button><button id="agentStopSpeakBtn" title="停止朗读">停止</button>
+          </div>
+        </section>
+        <label class="sr-only" for="agentInput">告诉小熊要做什么</label>
+        <div class="agent-input-row"><input id="agentInput" maxlength="500" placeholder="记录事情，或询问公开知识"><button id="agentSendBtn">发送</button></div>
+        <section class="agent-plan" id="agentPlan" hidden aria-live="polite" aria-atomic="true">
+          <strong id="agentPlanIntent"></strong><span id="agentPlanTool"></span><span id="agentPlanChange"></span>
+          <div class="agent-plan-actions"><button id="agentExecuteBtn">执行</button><button id="agentModifyBtn" hidden>修改</button><button id="agentCancelBtn">取消</button></div>
+        </section>
+        <div class="agent-footer-actions"><button id="agentClearBtn">清空对话</button><button id="agentClearContextBtn">清空上下文</button><button id="agentExportBtn">导出对话</button></div>
       </section>
-      <div class="agent-footer-actions"><button id="agentClearBtn">清空对话</button><button id="agentExportBtn">导出对话</button></div>
+      <section class="agent-tab-panel" id="agentPanelOverview" data-agent-panel="overview" role="tabpanel" hidden>
+        <div class="agent-overview-grid">
+          <article><span>今天</span><strong id="agentTodayCount">0</strong><small id="agentTodayHint">暂无安排</small></article>
+          <article><span>全部记录</span><strong id="agentRecordCount">0</strong><small>仅保存在本地</small></article>
+          <article><span>关注未读</span><strong id="agentWatchUnread">0</strong><small id="agentWatchHint">打开关注中心查看</small></article>
+        </div>
+        <div class="agent-overview-section"><strong>最近记录</strong><div id="agentRecentRecords" class="agent-recent-list"></div></div>
+        <div class="agent-overview-section"><strong>快捷动作</strong><div class="agent-overview-actions"><button data-agent-page="home">写一句</button><button data-agent-page="calendar">看日历</button><button data-agent-page="watch">看关注</button><button data-agent-page="import">整理一段</button></div></div>
+      </section>
+      <section class="agent-tab-panel" id="agentPanelSettings" data-agent-panel="settings" role="tabpanel" hidden>
+        <div class="sprite-settings-grid">
+          <label><span>名称</span><input id="spriteNameInput" maxlength="12" aria-label="精灵名称"></label>
+          <label><span>身体</span><input id="spritePrimaryInput" type="color" aria-label="精灵身体颜色"></label>
+          <label><span>辅助色</span><input id="spriteSecondaryInput" type="color" aria-label="精灵辅助颜色"></label>
+          <label><span>眼睛</span><select id="spriteEyesSelect"><option value="dot">圆点</option><option value="smile">笑眼</option><option value="sleepy">困困眼</option></select></label>
+          <label><span>表情</span><select id="spriteExpressionSelect"><option value="calm">平静</option><option value="cheerful">开心</option><option value="focused">专注</option></select></label>
+          <label><span>耳朵</span><select id="spriteEarsSelect"><option value="round">圆耳</option><option value="small">小耳</option></select></label>
+          <label><span>帽子</span><select id="spriteHatSelect"><option value="none">无</option><option value="cap">小帽</option><option value="leaf">叶子</option></select></label>
+          <label><span>眼镜</span><select id="spriteGlassesSelect"><option value="none">无</option><option value="round">圆框</option></select></label>
+          <label><span>围巾</span><select id="spriteScarfSelect"><option value="none">无</option><option value="paper">暖红</option><option value="forest">青绿</option></select></label>
+          <label><span>徽章</span><select id="spriteBadgeSelect"><option value="none">无</option><option value="clock">时钟</option><option value="star">星星</option></select></label>
+          <label><span>光环</span><select id="spriteAuraSelect"><option value="none">无</option><option value="soft">柔光</option><option value="warm">暖光</option></select></label>
+          <label><span>动画</span><select id="spriteAnimationSelect"><option value="off">关闭</option><option value="gentle">轻柔</option><option value="lively">活泼</option></select></label>
+        </div>
+        <div class="sprite-setting-switch"><span><strong>3D 精灵</strong><small id="sprite3dHint">按需启用，不支持时自动回退</small></span><input id="sprite3dToggle" type="checkbox" aria-label="启用 3D 精灵"></div>
+        <div class="sprite-setting-switch"><span><strong>提示音</strong><small>首次交互后播放克制提示音</small></span><input id="spriteSoundToggle" type="checkbox" aria-label="启用提示音"></div>
+        <div class="sprite-setting-switch"><span><strong>语音模式</strong><small>开启后才自动朗读回答</small></span><input id="spriteSpeechToggle" type="checkbox" aria-label="启用语音模式"></div>
+        <div class="sprite-setting-switch"><span><strong>增强回答</strong><small id="agentAiHint">检测浏览器本地模型中</small></span><input id="agentAiToggle" type="checkbox" aria-label="启用浏览器增强回答"></div>
+        <label class="sprite-setting-wide"><span>声音</span><select id="spriteVoiceSelect"><option value="">浏览器默认</option></select></label>
+        <label class="sprite-setting-wide"><span>语速 <output id="spriteRateValue">1.0</output></span><input id="spriteRateInput" type="range" min="0.6" max="1.6" step="0.1" aria-label="语音速度"></label>
+        <label class="sprite-setting-wide"><span>音量 <output id="spriteVolumeValue">28%</output></span><input id="spriteVolumeInput" type="range" min="0" max="1" step="0.05" aria-label="精灵音量"></label>
+        <div class="agent-footer-actions"><button id="spritePreviewSoundBtn">试听</button><button id="spriteResetPrefsBtn">恢复默认</button></div>
+      </section>
     </details>
     <button class="time-sprite-reset" id="timeSpriteResetBtn" data-i18n="spriteResetAction">重置位置</button>
-    <div class="time-sprite-future" id="timeSpriteFuture" data-i18n="spriteFutureHint">更主动的智能助手能力正在规划中。</div>
+    <div class="time-sprite-future" id="timeSpriteFuture">公开资料查询会显示来源；没有足够依据时会明确说明。</div>
   </div>
   <button class="time-sprite-orb" id="timeSpriteToggle" aria-label="打开时刻精灵" aria-expanded="false" aria-controls="timeSpritePanel">
     <span class="time-sprite-shadow" aria-hidden="true"></span>
-    <span class="time-sprite-bear" aria-hidden="true"><span class="bear-ear left"></span><span class="bear-ear right"></span><span class="bear-body"></span><span class="bear-face"><span class="bear-highlight"></span><span class="bear-eye left"></span><span class="bear-eye right"></span><span class="bear-nose"></span></span></span>
+    <span class="time-sprite-bear" aria-hidden="true"><span class="bear-ear left"></span><span class="bear-ear right"></span><span class="bear-body"></span><span class="bear-scarf"></span><span class="bear-face"><span class="bear-highlight"></span><span class="bear-eye left"></span><span class="bear-eye right"></span><span class="bear-nose"></span><span class="bear-mouth"></span><span class="bear-glasses"></span></span><span class="bear-hat"></span><span class="bear-badge"></span></span>
+    <canvas class="sprite-3d-canvas" id="sprite3dCanvas" width="112" height="112" aria-hidden="true"></canvas>
   </button>
 </div>
-<script src="./src/config/version.js"></script>
+  <script src="./src/config/version.js"></script>
+  <script src="./src/config/release-notes.js"></script>
 <script src="./src/config/constants.js"></script>
 <script src="./src/utilities/sanitize.js"></script>
 <script src="./src/utilities/ids.js"></script>
@@ -480,7 +535,26 @@
 <script src="./src/storage/local-first-bridge.js"></script>
 <script src="./src/legacy-app.js"></script>
 <script type="module" src="./src/app.js"></script>
-<script src="./src/assistant/sprite-create-intent.js"></script>
+  <script src="./src/assistant/sprite-create-intent.js"></script>
+  <script src="./src/assistant/bear-state-machine.js"></script>
+  <script src="./src/assistant/sprite-customization.js"></script>
+  <script src="./src/assistant/sprite-renderer-2d.js"></script>
+  <script src="./src/assistant/sprite-renderer-3d.js"></script>
+  <script src="./src/assistant/sprite-audio.js"></script>
+  <script src="./src/retrieval/query-classifier.js"></script>
+  <script src="./src/retrieval/provider-registry.js"></script>
+  <script src="./src/retrieval/result-normalizer.js"></script>
+  <script src="./src/retrieval/result-ranker.js"></script>
+  <script src="./src/retrieval/extractive-summarizer.js"></script>
+  <script src="./src/retrieval/source-cache.js"></script>
+  <script src="./src/retrieval/search-fallback.js"></script>
+  <script src="./src/retrieval/browser-ai.js"></script>
+  <script src="./src/retrieval/providers/wikipedia.js"></script>
+  <script src="./src/retrieval/providers/wikidata.js"></script>
+  <script src="./src/retrieval/providers/github.js"></script>
+  <script src="./src/retrieval/providers/stackexchange.js"></script>
+  <script src="./src/retrieval/providers/open-meteo.js"></script>
+  <script src="./src/retrieval/retrieval-engine.js"></script>
 <script src="./src/agent/namespace.js"></script>
 <script src="./src/agent/safety-policy.js"></script>
 <script src="./src/agent/confirmation-policy.js"></script>

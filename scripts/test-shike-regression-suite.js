@@ -289,6 +289,11 @@ const tests = [
     script: 'test-shike-agent-context-proactive.js',
     expected: 'Agent context tests passed: 65/65'
   },
+  {
+    name: 'v1.5 bear workbench',
+    script: 'test-shike-v150-bear-workbench.js',
+    expected: 'v1.5 bear workbench regression passed'
+  },
 ];
 
 [

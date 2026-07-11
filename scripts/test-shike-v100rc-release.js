@@ -44,7 +44,7 @@ add('desktop styles exist', () => assert(style.includes('@media (min-width:1024p
 add('no visible undefined marker', () => assert(!html.includes('>undefined<'), 'visible undefined marker'));
 add('no visible null marker', () => assert(!html.includes('>null<'), 'visible null marker'));
 add('no mojibake marker', () => assert(!html.includes('�'), 'mojibake marker'));
-add('release notes keep honest capability wording', () => assert(script.includes('releaseCenterV100rc') && (html+script).includes('当前主要使用本地规则'), 'release note honesty mismatch'));
+add('release notes keep honest capability wording', () => assert(script.includes('releaseCenterV100rc') && ((html+script).includes('当前主要使用本地规则') || (html+script).includes('应用操作只在本机执行')), 'release note honesty mismatch'));
 add('feedback email exists', () => assert(html.includes('href="mailto:308138249@qq.com"') && html.includes('id="copyFeedbackTemplateBtn"'), 'feedback email/template missing'));
 add('experience examples exist', () => assert(html.includes('id="experienceExampleSection"') && html.includes('id="demoBtnMy"'), 'experience examples missing'));
 add('sprite quick actions exist', () => assert(html.includes('id="timeSpriteInputBtn"') && html.includes('id="timeSpriteBatchBtn"') && html.includes('id="timeSpriteUpdateBtn"'), 'sprite quick actions missing'));

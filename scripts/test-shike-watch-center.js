@@ -16,14 +16,14 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-// 1. Version is v1.4.1
-add('version.js sets APP_VERSION to v1.4.1', () => {
-  assert(versionJs.includes("APP_VERSION='v1.4.1'"), 'APP_VERSION should be v1.4.1');
+// 1. Version is v1.5.0
+add('version.js sets APP_VERSION to v1.5.0', () => {
+  assert(versionJs.includes("APP_VERSION='v1.5.0'"), 'APP_VERSION should be v1.5.0');
 });
 
-// 2. Cache name is shike-v141-v53
-add('sw.js CACHE_NAME is shike-v141-v53', () => {
-  assert(sw.includes("shike-v141-v53"), 'sw cache should be shike-v141-v53');
+// 2. Cache name is shike-v150-v54
+add('sw.js CACHE_NAME is shike-v150-v54', () => {
+  assert(sw.includes("shike-v150-v54"), 'sw cache should be shike-v150-v54');
 });
 
 // 3. Watch page exists in HTML
@@ -95,19 +95,20 @@ add('ShikeWatchCenter module exports correctly', () => {
   assert(watchCenter.includes('getUnreadCount:'), 'getUnreadCount method missing');
 });
 
-// 10. Watch uses localStorage only (no network fetch)
-add('watch center is local-first (no external fetch/XMLHttpRequest)', () => {
+// 10. Watch keeps preferences local and fetches only direct public sources
+add('watch center uses real fetch without XMLHttpRequest or proxy bypass', () => {
   assert(!watchCenter.includes('XMLHttpRequest'), 'should not use XMLHttpRequest');
-  assert(!watchCenter.includes('fetch(') || watchCenter.includes('fetch is not used'), 'should not use fetch()');
+  assert(watchCenter.includes('fetch('), 'real public source fetch should be used');
+  assert(watchCenter.includes('No proxy') || watchCenter.includes('不使用代理'), 'proxy bypass must be explicitly excluded');
   assert(watchCenter.includes('localStorage') || watchStorage.includes('localStorage'), 'localStorage should be used');
 });
 
 // 11. Built-in whitelist sources are hardcoded
-add('built-in sources are hardcoded (no arbitrary URL input)', () => {
+add('built-in sources are hardcoded and custom RSS is protocol validated', () => {
   assert(watchCenter.includes('BUILTIN_SOURCES'), 'BUILTIN_SOURCES missing');
-  assert(watchCenter.includes('科技资讯') || watchCenter.includes('开源更新'), 'built-in source names missing');
-  // No user-configurable URL field
-  assert(!watchCenter.includes('addSource') || watchCenter.includes('hardcoded'), 'should not allow adding arbitrary sources');
+  assert(watchCenter.includes('中文维基百科') && watchCenter.includes('GitHub'), 'built-in source names missing');
+  assert(watchCenter.includes('validateFeedUrl'), 'custom RSS URL validation missing');
+  assert(watchCenter.includes("parsed.protocol!=='http:'") && watchCenter.includes("parsed.protocol!=='https:'"), 'RSS protocol allowlist missing');
 });
 
 // 12. switchPage handles watch page
@@ -151,9 +152,10 @@ add('intent router handles 关注xxx pattern', () => {
   assert(script.includes('关注(.+)'), '关注 keyword pattern missing');
 });
 
-// 19. Honest disclaimer about sample data present
-add('honest disclaimer about sample/local data present', () => {
-  assert(watchCenter.includes('isSample') || watchCenter.includes('sample') || watchCenter.includes('示例'), 'sample data honesty marker missing');
+// 19. Honest disclaimer and no simulated feed
+add('honest disclaimer present and simulated feed removed', () => {
+  assert(!watchCenter.includes('FEED_SEED') && !watchCenter.includes('_simulateFetch'), 'simulated feed must be removed');
+  assert(watchCenter.includes('isLive:true'), 'live-source marker missing');
   assert(html.includes('不构成投资') || watchCenter.includes('不构成投资') || watchCenter.includes('不提供') || watchCenter.includes('不构成'), 'disclaimer about not providing advice missing');
 });
 
@@ -188,9 +190,9 @@ add('watch UI has keyword add input and button', () => {
 });
 
 // 24. Watch center UI: source filter chips
-add('watch UI has source filter chips', () => {
-  assert(watchCenter.includes('watch-source-chip') || watchCenter.includes('watchSourceChip') || watchCenter.includes('data-source'), 'source filter chips missing');
-  assert(watchCenter.includes('watch-sources') || watchCenter.includes('watchSources'), 'sources container missing');
+add('watch UI has source directory and filter', () => {
+  assert(watchCenter.includes('watch-source-card') || watchCenter.includes('data-watch-source'), 'source directory controls missing');
+  assert(watchCenter.includes('watchSourceFilter') && watchCenter.includes('watch-source-directory'), 'source filter or directory missing');
 });
 
 // 25. Watch center UI: feed list with read/unread dots
@@ -230,9 +232,9 @@ add('watch center CSS styles exist', () => {
   assert(style.includes('.nav-badge'), 'nav-badge CSS missing');
 });
 
-// 31. v1.4.1 in release center list in HTML
-add('v1.4.1 appears in release center list', () => {
-  assert(html.includes('>v1.4.1<') || html.includes('v1.4.1'), 'v1.4.1 missing from release center');
+// 31. v1.5.0 in release center list in HTML
+add('v1.5.0 appears in release center list', () => {
+  assert(html.includes('>v1.5.0<') || html.includes('v1.5.0'), 'v1.5.0 missing from release center');
   assert(html.includes('releaseCenterV140') || script.includes('releaseCenterV140'), 'releaseCenterV140 i18n key missing');
 });
 

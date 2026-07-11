@@ -13,9 +13,9 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('version and cache are v1.4.1', () => {
-  assert(script.includes("APP_VERSION='v1.4.1'"), 'APP_VERSION should be v1.4.1');
-  assert(sw.includes("shike-v141-v53"), 'sw cache should be shike-v141-v53');
+add('version and cache are v1.5.0', () => {
+  assert(script.includes("APP_VERSION='v1.5.0'"), 'APP_VERSION should be v1.5.0');
+  assert(sw.includes("shike-v150-v54"), 'sw cache should be shike-v150-v54');
 });
 
 add('release center section exists', () => {
@@ -25,7 +25,7 @@ add('release center section exists', () => {
 });
 
 add('recent version list is visible', () => {
-  ['v1.4.1', 'v1.4.0', 'v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
+  ['v1.5.0', 'v1.4.1', 'v1.4.0', 'v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
     assert(html.includes(version), `${version} missing from release center`);
   });
 });
@@ -109,7 +109,7 @@ add('forbidden launched capability claims are absent', () => {
   });
 });
 
-add('release notes describe the v1.4.1 stabilization', () => {
+add('release notes remain available for the current release', () => {
   ['事项、日期、时间和类型', '提交锁', 'Service Worker', 'NLP parser'].forEach((token) => {
     assert(script.includes(token), `release note token missing: ${token}`);
   });
