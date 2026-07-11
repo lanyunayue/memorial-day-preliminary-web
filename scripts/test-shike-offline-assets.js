@@ -1,4 +1,4 @@
-const fs=require('fs');
+﻿const fs=require('fs');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const sw=fs.readFileSync(path.join(root,'sw.js'),'utf8');
@@ -6,7 +6,7 @@ const listMatch=sw.match(/var PRECACHE_URLS\s*=\s*\[([\s\S]*?)\];/);
 const assets=listMatch?[...listMatch[1].matchAll(/['"]([^'"]+)['"]/g)].map((match)=>match[1]):[];
 const missing=assets.filter((asset)=>asset!=='./'&&!fs.existsSync(path.join(root,asset.replace(/^\.\//,''))));
 const checks=[
-  ['cache version is v2.0.0-rc5',sw.includes("shike-v200rc5-v59")],
+  ['cache version is v2.0.0-rc5',sw.includes("shike-v200rc5-v60")],
   ['precache list exists',!!listMatch],
   ['root and index are precached',assets.includes('./')&&assets.includes('./index.html')],
   ['manifest is precached',assets.includes('./manifest.json')],

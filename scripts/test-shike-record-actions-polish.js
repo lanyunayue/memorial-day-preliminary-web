@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
@@ -32,7 +32,7 @@ add('desktop style exists', style.includes('@media (hover:hover) and (pointer:fi
 add('no horizontal overflow style preserved', style.includes('overflow:hidden') && style.includes('body{'));
 add('no visible undefined/null/mojibake', !html.includes('>undefined<') && !html.includes('>null<') && !html.includes('\uFFFD'));
 add('version is v2.0.0-rc5', script.includes("APP_VERSION='v2.0.0-rc5'"));
-add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc5-v59'"));
+add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc5-v60'"));
 add('batch organize still exists', html.includes('id="page-import"') && html.includes('id="parseImportBtn"'));
 add('dedupe still exists', script.includes('draftDuplicateSkipped') || script.includes('dedupe'));
 add('ics export still exists', script.includes('function exportIcsFile'));

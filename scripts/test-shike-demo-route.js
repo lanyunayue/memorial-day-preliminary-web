@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
@@ -137,7 +137,7 @@ function loadApp() {
 add('route entry and version are present', () => {
   assert(html.includes('id="demoRouteBlock"'), 'missing home route container');
   assert(script.includes("var APP_VERSION='v2.0.0-rc5'"), 'APP_VERSION should be v2.0.0-rc5');
-  assert(sw.includes("shike-v200rc5-v59"), 'service worker cache should be v150');
+  assert(sw.includes("shike-v200rc5-v60"), 'service worker cache should be v150');
 });
 
 add('route title and subtitle match requested copy', () => {

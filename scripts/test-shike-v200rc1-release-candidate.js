@@ -1,4 +1,4 @@
-/**
+﻿/**
  * v2.0.0-rc5 Release Candidate Test Suite
  * Tests engineering infrastructure, security hardening, and release readiness
  */
@@ -18,7 +18,7 @@ console.log('[1] Version and cache');
 const vjs = readSafe(path.join(V, 'src/config/version.js'));
 assert(vjs && vjs.includes('v2.0.0-rc5'), 'APP_VERSION is v2.0.0-rc5');
 const sw = readSafe(path.join(V, 'sw.js'));
-assert(sw && sw.includes('shike-v200rc5-v59'), 'CACHE_NAME is shike-v200rc5-v59');
+assert(sw && sw.includes('shike-v200rc5-v60'), 'CACHE_NAME is shike-v200rc5-v60');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');

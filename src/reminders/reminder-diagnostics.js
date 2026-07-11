@@ -461,7 +461,7 @@
             // Header.
             var header = global.document.createElement('h2');
             header.className = 'shike-diag-title';
-            header.textContent = '时刻 提醒诊断 (v2.0.0-rc4)';
+            header.textContent = '时刻 提醒诊断 (v2.0.0-rc5)';
             wrapper.appendChild(header);
 
             // Advisory: background restriction.

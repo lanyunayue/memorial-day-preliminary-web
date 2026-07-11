@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
@@ -178,7 +178,7 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
 add('version and service worker cache are ready for v2.0.0-rc5 candidate', () => {
   assert(script.includes("APP_VERSION='v2.0.0-rc5'"), 'APP_VERSION should be v2.0.0-rc5');
   assert(/APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script), 'APP_UPDATED_AT should use release timestamp format');
-  assert(sw.includes("CACHE_NAME = 'shike-v200rc5-v59'"), 'service worker cache should be v150');
+  assert(sw.includes("CACHE_NAME = 'shike-v200rc5-v60'"), 'service worker cache should be v150');
 });
 
 add('all languages include sprite i18n keys', () => {

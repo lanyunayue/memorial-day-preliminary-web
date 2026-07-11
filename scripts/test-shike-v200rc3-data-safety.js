@@ -1,4 +1,4 @@
-/**
+﻿/**
  * v2.0.0-rc5 Data Safety Release Candidate Tests
  */
 const fs = require('fs');
@@ -18,7 +18,7 @@ const ver = readSafe(path.join(V,'src/config/version.js'));
 // 1. Version
 console.log('[1] Version');
 assert(ver && ver.includes('v2.0.0-rc5'), 'APP_VERSION is v2.0.0-rc5');
-assert(sw && sw.includes('shike-v200rc5-v59'), 'CACHE_NAME is shike-v200rc5-v59');
+assert(sw && sw.includes('shike-v200rc5-v60'), 'CACHE_NAME is shike-v200rc5-v60');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');

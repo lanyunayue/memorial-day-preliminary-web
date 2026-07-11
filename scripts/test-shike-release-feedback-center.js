@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
@@ -15,7 +15,7 @@ function add(name, run) { checks.push({ name, run }); }
 
 add('version and cache are v2.0.0-rc5', () => {
   assert(script.includes("APP_VERSION='v2.0.0-rc5'"), 'APP_VERSION should be v2.0.0-rc5');
-  assert(sw.includes("shike-v200rc5-v59"), 'sw cache should be shike-v200rc5-v59');
+  assert(sw.includes("shike-v200rc5-v60"), 'sw cache should be shike-v200rc5-v60');
 });
 
 add('release center section exists', () => {

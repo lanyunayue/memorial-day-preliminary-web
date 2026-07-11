@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
@@ -21,9 +21,9 @@ add('version.js sets APP_VERSION to v2.0.0-rc5', () => {
   assert(versionJs.includes("APP_VERSION='v2.0.0-rc5'"), 'APP_VERSION should be v2.0.0-rc5');
 });
 
-// 2. Cache name is shike-v200rc5-v59
-add('sw.js CACHE_NAME is shike-v200rc5-v59', () => {
-  assert(sw.includes("shike-v200rc5-v59"), 'sw cache should be shike-v200rc5-v59');
+// 2. Cache name is shike-v200rc5-v60
+add('sw.js CACHE_NAME is shike-v200rc5-v60', () => {
+  assert(sw.includes("shike-v200rc5-v60"), 'sw cache should be shike-v200rc5-v60');
 });
 
 // 3. Watch page exists in HTML

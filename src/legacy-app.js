@@ -1,4 +1,4 @@
-/* ================================================================
+﻿/* ================================================================
  *  时刻 v0.7.0 - Shike PWA
  *  核心: NLP Parser / Live Countdown / Universal Cards / i18n / Themes
  * ================================================================ */
@@ -72,7 +72,7 @@ var I18N={
     pushBetaStatus:'推送 Beta 状态',pushBetaLocal:'仅本地 - 云推送未部署',
     reminderAdvice:'仅依靠本地网页无法保证浏览器完全关闭后准时提醒。',
     reminderCheckNote:'页面打开时会检查提醒；浏览器关闭后的后台提醒后续完善。',
-    releaseCenterV200rc4:'v2.0.0-rc4 提醒可靠性',
+    releaseCenterV200rc4:'v2.0.0-rc5 提醒可靠性',
     navSync:'同步',syncTitle:'同步設定',
     syncModeLocal:'本地模式：資料僅保存在此裝置',syncModeSync:'加密同步模式',
     deviceIdentity:'裝置身份',deviceId:'裝置ID',
@@ -183,7 +183,7 @@ var I18N={
     pushBetaStatus:'推送 Beta 狀態',pushBetaLocal:'僅本地 - 雲推送未部署',
     reminderAdvice:'僅依靠本地網頁無法保證瀏覽器完全關閉後準時提醒。',
     reminderCheckNote:'頁面開啟時會檢查提醒；瀏覽器關閉後的系統級提醒後續完善。',
-    releaseCenterV200rc4:'v2.0.0-rc4 提醒可靠性',
+    releaseCenterV200rc4:'v2.0.0-rc5 提醒可靠性',
     today:'今天',tomorrow:'明天',dayAfter:'後天',minCountdown:'還有 {n} 分鐘',hourCountdown:'還有 {h} 小時 {m} 分鐘',
     dayCountdown:'還有 {d} 天',tomorrowTime:'明天 {t}',overdueMin:'已過 {n} 分鐘',overdueHour:'已過 {h} 小時',
     overdueDay:'已過 {d} 天',now:'此刻',pinned:'置頂',coverRemove:'移除圖片',coverUpload:'自選圖片',
@@ -276,7 +276,7 @@ var I18N={
     pushBetaStatus:'Push Beta Status',pushBetaLocal:'Local only - cloud push not deployed',
     reminderAdvice:'Local web pages cannot guarantee timely reminders when browser is fully closed.',
     reminderCheckNote:'Reminders are checked when page is open; system-level reminders for closed browser will be added later.',
-    releaseCenterV200rc4:'v2.0.0-rc4 Reminder Reliability',
+    releaseCenterV200rc4:'v2.0.0-rc5 Reminder Reliability',
     navSync:'Sync',syncTitle:'Sync Settings',
     syncModeLocal:'Local mode: data stays on this device only',syncModeSync:'Encrypted sync mode',
     deviceIdentity:'Device Identity',deviceId:'Device ID',
@@ -378,7 +378,7 @@ var I18N={
     pushBetaStatus:'プッシュ Beta 状態',pushBetaLocal:'ローカルのみ - クラウドプッシュ未デプロイ',
     reminderAdvice:'ローカルウェブページのみでは、ブラウザ完全終了後の正確なリマインドを保証できません。',
     reminderCheckNote:'ページが開いている時にリマインドをチェックします。ブラウザ終了後のシステムレベルリマインドは今後対応予定です。',
-    releaseCenterV200rc4:'v2.0.0-rc4 リマインダー信頼性',
+    releaseCenterV200rc4:'v2.0.0-rc5 リマインダー信頼性',
     navSync:'同期',syncTitle:'同期設定',
     syncModeLocal:'ローカルモード：データはこのデバイスのみに保存',syncModeSync:'暗号化同期モード',
     deviceIdentity:'デバイスID',deviceId:'デバイスID',
@@ -2348,10 +2348,11 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  else if(page==='data-safety'){if(global.ShikeSyncStatus)ShikeSyncStatus.render($('syncContainer'));if(global.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(global.ShikeSnapshotService)renderSnapshotList();if(global.ShikeTrashRepository)renderTrashList();}
-      if(page==='reminder-diagnostics'){if(global.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
+  else if(page==='sync'){if(window.ShikeSyncStatus)ShikeSyncStatus.render($('syncContainer'));}
+  else if(page==='data-safety'){if(window.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(window.ShikeSnapshotService)renderSnapshotList();if(window.ShikeTrashRepository)renderTrashList();}
+  else if(page==='reminder-diagnostics'){if(window.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
       
-      if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
+  else if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
   renderTimeSprite();
   window.scrollTo(0,0);
 }
@@ -3610,7 +3611,7 @@ var capabilityEncryptedBackup=true;
 /* ========== Data Safety helpers ========== */
 function renderTrashList(){
   var container=$('trashList');if(!container)return;
-  if(!global.ShikeTrashRepository){container.innerHTML='';return;}
+  if(!window.ShikeTrashRepository){container.innerHTML='';return;}
   ShikeTrashRepository.getAll().then(function(items){
     if(!items||items.length===0){
       container.innerHTML='<div class="empty-state">'+t('trashEmpty')+'</div>';
@@ -3647,47 +3648,49 @@ function renderTrashList(){
 }
 function renderSnapshotList(){
   var container=$('snapshotList');if(!container)return;
-  if(!global.ShikeSnapshotService){container.innerHTML='';return;}
-  var snaps=ShikeSnapshotService.getAll();
-  if(!snaps||snaps.length===0){
-    container.innerHTML='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('snapshotTitle')+'</div></div><div class="empty-state">--</div><button class="btn-create-snapshot">'+t('createSnapshot')+'</button></div>';
-  }else{
-    var html='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('snapshotTitle')+' ('+snaps.length+')</div></div>';
-    snaps.forEach(function(s){
-      var dt=new Date(s.createdAt||Date.now()).toLocaleString();
-      html+='<div class="snapshot-item" data-id="'+s.id+'"><div class="snapshot-item-info"><div class="snapshot-item-label">'+escHtml(s.label||'--')+'</div><div class="snapshot-item-date">'+escHtml(dt)+'</div><div class="snapshot-item-count">'+s.recordCount+' records</div></div>';
-      html+='<button class="btn-restore-snap" data-id="'+s.id+'">'+t('restoreSnapshot')+'</button>';
-      html+='<button class="btn-delete-snap" data-id="'+s.id+'">'+t('deleteSnapshot')+'</button></div>';
-    });
-    html+='</div>';
-    container.innerHTML=html;
-    container.querySelectorAll('.btn-restore-snap').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var id=btn.getAttribute('data-id');
-        var snap=ShikeSnapshotService.getSnapshot(id);
-        if(snap&&snap.data&&confirm(t('restoreSnapshot')+'?')){
-          if(confirm('This will replace current data. Continue?')){
-            records=snap.data.slice();saveRecords();renderCurrent();
-            showToast(t('restoreSnapshot')+' OK');
-          }
-        }
+  if(!window.ShikeSnapshotService){container.innerHTML='';return;}
+  ShikeSnapshotService.getAll().then(function(snaps){
+    if(!snaps||snaps.length===0){
+      container.innerHTML='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('snapshotTitle')+'</div></div><div class="empty-state">--</div><button class="btn-create-snapshot">'+t('createSnapshot')+'</button></div>';
+    }else{
+      var html='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('snapshotTitle')+' ('+snaps.length+')</div></div>';
+      snaps.forEach(function(s){
+        var dt=new Date(s.createdAt||Date.now()).toLocaleString();
+        html+='<div class="snapshot-item" data-id="'+s.id+'"><div class="snapshot-item-info"><div class="snapshot-item-label">'+escHtml(s.label||'--')+'</div><div class="snapshot-item-date">'+escHtml(dt)+'</div><div class="snapshot-item-count">'+s.recordCount+' records</div></div>';
+        html+='<button class="btn-restore-snap" data-id="'+s.id+'">'+t('restoreSnapshot')+'</button>';
+        html+='<button class="btn-delete-snap" data-id="'+s.id+'">'+t('deleteSnapshot')+'</button></div>';
       });
-    });
-    container.querySelectorAll('.btn-delete-snap').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var id=btn.getAttribute('data-id');
-        if(confirm(t('deleteSnapshot')+'?')){ShikeSnapshotService.deleteSnapshot(id);renderSnapshotList();}
+      html+='</div>';
+      container.innerHTML=html;
+      container.querySelectorAll('.btn-restore-snap').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          var id=btn.getAttribute('data-id');
+          ShikeSnapshotService.getSnapshot(id).then(function(snap){
+            if(snap&&snap.data&&confirm(t('restoreSnapshot')+'?')){
+              if(confirm('This will replace current data. Continue?')){
+                records=snap.data.slice();saveRecords();renderCurrent();
+                showToast(t('restoreSnapshot')+' OK');
+              }
+            }
+          });
+        });
       });
-    });
-  }
-  var createBtn=container.querySelector('.btn-create-snapshot');
-  if(createBtn){
-    createBtn.addEventListener('click',function(){
-      ShikeSnapshotService.createSnapshot('Manual snapshot',records).then(function(){
-        renderSnapshotList();showToast(t('createSnapshot')+' OK');
+      container.querySelectorAll('.btn-delete-snap').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          var id=btn.getAttribute('data-id');
+          if(confirm(t('deleteSnapshot')+'?')){ShikeSnapshotService.deleteSnapshot(id).then(function(){renderSnapshotList();});}
+        });
       });
-    });
-  }
+    }
+    var createBtn=container.querySelector('.btn-create-snapshot');
+    if(createBtn){
+      createBtn.addEventListener('click',function(){
+        ShikeSnapshotService.createSnapshot('Manual snapshot',records).then(function(){
+          renderSnapshotList();showToast(t('createSnapshot')+' OK');
+        });
+      });
+    }
+  }).catch(function(e){container.innerHTML='<div class="empty-state">--</div>';});
 }
 function init(){
   // Prevent browser from auto-restoring previous scroll position
@@ -3732,9 +3735,17 @@ function init(){
   b('demoBtnMy','click',addDemoRecords);
   initSwipeActions();
   initTimeSprite();
-  try{if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='function')window.ShikePermissionCenter.init();
+  try{
+// Initialize trash repository with empty adapter
+if(window.ShikeTrashRepository&&ShikeTrashRepository.setMainStore){
+  ShikeTrashRepository.setMainStore({
+    getAll:function(){return Promise.resolve([]);},
+    softDelete:function(){return Promise.resolve(null);}
+  });
+}
+if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='function')window.ShikePermissionCenter.init();
   // Start reminder scheduler
-  if(global.ShikeReminderScheduler){ShikeReminderScheduler.start(60000);}}catch(e){}
+  if(window.ShikeReminderScheduler){ShikeReminderScheduler.start(60000);}}catch(e){}
   // Nav
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(){switchPage(n.dataset.page);});
