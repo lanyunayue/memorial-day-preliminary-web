@@ -73,6 +73,24 @@ var I18N={
     reminderAdvice:'仅依靠本地网页无法保证浏览器完全关闭后准时提醒。',
     reminderCheckNote:'页面打开时会检查提醒；浏览器关闭后的后台提醒后续完善。',
     releaseCenterV200rc4:'v2.0.0-rc4 提醒可靠性',
+    navSync:'同步',syncTitle:'同步設定',
+    syncModeLocal:'本地模式：資料僅保存在此裝置',syncModeSync:'加密同步模式',
+    deviceIdentity:'裝置身份',deviceId:'裝置ID',
+    syncEndpoint:'同步伺服器',syncLastTime:'上次同步',syncPending:'待同步',
+    analyticsConsent:'分析同意',localAnalytics:'本地分析',remoteAnalytics:'遠端分析',
+    analyticsOff:'已關閉',analyticsOn:'已開啟',
+    consentLocal:'記錄頁面訪問和功能使用（僅本地）',
+    consentRemote:'上傳匿名使用統計（需要明確同意）',
+    releaseCenterV200rc5:'v2.0.0-rc5 可選同步 Beta',
+    navSync:'同步',syncTitle:'同步设置',
+    syncModeLocal:'本地模式：数据仅保存在此设备',syncModeSync:'加密同步模式',
+    deviceIdentity:'设备身份',deviceId:'设备ID',
+    syncEndpoint:'同步服务器',syncLastTime:'上次同步',syncPending:'待同步',
+    analyticsConsent:'分析同意',localAnalytics:'本地分析',remoteAnalytics:'远程分析',
+    analyticsOff:'已关闭',analyticsOn:'已开启',
+    consentLocal:'记录页面访问和功能使用（仅本地）',
+    consentRemote:'上传匿名使用统计（需要明确同意）',
+    releaseCenterV200rc5:'v2.0.0-rc5 可选同步 Beta',
     today:'今天',tomorrow:'明天',dayAfter:'后天',minCountdown:'还有 {n} 分钟',hourCountdown:'还有 {h} 小时 {m} 分钟',
     dayCountdown:'还有 {d} 天',tomorrowTime:'明天 {t}',overdueMin:'已过 {n} 分钟',overdueHour:'已过 {h} 小时',
     overdueDay:'已过 {d} 天',now:'此刻',pinned:'置顶',coverRemove:'移除图片',coverUpload:'自选图片',
@@ -259,6 +277,15 @@ var I18N={
     reminderAdvice:'Local web pages cannot guarantee timely reminders when browser is fully closed.',
     reminderCheckNote:'Reminders are checked when page is open; system-level reminders for closed browser will be added later.',
     releaseCenterV200rc4:'v2.0.0-rc4 Reminder Reliability',
+    navSync:'Sync',syncTitle:'Sync Settings',
+    syncModeLocal:'Local mode: data stays on this device only',syncModeSync:'Encrypted sync mode',
+    deviceIdentity:'Device Identity',deviceId:'Device ID',
+    syncEndpoint:'Sync Server',syncLastTime:'Last Sync',syncPending:'Pending',
+    analyticsConsent:'Analytics Consent',localAnalytics:'Local Analytics',remoteAnalytics:'Remote Analytics',
+    analyticsOff:'Off',analyticsOn:'On',
+    consentLocal:'Record page visits and feature usage (local only)',
+    consentRemote:'Upload anonymous usage stats (requires explicit consent)',
+    releaseCenterV200rc5:'v2.0.0-rc5 Optional Sync Beta',
     today:'Today',tomorrow:'Tomorrow',dayAfter:'Day after',minCountdown:'{n} min left',hourCountdown:'{h}h {m}m left',
     dayCountdown:'{d} days left',tomorrowTime:'Tomorrow {t}',overdueMin:'{n} min overdue',overdueHour:'{h}h overdue',
     overdueDay:'{d} days overdue',now:'Now',pinned:'Pinned',coverRemove:'Remove image',coverUpload:'Upload image',
@@ -352,6 +379,15 @@ var I18N={
     reminderAdvice:'ローカルウェブページのみでは、ブラウザ完全終了後の正確なリマインドを保証できません。',
     reminderCheckNote:'ページが開いている時にリマインドをチェックします。ブラウザ終了後のシステムレベルリマインドは今後対応予定です。',
     releaseCenterV200rc4:'v2.0.0-rc4 リマインダー信頼性',
+    navSync:'同期',syncTitle:'同期設定',
+    syncModeLocal:'ローカルモード：データはこのデバイスのみに保存',syncModeSync:'暗号化同期モード',
+    deviceIdentity:'デバイスID',deviceId:'デバイスID',
+    syncEndpoint:'同期サーバー',syncLastTime:'前回同期',syncPending:'保留中',
+    analyticsConsent:'分析同意',localAnalytics:'ローカル分析',remoteAnalytics:'リモート分析',
+    analyticsOff:'オフ',analyticsOn:'オン',
+    consentLocal:'ページアクセスと機能使用を記録（ローカルのみ）',
+    consentRemote:'匿名使用統計をアップロード（明示的な同意が必要）',
+    releaseCenterV200rc5:'v2.0.0-rc5 オプション同期 Beta',
     today:'今日',tomorrow:'明日',dayAfter:'明後日',minCountdown:'あと{n}分',hourCountdown:'あと{h}時間{m}分',
     dayCountdown:'あと{d}日',tomorrowTime:'明日 {t}',overdueMin:'{n}分経過',overdueHour:'{h}時間経過',
     overdueDay:'{d}日経過',now:'今',pinned:'固定',coverRemove:'画像削除',coverUpload:'画像アップロード',
@@ -2312,8 +2348,9 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  else if(page==='reminder-diagnostics'){if(global.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
-      if(page==='data-safety'){if(global.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(global.ShikeSnapshotService)renderSnapshotList();if(global.ShikeTrashRepository)renderTrashList();}
+  else if(page==='data-safety'){if(global.ShikeSyncStatus)ShikeSyncStatus.render($('syncContainer'));if(global.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(global.ShikeSnapshotService)renderSnapshotList();if(global.ShikeTrashRepository)renderTrashList();}
+      if(page==='reminder-diagnostics'){if(global.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
+      
       if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
   renderTimeSprite();
   window.scrollTo(0,0);
@@ -3556,6 +3593,10 @@ var capabilityUnifiedComposer=true;
 var capabilityV200rc2=true;
 var capabilityV200rc3=true;
 var capabilityV200rc4=true;
+var capabilityV200rc5=true;
+var capabilitySync=true;
+var capabilityAnalytics=true;
+var capabilityDeviceIdentity=true;
 var capabilityReminderEngine=true;
 var capabilityCalendarBridge=true;
 var capabilityReminderDiagnostics=true;

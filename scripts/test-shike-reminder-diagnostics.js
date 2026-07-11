@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc4 Reminder Diagnostics Tests
+ * v2.0.0-rc5 Reminder Diagnostics Tests
  */
 const fs = require('fs');
 const path = require('path');
