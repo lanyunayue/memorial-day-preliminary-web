@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc2 Dead Interactions Tests
+ * v2.0.0-rc3 Dead Interactions Tests
  */
 const fs = require('fs');
 const path = require('path');

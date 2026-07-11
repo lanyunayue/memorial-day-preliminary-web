@@ -1,5 +1,5 @@
 // Service Worker for 时刻 (Shike) - v1.5.0
-var CACHE_NAME = 'shike-v200rc2-v56';
+var CACHE_NAME = 'shike-v200rc3-v57';
 var PRECACHE_URLS = [
   './','./index.html','./manifest.json','./assets/styles/app.css','./src/config/release-notes.js',
   './src/config/version.js','./src/config/constants.js','./src/utilities/sanitize.js','./src/utilities/ids.js','./src/storage/legacy-storage.js','./src/storage/data-integrity.js','./src/storage/indexeddb-storage.js','./src/storage/local-first-bridge.js','./src/legacy-app.js','./src/app.js',
@@ -11,6 +11,7 @@ var PRECACHE_URLS = [
   './src/utilities/dates.js','./src/utilities/clipboard.js','./src/utilities/downloads.js',
   './src/composer/composer-state.js','./src/composer/composer-controller.js','./src/composer/composer-classifier.js','./src/composer/composer-view.js',
   './src/permissions/permission-center.js','./src/permissions/notification-permission.js','./src/permissions/microphone-permission.js','./src/permissions/storage-permission.js','./src/permissions/pwa-install-state.js',
+  './src/storage/trash-repository.js','./src/commands/command-bus.js','./src/commands/undo-manager.js','./src/storage/snapshot-service.js','./src/storage/encrypted-backup.js','./src/safety/dangerous-actions.js','./src/safety/storage-persistence.js',
   './src/assistant/sprite-create-intent.js','./src/assistant/bear-state-machine.js','./src/assistant/sprite-customization.js','./src/assistant/sprite-renderer-2d.js','./src/assistant/sprite-renderer-3d.js','./src/assistant/sprite-audio.js','./src/agent/namespace.js','./src/agent/safety-policy.js','./src/agent/confirmation-policy.js','./src/agent/intent-router.js','./src/agent/context-builder.js',
   './src/retrieval/query-classifier.js','./src/retrieval/provider-registry.js','./src/retrieval/result-normalizer.js','./src/retrieval/result-ranker.js','./src/retrieval/extractive-summarizer.js','./src/retrieval/source-cache.js','./src/retrieval/search-fallback.js','./src/retrieval/browser-ai.js','./src/retrieval/providers/wikipedia.js','./src/retrieval/providers/wikidata.js','./src/retrieval/providers/github.js','./src/retrieval/providers/stackexchange.js','./src/retrieval/providers/open-meteo.js','./src/retrieval/retrieval-engine.js',
   './src/agent/proactive-task-detector.js','./src/agent/session-context.js','./src/agent/tool-registry.js','./src/agent/tools/tool-definitions.js','./src/agent/planner.js','./src/agent/executor.js','./src/agent/conversation-repository.js','./src/agent/result-formatter.js','./src/agent/agent-core.js','./src/agent/ui.js','./src/watch/watch-storage.js','./src/watch/watch-center.js'

@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc2 Information Architecture Tests
+ * v2.0.0-rc3 Information Architecture Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -50,7 +50,7 @@ assert(leg && leg.includes('capabilityV200rc2'), 'capabilityV200rc2 flag');
 
 // 7. Version in HTML
 console.log('\n[7] Version');
-assert(html && html.includes('v2.0.0-rc2'), 'v2.0.0-rc2 in HTML');
+assert(html && html.includes('v2.0.0-rc3'), 'v2.0.0-rc3 in HTML');
 
 // 8. Release center
 console.log('\n[8] Release center');

@@ -66,7 +66,7 @@ var I18N={
     importResult:'导入成功，新增 {added} 条，跳过 {skipped} 条无效记录',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'记录从此刻开始',daysText:'这是你来到时刻的第 {n} 天',userDaysText:'{name}，这是你来到时刻的第 {n} 天',
-    nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',
+    nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',navDataSafety:'数据安全',dataSafetyTitle:'数据安全',dataSafetySubtitle:'保护你的数据安全',trashTitle:'回收站',trashEmpty:'回收站为空',restoreRecord:'恢复',permanentlyDelete:'永久删除',emptyTrash:'清空回收站',snapshotTitle:'数据快照',createSnapshot:'创建快照',restoreSnapshot:'恢复快照',deleteSnapshot:'删除快照',storagePersistence:'存储持久化',requestPersist:'请求持久化',undoText:'撤销',releaseCenterV200rc3:'v2.0.0-rc3 数据安全',
     today:'今天',tomorrow:'明天',dayAfter:'后天',minCountdown:'还有 {n} 分钟',hourCountdown:'还有 {h} 小时 {m} 分钟',
     dayCountdown:'还有 {d} 天',tomorrowTime:'明天 {t}',overdueMin:'已过 {n} 分钟',overdueHour:'已过 {h} 小时',
     overdueDay:'已过 {d} 天',now:'此刻',pinned:'置顶',coverRemove:'移除图片',coverUpload:'自选图片',
@@ -153,7 +153,7 @@ var I18N={
     importResult:'匯入成功，新增 {added} 條，略過 {skipped} 條無效記錄',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'記錄從此刻開始',daysText:'這是你來到時刻的第 {n} 天',userDaysText:'{name}，這是你來到時刻的第 {n} 天',
-    nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',
+    nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',navDataSafety:'資料安全',dataSafetyTitle:'資料安全',dataSafetySubtitle:'保護你的資料安全',trashTitle:'回收站',trashEmpty:'回收站為空',restoreRecord:'恢復',permanentlyDelete:'永久刪除',emptyTrash:'清空回收站',snapshotTitle:'資料快照',createSnapshot:'建立快照',restoreSnapshot:'恢復快照',deleteSnapshot:'刪除快照',storagePersistence:'儲存持久化',requestPersist:'請求持久化',undoText:'撤銷',releaseCenterV200rc3:'v2.0.0-rc3 資料安全',
     today:'今天',tomorrow:'明天',dayAfter:'後天',minCountdown:'還有 {n} 分鐘',hourCountdown:'還有 {h} 小時 {m} 分鐘',
     dayCountdown:'還有 {d} 天',tomorrowTime:'明天 {t}',overdueMin:'已過 {n} 分鐘',overdueHour:'已過 {h} 小時',
     overdueDay:'已過 {d} 天',now:'此刻',pinned:'置頂',coverRemove:'移除圖片',coverUpload:'自選圖片',
@@ -240,7 +240,7 @@ var I18N={
     importResult:'Imported {added} records, skipped {skipped} invalid records',
     clockFormat:'{month} {day}, {year} {hour}:{min}',
     emptyGreeting:'Your journey starts here',daysText:'Day {n} with Shike',userDaysText:'{name}, day {n} with Shike',
-    nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',
+    nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',navDataSafety:'Safety',dataSafetyTitle:'Data Safety',dataSafetySubtitle:'Protect your data',trashTitle:'Trash',trashEmpty:'Trash is empty',restoreRecord:'Restore',permanentlyDelete:'Delete Forever',emptyTrash:'Empty Trash',snapshotTitle:'Snapshots',createSnapshot:'Create Snapshot',restoreSnapshot:'Restore',deleteSnapshot:'Delete',storagePersistence:'Storage Persistence',requestPersist:'Request Persistence',undoText:'Undo',releaseCenterV200rc3:'v2.0.0-rc3 Data Safety',
     today:'Today',tomorrow:'Tomorrow',dayAfter:'Day after',minCountdown:'{n} min left',hourCountdown:'{h}h {m}m left',
     dayCountdown:'{d} days left',tomorrowTime:'Tomorrow {t}',overdueMin:'{n} min overdue',overdueHour:'{h}h overdue',
     overdueDay:'{d} days overdue',now:'Now',pinned:'Pinned',coverRemove:'Remove image',coverUpload:'Upload image',
@@ -327,7 +327,7 @@ var I18N={
     importResult:'インポートしました。追加 {added} 件、無効スキップ {skipped} 件',
     clockFormat:'{year}年{month}月{day}日 {hour}:{min}',
     emptyGreeting:'記録は今この瞬間から始まります',daysText:'時刻を使い始めて{n}日目',userDaysText:'{name}さん、時刻を使い始めて{n}日目',
-    nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',
+    nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',navDataSafety:'安全',dataSafetyTitle:'データ安全',dataSafetySubtitle:'データを守る',trashTitle:'ゴミ箱',trashEmpty:'ゴミ箱は空です',restoreRecord:'復元',permanentlyDelete:'完全に削除',emptyTrash:'ゴミ箱を空にする',snapshotTitle:'スナップショット',createSnapshot:'作成',restoreSnapshot:'復元',deleteSnapshot:'削除',storagePersistence:'ストレージ永続化',requestPersist:'永続化を要求',undoText:'元に戻す',releaseCenterV200rc3:'v2.0.0-rc3 データ安全',
     today:'今日',tomorrow:'明日',dayAfter:'明後日',minCountdown:'あと{n}分',hourCountdown:'あと{h}時間{m}分',
     dayCountdown:'あと{d}日',tomorrowTime:'明日 {t}',overdueMin:'{n}分経過',overdueHour:'{h}時間経過',
     overdueDay:'{d}日経過',now:'今',pinned:'固定',coverRemove:'画像削除',coverUpload:'画像アップロード',
@@ -2288,7 +2288,8 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  else if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
+  else if(page==='data-safety'){if(global.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(global.ShikeSnapshotService)renderSnapshotList();if(global.ShikeTrashRepository)renderTrashList();}
+      if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
   renderTimeSprite();
   window.scrollTo(0,0);
 }
@@ -3528,7 +3529,96 @@ var capabilityV200rc1=true;
 var capabilityPermissionCenter=true;
 var capabilityUnifiedComposer=true;
 var capabilityV200rc2=true;
+var capabilityV200rc3=true;
+var capabilityDataSafety=true;
+var capabilityTrash=true;
+var capabilityUndo=true;
+var capabilitySnapshots=true;
+var capabilityEncryptedBackup=true;
 
+
+/* ========== Data Safety helpers ========== */
+function renderTrashList(){
+  var container=$('trashList');if(!container)return;
+  if(!global.ShikeTrashRepository){container.innerHTML='';return;}
+  ShikeTrashRepository.getAll().then(function(items){
+    if(!items||items.length===0){
+      container.innerHTML='<div class="empty-state">'+t('trashEmpty')+'</div>';
+      return;
+    }
+    var html='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('trashTitle')+' ('+items.length+')</div></div>';
+    items.sort(function(a,b){return(b.deletedAt||'').localeCompare(a.deletedAt||'');});
+    items.forEach(function(item){
+      var rec=item.originalRecord||{};
+      var title=rec.title||rec.text||'--';
+      var dt=new Date(item.deletedAt||Date.now()).toLocaleString();
+      html+='<div class="trash-item" data-id="'+item.id+'"><div class="trash-item-info"><div class="trash-item-title">'+escHtml(title)+'</div><div class="trash-item-date">'+escHtml(dt)+'</div></div>';
+      html+='<button class="btn-restore" data-id="'+item.id+'">'+t('restoreRecord')+'</button>';
+      html+='<button class="btn-perm-delete" data-id="'+item.id+'">'+t('permanentlyDelete')+'</button></div>';
+    });
+    html+='</div>';
+    container.innerHTML=html;
+    container.querySelectorAll('.btn-restore').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.getAttribute('data-id');
+        ShikeTrashRepository.restore(id).then(function(record){
+          if(record){records.push(record);saveRecords();renderCurrent();}
+          showToast(t('restoreRecord')+' OK');
+        });
+      });
+    });
+    container.querySelectorAll('.btn-perm-delete').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.getAttribute('data-id');
+        if(confirm(t('permanentlyDelete')+'?')){ShikeTrashRepository.permanentlyDelete(id).then(function(){renderTrashList();});}
+      });
+    });
+  }).catch(function(){container.innerHTML='<div class="empty-state">'+t('trashEmpty')+'</div>';});
+}
+function renderSnapshotList(){
+  var container=$('snapshotList');if(!container)return;
+  if(!global.ShikeSnapshotService){container.innerHTML='';return;}
+  var snaps=ShikeSnapshotService.getAll();
+  if(!snaps||snaps.length===0){
+    container.innerHTML='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('snapshotTitle')+'</div></div><div class="empty-state">--</div><button class="btn-create-snapshot">'+t('createSnapshot')+'</button></div>';
+  }else{
+    var html='<div class="card-section"><div class="card-section-head"><div class="card-section-title">'+t('snapshotTitle')+' ('+snaps.length+')</div></div>';
+    snaps.forEach(function(s){
+      var dt=new Date(s.createdAt||Date.now()).toLocaleString();
+      html+='<div class="snapshot-item" data-id="'+s.id+'"><div class="snapshot-item-info"><div class="snapshot-item-label">'+escHtml(s.label||'--')+'</div><div class="snapshot-item-date">'+escHtml(dt)+'</div><div class="snapshot-item-count">'+s.recordCount+' records</div></div>';
+      html+='<button class="btn-restore-snap" data-id="'+s.id+'">'+t('restoreSnapshot')+'</button>';
+      html+='<button class="btn-delete-snap" data-id="'+s.id+'">'+t('deleteSnapshot')+'</button></div>';
+    });
+    html+='</div>';
+    container.innerHTML=html;
+    container.querySelectorAll('.btn-restore-snap').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.getAttribute('data-id');
+        var snap=ShikeSnapshotService.getSnapshot(id);
+        if(snap&&snap.data&&confirm(t('restoreSnapshot')+'?')){
+          if(confirm('This will replace current data. Continue?')){
+            records=snap.data.slice();saveRecords();renderCurrent();
+            showToast(t('restoreSnapshot')+' OK');
+          }
+        }
+      });
+    });
+    container.querySelectorAll('.btn-delete-snap').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.getAttribute('data-id');
+        if(confirm(t('deleteSnapshot')+'?')){ShikeSnapshotService.deleteSnapshot(id);renderSnapshotList();}
+      });
+    });
+  }
+  var createBtn=container.querySelector('.btn-create-snapshot');
+  if(createBtn){
+    createBtn.addEventListener('click',function(){
+      ShikeSnapshotService.createSnapshot('Manual snapshot',records).then(function(){
+        renderSnapshotList();showToast(t('createSnapshot')+' OK');
+      });
+    });
+  }
+}
 function init(){
   // Prevent browser from auto-restoring previous scroll position
   if('scrollRestoration' in history)history.scrollRestoration='manual';
