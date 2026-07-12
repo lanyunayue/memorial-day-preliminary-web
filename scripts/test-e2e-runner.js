@@ -51,13 +51,20 @@ if (hasPlaywright) {
 function findEdge() {
   const candidates = [
     process.env.MSEDGE_PATH,
+    process.env.CHROME_PATH,
+    process.env.CHROMIUM_PATH,
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
     'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
     '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     '/usr/bin/microsoft-edge',
     '/usr/bin/microsoft-edge-stable',
     '/usr/bin/chromium',
-    '/usr/bin/google-chrome'
+    '/usr/bin/chromium-browser',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/snap/bin/chromium',
+    '/snap/bin/chromium-browser'
   ].filter(Boolean);
   return candidates.find((candidate) => fs.existsSync(candidate));
 }
@@ -177,6 +184,10 @@ async function writeBrowserMetadata(cdpUrl, appUrl, artifactDir) {
 
 async function runLocalCdpFallback() {
   console.log('Playwright not installed - running CDP E2E validation when available');
+  if (typeof WebSocket === 'undefined') {
+    skip('WebSocket global is not available (Node 22+ required for CDP browser tests)');
+    return;
+  }
   if (process.env.SHIKE_CDP_URL) {
     const artifactDir = configuredArtifactDir || fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-artifacts-'));
     const appUrl = process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/index.html';
