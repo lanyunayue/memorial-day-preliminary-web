@@ -1,7 +1,24 @@
 // Accessibility check runner
+const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const V = path.resolve(__dirname, '..');
+const strictRunner = path.join(V, 'scripts', 'test-shike-a11y-static.js');
+
+if (fs.existsSync(strictRunner)) {
+  const result = spawnSync(process.execPath, [strictRunner], {
+    cwd: V,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+  if (result.stdout) process.stdout.write(result.stdout);
+  if (result.stderr) process.stderr.write(result.stderr);
+  if (result.error) {
+    console.error(result.error.message);
+    process.exit(1);
+  }
+  process.exit(typeof result.status === 'number' ? result.status : 1);
+}
 
 let issues = 0;
 
@@ -28,4 +45,4 @@ while ((m = btnRegex.exec(html)) !== null) {
 }
 
 console.log(issues === 0 ? 'Accessibility check passed' : `Accessibility: ${issues} issues`);
-process.exit(0); // Non-blocking for informational issues
+process.exit(issues === 0 ? 0 : 1);
