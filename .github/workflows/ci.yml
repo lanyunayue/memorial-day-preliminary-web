@@ -21,16 +21,18 @@ jobs:
         run: npm ci || echo "No dependencies to install"
       - name: Lint
         run: npm run lint
-        continue-on-error: true
       - name: Format check
         run: npm run format:check
-        continue-on-error: true
       - name: Unit tests
         run: npm run test:unit
       - name: Legacy regression
         run: npm run test:legacy
+      - name: Accessibility
+        run: npm run test:a11y
       - name: Security checks
         run: npm run test:security
+      - name: E2E runner smoke
+        run: npm run test:e2e
       - name: Static asset validation
         run: node scripts/test-shike-offline-assets.js
       - name: Service Worker validation

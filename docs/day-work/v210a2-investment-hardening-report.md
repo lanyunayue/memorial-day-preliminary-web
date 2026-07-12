@@ -32,12 +32,23 @@
    - 支持 `SHIKE_AUTOSTART_EDGE=1` 尝试本机 Edge/CDP 启动。
    - 移除默认调用陈旧 v1.5.0 responsive/network CDP 脚本的路径，避免失真失败。
 
+4. `scripts/format-check.js`
+   - 发现格式问题时退出 `1`，不再固定退出 `0`。
+
+5. `.github/workflows/ci.yml`
+   - 移除 lint/format 的 `continue-on-error`。
+   - 增加 a11y 和 e2e runner smoke 步骤。
+
+6. `package.json`
+   - `test:all` 扩展为 lint、format、unit、legacy、a11y、security、e2e runner smoke 的统一入口。
+
 ## 验证记录
 
+- `npm run format:check`：先发现 7 个 `src` 长行；已通过只换行/拆块修复，复跑通过。
 - `npm run test:a11y`：通过，`A11y static regression passed: 6/6`。
 - `npm run test:e2e`（无 CDP）：通过，明确跳过浏览器验证并提示配置方式。
 - `npm run test:e2e`（外部 Edge CDP）：通过，`Runtime CDP acceptance passed: 11/11`，`E2E (CDP): 1 passed, 0 failed`。
-- `npm run test:all`：通过。
+- `npm run test:all`：通过，现已包含 lint、format、unit、legacy、a11y、security、e2e runner smoke。
   - Unit：9 passed。
   - Legacy：66/66 passed。
   - Security：passed。
