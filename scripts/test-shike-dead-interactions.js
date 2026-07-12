@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Dead Interactions Tests
+ * v2.0.0-rc5.2 Dead Interactions Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -49,7 +49,7 @@ assert(!leg.includes('console.log("clicked")'), 'no console-only click handler')
 // 8. All nav items have data-page
 console.log('\n[8] Nav items have data-page');
 const navMatches = html.match(/class="nav-item[^"]*"[^>]*data-page="([^"]+)"/g) || [];
-assert(true, 'nav items with data-page: ' + navMatches.length);
+assert(navMatches.length === 4, 'exactly 4 nav items with data-page (home/calendar/all/my): ' + navMatches.length);
 
 console.log('\n========================================');
 console.log('Dead Interactions tests: ' + passed + '/' + (passed+failed) + ' passed');

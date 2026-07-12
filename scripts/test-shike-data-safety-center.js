@@ -9,8 +9,8 @@ function assert(condition, message) { if (!condition) throw new Error(message); 
 const checks = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('data safety section exists', () => {
-  assert(html.includes('data-i18n="dataSafety"'), 'data safety title should exist');
+add('data backup section exists', () => {
+  assert(html.includes('data-i18n="dataBackup"'), 'data backup title should exist');
 });
 
 add('current record count copy exists', () => {

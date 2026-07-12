@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
 const { html, style, script } = require('./load-shike-source').loadShikeSource(root);
@@ -48,7 +48,7 @@ add('11. action buttons have fixed min height', () => {
   assert(style.includes('min-height')||style.includes('height:'), 'swipe-action should have height');
 });
 add('12. no dangerous negative margin on action rail', () => {
-  assert(!style.includes('margin:-')||true, 'no dangerous negative margins (sanity check)');
+  assert(!style.includes('margin:-') || style.includes('margin:-0') || style.includes('margin:-0px'), 'no dangerous negative margins (sanity check)');
 });
 add('13. transform translateX has max limit', () => {
   assert(script.includes('getSwipeRailWidth')||script.includes('maxSwipe')||script.includes('Math.max(-'), 'max swipe distance not limited');
@@ -145,11 +145,11 @@ add('40. dark theme styles exist', () => {
 add('41. reduced-motion support exists', () => {
   assert(style.includes('prefers-reduced-motion')||script.includes('prefers-reduced-motion'), 'reduced-motion support missing');
 });
-add('42. APP_VERSION = v2.0.0-rc5.1', () => {
-  assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v2.0.0-rc5.1"), 'APP_VERSION should be v2.0.0-rc5.1');
+add('42. APP_VERSION = v2.0.0-rc5.2', () => {
+  assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v2.0.0-rc5.2"), 'APP_VERSION should be v2.0.0-rc5.2');
 });
-add('43. cache name shike-v200rc51-v61', () => {
-  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v200rc51-v61'), 'CACHE_NAME should be shike-v200rc51-v61');
+add('43. cache name shike-v200rc52-v62', () => {
+  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v200rc52-v62'), 'CACHE_NAME should be shike-v200rc52-v62');
 });
 add('44. original swipe functionality not regressed', () => {
   assert(script.includes('record-swipe')&&script.includes('swiped')&&script.includes('translateX'), 'core swipe functionality preserved');

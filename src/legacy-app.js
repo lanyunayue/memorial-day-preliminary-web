@@ -24,7 +24,7 @@ var I18N={
     spriteQuietMessage:'我会在这里帮你留意最近的时刻。',
     spriteTodayLine:'今日 {n} 条',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以帮你把一句话变成时刻。',spriteTip2:'今天有什么安排，可以先看看首页。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要记录记得导出备份。',spriteTip5:'有日期的记录可以导出到系统日历。',
-    navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',navPermissions:'权限',navWatch:'关注',watchCenter:'关注中心',watchSubtitle:'本地关键词关注，公开信息聚合',permissionCenter:'权限与提醒',permissionSubtitle:'管理应用权限和提醒设置',navWatch:'关注',
+    navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
     close:'关闭',confirm:'确定',details:'详情',setLarge:'大卡片',setNormal:'普通',setBg:'换背景',
@@ -66,8 +66,7 @@ var I18N={
     importResult:'导入成功，新增 {added} 条，跳过 {skipped} 条无效记录',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'记录从此刻开始',daysText:'这是你来到时刻的第 {n} 天',userDaysText:'{name}，这是你来到时刻的第 {n} 天',
-    nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',navDataSafety:'数据安全',dataSafetyTitle:'数据安全',dataSafetySubtitle:'保护你的数据安全',trashTitle:'回收站',trashEmpty:'回收站为空',restoreRecord:'恢复',permanentlyDelete:'永久删除',emptyTrash:'清空回收站',snapshotTitle:'数据快照',createSnapshot:'创建快照',restoreSnapshot:'恢复快照',deleteSnapshot:'删除快照',storagePersistence:'存储持久化',requestPersist:'请求持久化',undoText:'撤销',releaseCenterV200rc3:'v2.0.0-rc3 数据安全',
-    navReminderDiag:'提醒诊断',reminderDiagTitle:'提醒诊断',
+    nextReminder:'下一个提醒',recentRecords:'最近记录',topCards:'置顶时刻',emptyHint:'暂无记录',trashTitle:'回收站',trashEmpty:'回收站为空',restoreRecord:'恢复',permanentlyDelete:'永久删除',emptyTrash:'清空回收站',snapshotTitle:'数据快照',createSnapshot:'创建快照',restoreSnapshot:'恢复快照',deleteSnapshot:'删除快照',storagePersistence:'存储持久化',requestPersist:'请求持久化',undoText:'撤销',releaseCenterV200rc3:'v2.0.0-rc3 数据安全',
     testNotification:'测试通知',testDelayedReminder:'测试 1 分钟提醒',exportCalendar:'导出日历',
     pushBetaStatus:'推送 Beta 状态',pushBetaLocal:'仅本地 - 云推送未部署',
     reminderAdvice:'仅依靠本地网页无法保证浏览器完全关闭后准时提醒。',
@@ -113,8 +112,7 @@ var I18N={
     theme_paper:'米白',theme_mono:'黑白',theme_coffee:'暖棕',theme_mist:'雾蓝',theme_rose:'玫瑰',theme_forest:'森林',theme_night:'夜间',theme_sakura:'樱花',
     cardStyle:'卡片样式',cardLarge:'大卡片',cardNormal:'普通',accentColor:'主题色',
     noRecordsToday:'今日暂无记录',eventsToday:'今日有 {n} 件事',calQuickAddPh:'为这一天添加记录',
-    jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
-  },
+    jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'提醒设置',reminderSettingsHint:'网页版提醒依赖浏览器环境。页面关闭后提醒不一定可靠，重要日程建议导出 .ics 到系统日历。',defaultLeadTime:'默认提前时间',atEventTime:'准时',permissionSettings:'权限设置',permissionSettingsHint:'查看和管理时刻使用的浏览器权限',microphonePerm:'麦克风',pwaInstallStatus:'PWA 安装',requestMic:'请求麦克风权限',requestStoragePersist:'请求持久化存储',dataBackup:'数据与备份',storagePersist:'持久化存储'},
   'zh-TW':{
     appName:'時刻',tagline:'你的貼心記事助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
@@ -135,7 +133,7 @@ var I18N={
     spriteQuietMessage:'我會在這裡幫你留意最近的時刻。',
     spriteTodayLine:'今日 {n} 條',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以幫你把一句話變成時刻。',spriteTip2:'今天有什麼安排，可以先看看首頁。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要記錄記得匯出備份。',spriteTip5:'有日期的記錄可以匯出到系統日曆。',
-    navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',navPermissions:'權限',navWatch:'關注',watchCenter:'關注中心',watchSubtitle:'本地關鍵詞關注，公開資訊聚合',permissionCenter:'權限與提醒',permissionSubtitle:'管理應用權限和提醒設定',navWatch:'關注',
+    navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
     close:'關閉',confirm:'確定',details:'詳情',setLarge:'大卡片',setNormal:'普通',setBg:'換背景',
@@ -177,8 +175,7 @@ var I18N={
     importResult:'匯入成功，新增 {added} 條，略過 {skipped} 條無效記錄',
     clockFormat:'YYYY年MM月DD日 HH:mm',
     emptyGreeting:'記錄從此刻開始',daysText:'這是你來到時刻的第 {n} 天',userDaysText:'{name}，這是你來到時刻的第 {n} 天',
-    nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',navDataSafety:'資料安全',dataSafetyTitle:'資料安全',dataSafetySubtitle:'保護你的資料安全',trashTitle:'回收站',trashEmpty:'回收站為空',restoreRecord:'恢復',permanentlyDelete:'永久刪除',emptyTrash:'清空回收站',snapshotTitle:'資料快照',createSnapshot:'建立快照',restoreSnapshot:'恢復快照',deleteSnapshot:'刪除快照',storagePersistence:'儲存持久化',requestPersist:'請求持久化',undoText:'撤銷',releaseCenterV200rc3:'v2.0.0-rc3 資料安全',
-    navReminderDiag:'提醒診斷',reminderDiagTitle:'提醒診斷',
+    nextReminder:'下一個提醒',recentRecords:'最近記錄',topCards:'置頂時刻',emptyHint:'暫無記錄',trashTitle:'回收站',trashEmpty:'回收站為空',restoreRecord:'恢復',permanentlyDelete:'永久刪除',emptyTrash:'清空回收站',snapshotTitle:'資料快照',createSnapshot:'建立快照',restoreSnapshot:'恢復快照',deleteSnapshot:'刪除快照',storagePersistence:'儲存持久化',requestPersist:'請求持久化',undoText:'撤銷',releaseCenterV200rc3:'v2.0.0-rc3 資料安全',
     testNotification:'測試通知',testDelayedReminder:'測試 1 分鐘提醒',exportCalendar:'匯出日曆',
     pushBetaStatus:'推送 Beta 狀態',pushBetaLocal:'僅本地 - 雲推送未部署',
     reminderAdvice:'僅依靠本地網頁無法保證瀏覽器完全關閉後準時提醒。',
@@ -206,8 +203,7 @@ var I18N={
     theme_paper:'米白',theme_mono:'黑白',theme_coffee:'暖棕',theme_mist:'霧藍',theme_rose:'玫瑰',theme_forest:'森林',theme_night:'夜間',theme_sakura:'櫻花',
     cardStyle:'卡片樣式',cardLarge:'大卡片',cardNormal:'普通',accentColor:'主題色',
     noRecordsToday:'今日暫無記錄',eventsToday:'今日有 {n} 件事',calQuickAddPh:'為這一天新增記錄',
-    jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
-  },
+    jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'提醒設定',reminderSettingsHint:'網頁版提醒依賴瀏覽器環境。頁面關閉後提醒不一定可靠，重要日程建議匯出 .ics 到系統日曆。',defaultLeadTime:'默認提前時間',atEventTime:'準時',permissionSettings:'權限設定',permissionSettingsHint:'查看和管理時刻使用的瀏覽器權限',microphonePerm:'麥克風',pwaInstallStatus:'PWA 安裝',requestMic:'請求麥克風權限',requestStoragePersist:'請求持久化存儲',dataBackup:'數據與備份',storagePersist:'持久化存儲'},
   'en':{
     appName:'Shike',tagline:'Your personal time keeper',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
@@ -228,7 +224,7 @@ var I18N={
     spriteQuietMessage:'I will keep an eye on your upcoming moments here.',
     spriteTodayLine:'Today {n}',spriteNextLine:'Next: {title} · {when}',
     spriteTip1:'I can turn one sentence into a Shike moment.',spriteTip2:'Start with Home to see what is due today.',spriteTip3:'A paragraph of chat can be organized in batch.',spriteTip4:'Export backups for important records.',spriteTip5:'Dated records can be exported to your system calendar.',
-    navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',navPermissions:'Permissions',navWatch:'Watch',watchCenter:'Watch Center',watchSubtitle:'Local keyword watch, public info aggregation',permissionCenter:'Permissions & Reminders',permissionSubtitle:'Manage app permissions and reminder settings',navWatch:'Watch',
+    navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
     close:'Close',confirm:'OK',details:'Details',setLarge:'Large Card',setNormal:'Normal',setBg:'Background',
@@ -270,8 +266,7 @@ var I18N={
     importResult:'Imported {added} records, skipped {skipped} invalid records',
     clockFormat:'{month} {day}, {year} {hour}:{min}',
     emptyGreeting:'Your journey starts here',daysText:'Day {n} with Shike',userDaysText:'{name}, day {n} with Shike',
-    nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',navDataSafety:'Safety',dataSafetyTitle:'Data Safety',dataSafetySubtitle:'Protect your data',trashTitle:'Trash',trashEmpty:'Trash is empty',restoreRecord:'Restore',permanentlyDelete:'Delete Forever',emptyTrash:'Empty Trash',snapshotTitle:'Snapshots',createSnapshot:'Create Snapshot',restoreSnapshot:'Restore',deleteSnapshot:'Delete',storagePersistence:'Storage Persistence',requestPersist:'Request Persistence',undoText:'Undo',releaseCenterV200rc3:'v2.0.0-rc3 Data Safety',
-    navReminderDiag:'Reminders',reminderDiagTitle:'Reminder Diagnostics',
+    nextReminder:'Next up',recentRecords:'Recent',topCards:'Pinned',emptyHint:'No records yet',trashTitle:'Trash',trashEmpty:'Trash is empty',restoreRecord:'Restore',permanentlyDelete:'Delete Forever',emptyTrash:'Empty Trash',snapshotTitle:'Snapshots',createSnapshot:'Create Snapshot',restoreSnapshot:'Restore',deleteSnapshot:'Delete',storagePersistence:'Storage Persistence',requestPersist:'Request Persistence',undoText:'Undo',releaseCenterV200rc3:'v2.0.0-rc3 Data Safety',
     testNotification:'Test Notification',testDelayedReminder:'Test 1-min Reminder',exportCalendar:'Export Calendar',
     pushBetaStatus:'Push Beta Status',pushBetaLocal:'Local only - cloud push not deployed',
     reminderAdvice:'Local web pages cannot guarantee timely reminders when browser is fully closed.',
@@ -308,8 +303,7 @@ var I18N={
     theme_paper:'Paper',theme_mono:'Mono',theme_coffee:'Coffee',theme_mist:'Mist',theme_rose:'Rose',theme_forest:'Forest',theme_night:'Night',theme_sakura:'Sakura',
     cardStyle:'Card style',cardLarge:'Large',cardNormal:'Normal',accentColor:'Accent',
     noRecordsToday:'Nothing today',eventsToday:'{n} events today',calQuickAddPh:'Add a record for this day',
-    jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec'
-  },
+    jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec',reminderSettings:'Reminder Settings',reminderSettingsHint:'Web reminders depend on the browser environment. Reminders may not be reliable when the page is closed. Export important schedules as .ics to your system calendar.',defaultLeadTime:'Default Lead Time',atEventTime:'At event time',permissionSettings:'Permissions',permissionSettingsHint:'View and manage browser permissions used by Shike',microphonePerm:'Microphone',pwaInstallStatus:'PWA Install',requestMic:'Request Microphone',requestStoragePersist:'Request Persistent Storage',dataBackup:'Data & Backup',storagePersist:'Persistent Storage'},
   'ja':{
     appName:'時刻',tagline:'あなたの大切な時間を記録',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
@@ -330,7 +324,7 @@ var I18N={
     spriteQuietMessage:'ここで近い時刻をそっと見守ります。',
     spriteTodayLine:'今日 {n} 件',spriteNextLine:'次：{title} · {when}',
     spriteTip1:'一文を時刻に変えるお手伝いができます。',spriteTip2:'今日の予定はまずホームで確認できます。',spriteTip3:'チャットの一段落もまとめて整理できます。',spriteTip4:'大事な記録はバックアップを書き出しましょう。',spriteTip5:'日付付き記録はシステムカレンダーへ書き出せます。',
-    navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',navPermissions:'権限',navWatch:'ウォッチ',watchCenter:'ウォッチセンター',watchSubtitle:'ローカルキーワードウォッチ、公開情報の集約',permissionCenter:'権限とリマインド',permissionSubtitle:'アプリの権限とリマインド設定を管理',
+    navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
     close:'閉じる',confirm:'OK',details:'詳細',setLarge:'大カード',setNormal:'通常',setBg:'背景',
@@ -372,8 +366,7 @@ var I18N={
     importResult:'インポートしました。追加 {added} 件、無効スキップ {skipped} 件',
     clockFormat:'{year}年{month}月{day}日 {hour}:{min}',
     emptyGreeting:'記録は今この瞬間から始まります',daysText:'時刻を使い始めて{n}日目',userDaysText:'{name}さん、時刻を使い始めて{n}日目',
-    nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',navDataSafety:'安全',dataSafetyTitle:'データ安全',dataSafetySubtitle:'データを守る',trashTitle:'ゴミ箱',trashEmpty:'ゴミ箱は空です',restoreRecord:'復元',permanentlyDelete:'完全に削除',emptyTrash:'ゴミ箱を空にする',snapshotTitle:'スナップショット',createSnapshot:'作成',restoreSnapshot:'復元',deleteSnapshot:'削除',storagePersistence:'ストレージ永続化',requestPersist:'永続化を要求',undoText:'元に戻す',releaseCenterV200rc3:'v2.0.0-rc3 データ安全',
-    navReminderDiag:'リマインダー',reminderDiagTitle:'リマインダー診断',
+    nextReminder:'次の予定',recentRecords:'最近の記録',topCards:'固定',emptyHint:'まだ記録がありません',trashTitle:'ゴミ箱',trashEmpty:'ゴミ箱は空です',restoreRecord:'復元',permanentlyDelete:'完全に削除',emptyTrash:'ゴミ箱を空にする',snapshotTitle:'スナップショット',createSnapshot:'作成',restoreSnapshot:'復元',deleteSnapshot:'削除',storagePersistence:'ストレージ永続化',requestPersist:'永続化を要求',undoText:'元に戻す',releaseCenterV200rc3:'v2.0.0-rc3 データ安全',
     testNotification:'テスト通知',testDelayedReminder:'1分テスト',exportCalendar:'カレンダー書き出し',
     pushBetaStatus:'プッシュ Beta 状態',pushBetaLocal:'ローカルのみ - クラウドプッシュ未デプロイ',
     reminderAdvice:'ローカルウェブページのみでは、ブラウザ完全終了後の正確なリマインドを保証できません。',
@@ -410,8 +403,7 @@ var I18N={
     theme_paper:'紙',theme_mono:'墨',theme_coffee:'珈琲',theme_mist:'霧',theme_rose:'薔薇',theme_forest:'森',theme_night:'夜',theme_sakura:'桜',
     cardStyle:'カードスタイル',cardLarge:'大カード',cardNormal:'通常',accentColor:'テーマカラー',
     noRecordsToday:'今日の予定はありません',eventsToday:'今日は{n}件の予定',calQuickAddPh:'この日に記録を追加',
-    jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月'
-  }
+    jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'リマインダー設定',reminderSettingsHint:'Web版のリマインドはブラウザ環境に依存します。ページを閉じた後のリマインドは保証されません。重要な予定は .ics でシステムカレンダーに出力することをおすすめします。',defaultLeadTime:'デフォルト通知時間',atEventTime:'開始時',permissionSettings:'権限設定',permissionSettingsHint:'時刻が使用するブラウザ権限を表示・管理',microphonePerm:'マイク',pwaInstallStatus:'PWAインストール',requestMic:'マイク権限を要求',requestStoragePersist:'永続ストレージを要求',dataBackup:'データとバックアップ',storagePersist:'永続ストレージ'}
 };
 var DEMO_ROUTE_I18N={
   'zh-CN':{
@@ -1458,7 +1450,7 @@ function initTimeSprite(){
   b('timeSpriteBatchBtn','click',function(){switchPage('import');var input=$('importTextInput');if(input)setTimeout(function(){input.focus();},60);saveTimeSpriteCollapsed(true);});
   b('timeSpriteCalendarBtn','click',function(){switchPage('calendar');saveTimeSpriteCollapsed(true);});
   b('timeSpriteExportBtn','click',function(){jumpToMySection('calendarExportSection');saveTimeSpriteCollapsed(true);});
-  b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataSafetySection');saveTimeSpriteCollapsed(true);});
+  b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection');saveTimeSpriteCollapsed(true);});
   b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true);saveTimeSpriteCollapsed(false);});
   b('timeSpriteResetBtn','click',resetTimeSpritePosition);
   renderTimeSprite();
@@ -2033,7 +2025,7 @@ function jumpToMySection(sectionId){
   },50);
 }
 function jumpDemoRouteCalendarExport(){jumpToMySection('calendarExportSection');}
-function jumpDemoRouteDataSafety(){jumpToMySection('dataSafetySection');}
+function jumpDemoRouteDataSafety(){jumpToMySection('dataBackupSection');}
 function getTimelineGroups(){
   var today=setHoursZero(new Date());
   var tomorrow=new Date(today);tomorrow.setDate(today.getDate()+1);
@@ -2333,6 +2325,45 @@ function refreshCountdowns(){
   else if(currentPage==='calendar'){renderCalendarDay();}
 }
 
+function updatePermStatus(){
+  // Notification permission
+  var notifyEl=$('permNotifyStatus');
+  if(notifyEl){
+    if(!('Notification' in window)){notifyEl.textContent='不支持';}
+    else{
+      var np=Notification.permission;
+      if(np==='granted')notifyEl.textContent='已授权';
+      else if(np==='denied')notifyEl.textContent='已拒绝';
+      else notifyEl.textContent='未授权';
+    }
+  }
+  // Microphone permission
+  var micEl=$('permMicStatus');
+  if(micEl){
+    if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){micEl.textContent='可请求';}
+    else{micEl.textContent='不支持';}
+  }
+  // PWA install status
+  var pwaEl=$('permPwaStatus');
+  if(pwaEl){
+    var isStandalone=window.matchMedia&&(window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode:standalone)').matches)||window.navigator.standalone===true;
+    if(isStandalone)pwaEl.textContent='已安装';
+    else if(window.deferredInstallPrompt)pwaEl.textContent='可安装';
+    else pwaEl.textContent='未安装';
+  }
+  // Storage persist
+  var storageEl=$('permStorageStatus');
+  if(storageEl){
+    if(navigator.storage&&typeof navigator.storage.persisted==='function'){
+      navigator.storage.persisted().then(function(persisted){
+        storageEl.textContent=persisted?'已持久化':'未持久化';
+      }).catch(function(){storageEl.textContent='未知';});
+    }else{
+      storageEl.textContent='不支持';
+    }
+  }
+}
+
 /* ========== Page navigation ========== */
 var currentPage='home';
 function switchPage(page){
@@ -2351,32 +2382,6 @@ function switchPage(page){
   renderTimeSprite();
   window.scrollTo(0,0);
 }
-
-function updateWatchBadge(){
-  var badge=document.getElementById('navWatchBadge');
-  if(!badge||!window.ShikeWatchCenter)return;
-  try{
-    var count=window.ShikeWatchCenter.getUnreadCount();
-    if(count>0){
-      badge.textContent=count>99?'99+':String(count);
-      badge.classList.remove('hidden');
-    }else{
-      badge.classList.add('hidden');
-    }
-  }catch(e){badge.classList.add('hidden');}
-}
-function renderWatchCenter(){
-  var container=$('watchContent')||$('watchContent');
-  if(!container)return;
-  if(window.ShikeWatchCenter && typeof window.ShikeWatchCenter.render==='function'){
-    window.ShikeWatchCenter.render(container);
-  }else{
-    container.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--ink-mute);font-size:13px;">关注中心加载中...</div>';
-  }
-  updateWatchBadge();
-}
-
-function openWatchCenter(){switchPage('watch');}
 
 /* ========== Has records state ========== */
 function hasAnyRecord(){return records.length>0;}
@@ -2994,6 +2999,17 @@ function renderMy(){
   var _ses=$('storageEngineStatus');if(_ses)_ses.textContent=storageStatus.mode==='indexeddb'?t('indexedDbMode'):t('legacyFallbackMode');
   var _qc=$('quarantineCount');if(_qc)_qc.textContent=storageStatus.quarantineCount||0;
   if($('safetyStatusHint'))$('safetyStatusHint').textContent=(stat>=5&&!localStorage.getItem(LAST_BACKUP_KEY))?t('backupSuggested'):t('backupLooksOk');
+  updatePermStatus();
+  if(window.ShikeTrashRepository&&typeof window.ShikeTrashRepository.renderList==='function'){
+    try{window.ShikeTrashRepository.renderList();}catch(e){}
+  }else if(typeof renderTrashList==='function'){
+    try{renderTrashList();}catch(e){}
+  }
+  if(window.ShikeSnapshotService&&typeof window.ShikeSnapshotService.renderList==='function'){
+    try{window.ShikeSnapshotService.renderList();}catch(e){}
+  }else if(typeof renderSnapshotList==='function'){
+    try{renderSnapshotList();}catch(e){}
+  }
   // Username input
   $('usernameInput').value=settings.username||'';
   // Theme
@@ -3048,8 +3064,8 @@ function copyFeedbackTemplate(){
 function openFeatureHubAction(action){
   if(action==='demo'){jumpToMySection('experienceExampleSection');return;}
   if(action==='route'){
-    jumpToMySection('demoRouteSection');
-    var sec=$('demoRouteSection');
+    jumpToMySection('reminderSection');
+    var sec=$('reminderSection');
     var details=sec&&sec.querySelector?sec.querySelector('details'):null;
     if(details)details.open=true;
     return;
@@ -3061,7 +3077,7 @@ function openFeatureHubAction(action){
     showReleaseNotes(true);
     return;
   }
-  if(action==='safety'){jumpToMySection('dataSafetySection');return;}
+  if(action==='safety'){jumpToMySection('dataBackupSection');return;}
   if(action==='calendar'){jumpToMySection('calendarExportSection');return;}
   if(action==='feedback'){jumpToMySection('feedbackSection');return;}
   if(action==='future'){jumpToMySection('futurePlanSection');return;}
@@ -3464,8 +3480,6 @@ function setVoiceState(state,optMsg){
   statusEl.classList.remove('listening');statusEl.textContent='';
   switch(state){
     case VOICE_IDLE:btn.disabled=false;break;
-    case'watch':
-      break;
     case VOICE_STARTING:
       btn.disabled=false;btn.classList.add('listening');
       statusEl.classList.add('listening');statusEl.textContent=optMsg||'正在启动麦克风...';break;
@@ -3581,7 +3595,6 @@ function applyLanguage(lang){
 
 /* ========== Init ========== */
 function b(id,ev,fn){var el=$(id);if(el)el.addEventListener(ev,fn);}
-var capabilityWatchCenter=true;
 var capabilityV200rc1=true;
 var capabilityPermissionCenter=true;
 var capabilityUnifiedComposer=true;
@@ -3796,6 +3809,59 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
       else if(p==='denied')showToast(t('notifyDeniedToast'),'warn');
     }).catch(function(){showToast(t('notifyUnsupported'),'warn');updateNotifyStatus();});
   });
+  b('testNotifyBtn','click',function(){
+    if(window.ShikeReminderEngine&&typeof window.ShikeReminderEngine.testNotification==='function'){
+      try{window.ShikeReminderEngine.testNotification();showToast('测试通知已发送','success');}catch(e){showToast('测试通知失败','error');}
+    }else{
+      showToast('提醒引擎未就绪','warn');
+    }
+  });
+  b('defaultLeadTimeSelect','change',function(){
+    var sel=$('defaultLeadTimeSelect');if(!sel)return;
+    localStorage.setItem('shike_default_lead',sel.value);
+    showToast('已保存默认提前时间','success');
+  });
+  (function(){
+    var sel=$('defaultLeadTimeSelect');
+    if(sel){
+      var saved=localStorage.getItem('shike_default_lead');
+      if(saved)sel.value=saved;
+    }
+  })();
+  b('exportIcsBtnReminder','click',exportIcsFile);
+  b('createSnapshotBtn','click',function(){
+    if(!window.ShikeSnapshotService||typeof window.ShikeSnapshotService.create!=='function'){showToast('快照服务不可用','warn');return;}
+    try{
+      window.ShikeSnapshotService.create(records);
+      showToast('快照已创建','success');
+      renderMy();
+    }catch(e){showToast('创建快照失败','error');}
+  });
+  b('emptyTrashBtn','click',function(){
+    if(!window.ShikeTrashRepository||typeof window.ShikeTrashRepository.empty!=='function'){showToast('回收站不可用','warn');return;}
+    if(confirm('确定清空回收站？此操作不可恢复。')){
+      try{
+        window.ShikeTrashRepository.empty();
+        showToast('回收站已清空','success');
+        renderMy();
+      }catch(e){showToast('清空回收站失败','error');}
+    }
+  });
+  b('reqMicBtn','click',function(){
+    if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){showToast('当前浏览器不支持麦克风','warn');return;}
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      stream.getTracks().forEach(function(t){t.stop();});
+      showToast('麦克风权限已授权','success');
+      if(typeof updatePermStatus==='function')updatePermStatus();
+    }).catch(function(){showToast('麦克风权限被拒绝','error');if(typeof updatePermStatus==='function')updatePermStatus();});
+  });
+  b('reqStorageBtn','click',function(){
+    if(!(navigator.storage&&typeof navigator.storage.persist==='function')){showToast('当前浏览器不支持持久化存储','warn');return;}
+    navigator.storage.persist().then(function(persisted){
+      showToast(persisted?'存储已持久化':'存储持久化被拒绝',persisted?'success':'warn');
+      if(typeof updatePermStatus==='function')updatePermStatus();
+    }).catch(function(){showToast('存储持久化请求失败','error');if(typeof updatePermStatus==='function')updatePermStatus();});
+  });
   b('installPwaBtn','click',function(){
     if(!deferredInstallPrompt){showToast(t('pwaInstallHint'),'warn');return;}
     deferredInstallPrompt.prompt();
@@ -3906,8 +3972,6 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   renderHome();
   // Ensure scroll at top after initial render
   requestAnimationFrame(function(){window.scrollTo(0,0);});
-  try{if(window.ShikeWatchCenter&&typeof window.ShikeWatchCenter.init==='function')window.ShikeWatchCenter.init();}catch(e){}
-  try{if(window.ShikeWatchCenter&&typeof window.ShikeWatchCenter.onRefresh==='function')window.ShikeWatchCenter.onRefresh(function(){updateWatchBadge();});}catch(e){}
   setTimeout(function(){window.scrollTo(0,0);},150);
 }
 function showUpdateHint(){

@@ -252,7 +252,7 @@ const tests = [
   {
     name: 'Agent tools',
     script: 'test-shike-agent-tools.js',
-    expected: 'Agent tools regression passed: 20/20'
+    expected: 'Agent tools regression passed: 19/19'
   },
   {
     name: 'Agent confirmation',
@@ -267,7 +267,7 @@ const tests = [
   {
     name: 'Agent security',
     script: 'test-shike-agent-security.js',
-    expected: 'Agent security regression passed: 12/12'
+    expected: 'Agent security regression passed: 11/11'
   },
   {
     name: 'Home initial layout',
@@ -277,7 +277,7 @@ const tests = [
   {
     name: 'Sprite create intent',
     script: 'test-shike-sprite-create-intent.js',
-    expected: 'Sprite create intent tests passed'
+    expected: 'Sprite create intent tests passed: 102/102'
   },
   {
     name: 'Record actions responsive',
@@ -293,6 +293,46 @@ const tests = [
     name: 'v1.5 bear workbench',
     script: 'test-shike-v150-bear-workbench.js',
     expected: 'v1.5 bear workbench regression passed'
+  },
+  {
+    name: 'Watch removal contract',
+    script: 'test-shike-watch-removal-contract.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'Navigation consolidation',
+    script: 'test-shike-navigation-consolidation.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'Settings consolidation',
+    script: 'test-shike-settings-consolidation.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'Permission settings',
+    script: 'test-shike-permission-settings.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'Reminder settings',
+    script: 'test-shike-reminder-settings.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'Data tools in My',
+    script: 'test-shike-data-tools-in-my.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'No dead routes',
+    script: 'test-shike-no-dead-routes.js',
+    expected: 'All checks passed.'
+  },
+  {
+    name: 'Test integrity',
+    script: 'test-shike-test-integrity.js',
+    expected: 'Test Integrity: 710 checks, 710 passed'
   },
 ];
 

@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
@@ -57,7 +57,7 @@ function loadApp() {
   const ids = [
     'app', 'quickInput', 'parsePreviewBlock', 'demoRouteBlock', 'importTextInput',
     'importDraftList', 'laterInboxBlock', 'page-home', 'page-import', 'page-my',
-    'calendarExportSection', 'dataSafetySection', 'toastContainer'
+    'calendarExportSection', 'dataBackupSection', 'toastContainer'
   ];
   ids.forEach((id) => { elements[id] = createNode(id); });
   elements.toastContainer.appendChild = (node) => { toasts.push(node.textContent); };
@@ -136,8 +136,8 @@ function loadApp() {
 
 add('route entry and version are present', () => {
   assert(html.includes('id="demoRouteBlock"'), 'missing home route container');
-  assert(script.includes("var APP_VERSION='v2.0.0-rc5.1'"), 'APP_VERSION should be v2.0.0-rc5.1');
-  assert(sw.includes("shike-v200rc51-v61"), 'service worker cache should be v150');
+  assert(script.includes("var APP_VERSION='v2.0.0-rc5.2'"), 'APP_VERSION should be v2.0.0-rc5.2');
+  assert(sw.includes("shike-v200rc52-v62"), 'service worker cache should be shike-v200rc52-v62');
 });
 
 add('route title and subtitle match requested copy', () => {
@@ -225,7 +225,7 @@ add('data safety button jumps to my page target', () => {
   const app = loadApp();
   app.run("currentPage='home';jumpDemoRouteDataSafety();");
   assert(app.run('currentPage') === 'my', 'data safety jump should switch to my page');
-  assert(app.elements.dataSafetySection.scrolled === true, 'data safety section not scrolled');
+  assert(app.elements.dataBackupSection.scrolled === true, 'data backup section not scrolled');
 });
 
 add('route action bodies do not save, clear, import, or export', () => {

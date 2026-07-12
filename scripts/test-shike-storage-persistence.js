@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Storage Persistence Tests
+ * v2.0.0-rc5.2 Storage Persistence Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -39,7 +39,7 @@ assert(sp && sp.includes('navigator.storage.estimate'), 'uses navigator.storage.
 // 4. HTML integration
 console.log('\n[4] HTML integration');
 assert(html && html.includes('storage-persistence.js'), 'script tag in HTML');
-true;// storageStatus container removed
+assert(html && html.includes('id="storageEngineStatus"'), 'storageEngineStatus container');
 
 // 5. SW precache
 console.log('\n[5] Service Worker');
@@ -47,7 +47,7 @@ assert(sw && sw.includes('storage-persistence.js'), 'in SW precache');
 
 // 6. Legacy integration
 console.log('\n[6] Legacy integration');
-true;// storage page routing removed
+assert(html.includes('src/safety/storage-persistence.js'), 'storage-persistence.js loaded in HTML');
 assert(leg && leg.includes('storagePersistence'), 'storagePersistence i18n');
 
 // 7. Advice messages

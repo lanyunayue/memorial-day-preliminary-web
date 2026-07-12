@@ -50,7 +50,7 @@
   var ACTION_INTENTS = [
     'pin_record', 'delete_record', 'open_page',
     'export_calendar', 'export_backup', 'change_theme',
-    'show_release_notes', 'manage_subscription'
+    'show_release_notes'
   ];
 
   /* ---------- Pattern matching ---------- */

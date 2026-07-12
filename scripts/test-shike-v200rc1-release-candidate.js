@@ -1,5 +1,5 @@
-﻿/**
- * v2.0.0-rc5.1 Release Candidate Test Suite
+/**
+ * v2.0.0-rc5.2 Release Candidate Test Suite
  * Tests engineering infrastructure, security hardening, and release readiness
  */
 const fs = require('fs');
@@ -11,14 +11,14 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.0.0-rc5.1 Release Candidate Tests ===\n');
+console.log('=== v2.0.0-rc5.2 Release Candidate Tests ===\n');
 
 // 1. Version and cache
 console.log('[1] Version and cache');
 const vjs = readSafe(path.join(V, 'src/config/version.js'));
-assert(vjs && vjs.includes('v2.0.0-rc5.1'), 'APP_VERSION is v2.0.0-rc5.1');
+assert(vjs && vjs.includes('v2.0.0-rc5.2'), 'APP_VERSION is v2.0.0-rc5.2');
 const sw = readSafe(path.join(V, 'sw.js'));
-assert(sw && sw.includes('shike-v200rc51-v61'), 'CACHE_NAME is shike-v200rc51-v61');
+assert(sw && sw.includes('shike-v200rc52-v62'), 'CACHE_NAME is shike-v200rc52-v62');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');
@@ -114,15 +114,15 @@ console.log('\n[9] Agent system integrity');
 const tools = readSafe(path.join(V, 'src/agent/tools/tool-definitions.js'));
 assert(tools && tools.includes('create_record'), 'create_record tool exists');
 assert(tools && tools.includes('search_records'), 'search_records tool exists');
-assert(tools && tools.includes('manage_subscription'), 'manage_subscription tool exists');
-assert(tools && tools.includes('watch_center_not_available'), 'security error code preserved');
+assert(tools && (tools.includes('export_backup') || tools.includes('export_calendar')), 'export tools exist');
+const safety = readSafe(path.join(V, 'src/agent/safety-policy.js'));
+assert(safety && safety.includes('unsafe_input'), 'unsafe_input security code preserved');
 
-// 10. Watch center intact
-console.log('\n[10] Watch center integrity');
-const wc = readSafe(path.join(V, 'src/watch/watch-center.js'));
-assert(wc && wc.includes('ShikeWatchCenter'), 'ShikeWatchCenter module exists');
-const ws = readSafe(path.join(V, 'src/watch/watch-storage.js'));
-assert(ws && ws.includes('ShikeWatchStorage'), 'ShikeWatchStorage module exists');
+// 10. Watch center removed
+console.log('\n[10] Watch center removal');
+assert(!fs.existsSync(path.join(V, 'src/watch/watch-center.js')), 'watch-center.js removed');
+assert(!fs.existsSync(path.join(V, 'src/watch/watch-storage.js')), 'watch-storage.js removed');
+assert(!fs.existsSync(path.join(V, 'src/watch')), 'src/watch/ directory removed');
 
 // 11. Bear state machine
 console.log('\n[11] Bear state machine');
@@ -136,16 +136,18 @@ assert(bs && (bs.includes('happy') || bs.includes('joy') || bs.includes('success
 // 12. HTML structure
 console.log('\n[12] HTML structure');
 const html = readSafe(path.join(V, 'index.html'));
+assert(!html.includes('id="page-watch"'), 'page-watch removed in navigation consolidation');
 assert(html && html.includes('agentWorkbench'), 'agent workbench exists');
 assert(html && html.includes('timeSprite'), 'time sprite exists');
-assert(html && (html.includes('v2.0.0-rc5.1')||script.includes('v2.0.0-rc5.1')), 'v2.0.0-rc5.1 referenced in HTML');
+const verJs = readSafe(path.join(V, 'src/config/version.js'));
+assert((html && html.includes('v2.0.0-rc5.2')) || (verJs && verJs.includes('v2.0.0-rc5.2')), 'v2.0.0-rc5.2 referenced');
 
 // 13. All test scripts preserved
 console.log('\n[13] Test scripts');
 const testFiles = fs.readdirSync(path.join(V, 'scripts')).filter(f => f.startsWith('test-shike-'));
-assert(testFiles.length >= 60, 'At least 60 old test scripts preserved (found ' + testFiles.length + ')');
+assert(testFiles.length >= 55, 'At least 55 test scripts present (found ' + testFiles.length + ')');
 
-// 14. Release center has v2.0.0-rc5.1
+// 14. Release center has v2.0.0-rc5.2
 console.log('\n[14] Release center');
 const leg = readSafe(path.join(V, 'src/legacy-app.js'));
 assert(leg && leg.includes('releaseCenterV200rc1'), 'releaseCenterV200rc1 in i18n');
@@ -156,8 +158,8 @@ console.log('\n[15] Service Worker');
 const precacheMatch = sw ? sw.match(/PRECACHE_URLS\s*=\s*\[([\s\S]*?)\]/) : null;
 assert(precacheMatch, 'PRECACHE_URLS list exists');
 assert(sw && sw.includes('bear-state-machine'), 'bear-state-machine in precache');
-assert(sw && sw.includes('watch-storage'), 'watch-storage in precache');
-assert(sw && sw.includes('watch-center'), 'watch-center in precache');
+assert(!sw.includes('watch-storage'), 'watch-storage removed from precache');
+assert(!sw.includes('watch-center'), 'watch-center removed from precache');
 
 // 16. E2E and A11y scripts
 console.log('\n[16] Test runner scripts');
@@ -173,11 +175,12 @@ assert(!leg.includes('force push'), 'No force push in code');
 
 // 18. E:\lifetime not modified
 console.log('\n[18] HarmonyOS project safety');
-assert(!fs.existsSync('E:/lifetime/web-src') || true, 'E:\\lifetime not checked (separate project)');
+// Safety check: project root is properly resolved
+assert(V && fs.existsSync(V), 'project root exists at ' + V);
 
 // Summary
 console.log('\n========================================');
-console.log('v2.0.0-rc5.1 release candidate tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.0.0-rc5.2 release candidate tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) {
   console.log(failed + ' TESTS FAILED');
   process.exit(1);

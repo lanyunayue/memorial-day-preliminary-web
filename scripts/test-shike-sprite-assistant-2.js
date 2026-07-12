@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
@@ -42,11 +42,11 @@ add('no cloud sync claim', !html.includes('已支持云端同步') && !html.incl
 add('dark theme sprite style exists', style.includes('body.theme-night .time-sprite-orb') && style.includes('body.theme-night .time-sprite-panel'));
 add('mobile constrained style exists', style.includes('@media (max-width:767px)') && style.includes('.time-sprite-panel{width:min(280px'));
 add('z-index stays below bottom nav', /\.time-sprite\{[\s\S]*z-index:58/.test(style) && /\.nav\{[\s\S]*z-index:60/.test(style));
-add('quick actions call existing navigation', ["switchPage('home')", "switchPage('import')", "switchPage('calendar')", "jumpToMySection('calendarExportSection')", "jumpToMySection('dataSafetySection')", 'showReleaseNotes(true)'].every((snippet) => script.includes(snippet)));
+add('quick actions call existing navigation', ["switchPage('home')", "switchPage('import')", "switchPage('calendar')", "jumpToMySection('calendarExportSection')", "jumpToMySection('dataBackupSection')", 'showReleaseNotes(true)'].every((snippet) => script.includes(snippet)));
 add('no heavy 3d library is introduced', !/three(\.min)?\.js|babylon|model-viewer|webgl/i.test(html));
-add('version is v2.0.0-rc5.1', script.includes("APP_VERSION='v2.0.0-rc5.1'"));
+add('version is v2.0.0-rc5.2', script.includes("APP_VERSION='v2.0.0-rc5.2'"));
 add('updated timestamp has release format', /APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script));
-add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc51-v61'"));
+add('service worker cache is shike-v200rc52-v62', sw.includes("CACHE_NAME = 'shike-v200rc52-v62'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {

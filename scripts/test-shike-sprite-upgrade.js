@@ -38,7 +38,7 @@ add('sprite actions call existing product flows', () => {
   assert(script.includes("b('timeSpriteTodayBtn','click',function(){switchPage('home')"), 'today action missing');
   assert(script.includes("b('timeSpriteBatchBtn','click',function(){switchPage('import')"), 'batch action missing');
   assert(script.includes("b('timeSpriteCalendarBtn','click',function(){switchPage('calendar')"), 'calendar action missing');
-  assert(script.includes("b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataSafetySection')"), 'backup action missing');
+  assert(script.includes("b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection')"), 'backup action missing');
   assert(script.includes("b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true)"), 'update action missing');
 });
 

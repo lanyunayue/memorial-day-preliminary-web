@@ -1,9 +1,9 @@
-// v2.0.0-rc5.1 No Plaintext Private Key Test
+// v2.0.0-rc5.2 No Plaintext Private Key Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
   var fs=require('fs'),path=require('path');
-  var root='E:/lifetime-web-v200rc51-security-quarantine/src/sync';
+  var root=require('path').resolve(__dirname,'..','src','sync');
 
   console.log('=== No Plaintext Private Key Tests ===\n');
 
@@ -16,7 +16,7 @@
   assert(sources['sync-quarantine-migration.js'].includes('privateKeyRemoved'), 'migration reports private key removal');
 
   // Migration is loaded before user can interact with sync
-  var html = fs.readFileSync('E:/lifetime-web-v200rc51-security-quarantine/index.html','utf8');
+  var html = fs.readFileSync(require('path').resolve(__dirname,'..','index.html'),'utf8');
   var migIdx = html.indexOf('sync-quarantine-migration.js');
   var statusIdx = html.indexOf('sync-status.js');
   assert(migIdx > statusIdx && migIdx > 0, 'migration loads after sync modules so it can clean up');

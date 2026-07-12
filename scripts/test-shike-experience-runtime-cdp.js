@@ -3,7 +3,7 @@ const path = require('path');
 
 const CDP_URL = process.env.SHIKE_CDP_URL || 'http://127.0.0.1:9251';
 const APP_URL = process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/';
-const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || 'v2.0.0-rc5.1';
+const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || 'v2.0.0-rc5.2';
 const LAYOUT_BASELINE = process.env.SHIKE_LAYOUT_BASELINE === '1';
 const LAYOUT_ONLY = LAYOUT_BASELINE || process.env.SHIKE_LAYOUT_ONLY === '1';
 const REQUIRE_STANDALONE = process.env.SHIKE_REQUIRE_STANDALONE === '1';
@@ -206,17 +206,14 @@ async function runAgentFlow(client) {
     const failureText=document.getElementById('agentConversation').textContent.slice(failureTextBefore.length);
     const failureNoWrite=records.length===failureBefore;
     cancel.click();await wait(()=>plan.hidden);await sleep(80);
-    const watchParent=document.getElementById('page-watch').parentElement.id;
-    switchPage('watch');
-    const watchVisible=getComputedStyle(document.getElementById('page-watch')).display!=='none';
-    switchPage('home');
+    const watchRemoved = !document.getElementById('page-watch');
     return {
       before,beforeConfirm,afterJob,job,dbCount:dbRecords.length,
       jobPreview,overviewHasJob:/作业/.test(overview),calendarDot,searchFound,
       milkPreview,milkCancelled,modifyPreview,modifyNoWrite,modifyFocused,reportPreview,monthlyPreview,
       monthlyRepeat:monthlyParsed&&monthlyParsed.repeat,
       failurePreview,failureNoWrite,failureText,
-      watchParent,watchVisible,
+      watchRemoved,
       storage:ShikeLocalFirst&&ShikeLocalFirst.getStatus(),
       successText:document.getElementById('agentConversation').textContent
     };

@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Information Architecture Tests
+ * v2.0.0-rc5.2 Information Architecture Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -13,18 +13,25 @@ console.log('=== Information Architecture Tests ===\n');
 const html = readSafe(path.join(V,'index.html'));
 const leg = readSafe(path.join(V,'src/legacy-app.js'));
 
-// 1. Navigation items
+// 1. Navigation items (consolidated to 4: home/calendar/all/my)
 console.log('[1] Navigation items');
 const navItems = (html && html.match(/class="nav-item/g)) || [];
 console.log('  Found ' + navItems.length + ' nav items');
-assert(true, 'at least 6 nav items (home/calendar/all/import/watch/my)');
-assert(navItems.length <= 8, 'at most 8 nav items');
+assert(navItems.length === 4, 'exactly 4 nav items (home/calendar/all/my), found ' + navItems.length);
+const navPageMatches = (html && html.match(/data-page="([^"]+)"/g)) || [];
+assert(navPageMatches.length === 4, 'exactly 4 data-page nav attributes');
 
 // 2. Required pages
 console.log('\n[2] Required pages');
 assert(html && html.includes('page-home'), 'page-home exists');
 assert(html && html.includes('page-calendar') || html.includes('page-cal'), 'page-calendar exists');
 assert(html && html.includes('page-all'), 'page-all exists');
+assert(html && html.includes('page-import'), 'page-import exists');
+assert(html && html.includes('page-my'), 'page-my exists');
+assert(!html.includes('id="page-watch"'), 'page-watch removed');
+assert(!html.includes('id="page-permissions"'), 'page-permissions removed');
+assert(!html.includes('id="page-data-safety"'), 'page-data-safety removed');
+assert(!html.includes('id="page-reminder-diagnostics"'), 'page-reminder-diagnostics removed');
 
 // 3. Settings accessibility
 console.log('\n[3] Settings accessibility');
@@ -48,7 +55,8 @@ assert(leg && leg.includes('capabilityV200rc2'), 'capabilityV200rc2 flag');
 
 // 7. Version in HTML
 console.log('\n[7] Version');
-assert(html && (html.includes('v2.0.0-rc5.1')||script.includes('v2.0.0-rc5.1')), 'v2.0.0-rc5.1 in HTML');
+const versionJs = readSafe(path.join(V,'src/config/version.js'));
+assert((html && html.includes('v2.0.0-rc5.2')) || (versionJs && versionJs.includes('v2.0.0-rc5.2')), 'v2.0.0-rc5.2 referenced');
 
 // 8. Release center
 console.log('\n[8] Release center');

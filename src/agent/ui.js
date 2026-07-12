@@ -204,7 +204,6 @@
     if(node('agentTodayCount'))node('agentTodayCount').textContent=String(todayRecords.length);
     if(node('agentTodayHint'))node('agentTodayHint').textContent=todayRecords[0]?todayRecords[0].title:'暂无安排';
     if(node('agentRecordCount'))node('agentRecordCount').textContent=String(records.length);
-    var unread=global.ShikeWatchCenter?global.ShikeWatchCenter.getUnreadCount():0;if(node('agentWatchUnread'))node('agentWatchUnread').textContent=String(unread);
     var recent=node('agentRecentRecords');if(recent){recent.textContent='';records.slice().sort(function(a,b){return(b.createdAt||0)-(a.createdAt||0);}).slice(0,5).forEach(function(record){var item=document.createElement('div');item.className='agent-recent-item';item.textContent=record.title||'未命名记录';if(typeof recent.appendChild==='function')recent.appendChild(item);});if(!recent.children||!recent.children.length)recent.textContent='还没有记录';}
   }
   var settingBindings={

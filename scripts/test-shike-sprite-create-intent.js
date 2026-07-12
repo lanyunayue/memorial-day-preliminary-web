@@ -1,5 +1,5 @@
 // test-shike-sprite-create-intent.js
-// Runtime tests for sprite create intent normalization (v2.0.0-rc5.1)
+// Runtime tests for sprite create intent normalization (v2.0.0-rc5.2)
 const fs = require('fs');
 const path = require('path');
 
@@ -177,16 +177,17 @@ add('Source text preserved in normalization', () => {
   });
 });
 
-add('Shortcut commands still bypass create intent', () => {
-  // These are not creation requests
+add('Shortcut commands are routed by intent-router before create intent', () => {
+  // These quick-action commands are handled by intent-router, not create_record
+  const intentRouter = fs.readFileSync(path.join(root, 'src/agent/intent-router.js'), 'utf8');
   const shortcuts = ['打开日历', '查看今天', '切换主题', '导出日历'];
   shortcuts.forEach(cmd => {
-    const norm = ShikeSpriteCreateIntent.normalize(cmd);
-    // Commands like "打开日历" should not match as create - they start with open/view verbs
-    // Actually our current logic might still flag them; but the intent-router checks quick actions FIRST
-    // So this is fine - the router layer handles quick action routing before create intent
-    assert(true, `"${cmd}" routing handled by intent-router quick action layer`);
+    // Verify intent-router recognizes these as quick actions
+    assert(intentRouter.includes('open_page') || intentRouter.includes('summarize_today'), 'intent-router has quick action tools for ' + cmd);
   });
+  // The intent-router must be evaluated before create intent in agent-core
+  const agentCore = fs.readFileSync(path.join(root, 'src/agent/agent-core.js'), 'utf8');
+  assert(agentCore.includes('intentRouter.route') || agentCore.includes('ns.intentRouter'), 'agent-core routes via intentRouter before create');
 });
 
 add('Very long input is limited', () => {
@@ -203,9 +204,9 @@ add('parser-adapter.js hash unchanged', () => {
   assert(hash === 'D6298D52D56BEDDFC407B329569FE81F179FCF50652425ED29DDA6FA6EB6BE32', 'parser-adapter hash matches expected');
 });
 
-  add('Version is v2.0.0-rc5.1', () => {
+  add('Version is v2.0.0-rc5.2', () => {
   const version = fs.readFileSync(path.join(root, 'src/config/version.js'), 'utf8');
-    assert(version.includes("v2.0.0-rc5.1"), 'version.js has v2.0.0-rc5.1');
+    assert(version.includes("v2.0.0-rc5.2"), 'version.js has v2.0.0-rc5.2');
 });
 
 add('Structured confirmation UI is complete and safe', () => {

@@ -27,7 +27,7 @@ add('update center exists', () => assert(html.includes('id="releaseCenterSection
 add('feedback entry exists', () => assert(html.includes('id="feedbackSection"') && html.includes('308138249@qq.com'), 'feedback missing'));
 add('.ics export exists', () => assert(html.includes('data-i18n="capabilityIcsExport"') && html.includes('id="exportIcsBtn"'), '.ics export missing'));
 add('JSON backup exists', () => assert(html.includes('data-i18n="capabilityJsonBackup"') && html.includes('id="exportBackupBtnMy"'), 'JSON backup missing'));
-add('data safety copy exists', () => assert(html.includes('id="dataSafetySection"') && script.includes('dataSafetyHint'), 'data safety missing'));
+add('data backup section exists', () => assert(html.includes('id="dataBackupSection"') && script.includes('dataSafetyHint'), 'data backup section missing'));
 add('current browser local save copy exists', () => assert(script.includes('数据默认保存在当前浏览器') || script.includes('Data is saved in this browser'), 'local save copy missing'));
 add('no launched cloud sync claim', () => assert(!html.includes('云同步已上线') && !script.includes('已实现云同步'), 'cloud sync claim found'));
 add('no automatic stock monitoring claim', () => assert(!html.includes('自动股票监控') && !script.includes('已支持股票监控'), 'stock monitoring claim found'));

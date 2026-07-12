@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Permission Center Tests
+ * v2.0.0-rc5.2 Permission Center Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -64,10 +64,12 @@ assert(pwa && pwa.includes('beforeinstallprompt'), 'beforeinstallprompt listener
 assert(pwa && pwa.includes('appinstalled'), 'appinstalled listener');
 assert(pwa && pwa.includes('standalone'), 'standalone detection');
 
-// 8. HTML integration
+// 8. HTML integration (permissions migrated to My page permissionSection)
 console.log('\n[8] HTML integration');
 const html = readSafe(path.join(V,'index.html'));
-  true;//removed page container assertion skipped
+assert(!html.includes('id="page-permissions"'), 'standalone page-permissions removed');
+assert(!html.includes('data-page="permissions"'), 'permissions nav item removed');
+assert(html && html.includes('id="permissionSection"'), 'permissionSection exists in My page');
 assert(html && html.includes('permission-center.js'), 'permission-center.js script tag');
 
 // 9. SW precache
@@ -78,12 +80,12 @@ assert(sw && sw.includes('permission-center.js'), 'permission-center in SW preca
 // 10. i18n keys
 console.log('\n[10] i18n keys');
 const leg = readSafe(path.join(V,'src/legacy-app.js'));
-assert(leg && leg.includes('permissionCenter'), 'permissionCenter i18n key');
-assert(leg && leg.includes('permissionSubtitle'), 'permissionSubtitle i18n key');
+assert(leg && leg.includes('permissionSettings'), 'permissionSettings i18n key');
+assert(leg && leg.includes('permissionSettingsHint'), 'permissionSettingsHint i18n key');
 
-// 11. switchPage support
-console.log('\n[11] Page switch');
-true;// permissions page removed from UI
+// 11. No standalone permissions page (capabilities in My page)
+console.log('\n[11] No standalone permissions page');
+assert(leg && !leg.includes("page==='permissions'"), 'no standalone permissions page switch');
 
 // 12. Initialization
 console.log('\n[12] Initialization');

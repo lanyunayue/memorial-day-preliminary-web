@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
@@ -25,17 +25,17 @@ add('future plan entry exists', my.includes('id="featureHubFutureBtn"') && my.in
 add('home main input still exists', html.includes('id="quickInput"') && html.includes('id="todayOverviewBlock"'));
 add('home examples remain muted', /id="exampleChips"[^>]*home-muted-entry|home-muted-entry[^>]*id="exampleChips"/.test(html) && html.includes('id="demoRouteBlock" class="home-muted-entry"'));
 add('personalization remains first my setting group', pos('personalizeSection') > 0 && pos('featureHubSection') > pos('personalizeSection'));
-add('feature hub is visible in my page before data safety', pos('featureHubSection') > 0 && pos('featureHubSection') < pos('dataSafetySection'));
+add('feature hub is visible in my page before data safety', pos('featureHubSection') > 0 && pos('featureHubSection') < pos('dataBackupSection'));
 add('sprite quick actions still exist', ['timeSpriteInputBtn', 'timeSpriteBatchBtn', 'timeSpriteCalendarBtn', 'timeSpriteExportBtn', 'timeSpriteBackupBtn', 'timeSpriteUpdateBtn'].every((id) => html.includes(`id="${id}"`)));
 add('example entries are not over duplicated', count(/id="demoBtnMy"/g) === 1 && count(/data-feature-action="demo"/g) === 1);
-add('feature hub uses existing jump logic', script.includes('function openFeatureHubAction') && script.includes("jumpToMySection('dataSafetySection')") && script.includes('showReleaseNotes(true)'));
+add('feature hub uses existing jump logic', script.includes('function openFeatureHubAction') && script.includes("jumpToMySection('dataBackupSection')") && script.includes('showReleaseNotes(true)'));
 add('no undefined null or mojibake in hub', !my.includes('>undefined<') && !my.includes('>null<') && !my.includes('\uFFFD'));
 add('feature hub css exists', style.includes('.feature-hub-grid') && style.includes('.feature-hub-item'));
 add('mobile compact grid exists', style.includes('grid-template-columns:repeat(2'));
 add('desktop grid exists', style.includes('@media (min-width:900px)') && style.includes('grid-template-columns:repeat(3'));
-add('version is v2.0.0-rc5.1', script.includes("APP_VERSION='v2.0.0-rc5.1'"));
+add('version is v2.0.0-rc5.2', script.includes("APP_VERSION='v2.0.0-rc5.2'"));
 add('updated timestamp has release format', /APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script));
-add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc51-v61'"));
+add('service worker cache is shike-v200rc52-v62', sw.includes("CACHE_NAME = 'shike-v200rc52-v62'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {

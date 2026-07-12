@@ -1,9 +1,9 @@
-// v2.0.0-rc5.1 No Plaintext Sync Queue Test
+// v2.0.0-rc5.2 No Plaintext Sync Queue Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
   var fs=require('fs');
-  var root='E:/lifetime-web-v200rc51-security-quarantine';
+  var root=require('path').resolve(__dirname,'..');
 
   console.log('=== No Plaintext Sync Queue Tests ===\n');
 

@@ -1,4 +1,4 @@
-﻿const fs=require('fs');
+const fs=require('fs');
 const path=require('path');
 const vm=require('vm');
 const crypto=require('crypto');
@@ -11,15 +11,15 @@ const sw=read('sw.js');
 const legacy=read('src/legacy-app.js');
 const files={
   state:read('src/assistant/bear-state-machine.js'),custom:read('src/assistant/sprite-customization.js'),renderer2d:read('src/assistant/sprite-renderer-2d.js'),renderer3d:read('src/assistant/sprite-renderer-3d.js'),audio:read('src/assistant/sprite-audio.js'),
-  classifier:read('src/retrieval/query-classifier.js'),registry:read('src/retrieval/provider-registry.js'),engine:read('src/retrieval/retrieval-engine.js'),browserAI:read('src/retrieval/browser-ai.js'),watch:read('src/watch/watch-center.js'),watchStorage:read('src/watch/watch-storage.js')
+  classifier:read('src/retrieval/query-classifier.js'),registry:read('src/retrieval/provider-registry.js'),engine:read('src/retrieval/retrieval-engine.js'),browserAI:read('src/retrieval/browser-ai.js')
 };
 const checks=[];
 function add(name,condition){checks.push({name,condition});}
 function sha(value){return crypto.createHash('sha256').update(String(value).replace(/\r\n/g,'\n')).digest('hex');}
 function extractFunction(source,name){source=String(source).replace(/\r\n/g,'\n');const start=source.indexOf(`function ${name}(`);if(start<0)throw new Error(`missing ${name}`);const open=source.indexOf('{',start);let depth=0,quote=null,escaped=false;for(let i=open;i<source.length;i++){const c=source[i];if(quote){if(escaped)escaped=false;else if(c==='\\')escaped=true;else if(c===quote)quote=null;continue;}if(c==='"'||c==="'"||c==='`'){quote=c;continue;}if(c==='{')depth++;if(c==='}'&&--depth===0)return source.slice(start,i+1);}throw new Error(`unclosed ${name}`);}
 
-add('version v2.0.0-rc5.1',read('src/config/version.js').includes("APP_VERSION='v2.0.0-rc5.1'"));
-add('cache version',sw.includes("CACHE_NAME = 'shike-v200rc51-v61'"));
+add('version v2.0.0-rc5.2',read('src/config/version.js').includes("APP_VERSION='v2.0.0-rc5.2'"));
+add('cache v62',sw.includes("CACHE_NAME = 'shike-v200rc52-v62'"));
 add('release notes module',html.includes('./src/config/release-notes.js')&&sw.includes('./src/config/release-notes.js'));
 ['idle','blink','wave','listening','thinking','searching','planning','waiting-confirmation','working','speaking','success','warning','error','sleeping','dragging'].forEach((state)=>add(`state ${state}`,files.state.includes(`${state}:`)||files.state.includes(`'${state}':`)));
 add('explicit enter and exit phases',files.state.includes("emit('exit'")&&files.state.includes("emit('enter'"));
@@ -56,12 +56,12 @@ add('fallback search links',read('src/retrieval/search-fallback.js').includes('b
 ['wikipedia','wikidata','github','stackexchange','open-meteo'].forEach((provider)=>add(`provider ${provider}`,fs.existsSync(path.join(root,'src/retrieval/providers',`${provider}.js`))));
 add('wikimedia CORS origin',read('src/retrieval/providers/wikipedia.js').includes('origin=*')&&read('src/retrieval/providers/wikidata.js').includes('origin=*'));
 add('Open-Meteo attribution',read('src/retrieval/providers/open-meteo.js').includes('CC BY 4.0'));
-add('watch uses live fetch',files.watch.includes('fetch(')&&files.watch.includes('isLive:true'));
-add('watch has no simulated seed',!files.watch.includes('FEED_SEED')&&!files.watch.includes('_simulateFetch'));
-add('watch RSS protocol validation',files.watch.includes("parsed.protocol!=='http:'")&&files.watch.includes("parsed.protocol!=='https:'"));
-add('watch RSS CORS error is honest',files.watch.includes('CORS 或网络策略阻止了直接访问'));
-add('watch has no proxy bypass',files.watch.includes('No proxy')&&!files.watch.includes('allorigins'));
-add('watch local read and RSS storage',files.watchStorage.includes('WATCH_READ_KEY')&&files.watchStorage.includes('WATCH_FEEDS_KEY'));
+
+
+
+
+
+
 add('new modules are precached',['bear-state-machine.js','sprite-customization.js','sprite-renderer-2d.js','sprite-renderer-3d.js','sprite-audio.js','browser-ai.js','retrieval-engine.js'].every((name)=>sw.includes(name)));
 add('parser-adapter baseline hash',sha(read('src/parser/parser-adapter.js'))==='efbff968efd518e26970bac24ad35396df8482a32ba56011c6670167d58c4b58');
 add('parseReminderText baseline hash',sha(extractFunction(legacy,'parseReminderText'))==='4a628925b331cf3f56e13440cf5af51b49efe4ca24db1e1f8794e03aba394d69');

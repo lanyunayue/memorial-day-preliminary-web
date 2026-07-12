@@ -1,5 +1,5 @@
-﻿/**
- * v2.0.0-rc5.1 First User Experience Tests
+/**
+ * v2.0.0-rc5.2 First User Experience Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -12,7 +12,6 @@ console.log('=== First User Experience Tests ===\n');
 
 const html = readSafe(path.join(V,'index.html'));
 const leg = readSafe(path.join(V,'src/legacy-app.js'));
-const wc = readSafe(path.join(V,'src/watch/watch-center.js'));
 const sw = readSafe(path.join(V,'sw.js'));
 
 // 1. First visit greeting
@@ -36,15 +35,16 @@ assert(html && html.includes('placeholder'), 'input has placeholder');
 
 // 5. Version visible
 console.log('[5] Version visible');
-assert(html && (html.includes('v2.0.0-rc5.1')||script.includes('v2.0.0-rc5.1')), 'v2.0.0-rc5.1 visible in HTML');
+const versionJs = readSafe(path.join(V,'src/config/version.js'));
+assert((html && html.includes('v2.0.0-rc5.2')) || (versionJs && versionJs.includes('v2.0.0-rc5.2')), 'v2.0.0-rc5.2 visible');
 
 // 6. Cache
 console.log('\n[6] Cache');
-assert(sw && sw.includes('shike-v200rc51-v61'), 'CACHE_NAME is shike-v200rc51-v61');
+assert(sw && sw.includes('shike-v200rc52-v62'), 'CACHE_NAME is shike-v200rc52-v62');
 
 // 7. Watch center empty state
 console.log('\n[7] Watch center empty state');
-assert(wc && (wc.includes('添加') || wc.includes('关注')), 'watch center has add guidance');
+assert(html && html.includes('id="dataBackupSection"'), 'dataBackupSection exists in My page');
 
 // 8. Permission center first visit
 console.log('\n[8] Permission center first visit');

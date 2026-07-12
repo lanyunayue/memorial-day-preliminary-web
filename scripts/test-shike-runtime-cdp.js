@@ -299,7 +299,7 @@ async function main() {
       jumpDemoRouteCalendarExport();
       const calendarJump = currentPage === 'my' && !!document.getElementById('calendarExportSection');
       jumpDemoRouteDataSafety();
-      const safetyJump = currentPage === 'my' && !!document.getElementById('dataSafetySection');
+      const safetyJump = currentPage === 'my' && !!document.getElementById('dataBackupSection');
       return { beforeSentence, sentence, beforeBatch, batch, calendarJump, safetyJump };
     })()
   `);

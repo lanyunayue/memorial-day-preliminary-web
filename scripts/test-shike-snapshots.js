@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Snapshot Service Tests
+ * v2.0.0-rc5.2 Snapshot Service Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -56,7 +56,7 @@ assert(snap && snap.includes('shike_snapshots'), 'metadata key');
 // 8. HTML integration
 console.log('\n[8] HTML integration');
 assert(html && html.includes('snapshot-service.js'), 'script tag in HTML');
-true;// snapshotList container removed with data-safety page
+assert(html && html.includes('snapshotList'), 'snapshotList container');
 
 // 9. SW precache
 console.log('\n[9] Service Worker');

@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Dangerous Actions Tests
+ * v2.0.0-rc5.2 Dangerous Actions Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -59,12 +59,17 @@ assert(html && html.includes('dangerous-actions.js'), 'script tag in HTML');
 console.log('\n[7] Service Worker');
 assert(sw && sw.includes('dangerous-actions.js'), 'in SW precache');
 
-// 8. Data safety page
-console.log('\n[8] Data safety page');
+// 8. Data safety page removed (capabilities migrated to My page dataBackupSection)
+console.log('\n[8] Data safety page removal');
+assert(html && !html.includes('id="page-data-safety"'), 'page-data-safety section removed');
+assert(!html.includes('data-page="data-safety"'), 'data-safety nav item removed');
+assert(!html.includes('dataSafetyContainer'), 'dataSafetyContainer removed from HTML');
+assert(html && html.includes('id="dataBackupSection"'), 'dataBackupSection exists in My page');
 
 // 9. i18n
 console.log('\n[9] i18n');
-assert(leg && leg.includes('dataSafetyTitle'), 'dataSafetyTitle i18n');
+assert(leg && leg.includes('dataSafetyHint'), 'dataSafetyHint i18n');
+assert(leg && leg.includes('permissionSettings'), 'permissionSettings i18n');
 assert(leg && leg.includes('releaseCenterV200rc3'), 'releaseCenterV200rc3 i18n');
 
 console.log('\n========================================');

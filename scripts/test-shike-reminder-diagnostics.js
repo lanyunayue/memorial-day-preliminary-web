@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Reminder Diagnostics Tests
+ * v2.0.0-rc5.2 Reminder Diagnostics Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -43,21 +43,25 @@ console.log('\n[5] Push beta');
 assert(diag && diag.includes('not_configured'), 'push beta status not_configured');
 assert(diag && diag.includes('云推送') || diag.includes('cloud push'), 'cloud push mention');
 
-console.log('\n[6] HTML integration');
+console.log('\n[6] HTML integration (diagnostics migrated to My page reminderSection)');
 assert(html && html.includes('reminder-diagnostics.js'), 'script tag in HTML');
-  true;//removed page container assertion skipped
+assert(!html.includes('id="page-reminder-diagnostics"'), 'standalone page-reminder-diagnostics removed');
+assert(!html.includes('data-page="reminder-diagnostics"'), 'reminder-diagnostics nav item removed');
+assert(!html.includes('reminderDiagContainer'), 'reminderDiagContainer removed');
+assert(html && html.includes('id="reminderSection"'), 'reminderSection exists in My page');
+assert(html && html.includes('id="testNotifyBtn"'), 'testNotifyBtn exists in reminderSection');
 
 console.log('\n[7] SW precache');
 assert(sw && sw.includes('reminder-diagnostics.js'), 'in SW precache');
 
 console.log('\n[8] Legacy integration');
-true;// capability flag removed with page
-true;// ShikeReminderDiagnostics module page removed from UI
+assert(leg && leg.includes('capabilityReminderDiagnostics'), 'capability flag');
 assert(leg && leg.includes('ShikeReminderScheduler'), 'scheduler started in init');
 
 console.log('\n[9] i18n');
 assert(leg && leg.includes('testNotification'), 'testNotification i18n');
-assert(leg && leg.includes('exportCalendar'), 'exportCalendar i18n');
+assert(leg && leg.includes('enableNotify'), 'enableNotify i18n');
+assert(leg && leg.includes('reminderSettingsHint'), 'reminderSettingsHint i18n');
 assert(leg && leg.includes('releaseCenterV200rc4'), 'releaseCenterV200rc4 i18n');
 
 console.log('\n========================================');

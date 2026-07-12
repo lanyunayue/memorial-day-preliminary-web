@@ -1,9 +1,9 @@
-// v2.0.0-rc5.1 Sync Quarantine Test
+// v2.0.0-rc5.2 Sync Quarantine Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
   var fs=require('fs');
-  var path='E:/lifetime-web-v200rc51-security-quarantine';
+  var path=require('path').resolve(__dirname,'..');
 
   var clientSrc=fs.readFileSync(path+'/src/sync/sync-client.js','utf8');
   var statusSrc=fs.readFileSync(path+'/src/sync/sync-status.js','utf8');
@@ -23,8 +23,8 @@
   assert(clientSrc.match(/enable\s*=\s*function\(\)\s*{\s*return false;?\s*}/),'enable returns false');
   assert(!htmlSrc.includes('id="page-sync"'),'page-sync section removed from HTML');
   assert(!htmlSrc.includes('syncContainer'),'syncContainer div removed from HTML');
-  assert(versionSrc.includes("v2.0.0-rc5.1"),'APP_VERSION is v2.0.0-rc5.1');
-  assert(swSrc.includes("shike-v200rc51-v61"),'CACHE_NAME is shike-v200rc51-v61');
+  assert(versionSrc.includes("v2.0.0-rc5.2"),'APP_VERSION is v2.0.0-rc5.2');
+  assert(swSrc.includes("shike-v200rc52-v62"),'CACHE_NAME is shike-v200rc52-v62');
 
   // sync-status must show quarantine
   var quarantineMsg = statusSrc.includes('syncQuarantine') ||

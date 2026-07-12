@@ -1,9 +1,9 @@
-// v2.0.0-rc5.1 Test Quality Audit
+// v2.0.0-rc5.2 Test Quality Audit
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
   var fs=require('fs'),path=require('path');
-  var root='E:/lifetime-web-v200rc51-security-quarantine/scripts';
+  var root=require('path').resolve(__dirname);
 
   console.log('=== Test Quality Audit ===\n');
 

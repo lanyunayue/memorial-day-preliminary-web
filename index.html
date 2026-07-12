@@ -273,8 +273,8 @@
           <div data-i18n="calendarImportGuide">这是手动导入标准日历文件：Google Calendar 在设置里选择“导入和导出”；Apple Calendar 可直接打开 .ics 或在日历 App 导入；Outlook 在导入/订阅日历中选择 .ics 文件。</div>
         </details>
       </div>
-      <div class="setting-group" id="dataSafetySection">
-        <div class="setting-group-title" data-i18n="dataSafety">数据安全</div>
+      <div class="setting-group" id="dataBackupSection">
+        <div class="setting-group-title" data-i18n="dataBackup">数据与备份</div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="recordCountLabel">当前记录数</span><span class="setting-item-value" id="safetyRecordCount">0</span></div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="exportableCountLabel">可导出日历数</span><span class="setting-item-value" id="safetyExportableCount">0</span></div>
         <div class="setting-item"><span class="setting-item-label" data-i18n="undatedCountLabel">无日期记录数</span><span class="setting-item-value" id="safetyUndatedCount">0</span></div>
@@ -290,6 +290,22 @@
             <input type="file" accept=".json" id="restoreFileInputMy" style="display:none">
           </label>
         </div>
+        
+        <details style="margin-top:12px;">
+          <summary style="cursor:pointer;font-size:13px;color:var(--ink-soft);" data-i18n="trashTitle">回收站</summary>
+          <div id="trashList" style="margin-top:8px;"></div>
+        </details>
+        <details style="margin-top:8px;">
+          <summary style="cursor:pointer;font-size:13px;color:var(--ink-soft);" data-i18n="snapshotTitle">数据快照</summary>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="import-btn" id="createSnapshotBtn" data-i18n="createSnapshot">创建快照</button>
+          </div>
+          <div id="snapshotList" style="margin-top:8px;"></div>
+        </details>
+        <div style="margin-top:8px;">
+          <button class="import-btn" id="emptyTrashBtn" data-i18n="emptyTrash" style="background:var(--bg-soft);color:var(--ink-mute);">清空回收站</button>
+        </div>
+
         <p id="safetyStatusHint" style="font-size:12px;color:var(--ink-soft);line-height:1.6;margin:10px 0 0;"></p>
       </div>
       <div class="setting-group" id="experienceExampleSection">
@@ -297,17 +313,46 @@
         <p class="setting-note" data-i18n="exampleRecordsText">首次体验时可一键生成 5 条示例记录，不覆盖真实数据。</p>
         <button class="import-btn" id="demoBtnMy" style="width:100%;" data-i18n="demoAction">体验示例</button>
       </div>
-      <div class="setting-group" id="demoRouteSection">
-        <div class="setting-group-title" data-i18n="reminderNoticeTitle">提醒说明</div>
-        <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:0 0 10px;" data-i18n="reminderNoticeText">网页版提醒依赖浏览器环境。页面关闭后，长期提醒不一定可靠；建议将时刻添加到桌面并定期打开查看，重要日程建议导出 .ics 到系统日历。</p>
+      <div class="setting-group" id="reminderSection">
+        <div class="setting-group-title" data-i18n="reminderSettings">提醒设置</div>
+        <p style="font-size:12px;color:var(--ink-mute);line-height:1.7;margin:0 0 10px;" data-i18n="reminderSettingsHint">网页版提醒依赖浏览器环境。页面关闭后提醒不一定可靠，重要日程建议导出 .ics 到系统日历。</p>
         <div class="setting-item"><span class="setting-item-label" data-i18n="notifyPerm">通知权限</span><span class="setting-item-value" id="notifyStatus">--</span></div>
         <div class="setting-item" id="notifyPermItem" style="display:none;">
           <button class="setting-item-btn" id="reqNotifyBtn" data-i18n="enableNotify">开启通知</button>
         </div>
-        <div class="setting-item" id="installPwaItem" style="display:none;">
-          <button class="setting-item-btn" id="installPwaBtn" data-i18n="installPwa">添加到桌面</button>
+        <div class="setting-item">
+          <span class="setting-item-label" data-i18n="testNotification">测试通知</span>
+          <button class="setting-item-btn" id="testNotifyBtn" data-i18n="testNotification">发送测试</button>
         </div>
-        <div class="setting-note" data-i18n="pwaInstallHint">如果浏览器没有显示安装按钮，可使用浏览器菜单中的“添加到桌面”或“安装应用”。</div>
+        <div class="setting-item" id="installPwaItem" style="display:none;">
+          <span class="setting-item-label" data-i18n="installPwa">添加到桌面</span>
+          <button class="setting-item-btn" id="installPwaBtn" data-i18n="installPwa">添加</button>
+        </div>
+        <div class="setting-item">
+          <span class="setting-item-label" data-i18n="defaultLeadTime">默认提前时间</span>
+          <select class="setting-item-input" id="defaultLeadTimeSelect" style="width:auto;">
+            <option value="0" data-i18n="atEventTime">准时</option>
+            <option value="5">5分钟</option>
+            <option value="15" selected>15分钟</option>
+            <option value="30">30分钟</option>
+            <option value="60">1小时</option>
+            <option value="1440">1天</option>
+          </select>
+        </div>
+        <button class="import-btn" id="exportIcsBtnReminder" data-i18n="exportIcs" style="width:100%;margin-top:8px;">导出日历文件</button>
+        <div class="setting-note" data-i18n="pwaInstallHint">如果浏览器没有显示安装按钮，可使用浏览器菜单中的"添加到桌面"或"安装应用"。</div>
+      </div>
+      <div class="setting-group" id="permissionSection">
+        <div class="setting-group-title" data-i18n="permissionSettings">权限设置</div>
+        <p class="setting-note" data-i18n="permissionSettingsHint">查看和管理时刻使用的浏览器权限。</p>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="notifyPerm">通知</span><span class="setting-item-value" id="permNotifyStatus">--</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="microphonePerm">麦克风</span><span class="setting-item-value" id="permMicStatus">--</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="pwaInstallStatus">PWA 安装</span><span class="setting-item-value" id="permPwaStatus">--</span></div>
+        <div class="setting-item"><span class="setting-item-label" data-i18n="storagePersist">持久化存储</span><span class="setting-item-value" id="permStorageStatus">--</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+          <button class="setting-item-btn" id="reqMicBtn" data-i18n="requestMic">请求麦克风权限</button>
+          <button class="setting-item-btn" id="reqStorageBtn" data-i18n="requestStoragePersist">请求持久化存储</button>
+        </div>
       </div>
       <div class="setting-group">
         <details>
@@ -468,10 +513,9 @@
         <div class="agent-overview-grid">
           <article><span>今天</span><strong id="agentTodayCount">0</strong><small id="agentTodayHint">暂无安排</small></article>
           <article><span>全部记录</span><strong id="agentRecordCount">0</strong><small>仅保存在本地</small></article>
-          <article><span>关注未读</span><strong id="agentWatchUnread">0</strong><small id="agentWatchHint">打开关注中心查看</small></article>
         </div>
         <div class="agent-overview-section"><strong>最近记录</strong><div id="agentRecentRecords" class="agent-recent-list"></div></div>
-        <div class="agent-overview-section"><strong>快捷动作</strong><div class="agent-overview-actions"><button data-agent-page="home">写一句</button><button data-agent-page="calendar">看日历</button><button data-agent-page="watch">看关注</button><button data-agent-page="import">整理一段</button></div></div>
+        <div class="agent-overview-section"><strong>快捷动作</strong><div class="agent-overview-actions"><button data-agent-page="home">写一句</button><button data-agent-page="calendar">看日历</button><button data-agent-page="import">整理一段</button></div></div>
       </section>
       <section class="agent-tab-panel" id="agentPanelSettings" data-agent-panel="settings" role="tabpanel" hidden>
         <div class="sprite-settings-grid">
@@ -561,8 +605,6 @@
 <script src="./src/agent/conversation-repository.js"></script>
 <script src="./src/agent/result-formatter.js"></script>
 <script src="./src/agent/agent-core.js"></script>
-<script src="./src/watch/watch-storage.js"></script>
-  <script src="./src/watch/watch-center.js"></script>
   <script src="./src/agent/ui.js"></script>
   <script src="src/storage/trash-repository.js"></script>
   <script src="src/commands/command-bus.js"></script>

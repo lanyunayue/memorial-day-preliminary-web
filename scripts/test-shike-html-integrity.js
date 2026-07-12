@@ -87,8 +87,7 @@ add('literal DOM id lookups point to existing elements', () => {
   const ids = new Set(matches(/\sid=["']([^"']+)["']/g, html+'\n'+script).map((m) => m[1]));
   const dollarIds = matches(/\$\(['"]([^'"]+)['"]\)/g, script).map((m) => m[1]);
   const bindIds = matches(/\bb\(['"]([^'"]+)['"]/g, script).map((m) => m[1]);
-  const allowedMissing = new Set(['watchContent','trashList','snapshotList','reminderDiagContainer','permissionContainer','storageStatus','navWatchBadge','storageEngineStatus','quarantineCount']);
-  const missing = unique(dollarIds.concat(bindIds).filter((id) => !ids.has(id) && !allowedMissing.has(id)));
+  const missing = unique(dollarIds.concat(bindIds).filter((id) => !ids.has(id)));
   assert(missing.length === 0, `missing literal ids: ${missing.join(', ')}`);
 });
 
@@ -96,7 +95,7 @@ add('bottom navigation targets existing pages', () => {
   const pageIds = new Set(matches(/\sid=["']page-([^"']+)["']/g, html).map((m) => m[1]));
   const navPages = unique(matches(/\sdata-page=["']([^"']+)["']/g, html).map((m) => m[1]));
   const missing = navPages.filter((page) => !pageIds.has(page));
-  assert(navPages.length >= 4, 'expected bottom navigation page entries');
+  assert(navPages.length === 4, 'expected exactly 4 bottom navigation page entries (home/calendar/all/my), got ' + navPages.length);
   assert(missing.length === 0, `missing page targets: ${missing.join(', ')}`);
 });
 

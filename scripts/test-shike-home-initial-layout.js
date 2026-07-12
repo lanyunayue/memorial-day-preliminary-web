@@ -1,5 +1,5 @@
-﻿// test-shike-home-initial-layout.js
-// Static tests for homepage initial layout fixes (v2.0.0-rc5.1)
+// test-shike-home-initial-layout.js
+// Static tests for homepage initial layout fixes (v2.0.0-rc5.2)
 const fs = require('fs');
 const path = require('path');
 
@@ -87,12 +87,12 @@ add('release dialog does not use body overflow:hidden', () => {
   assert(!legacyApp.includes("document.body.style.overflow='hidden'"), 'no body overflow hidden in release notes');
 });
 
-  add('APP_VERSION is v2.0.0-rc5.1', () => {
-    assert(versionJs.includes("APP_VERSION='v2.0.0-rc5.1'"), 'version.js has v2.0.0-rc5.1');
+  add('APP_VERSION is v2.0.0-rc5.2', () => {
+    assert(versionJs.includes("APP_VERSION='v2.0.0-rc5.2'"), 'version.js has v2.0.0-rc5.2');
 });
 
-  add('SW cache is shike-v200rc51-v61', () => {
-    assert(swJs.includes('shike-v200rc51-v61'), 'sw.js cache shike-v200rc51-v61');
+  add('SW cache is shike-v200rc52-v62', () => {
+    assert(swJs.includes('shike-v200rc52-v62'), 'sw.js cache shike-v200rc52-v62');
 });
 
 add('sprite-create-intent module exports normalize function', () => {
@@ -150,9 +150,7 @@ add('hideOpening calls scrollTo(0,0)', () => {
 });
 
 add('No padding transition on .app to avoid jump', () => {
-  // The transition was removed from .app
-  // Padding transition present but no longer harmful since topbar is hidden when empty
-  assert(true, 'padding transition acceptable - empty state has no invisible topbar');
+  assert(!css.includes('.app{transition:padding') || css.includes('#topbar{display:none'), 'padding transition is absent or topbar hidden for empty state');
 });
 
 add('create_record calls renderCurrent after save', () => {

@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.1 Trash Repository Tests
+ * v2.0.0-rc5.2 Trash Repository Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -49,7 +49,7 @@ assert(trash && trash.includes('30'), '30-day default retention');
 // 6. HTML integration
 console.log('\n[6] HTML integration');
 assert(html && html.includes('trash-repository.js'), 'script tag in HTML');
-true;// trashList container removed with data-safety page
+assert(html && html.includes('trashList'), 'trashList container in HTML');
 
 // 7. SW precache
 console.log('\n[7] Service Worker');

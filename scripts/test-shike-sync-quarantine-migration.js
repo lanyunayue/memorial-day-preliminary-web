@@ -1,9 +1,9 @@
-// v2.0.0-rc5.1 Sync Quarantine Migration Test
+// v2.0.0-rc5.2 Sync Quarantine Migration Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
   var fs=require('fs'),vm=require('vm');
-  var path='E:/lifetime-web-v200rc51-security-quarantine';
+  var path=require('path').resolve(__dirname,'..');
 
   console.log('=== Quarantine Migration Tests ===\n');
 
@@ -18,7 +18,7 @@
         setItem:function(k,v){try{fakeStorage[k]=JSON.parse(v);}catch(e){fakeStorage[k]=v;}},
         removeItem:function(k){delete fakeStorage[k];}
       },
-      ShikeVersion:{version:'v2.0.0-rc5.1'},
+      ShikeVersion:{version:'v2.0.0-rc5.2'},
       document:{readyState:'complete',addEventListener:function(){}},
       setTimeout:function(fn,t){/*don't auto-run in test*/},
       clearTimeout:function(){},

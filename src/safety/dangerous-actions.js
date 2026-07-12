@@ -427,7 +427,6 @@
   register('empty_trash', LEVELS.HIGH, 'Permanently empty the trash', false);
   register('overwrite_import', LEVELS.HIGH, 'Overwrite current data with imported data', false);
   register('reset_app', LEVELS.IRREVERSIBLE, 'Reset the application to its initial state', true);
-  register('delete_rss', LEVELS.LOW, 'Delete an RSS subscription', false);
   register('clear_conversation', LEVELS.LOW, 'Clear the current conversation', false);
   register('clear_context', LEVELS.LOW, 'Clear the current context', false);
   register('clear_search_cache', LEVELS.LOW, 'Clear the search cache', false);
