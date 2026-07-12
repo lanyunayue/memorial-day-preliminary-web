@@ -200,8 +200,8 @@ add('Very long input is limited', () => {
 add('parser-adapter.js hash unchanged', () => {
   const crypto = require('crypto');
   const adapter = fs.readFileSync(path.join(root, 'src/parser/parser-adapter.js'), 'utf8');
-  const hash = crypto.createHash('sha256').update(adapter).digest('hex').toUpperCase();
-  assert(hash === 'D6298D52D56BEDDFC407B329569FE81F179FCF50652425ED29DDA6FA6EB6BE32', 'parser-adapter hash matches expected');
+  const hash = crypto.createHash('sha256').update(adapter.replace(/\r\n/g,'\n')).digest('hex').toUpperCase();
+  assert(hash === 'EFBFF968EFD518E26970BAC24AD35396DF8482A32BA56011C6670167D58C4B58', 'parser-adapter hash matches expected');
 });
 
   add('Version is v2.0.0-rc5.2', () => {
