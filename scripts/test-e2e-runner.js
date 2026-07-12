@@ -1,10 +1,18 @@
 // E2E test runner - runs Playwright-style tests or local Edge CDP checks.
-const { execSync, spawn, spawnSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const http = require('http');
 const os = require('os');
 const path = require('path');
 const V = path.resolve(__dirname, '..');
+const args = new Set(process.argv.slice(2).filter((arg) => !arg.startsWith('--artifact-dir=')));
+const artifactArg = process.argv.slice(2).find((arg) => arg.startsWith('--artifact-dir='));
+const required = args.has('--required') || process.env.SHIKE_E2E_REQUIRED === '1';
+const autostart = args.has('--autostart') || process.env.SHIKE_AUTOSTART_EDGE === '1';
+const captureLayout = args.has('--layout') || process.env.SHIKE_E2E_LAYOUT === '1';
+const configuredArtifactDir = artifactArg
+  ? path.resolve(V, artifactArg.slice('--artifact-dir='.length))
+  : process.env.SHIKE_ARTIFACT_DIR;
 
 // Check if playwright is available
 let hasPlaywright = false;
@@ -14,10 +22,22 @@ try {
 } catch(e) {}
 
 if (hasPlaywright) {
+  const artifactDir = configuredArtifactDir || path.join(V, 'artifacts', 'playwright');
+  fs.mkdirSync(artifactDir, { recursive: true });
   try {
     execSync('npx playwright test --project=chromium', { stdio: 'inherit', cwd: V });
+    fs.writeFileSync(path.join(artifactDir, 'e2e-runner-result.json'), JSON.stringify({
+      classification: 'PASS',
+      mode: 'playwright',
+      generatedAt: new Date().toISOString()
+    }, null, 2));
     console.log('E2E tests passed');
   } catch(e) {
+    fs.writeFileSync(path.join(artifactDir, 'e2e-runner-result.json'), JSON.stringify({
+      classification: 'FAIL',
+      mode: 'playwright',
+      generatedAt: new Date().toISOString()
+    }, null, 2));
     console.log('E2E tests failed');
     process.exit(1);
   }
@@ -92,69 +112,89 @@ async function waitForJson(url, timeoutMs) {
 
 function runScript(script, env) {
   const fp = path.join(V, 'scripts', script);
-  if (!fs.existsSync(fp)) return { skipped: true };
-  return spawnSync(process.execPath, [fp], {
-    cwd: V,
-    env: Object.assign({}, process.env, env),
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-    timeout: 180000
+  if (!fs.existsSync(fp)) return Promise.resolve({ skipped: true });
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [fp], {
+      cwd: V,
+      env: Object.assign({}, process.env, env),
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true
+    });
+    let stdout = '';
+    let stderr = '';
+    const timer = setTimeout(() => child.kill(), 180000);
+    child.stdout.on('data', (chunk) => { stdout += chunk; });
+    child.stderr.on('data', (chunk) => { stderr += chunk; });
+    child.on('error', (error) => {
+      clearTimeout(timer);
+      resolve({ status: 1, stdout, stderr: `${stderr}${error.message}\n` });
+    });
+    child.on('close', (status, signal) => {
+      clearTimeout(timer);
+      if (signal) stderr += `Process terminated by ${signal}\n`;
+      resolve({ status, stdout, stderr });
+    });
   });
 }
 
-function psQuote(value) {
-  return String(value).replace(/'/g, "''");
+function startEdge(edge, browserArgs) {
+  const browser = spawn(edge, browserArgs, {
+    stdio: 'ignore',
+    detached: false,
+    windowsHide: true
+  });
+  browser.on('error', () => {});
+  return browser;
 }
 
-function startEdge(edge, args) {
-  if (process.platform === 'win32') {
-    const argString = args.map((arg) => {
-      if (arg.startsWith('--user-data-dir=')) {
-        return `--user-data-dir=\\"${arg.slice('--user-data-dir='.length)}\\"`;
-      }
-      return arg;
-    }).join(' ');
-    const command = `$p=Start-Process -FilePath '${psQuote(edge)}' -ArgumentList '${psQuote(argString)}' -WindowStyle Hidden -PassThru; $p.Id`;
-    const result = spawnSync('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', command], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe']
-    });
-    if (result.status !== 0) {
-      throw new Error(`Failed to start Edge: ${result.stderr || result.stdout}`);
-    }
-    const pid = parseInt((result.stdout || '').trim(), 10);
-    return {
-      pid,
-      killed: false,
-      kill() {
-        this.killed = true;
-        if (pid) {
-          spawnSync('powershell.exe', ['-NoProfile', '-Command', `Stop-Process -Id ${pid} -Force -ErrorAction SilentlyContinue`]);
-        }
-      }
-    };
+function skip(reason) {
+  console.log(`E2E SKIPPED: ${reason}`);
+  if (required) {
+    throw new Error(`E2E is required but could not run: ${reason}`);
   }
-  return spawn(edge, args, { stdio: 'ignore', detached: false, windowsHide: true });
+}
+
+async function writeBrowserMetadata(cdpUrl, appUrl, artifactDir) {
+  fs.mkdirSync(artifactDir, { recursive: true });
+  const version = await waitForJson(`${cdpUrl}/json/version`, 10000);
+  const targets = await waitForJson(`${cdpUrl}/json`, 10000);
+  const metadata = {
+    classification: 'RUNNING',
+    generatedAt: new Date().toISOString(),
+    cdpUrl,
+    appUrl,
+    browser: version.Browser || null,
+    protocolVersion: version['Protocol-Version'] || null,
+    userAgent: version['User-Agent'] || null,
+    pageTargets: targets.filter((target) => target.type === 'page').map((target) => ({
+      title: target.title,
+      url: target.url
+    }))
+  };
+  fs.writeFileSync(path.join(artifactDir, 'browser-metadata.json'), JSON.stringify(metadata, null, 2));
+  return metadata;
 }
 
 async function runLocalCdpFallback() {
   console.log('Playwright not installed - running CDP E2E validation when available');
   if (process.env.SHIKE_CDP_URL) {
-    const artifactDir = process.env.SHIKE_ARTIFACT_DIR || fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-artifacts-'));
-    runCdpScripts({
+    const artifactDir = configuredArtifactDir || fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-artifacts-'));
+    const appUrl = process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/index.html';
+    await writeBrowserMetadata(process.env.SHIKE_CDP_URL, appUrl, artifactDir);
+    await runCdpScripts({
       SHIKE_CDP_URL: process.env.SHIKE_CDP_URL,
-      SHIKE_APP_URL: process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/index.html',
+      SHIKE_APP_URL: appUrl,
       SHIKE_ARTIFACT_DIR: artifactDir
-    });
+    }, artifactDir);
     return;
   }
-  if (process.env.SHIKE_AUTOSTART_EDGE !== '1') {
-    console.log('E2E skipped: set SHIKE_CDP_URL for browser validation, or SHIKE_AUTOSTART_EDGE=1 to try local Edge startup');
+  if (!autostart) {
+    skip('set SHIKE_CDP_URL for browser validation, or use --autostart to launch local Edge/Chromium');
     return;
   }
   const edge = findEdge();
   if (!edge) {
-    console.log('E2E skipped: no Playwright or Edge/Chromium executable found');
+    skip('no Playwright or Edge/Chromium executable found');
     return;
   }
 
@@ -162,41 +202,77 @@ async function runLocalCdpFallback() {
   const appPort = server.address().port;
   const cdpPort = 9300 + Math.floor(Math.random() * 500);
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-edge-'));
-  const artifactDir = fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-artifacts-'));
-  const args = [
+  const artifactDir = configuredArtifactDir || fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-artifacts-'));
+  const browserArgs = [
     `--remote-debugging-port=${cdpPort}`,
+    '--remote-debugging-address=127.0.0.1',
     '--remote-allow-origins=*',
     `--user-data-dir=${profile}`,
+    '--headless=new',
+    '--disable-gpu',
+    '--disable-background-networking',
     '--no-first-run',
     '--disable-extensions',
-    '--new-window',
     `http://127.0.0.1:${appPort}/`
   ];
-  const browser = startEdge(edge, args);
+  if (process.platform !== 'win32') browserArgs.push('--no-sandbox');
+  const browser = startEdge(edge, browserArgs);
   try {
-    await waitForJson(`http://127.0.0.1:${cdpPort}/json`, 15000);
-    runCdpScripts({
-      SHIKE_CDP_URL: `http://127.0.0.1:${cdpPort}`,
-      SHIKE_APP_URL: `http://127.0.0.1:${appPort}/`,
+    const cdpUrl = `http://127.0.0.1:${cdpPort}`;
+    const appUrl = `http://127.0.0.1:${appPort}/`;
+    await waitForJson(`${cdpUrl}/json`, 30000);
+    await writeBrowserMetadata(cdpUrl, appUrl, artifactDir);
+    await runCdpScripts({
+      SHIKE_CDP_URL: cdpUrl,
+      SHIKE_APP_URL: appUrl,
       SHIKE_ARTIFACT_DIR: artifactDir
-    });
+    }, artifactDir);
   } finally {
     server.close();
     if (!browser.killed) browser.kill();
   }
 }
 
-function runCdpScripts(env) {
+async function runCdpScripts(env, artifactDir) {
   let passed = 0;
   let failed = 0;
-  for (const script of ['test-shike-runtime-cdp.js']) {
-    const result = runScript(script, env);
-    if (result.skipped) continue;
+  const scripts = [
+    {
+      name: 'test-shike-runtime-cdp.js',
+      env: captureLayout ? { SHIKE_CAPTURE_SCREENSHOTS: '1' } : {}
+    }
+  ];
+  for (let index = 0; index < scripts.length; index++) {
+    const script = scripts[index];
+    if (index > 0) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+    const result = await runScript(script.name, Object.assign({}, env, script.env));
+    if (result.skipped) {
+      failed++;
+      console.error(`E2E FAIL: required script missing: ${script.name}`);
+      continue;
+    }
     if (result.stdout) process.stdout.write(result.stdout);
     if (result.stderr) process.stderr.write(result.stderr);
     if (result.status === 0) passed++;
     else failed++;
   }
-  console.log(`E2E (CDP): ${passed} passed, ${failed} failed`);
-  if (failed) process.exit(1);
+  const classification = failed === 0 && passed === scripts.length ? 'PASS' : 'FAIL';
+  const metadataPath = path.join(artifactDir, 'browser-metadata.json');
+  if (fs.existsSync(metadataPath)) {
+    const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+    metadata.classification = classification;
+    metadata.completedAt = new Date().toISOString();
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
+  }
+  fs.writeFileSync(path.join(artifactDir, 'e2e-runner-result.json'), JSON.stringify({
+    classification,
+    generatedAt: new Date().toISOString(),
+    scripts: scripts.map((script) => script.name),
+    passed,
+    failed
+  }, null, 2));
+  console.log(`E2E (CDP) ${classification}: ${passed} passed, ${failed} failed`);
+  if (failed) throw new Error(`CDP E2E failed: ${failed} script(s) failed`);
 }

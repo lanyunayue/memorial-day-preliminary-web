@@ -1,8 +1,7 @@
 # Blocked
 
-| ID | Blocker | Current State | Unblock |
-|---|---|---|---|
-| SHIKE-A2-BLOCK-001 | `fetch origin --prune` 连接 reset | origin/main 只能使用本地缓存 | 网络恢复后重新 fetch |
-| SHIKE-A2-BLOCK-002 | Playwright 未安装或未执行 | 默认 e2e 为 SKIPPED | 安装 Playwright 或使用 Edge CDP |
+当前无阻塞项。
 
-Blocked 项不计入完成。
+- `git fetch origin --prune` 已恢复并确认 `origin/main`。
+- Playwright 仍未安装，但 Edge/CDP 已满足当前核心浏览器门禁，不再构成本轮 blocker。
+- 离线、Service Worker 更新、权限拒绝与恢复演练属于部署前缺失证据，不计为已完成。

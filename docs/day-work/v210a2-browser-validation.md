@@ -63,3 +63,26 @@
 - 部署：不允许。
 - 版本：未修改。
 - 缓存：未修改。
+
+## Investment Hardening Follow-up
+
+时间：2026-07-13 00:30 +08:00
+
+新增的 CI 等价强制路径 `npm run test:e2e:ci` 已在真实 Edge 上通过：
+
+- Browser：Edg/150.0.4078.65，Protocol 1.3。
+- Runtime：PASS，11/11。
+- 视口：375、390、414、768、1024、1366、1440，共 7/7。
+- 截图：7 张，截图前恢复首页基线状态。
+- Console/runtime/log/network errors：0。
+- required 模式下 SKIPPED：非零退出，不能计为 PASS。
+- 自动启动：PASS；runner 使用异步子进程，避免本地静态服务器事件循环被阻塞。
+
+证据路径：
+
+- `artifacts/ci-e2e/browser-metadata.json`
+- `artifacts/ci-e2e/runtime-result.json`
+- `artifacts/ci-e2e/e2e-runner-result.json`
+- `artifacts/ci-e2e/home-*.png`
+
+本次补强完成 `SHIKE-A2-001` 的核心浏览器门禁，但不改变原报告的部署判定。离线启动、Service Worker 更新、权限拒绝、回收站/快照/错误密码恢复仍未执行，完整 alpha2 发布验收仍为 NOT COMPLETE。

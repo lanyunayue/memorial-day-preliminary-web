@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies
-        run: npm ci || echo "No dependencies to install"
+        run: npm run ci:install
       - name: Lint
         run: npm run lint
       - name: Format check
@@ -27,12 +27,26 @@ jobs:
         run: npm run test:unit
       - name: Legacy regression
         run: npm run test:legacy
+      - name: Parser regression
+        run: node scripts/test-shike-sprite-create-intent.js
       - name: Accessibility
         run: npm run test:a11y
       - name: Security checks
         run: npm run test:security
-      - name: E2E runner smoke
-        run: npm run test:e2e
+      - name: CI gate regression
+        run: npm run test:ci-gates
+      - name: Test integrity
+        run: npm run test:integrity
+      - name: Browser E2E
+        id: browser_e2e
+        run: npm run test:e2e:ci
+      - name: Upload browser evidence
+        if: always() && steps.browser_e2e.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence
+          path: artifacts/ci-e2e/
+          if-no-files-found: error
       - name: Static asset validation
         run: node scripts/test-shike-offline-assets.js
       - name: Service Worker validation

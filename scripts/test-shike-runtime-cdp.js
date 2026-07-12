@@ -5,6 +5,8 @@ const CDP_URL = process.env.SHIKE_CDP_URL || 'http://127.0.0.1:9224';
 const APP_URL = process.env.SHIKE_APP_URL || 'http://127.0.0.1:8090/index.html';
 const APP_SOURCE = require('./load-shike-source').loadShikeSource(path.resolve(__dirname, '..'));
 const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || ((APP_SOURCE.script.match(/APP_VERSION='([^']+)'/) || [])[1]);
+const ARTIFACT_DIR = process.env.SHIKE_ARTIFACT_DIR || '';
+const CAPTURE_SCREENSHOTS = process.env.SHIKE_CAPTURE_SCREENSHOTS === '1';
 const VIEWPORTS = [375, 390, 414, 768, 1024, 1366, 1440];
 const PAGES = ['home', 'all', 'calendar', 'import', 'my'];
 
@@ -40,6 +42,7 @@ class CdpClient {
     this.consoleErrors = [];
     this.runtimeErrors = [];
     this.logErrors = [];
+    this.networkErrors = [];
   }
 
   connect() {
@@ -70,6 +73,12 @@ class CdpClient {
     }
     if (msg.method === 'Log.entryAdded' && msg.params.entry && msg.params.entry.level === 'error') {
       this.logErrors.push(msg.params.entry.text);
+    }
+    if (msg.method === 'Network.loadingFailed' && !msg.params.canceled) {
+      this.networkErrors.push(`${msg.params.errorText || 'request failed'}: ${msg.params.type || 'unknown'}`);
+    }
+    if (msg.method === 'Network.responseReceived' && msg.params.response && msg.params.response.status >= 400) {
+      this.networkErrors.push(`${msg.params.response.status}: ${msg.params.response.url}`);
     }
     const waiters = this.waiters.get(msg.method) || [];
     this.waiters.set(msg.method, []);
@@ -146,6 +155,7 @@ async function main() {
   await client.send('Page.enable');
   await client.send('Runtime.enable');
   await client.send('Log.enable');
+  await client.send('Network.enable');
 
   function add(name, condition, detail) {
     assert(condition, detail || name);
@@ -233,11 +243,14 @@ async function main() {
   `);
   add('release product surfaces work at runtime', polish.home.exampleHidden && polish.home.demoHidden && polish.home.hasInput && polish.home.hasToday && polish.swipe.hasWrapper && polish.swipe.hasEdit && polish.swipe.hasDanger && polish.my.demo && polish.my.feedback && polish.my.future && polish.release.shown && polish.release.bullets >= 5 && polish.sprite.bear && polish.sprite.today && polish.sprite.batch && polish.sprite.calendar && polish.sprite.backup && polish.sprite.update, JSON.stringify(polish));
 
+  await client.evaluate(`saveTimeSpriteCollapsed(true);switchPage('home');window.scrollTo(0,0);`);
   const overflows = [];
+  const viewportEvidence = [];
   for (const width of VIEWPORTS) {
+    const height = width >= 768 ? 900 : 812;
     await client.send('Emulation.setDeviceMetricsOverride', {
       width,
-      height: width >= 768 ? 900 : 812,
+      height,
       deviceScaleFactor: 1,
       mobile: width < 768
     });
@@ -253,6 +266,19 @@ async function main() {
       `);
       if (result.overflow > 1) overflows.push(result);
     }
+    let screenshot = null;
+    if (CAPTURE_SCREENSHOTS && ARTIFACT_DIR) {
+      await client.evaluate(`switchPage('home');window.scrollTo(0,0);`);
+      await delay(80);
+      const capture = await client.send('Page.captureScreenshot', {
+        format: 'png',
+        captureBeyondViewport: false
+      });
+      screenshot = `home-${width}x${height}.png`;
+      fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
+      fs.writeFileSync(path.join(ARTIFACT_DIR, screenshot), Buffer.from(capture.data, 'base64'));
+    }
+    viewportEvidence.push({ width, height, screenshot });
   }
   add('all requested viewports and pages avoid horizontal overflow', overflows.length === 0, JSON.stringify(overflows));
 
@@ -343,10 +369,24 @@ async function main() {
   add('night theme weather background and language switch remain stable', surface.spriteReadable && surface.backgroundOk && surface.weatherOk && surface.enTitle === 'Demo route' && surface.zhTitle === '演示路线', JSON.stringify(surface));
 
   await delay(300);
-  const allErrors = client.consoleErrors.concat(client.runtimeErrors).concat(client.logErrors)
+  const allErrors = client.consoleErrors.concat(client.runtimeErrors).concat(client.logErrors, client.networkErrors)
     .filter(Boolean)
     .filter((text) => !/favicon/i.test(text));
-  add('runtime has no console or JS errors', allErrors.length === 0, JSON.stringify(allErrors));
+  add('runtime has no console JS or network errors', allErrors.length === 0, JSON.stringify(allErrors));
+
+  if (ARTIFACT_DIR) {
+    fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
+    fs.writeFileSync(path.join(ARTIFACT_DIR, 'runtime-result.json'), JSON.stringify({
+      classification: 'PASS',
+      generatedAt: new Date().toISOString(),
+      appUrl: APP_URL,
+      expectedVersion: EXPECTED_VERSION,
+      viewports: viewportEvidence,
+      pages: PAGES,
+      checks,
+      errors: allErrors
+    }, null, 2));
+  }
 
   client.close();
   console.log(`Runtime CDP acceptance passed: ${checks.length}/${checks.length}`);
