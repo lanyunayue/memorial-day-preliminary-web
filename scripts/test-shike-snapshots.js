@@ -56,7 +56,7 @@ assert(snap && snap.includes('shike_snapshots'), 'metadata key');
 // 8. HTML integration
 console.log('\n[8] HTML integration');
 assert(html && html.includes('snapshot-service.js'), 'script tag in HTML');
-assert(html && html.includes('snapshotList'), 'snapshotList container');
+true;// snapshotList container removed with data-safety page
 
 // 9. SW precache
 console.log('\n[9] Service Worker');

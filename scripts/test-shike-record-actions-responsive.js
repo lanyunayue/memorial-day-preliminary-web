@@ -148,8 +148,8 @@ add('41. reduced-motion support exists', () => {
 add('42. APP_VERSION = v2.0.0-rc5.1', () => {
   assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v2.0.0-rc5.1"), 'APP_VERSION should be v2.0.0-rc5.1');
 });
-add('43. cache name shike-v200rc51-v60', () => {
-  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v200rc51-v60'), 'CACHE_NAME should be shike-v200rc51-v60');
+add('43. cache name shike-v200rc51-v61', () => {
+  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v200rc51-v61'), 'CACHE_NAME should be shike-v200rc51-v61');
 });
 add('44. original swipe functionality not regressed', () => {
   assert(script.includes('record-swipe')&&script.includes('swiped')&&script.includes('translateX'), 'core swipe functionality preserved');

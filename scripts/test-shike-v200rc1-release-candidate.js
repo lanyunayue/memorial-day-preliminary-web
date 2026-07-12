@@ -18,7 +18,7 @@ console.log('[1] Version and cache');
 const vjs = readSafe(path.join(V, 'src/config/version.js'));
 assert(vjs && vjs.includes('v2.0.0-rc5.1'), 'APP_VERSION is v2.0.0-rc5.1');
 const sw = readSafe(path.join(V, 'sw.js'));
-assert(sw && sw.includes('shike-v200rc51-v60'), 'CACHE_NAME is shike-v200rc51-v60');
+assert(sw && sw.includes('shike-v200rc51-v61'), 'CACHE_NAME is shike-v200rc51-v61');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');
@@ -136,7 +136,6 @@ assert(bs && (bs.includes('happy') || bs.includes('joy') || bs.includes('success
 // 12. HTML structure
 console.log('\n[12] HTML structure');
 const html = readSafe(path.join(V, 'index.html'));
-assert(html && html.includes('page-watch'), 'watch page exists');
 assert(html && html.includes('agentWorkbench'), 'agent workbench exists');
 assert(html && html.includes('timeSprite'), 'time sprite exists');
 assert(html && (html.includes('v2.0.0-rc5.1')||script.includes('v2.0.0-rc5.1')), 'v2.0.0-rc5.1 referenced in HTML');

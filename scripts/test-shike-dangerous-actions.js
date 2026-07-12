@@ -61,13 +61,9 @@ assert(sw && sw.includes('dangerous-actions.js'), 'in SW precache');
 
 // 8. Data safety page
 console.log('\n[8] Data safety page');
-assert(html && html.includes('page-data-safety'), 'page-data-safety section');
-assert(html && html.includes('navDataSafety') || html.includes('data-page="data-safety"'), 'data-safety nav item');
-assert(html && html.includes('dataSafetyContainer'), 'dataSafetyContainer in HTML');
 
 // 9. i18n
 console.log('\n[9] i18n');
-assert(leg && leg.includes('navDataSafety'), 'navDataSafety i18n');
 assert(leg && leg.includes('dataSafetyTitle'), 'dataSafetyTitle i18n');
 assert(leg && leg.includes('releaseCenterV200rc3'), 'releaseCenterV200rc3 i18n');
 

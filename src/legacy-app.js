@@ -2348,11 +2348,6 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  
-  else if(page==='data-safety'){if(window.ShikeStoragePersistence)ShikeStoragePersistence.render($('storageStatus'));if(window.ShikeSnapshotService)renderSnapshotList();if(window.ShikeTrashRepository)renderTrashList();}
-  else if(page==='reminder-diagnostics'){if(window.ShikeReminderDiagnostics)ShikeReminderDiagnostics.render($('reminderDiagContainer'));}
-      
-  else if(page==='permissions'){if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.render==='function'){var permContainer=document.getElementById('permissionContainer');if(permContainer)window.ShikePermissionCenter.render(permContainer);}}
   renderTimeSprite();
   window.scrollTo(0,0);
 }
@@ -2996,8 +2991,8 @@ function renderMy(){
   if($('safetyUndatedCount'))$('safetyUndatedCount').textContent=countUndatedRecords();
   if($('safetyLastBackup'))$('safetyLastBackup').textContent=getLastBackupText();
   var storageStatus=window.ShikeLocalFirst?ShikeLocalFirst.getStatus():{mode:'legacy-fallback',quarantineCount:0};
-  if($('storageEngineStatus'))$('storageEngineStatus').textContent=storageStatus.mode==='indexeddb'?t('indexedDbMode'):t('legacyFallbackMode');
-  if($('quarantineCount'))$('quarantineCount').textContent=storageStatus.quarantineCount||0;
+  var _ses=$('storageEngineStatus');if(_ses)_ses.textContent=storageStatus.mode==='indexeddb'?t('indexedDbMode'):t('legacyFallbackMode');
+  var _qc=$('quarantineCount');if(_qc)_qc.textContent=storageStatus.quarantineCount||0;
   if($('safetyStatusHint'))$('safetyStatusHint').textContent=(stat>=5&&!localStorage.getItem(LAST_BACKUP_KEY))?t('backupSuggested'):t('backupLooksOk');
   // Username input
   $('usernameInput').value=settings.username||'';
@@ -3470,7 +3465,6 @@ function setVoiceState(state,optMsg){
   switch(state){
     case VOICE_IDLE:btn.disabled=false;break;
     case'watch':
-      if(window.ShikeWatchCenter && typeof window.ShikeWatchCenter.render==='function'){window.ShikeWatchCenter.render($('watchContent') || $('watchContent'));}updateWatchBadge();
       break;
     case VOICE_STARTING:
       btn.disabled=false;btn.classList.add('listening');

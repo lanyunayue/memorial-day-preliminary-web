@@ -1,5 +1,5 @@
 ﻿// Service Worker for 时刻 (Shike) - v1.5.0
-var CACHE_NAME = 'shike-v200rc51-v60';
+var CACHE_NAME = 'shike-v200rc51-v61';
 var PRECACHE_URLS = [
   './','./index.html','./manifest.json','./assets/styles/app.css','./src/config/release-notes.js',
   './src/config/version.js','./src/config/constants.js','./src/utilities/sanitize.js','./src/utilities/ids.js','./src/storage/legacy-storage.js','./src/storage/data-integrity.js','./src/storage/indexeddb-storage.js','./src/storage/local-first-bridge.js','./src/legacy-app.js','./src/app.js',

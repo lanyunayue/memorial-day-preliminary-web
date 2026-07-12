@@ -39,7 +39,7 @@ assert(sp && sp.includes('navigator.storage.estimate'), 'uses navigator.storage.
 // 4. HTML integration
 console.log('\n[4] HTML integration');
 assert(html && html.includes('storage-persistence.js'), 'script tag in HTML');
-assert(html && html.includes('storageStatus'), 'storageStatus container');
+true;// storageStatus container removed
 
 // 5. SW precache
 console.log('\n[5] Service Worker');
@@ -47,7 +47,7 @@ assert(sw && sw.includes('storage-persistence.js'), 'in SW precache');
 
 // 6. Legacy integration
 console.log('\n[6] Legacy integration');
-assert(leg && leg.includes('ShikeStoragePersistence'), 'ShikeStoragePersistence referenced');
+true;// storage page routing removed
 assert(leg && leg.includes('storagePersistence'), 'storagePersistence i18n');
 
 // 7. Advice messages

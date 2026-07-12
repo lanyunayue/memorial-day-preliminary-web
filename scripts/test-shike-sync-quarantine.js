@@ -24,7 +24,7 @@
   assert(!htmlSrc.includes('id="page-sync"'),'page-sync section removed from HTML');
   assert(!htmlSrc.includes('syncContainer'),'syncContainer div removed from HTML');
   assert(versionSrc.includes("v2.0.0-rc5.1"),'APP_VERSION is v2.0.0-rc5.1');
-  assert(swSrc.includes("shike-v200rc51-v60"),'CACHE_NAME is shike-v200rc51-v60');
+  assert(swSrc.includes("shike-v200rc51-v61"),'CACHE_NAME is shike-v200rc51-v61');
 
   // sync-status must show quarantine
   var quarantineMsg = statusSrc.includes('syncQuarantine') ||

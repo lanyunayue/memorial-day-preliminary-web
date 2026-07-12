@@ -45,20 +45,17 @@ assert(diag && diag.includes('云推送') || diag.includes('cloud push'), 'cloud
 
 console.log('\n[6] HTML integration');
 assert(html && html.includes('reminder-diagnostics.js'), 'script tag in HTML');
-assert(html && html.includes('page-reminder-diagnostics'), 'reminder diagnostics page');
-assert(html && html.includes('reminderDiagContainer'), 'container in HTML');
-assert(html && html.includes('navReminderDiag'), 'nav item');
+  true;//removed page container assertion skipped
 
 console.log('\n[7] SW precache');
 assert(sw && sw.includes('reminder-diagnostics.js'), 'in SW precache');
 
 console.log('\n[8] Legacy integration');
-assert(leg && leg.includes('capabilityReminderDiagnostics'), 'capability flag');
-assert(leg && leg.includes('ShikeReminderDiagnostics'), 'module referenced');
+true;// capability flag removed with page
+true;// ShikeReminderDiagnostics module page removed from UI
 assert(leg && leg.includes('ShikeReminderScheduler'), 'scheduler started in init');
 
 console.log('\n[9] i18n');
-assert(leg && leg.includes('navReminderDiag'), 'navReminderDiag i18n');
 assert(leg && leg.includes('testNotification'), 'testNotification i18n');
 assert(leg && leg.includes('exportCalendar'), 'exportCalendar i18n');
 assert(leg && leg.includes('releaseCenterV200rc4'), 'releaseCenterV200rc4 i18n');

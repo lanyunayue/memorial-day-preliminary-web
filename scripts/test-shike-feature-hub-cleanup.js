@@ -35,7 +35,7 @@ add('mobile compact grid exists', style.includes('grid-template-columns:repeat(2
 add('desktop grid exists', style.includes('@media (min-width:900px)') && style.includes('grid-template-columns:repeat(3'));
 add('version is v2.0.0-rc5.1', script.includes("APP_VERSION='v2.0.0-rc5.1'"));
 add('updated timestamp has release format', /APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script));
-add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc51-v60'"));
+add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v200rc51-v61'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {
