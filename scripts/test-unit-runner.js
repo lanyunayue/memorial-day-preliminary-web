@@ -15,6 +15,7 @@ const unitTests = [
   'test-shike-indexeddb-repository.js',
   'test-shike-storage-migration.js',
   'test-shike-data-integrity.js',
+  'test-shike-temporal-domain.js',
 ];
 
 let passed = 0, failed = 0;
