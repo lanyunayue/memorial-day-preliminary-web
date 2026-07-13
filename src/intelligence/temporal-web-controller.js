@@ -4,6 +4,8 @@
     graphBuilder:global.ShikeGraphBuilder,graphRepository:global.ShikeGraphRepository,graphIntegrity:global.ShikeGraphIntegrity,graphSerializer:global.ShikeGraphSerializer,
     waitingEngine:global.ShikeWaitingForEngine,waitingRepository:global.ShikeWaitingForRepository,nextAction:global.ShikeNextActionEngine,
     daily:global.ShikeDailyBrief,weekly:global.ShikeWeeklyReview,correctionStore:global.ShikeCorrectionStore,memory:global.ShikeTemporalMemory,
+    operation:global.ShikeTemporalOperation,operationJournal:global.ShikeOperationJournal,operationLock:global.ShikeTemporalOperationLock,
+    operationCoordinator:global.ShikeOperationCoordinator,operationRecovery:global.ShikeOperationRecovery,consistencyAuditor:global.ShikeTemporalConsistencyAuditor,
     backupAdapter:global.ShikeChronosBackupAdapter,inboxView:global.ShikeLifeInboxPreview,actionView:global.ShikeNextActionCard,reviewView:global.ShikeTemporalReviewPanel,legacyAdapter:global.ShikeLegacyRecordAdapter
   };
   if(typeof module!=='undefined'&&module.exports){modules={
@@ -11,6 +13,8 @@
     graphBuilder:require('../graph/graph-builder.js'),graphRepository:require('../graph/graph-repository.js'),graphIntegrity:require('../graph/graph-integrity.js'),graphSerializer:require('../graph/graph-serializer.js'),
     waitingEngine:require('./waiting-for-engine.js'),waitingRepository:require('./waiting-for-repository.js'),nextAction:require('./next-action-engine.js'),
     daily:require('./daily-brief.js'),weekly:require('./weekly-review.js'),correctionStore:require('./correction-store.js'),memory:require('./temporal-memory.js'),
+    operation:require('./transactions/temporal-operation.js'),operationJournal:require('./transactions/operation-journal.js'),operationLock:require('./transactions/operation-lock.js'),
+    operationCoordinator:require('./transactions/operation-coordinator.js'),operationRecovery:require('./transactions/operation-recovery.js'),consistencyAuditor:require('./transactions/consistency-auditor.js'),
     backupAdapter:require('./adapters/backup-adapter.js'),inboxView:require('./ui/life-inbox-preview.js'),actionView:require('./ui/next-action-card.js'),reviewView:require('./ui/review-panel.js'),legacyAdapter:require('./adapters/legacy-record-adapter.js')
   };}
   var api=factory(modules,global);if(typeof module!=='undefined'&&module.exports)module.exports=api;global.ShikeChronosWeb=api;
@@ -21,11 +25,18 @@
   function copy(value){return JSON.parse(JSON.stringify(value));}
   function readNever(){try{var value=JSON.parse(global.localStorage.getItem(NEVER_KEY)||'[]');return new Set(Array.isArray(value)?value:[]);}catch(error){return new Set();}}
   function writeNever(values){try{global.localStorage.setItem(NEVER_KEY,JSON.stringify([...values]));}catch(error){}}
-  function defaultApi(){return {getRecords:function(){return[];},saveRecord:function(){return null;},removeRecord:function(){},updateRecord:function(){return false;},clearInput:function(){},onCaptureStart:function(){},openDetail:function(){},notify:function(){},refresh:function(){},download:function(){}};}
+  function defaultApi(){return {
+    getRecords:function(){return[];},createRecordId:function(){return 'record_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);},
+    prepareRecord:function(draft,id){return modules.intelligence.toRecord(draft,function(){return id;});},
+    saveRecord:function(){return null;},writeRecord:function(record,draft){return Promise.resolve(this.saveRecord(draft,record.id));},
+    removeRecord:function(){},removeRecordDurably:function(id){this.removeRecord(id);return Promise.resolve(true);},
+    updateRecord:function(){return false;},updateRecordDurably:function(id,changes){return Promise.resolve(this.updateRecord(id,changes));},
+    clearInput:function(){},onCaptureStart:function(){},openDetail:function(){},notify:function(){},refresh:function(){},download:function(){}
+  };}
   function create(options){
-    options=options||{};var api=defaultApi();var temporalRepository=null;var graphRepository=null;var waitingRepository=null;var correctionStore=null;var backupAdapter=null;var initialized=false;var renderToken=0;
+    options=options||{};var api=defaultApi();var temporalRepository=null;var graphRepository=null;var waitingRepository=null;var correctionStore=null;var operationJournal=null;var operationLock=null;var operationCoordinator=null;var operationRecovery=null;var backupAdapter=null;var initialized=false;var renderToken=0;
     var waitingTombstones=new Map();
-    var state={sourceText:'',drafts:[],rejected:[],persisting:false,error:'',saving:new Set(),ignored:new Set(),never:readNever(),lastModel:null,lastReview:null,memoryIndex:null};
+    var state={sourceText:'',drafts:[],rejected:[],persisting:false,error:'',saving:new Set(),ignored:new Set(),never:readNever(),lastModel:null,lastReview:null,memoryIndex:null,lastRecovery:null,lastConsistency:null};
     function notify(message,type){api.notify(message,type||'warn');}
     function previewContainer(){return global.document&&global.document.getElementById('temporalInboxBlock');}
     function actionContainer(){return global.document&&global.document.getElementById('temporalActionBlock');}
@@ -62,23 +73,50 @@
       var draft=state.drafts.find(function(item){return item.id===id;});
       temporalRepository.setStatus(id,'cancelled').catch(function(){return temporalRepository.removeDraft(id);}).then(function(){logCorrection({eventType:'draft_cancelled',draftId:id,sourceText:draft&&draft.sourceText,originalType:draft&&draft.type});removeDraftFromState(id);}).catch(function(){state.saving.delete(id);state.error='取消操作未能保存。';renderPreview();});
     }
-    async function rollback(recordId,waitingId){
-      await graphRepository.purgeRecord(recordId).catch(function(){});if(waitingId)await waitingRepository.remove(waitingId).catch(function(){});api.removeRecord(recordId);
+    function createPayload(draft,recordId){
+      return {operationType:'create_record',recordId:recordId,draftId:draft.id,type:draft.type,sourceSpan:draft.sourceSpan,personRefs:draft.personRefs||[],normalizedTime:draft.normalizedTime||null,recurrence:draft.recurrence||null,action:draft.action||'',object:draft.object||''};
+    }
+    function createPlan(draft,recordId){
+      var operationId='create:'+draft.id;var payload=createPayload(draft,recordId);var record=null;
+      async function currentRecord(){record=api.getRecords().find(function(item){return item.id===recordId;})||record;if(record)return record;record=api.prepareRecord(draft,recordId);if(!record||record.id!==recordId)throw new Error('prepared_record_id_mismatch');return record;}
+      return {operationId:operationId,operationType:'create_record',recordId:recordId,draftId:draft.id,payload:payload,pendingSteps:['record','sidecars','draft','correction'],steps:[
+        {name:'record',status:'record_written',run:async function(){var existing=api.getRecords().find(function(item){return item.id===recordId;});if(existing){record=existing;return existing;}var next=await currentRecord();var written=await api.writeRecord(next,draft);if(!written||written.id!==recordId)throw new Error('record_write_failed');record=written;return written;}},
+        {name:'sidecars',status:'sidecars_written',run:async function(){var next=await currentRecord();var graph=modules.graphBuilder.build(draft,next);await graphRepository.replaceForRecord(recordId,graph);if(draft.type==='waiting_for'){var waiting=modules.waitingEngine.fromDraft(draft,next,new Date());await waitingRepository.upsert(waiting);}return true;}},
+        {name:'draft',status:'sidecars_written',run:function(){return temporalRepository.setStatus(draft.id,'confirmed');}},
+        {name:'correction',status:'sidecars_written',run:function(){return correctionStore.record({id:'correction:'+operationId,eventType:'draft_confirmed',recordId:recordId,draftId:draft.id,sourceText:draft.sourceText,originalType:draft.type,correctedType:draft.type,createdAt:new Date().toISOString()});}}
+      ]};
+    }
+    async function resolveRecoveryPlan(operation){
+      if(operation.operationType!=='create_record')return null;var draft=await temporalRepository.getDraft(operation.draftId);if(!draft)return null;return createPlan(draft,operation.recordId);
+    }
+    async function runConsistencyAudit(){
+      if(!initialized)return null;var values=await Promise.all([graphRepository.snapshot(),waitingRepository.list(),operationJournal.list(),temporalRepository.listDrafts()]);
+      state.lastConsistency=modules.consistencyAuditor.audit({records:api.getRecords(),graph:values[0],waiting:values[1],operations:values[2],drafts:values[3]});return copy(state.lastConsistency);
+    }
+    async function rebuildConsistency(){
+      var report=await runConsistencyAudit();var operations=await operationJournal.list();var drafts=await temporalRepository.listDrafts();var draftById=new Map(drafts.map(function(item){return [item.id,item];}));
+      for(var index=0;index<report.findings.length;index++){
+        var finding=report.findings[index];
+        if(finding.code==='dangling_graph')await graphRepository.purgeRecord(finding.recordId);
+        else if(finding.code==='dangling_waiting'){var waiting=await waitingRepository.list();var dangling=waiting.find(function(item){return item.id===finding.waitingId;});if(dangling)await waitingRepository.remove(dangling.id);}
+        else if(['missing_graph','missing_waiting'].includes(finding.code)){
+          var operation=operations.find(function(item){return item.operationType==='create_record'&&item.recordId===finding.recordId;});var draft=operation&&draftById.get(operation.draftId);var record=api.getRecords().find(function(item){return item.id===finding.recordId;});
+          if(draft&&record){if(finding.code==='missing_graph')await graphRepository.replaceForRecord(record.id,modules.graphBuilder.build(draft,record));if(finding.code==='missing_waiting'&&draft.type==='waiting_for')await waitingRepository.upsert(modules.waitingEngine.fromDraft(draft,record,new Date()));}
+        }
+      }
+      state.lastConsistency=await runConsistencyAudit();await renderInsights(api.getRecords());return copy(state.lastConsistency);
     }
     async function confirmDraft(id){
       var draft=state.drafts.find(function(item){return item.id===id;});if(!draft||state.persisting||state.error||state.saving.has(id))return false;
-      if(modules.legacyAdapter.isDuplicate(draft,api.getRecords())){notify('这条记录已存在，未重复保存。','warn');return false;}
-      state.saving.add(id);renderPreview();var record=null;var waiting=null;
+      var operationId='create:'+draft.id;var existingOperation=await operationJournal.get(operationId);if(!existingOperation&&modules.legacyAdapter.isDuplicate(draft,api.getRecords())){notify('这条记录已存在，未重复保存。','warn');return false;}
+      state.saving.add(id);renderPreview();var recordId=existingOperation&&existingOperation.recordId||api.createRecordId();
       try{
-        record=api.saveRecord(draft);if(!record||!record.id)throw new Error('record_save_failed');
-        var graph=modules.graphBuilder.build(draft,record);await graphRepository.replaceForRecord(record.id,graph);
-        if(draft.type==='waiting_for'){waiting=modules.waitingEngine.fromDraft(draft,record,new Date());await waitingRepository.upsert(waiting);}
-        await temporalRepository.setStatus(id,'confirmed');logCorrection({eventType:'draft_confirmed',recordId:record.id,draftId:id,sourceText:draft.sourceText,originalType:draft.type,correctedType:draft.type});state.saving.delete(id);removeDraftFromState(id);api.refresh();await renderInsights(api.getRecords());return true;
+        await operationCoordinator.execute(createPlan(draft,recordId));state.saving.delete(id);state.error='';removeDraftFromState(id);api.refresh();await renderInsights(api.getRecords());await runConsistencyAudit();return true;
       }catch(error){
-        state.saving.delete(id);if(record)await rollback(record.id,waiting&&waiting.id);state.error='记录未完整保存，已回滚，请重试。';renderPreview();notify(state.error,'error');return false;
+        state.saving.delete(id);state.error='记录写入被中断，恢复日志已保留；重新打开页面会安全恢复。';renderPreview();notify(state.error,'error');return false;
       }
     }
-    async function confirmAll(){var ids=state.drafts.map(function(draft){return draft.id;});for(var i=0;i<ids.length;i++)await confirmDraft(ids[i]);}
+    async function confirmAll(){var ids=state.drafts.map(function(draft){return draft.id;});for(var i=0;i<ids.length;i++){var completed=await confirmDraft(ids[i]);if(!completed)break;}}
     async function auditGraph(){
       var graph=await graphRepository.snapshot();var result=modules.graphIntegrity.audit(graph);if(result.valid)return graph;
       if(global.ShikeIndexedDb)await global.ShikeIndexedDb.put('temporal_meta',{id:'graph_recovery:'+Date.now(),schemaVersion:1,reason:result.errors.join(','),graph:copy(graph),createdAt:new Date().toISOString()});
@@ -122,8 +160,22 @@
       graphRepository=options.graphRepository||modules.graphRepository.create();
       waitingRepository=options.waitingRepository||modules.waitingRepository.create();
       correctionStore=options.correctionStore||modules.correctionStore.create(global.ShikeIndexedDb?undefined:modules.correctionStore.memoryDriver());
+      operationJournal=options.operationJournal||modules.operationJournal.create(global.ShikeIndexedDb?undefined:modules.operationJournal.memoryDriver());
+      operationLock=options.operationLock||modules.operationLock.create(global.ShikeIndexedDb?undefined:modules.operationLock.memoryDriver(),options.lockOptions);
+      operationCoordinator=options.operationCoordinator||modules.operationCoordinator.create({journal:operationJournal,lock:operationLock,fault:options.fault});
+      operationRecovery=options.operationRecovery||modules.operationRecovery.create({journal:operationJournal,coordinator:operationCoordinator,resolvePlan:resolveRecoveryPlan,maxRetries:3});
       backupAdapter=options.backupAdapter||modules.backupAdapter.create({graphRepository:graphRepository,waitingRepository:waitingRepository});initialized=true;
-      try{var drafts=await temporalRepository.listDrafts();state.drafts=drafts.filter(function(draft){return draft.status==='draft';});if(state.drafts.length)state.sourceText=state.drafts[0].sourceText;renderPreview();await renderInsights(api.getRecords());}catch(error){notify('时间智能存储初始化失败，基础记录仍可使用。','warn');}
+      try{
+        var drafts=await temporalRepository.listDrafts();
+        state.drafts=drafts.filter(function(draft){return draft.status==='draft';});
+        if(state.drafts.length)state.sourceText=state.drafts[0].sourceText;
+        state.lastRecovery=await operationRecovery.scan();
+        drafts=await temporalRepository.listDrafts();
+        state.drafts=drafts.filter(function(draft){return draft.status==='draft';});
+        renderPreview();await renderInsights(api.getRecords());await runConsistencyAudit();
+        if(state.lastRecovery.recovered)notify('已安全恢复 '+state.lastRecovery.recovered+' 个中断操作。','success');
+        if(state.lastRecovery.quarantined)notify('有时间操作无法自动恢复，已隔离。','warn');
+      }catch(error){notify('时间智能存储初始化失败，基础记录仍可使用。','warn');}
       return true;
     }
     async function tombstoneRecord(recordId){
@@ -152,10 +204,10 @@
     }
     function hasPendingDrafts(){return state.drafts.length>0||state.persisting||state.saving.size>0;}
     async function queryMemory(question,options){if(!initialized)return {query:question,answer:'时间记忆尚未初始化。',sources:[]};var graph=await auditGraph();state.memoryIndex=modules.memory.buildIndex(api.getRecords(),graph);return modules.memory.query(state.memoryIndex,question,options);}
-    async function diagnostics(){return {initialized:initialized,pendingDrafts:state.drafts.length,graph:initialized?await graphRepository.snapshot():null,waiting:initialized?await waitingRepository.list():[],corrections:initialized?await correctionStore.list():[],model:copy(state.lastModel),review:copy(state.lastReview)};}
+    async function diagnostics(){return {initialized:initialized,pendingDrafts:state.drafts.length,graph:initialized?await graphRepository.snapshot():null,waiting:initialized?await waitingRepository.list():[],corrections:initialized?await correctionStore.list():[],operations:initialized?await operationJournal.diagnostics():null,recovery:copy(state.lastRecovery),consistency:initialized?await runConsistencyAudit():null,model:copy(state.lastModel),review:copy(state.lastReview)};}
     return Object.freeze({
       init:init,captureIfNeeded:captureIfNeeded,confirmDraft:confirmDraft,confirmAll:confirmAll,
-      cancelDraft:cancelDraft,render:renderInsights,renderReviews:renderReviews,queryMemory:queryMemory,
+      cancelDraft:cancelDraft,render:renderInsights,renderReviews:renderReviews,queryMemory:queryMemory,runConsistencyAudit:runConsistencyAudit,rebuildConsistency:rebuildConsistency,
       tombstoneRecord:tombstoneRecord,restoreRecord:restoreRecord,purgeRecord:purgeRecord,
       augmentBackup:augmentBackup,importBackupSidecars:importBackupSidecars,
       saveSnapshotSidecar:saveSnapshotSidecar,restoreSnapshotSidecar:restoreSnapshotSidecar,
@@ -170,7 +222,7 @@
     purgeRecord:singleton.purgeRecord,augmentBackup:singleton.augmentBackup,
     importBackupSidecars:singleton.importBackupSidecars,saveSnapshotSidecar:singleton.saveSnapshotSidecar,
     restoreSnapshotSidecar:singleton.restoreSnapshotSidecar,hasPendingDrafts:singleton.hasPendingDrafts,
-    renderReviews:singleton.renderReviews,queryMemory:singleton.queryMemory,
+    renderReviews:singleton.renderReviews,queryMemory:singleton.queryMemory,runConsistencyAudit:singleton.runConsistencyAudit,rebuildConsistency:singleton.rebuildConsistency,
     diagnostics:singleton.diagnostics
   });
 });
