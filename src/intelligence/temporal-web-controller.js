@@ -35,8 +35,18 @@
   };}
   function create(options){
     options=options||{};var api=defaultApi();var temporalRepository=null;var graphRepository=null;var waitingRepository=null;var correctionStore=null;var adaptationStore=null;var operationJournal=null;var operationLock=null;var operationCoordinator=null;var operationRecovery=null;var backupAdapter=null;var initialized=false;var renderToken=0;
+    var payloadMemory=new Map();var operationPayloadStore=options.operationPayloadStore||{
+      get:function(id){if(global.ShikeIndexedDb)return global.ShikeIndexedDb.get('temporal_meta',id);var value=payloadMemory.get(id);return Promise.resolve(value===undefined?undefined:copy(value));},
+      put:function(item){if(global.ShikeIndexedDb)return global.ShikeIndexedDb.put('temporal_meta',item);payloadMemory.set(item.id,copy(item));return Promise.resolve(copy(item));},
+      remove:function(id){if(global.ShikeIndexedDb)return global.ShikeIndexedDb.remove('temporal_meta',id);payloadMemory.delete(id);return Promise.resolve(true);}
+    };
     var waitingTombstones=new Map();
-    var state={sourceText:'',drafts:[],rejected:[],persisting:false,error:'',saving:new Set(),ignored:new Set(),never:readNever(),lastModel:null,lastReview:null,memoryIndex:null,adaptationRules:[],lastRecovery:null,lastConsistency:null};
+    var state={sourceText:'',drafts:[],rejected:[],persisting:false,batchSaving:false,error:'',saving:new Set(),ignored:new Set(),never:readNever(),lastModel:null,lastReview:null,memoryIndex:null,adaptationRules:[],lastRecovery:null,lastConsistency:null};
+    function nextOperationId(type,resourceId){return type+':'+String(resourceId||'global')+':'+Date.now().toString(36)+':'+Math.random().toString(36).slice(2,7);}
+    function payloadId(operationId){return 'operation_payload:'+operationId;}
+    function stagePayload(operationId,payload){return operationPayloadStore.put({id:payloadId(operationId),operationId:operationId,payload:copy(payload),createdAt:new Date().toISOString(),schemaVersion:1});}
+    async function readPayload(operationId){var item=await operationPayloadStore.get(payloadId(operationId));return item&&item.payload;}
+    function clearPayload(operationId){return operationPayloadStore.remove(payloadId(operationId));}
     function notify(message,type){api.notify(message,type||'warn');}
     function previewContainer(){return global.document&&global.document.getElementById('temporalInboxBlock');}
     function actionContainer(){return global.document&&global.document.getElementById('temporalActionBlock');}
@@ -91,14 +101,50 @@
         {name:'correction',status:'sidecars_written',run:function(){return correctionStore.record({id:'correction:'+operationId,eventType:'draft_confirmed',recordId:recordId,draftId:draft.id,sourceText:draft.sourceText,originalType:draft.type,correctedType:draft.type,createdAt:new Date().toISOString()});}}
       ]};
     }
+    function createRecordMutationPlan(operationId,operationType,recordId,changes){
+      var payload={recordId:recordId,changes:copy(changes)};
+      return {operationId:operationId,operationType:operationType,recordId:recordId,resourceId:payloadId(operationId),payload:payload,pendingSteps:['stage','record','sidecars','cleanup'],steps:[
+        {name:'stage',status:'prepared',run:function(){return stagePayload(operationId,payload);}},
+        {name:'record',status:'record_written',run:async function(){var current=api.getRecords().find(function(item){return item.id===recordId;});if(!current)throw new Error('record_not_found');var changed=await api.updateRecordDurably(recordId,changes);if(!changed)throw new Error('record_update_failed');return changed;}},
+        {name:'sidecars',status:'sidecars_written',run:async function(){if(operationType!=='complete_record')return true;var waiting=await waitingRepository.list();var item=waiting.find(function(entry){return entry.recordId===recordId;});if(item&&!['resolved','cancelled'].includes(item.status))await waitingRepository.upsert(modules.waitingEngine.transition(item,'resolved'));return true;}},
+        {name:'cleanup',status:'sidecars_written',run:function(){return clearPayload(operationId);}}
+      ]};
+    }
+    function createSidecarPlan(operationId,operationType,recordId){
+      var run=operationType==='delete_record'?tombstoneRecordRaw:operationType==='restore_record'?restoreRecordRaw:purgeRecordRaw;
+      return {operationId:operationId,operationType:operationType,recordId:recordId,resourceId:recordId,payload:{recordId:recordId},pendingSteps:['sidecars'],steps:[{name:'sidecars',status:'sidecars_written',run:function(){return run(recordId);}}]};
+    }
+    function createRebuildPlan(operationId){return {operationId:operationId,operationType:'rebuild_graph',resourceId:'temporal_graph',payload:{resourceId:'temporal_graph'},pendingSteps:['rebuild'],steps:[{name:'rebuild',status:'sidecars_written',run:rebuildConsistencyRaw}]};}
+    function createImportPlan(operationId,prepared){
+      var payload={prepared:copy(prepared)};var result=null;
+      return {operationId:operationId,operationType:'import_backup',resourceId:payloadId(operationId),payload:payload,pendingSteps:['stage','sidecars','cleanup'],steps:[
+        {name:'stage',status:'prepared',run:function(){return stagePayload(operationId,payload);}},
+        {name:'sidecars',status:'sidecars_written',run:async function(){result=await backupAdapter.importPrepared(prepared);state.adaptationRules=await adaptationStore.list();await renderInsights(api.getRecords());return result;}},
+        {name:'cleanup',status:'sidecars_written',run:function(){return clearPayload(operationId);}}
+      ],result:function(){return result;}};
+    }
+    function createSnapshotRestorePlan(operationId,snapshotId){return {operationId:operationId,operationType:'restore_snapshot',resourceId:snapshotId,payload:{snapshotId:snapshotId},pendingSteps:['sidecars'],steps:[{name:'sidecars',status:'sidecars_written',run:function(){return restoreSnapshotSidecarRaw(snapshotId);}}]};}
+    function createBatchPlan(operationId,draftIds){
+      var payload={draftIds:draftIds.slice()};var steps=[{name:'stage',status:'prepared',run:function(){return stagePayload(operationId,payload);}}];
+      draftIds.forEach(function(draftId,index){steps.push({name:'draft_'+index,status:'record_written',run:async function(){var draft=state.drafts.find(function(item){return item.id===draftId;});if(!draft){var stored=await temporalRepository.getDraft(draftId);if(stored&&stored.status==='confirmed')return true;throw new Error('batch_draft_unavailable');}if(!await confirmDraft(draftId))throw new Error('batch_draft_failed');return true;}});});
+      steps.push({name:'cleanup',status:'sidecars_written',run:function(){return clearPayload(operationId);}});return {operationId:operationId,operationType:'confirm_batch',resourceId:payloadId(operationId),payload:payload,pendingSteps:steps.map(function(step){return step.name;}),steps:steps};
+    }
     async function resolveRecoveryPlan(operation){
-      if(operation.operationType!=='create_record')return null;var draft=await temporalRepository.getDraft(operation.draftId);if(!draft)return null;return createPlan(draft,operation.recordId);
+      if(operation.operationType==='create_record'){var draft=await temporalRepository.getDraft(operation.draftId);return draft?createPlan(draft,operation.recordId):null;}
+      if(['delete_record','restore_record','purge_record'].includes(operation.operationType))return createSidecarPlan(operation.operationId,operation.operationType,operation.recordId);
+      if(operation.operationType==='rebuild_graph')return createRebuildPlan(operation.operationId);
+      if(operation.operationType==='restore_snapshot')return createSnapshotRestorePlan(operation.operationId,operation.resourceId);
+      var staged=await readPayload(operation.operationId);if(!staged)return null;
+      if(['update_record','complete_record'].includes(operation.operationType))return createRecordMutationPlan(operation.operationId,operation.operationType,operation.recordId,staged.changes);
+      if(operation.operationType==='import_backup')return createImportPlan(operation.operationId,staged.prepared);
+      if(operation.operationType==='confirm_batch')return createBatchPlan(operation.operationId,staged.draftIds||[]);
+      return null;
     }
     async function runConsistencyAudit(){
       if(!initialized)return null;var values=await Promise.all([graphRepository.snapshot(),waitingRepository.list(),operationJournal.list(),temporalRepository.listDrafts()]);
       state.lastConsistency=modules.consistencyAuditor.audit({records:api.getRecords(),graph:values[0],waiting:values[1],operations:values[2],drafts:values[3]});return copy(state.lastConsistency);
     }
-    async function rebuildConsistency(){
+    async function rebuildConsistencyRaw(){
       var report=await runConsistencyAudit();var operations=await operationJournal.list();var drafts=await temporalRepository.listDrafts();var draftById=new Map(drafts.map(function(item){return [item.id,item];}));
       for(var index=0;index<report.findings.length;index++){
         var finding=report.findings[index];
@@ -111,6 +157,9 @@
       }
       state.lastConsistency=await runConsistencyAudit();await renderInsights(api.getRecords());return copy(state.lastConsistency);
     }
+    async function rebuildConsistency(){
+      if(!initialized)return null;var operationId=nextOperationId('rebuild_graph','temporal_graph');await operationCoordinator.execute(createRebuildPlan(operationId));return copy(state.lastConsistency);
+    }
     async function confirmDraft(id){
       var draft=state.drafts.find(function(item){return item.id===id;});if(!draft||state.persisting||state.error||state.saving.has(id))return false;
       var operationId='create:'+draft.id;var existingOperation=await operationJournal.get(operationId);if(!existingOperation&&modules.legacyAdapter.isDuplicate(draft,api.getRecords())){notify('这条记录已存在，未重复保存。','warn');return false;}
@@ -121,7 +170,10 @@
         state.saving.delete(id);state.error='记录写入被中断，恢复日志已保留；重新打开页面会安全恢复。';renderPreview();notify(state.error,'error');return false;
       }
     }
-    async function confirmAll(){var ids=state.drafts.map(function(draft){return draft.id;});for(var i=0;i<ids.length;i++){var completed=await confirmDraft(ids[i]);if(!completed)break;}}
+    async function confirmAll(){
+      var ids=state.drafts.map(function(draft){return draft.id;});if(!ids.length||state.batchSaving)return false;state.batchSaving=true;
+      var operationId=nextOperationId('confirm_batch',ids[0]+'_'+ids.length);try{await operationCoordinator.execute(createBatchPlan(operationId,ids));state.batchSaving=false;return true;}catch(error){state.batchSaving=false;return false;}
+    }
     async function auditGraph(){
       var graph=await graphRepository.snapshot();var result=modules.graphIntegrity.audit(graph);if(result.valid)return graph;
       if(global.ShikeIndexedDb)await global.ShikeIndexedDb.put('temporal_meta',{id:'graph_recovery:'+Date.now(),schemaVersion:1,reason:result.errors.join(','),graph:copy(graph),createdAt:new Date().toISOString()});
@@ -144,9 +196,9 @@
       if(action==='detail'){api.openDetail(recordId);return;}
       if(action==='ignore'){state.ignored.add(recordId);logCorrection({eventType:'suggestion_ignored',recordId:recordId});await renderInsights(api.getRecords());return;}
       if(action==='never'){state.never.add(recordId);writeNever(state.never);logCorrection({eventType:'suggestion_never',recordId:recordId});await renderInsights(api.getRecords());return;}
-      if(action==='later'){api.updateRecord(recordId,{postpone:true});logCorrection({eventType:'suggestion_later',recordId:recordId});notify('已按你的选择稍后处理。','success');api.refresh();await renderInsights(api.getRecords());return;}
+      if(action==='later'){await updateRecord(recordId,{postpone:true});logCorrection({eventType:'suggestion_later',recordId:recordId});notify('已按你的选择稍后处理。','success');api.refresh();await renderInsights(api.getRecords());return;}
       if(action==='complete'){
-        api.updateRecord(recordId,{recordState:'completed'});var waiting=await waitingRepository.list();var item=waiting.find(function(entry){return entry.recordId===recordId;});if(item)await waitingRepository.upsert(modules.waitingEngine.transition(item,'resolved'));logCorrection({eventType:'suggestion_accepted',recordId:recordId});notify('已标记完成。','success');api.refresh();await renderInsights(api.getRecords());
+        await completeRecord(recordId);logCorrection({eventType:'suggestion_accepted',recordId:recordId});notify('已标记完成。','success');api.refresh();await renderInsights(api.getRecords());
       }
     }
     async function renderReviews(){
@@ -185,29 +237,38 @@
       }catch(error){notify('时间智能存储初始化失败，基础记录仍可使用。','warn');}
       return true;
     }
-    async function tombstoneRecord(recordId){
+    async function updateRecord(recordId,changes){
+      if(!initialized)return false;var operationId=nextOperationId('update_record',recordId);await operationCoordinator.execute(createRecordMutationPlan(operationId,'update_record',recordId,changes));return true;
+    }
+    async function completeRecord(recordId){
+      if(!initialized)return false;var operationId=nextOperationId('complete_record',recordId);await operationCoordinator.execute(createRecordMutationPlan(operationId,'complete_record',recordId,{recordState:'completed'}));return true;
+    }
+    async function tombstoneRecordRaw(recordId){
       if(!initialized)return false;await graphRepository.tombstoneRecord(recordId);var waiting=await waitingRepository.list();var item=waiting.find(function(entry){return entry.recordId===recordId;});
       if(item){waitingTombstones.set(recordId,copy(item));if(global.ShikeIndexedDb)await global.ShikeIndexedDb.put('temporal_meta',{id:'waiting_tombstone:'+recordId,schemaVersion:1,waiting:copy(item),deletedAt:new Date().toISOString()});await waitingRepository.remove(item.id);}return true;
     }
-    async function restoreRecord(recordId){
+    async function tombstoneRecord(recordId){if(!initialized)return false;var operationId=nextOperationId('delete_record',recordId);await operationCoordinator.execute(createSidecarPlan(operationId,'delete_record',recordId));return true;}
+    async function restoreRecordRaw(recordId){
       if(!initialized)return false;var restored=false;try{await graphRepository.restoreRecord(recordId);restored=true;}catch(error){if(error.message!=='graph_tombstone_not_found')throw error;}
       var waiting=waitingTombstones.get(recordId);if(!waiting&&global.ShikeIndexedDb){var stored=await global.ShikeIndexedDb.get('temporal_meta','waiting_tombstone:'+recordId);waiting=stored&&stored.waiting;}
       if(waiting){await waitingRepository.upsert(waiting);waitingTombstones.delete(recordId);if(global.ShikeIndexedDb)await global.ShikeIndexedDb.remove('temporal_meta','waiting_tombstone:'+recordId);restored=true;}
       await renderInsights(api.getRecords());return restored;
     }
-    async function purgeRecord(recordId){
+    async function restoreRecord(recordId){if(!initialized)return false;var operationId=nextOperationId('restore_record',recordId);await operationCoordinator.execute(createSidecarPlan(operationId,'restore_record',recordId));return true;}
+    async function purgeRecordRaw(recordId){
       if(!initialized)return false;await graphRepository.purgeRecord(recordId);var waiting=await waitingRepository.list();var item=waiting.find(function(entry){return entry.recordId===recordId;});if(item)await waitingRepository.remove(item.id);waitingTombstones.delete(recordId);if(global.ShikeIndexedDb)await global.ShikeIndexedDb.remove('temporal_meta','waiting_tombstone:'+recordId);return true;
     }
+    async function purgeRecord(recordId){if(!initialized)return false;var operationId=nextOperationId('purge_record',recordId);await operationCoordinator.execute(createSidecarPlan(operationId,'purge_record',recordId));return true;}
     function augmentBackup(payload){return initialized?backupAdapter.augment(payload):Promise.resolve(payload);}
     async function importBackupSidecars(prepared){
       if(!initialized)return {imported:false,reason:'not_initialized'};
-      var result=await backupAdapter.importPrepared(prepared);state.adaptationRules=await adaptationStore.list();await renderInsights(api.getRecords());return result;
+      var operationId=nextOperationId('import_backup','temporal_sidecars');var plan=createImportPlan(operationId,prepared);await operationCoordinator.execute(plan);return plan.result()||{imported:true,recovered:false};
     }
     async function saveSnapshotSidecar(snapshotId){
       if(!initialized||!global.ShikeIndexedDb)return false;var payload=await backupAdapter.augment({});
       await global.ShikeIndexedDb.put('temporal_meta',{id:'snapshot:'+snapshotId,schemaVersion:1,createdAt:new Date().toISOString(),temporalGraph:payload.temporalGraph,temporalWaiting:payload.temporalWaiting,temporalAdaptationRules:payload.temporalAdaptationRules});return true;
     }
-    async function restoreSnapshotSidecar(snapshotId){
+    async function restoreSnapshotSidecarRaw(snapshotId){
       if(!initialized||!global.ShikeIndexedDb)return false;var payload=await global.ShikeIndexedDb.get('temporal_meta','snapshot:'+snapshotId);if(!payload)return false;
       var graph=modules.graphSerializer.deserialize(payload.temporalGraph);var previousGraph=await graphRepository.snapshot();var previousWaiting=await waitingRepository.list();var previousRules=await adaptationStore.list();
       try{
@@ -219,7 +280,8 @@
       }
       state.adaptationRules=await adaptationStore.list();await renderInsights(api.getRecords());return true;
     }
-    function hasPendingDrafts(){return state.drafts.length>0||state.persisting||state.saving.size>0;}
+    async function restoreSnapshotSidecar(snapshotId){if(!initialized)return false;var operationId=nextOperationId('restore_snapshot',snapshotId);await operationCoordinator.execute(createSnapshotRestorePlan(operationId,snapshotId));return true;}
+    function hasPendingDrafts(){return state.drafts.length>0||state.persisting||state.batchSaving||state.saving.size>0;}
     async function queryMemory(question,options){if(!initialized)return {query:question,answer:'时间记忆尚未初始化。',sources:[]};var graph=await auditGraph();var waiting=await waitingRepository.list();state.memoryIndex=modules.memory.buildIndex(api.getRecords(),graph,{waiting:waiting});return modules.memory.query(state.memoryIndex,question,options);}
     async function listAdaptationRules(){return initialized?adaptationStore.list():[];}
     async function disableAdaptationRule(ruleId){if(!initialized)return false;var result=await adaptationStore.disable(ruleId);state.adaptationRules=await adaptationStore.list();return result;}
@@ -234,7 +296,7 @@
     return Object.freeze({
       init:init,captureIfNeeded:captureIfNeeded,confirmDraft:confirmDraft,confirmAll:confirmAll,
       cancelDraft:cancelDraft,render:renderInsights,renderReviews:renderReviews,queryMemory:queryMemory,runConsistencyAudit:runConsistencyAudit,rebuildConsistency:rebuildConsistency,
-      tombstoneRecord:tombstoneRecord,restoreRecord:restoreRecord,purgeRecord:purgeRecord,
+      updateRecord:updateRecord,completeRecord:completeRecord,tombstoneRecord:tombstoneRecord,restoreRecord:restoreRecord,purgeRecord:purgeRecord,
       augmentBackup:augmentBackup,importBackupSidecars:importBackupSidecars,
       saveSnapshotSidecar:saveSnapshotSidecar,restoreSnapshotSidecar:restoreSnapshotSidecar,
       listAdaptationRules:listAdaptationRules,disableAdaptationRule:disableAdaptationRule,removeAdaptationRule:removeAdaptationRule,resetAdaptationRules:resetAdaptationRules,exportAdaptationRules:exportAdaptationRules,
@@ -245,7 +307,7 @@
   return Object.freeze({
     create:create,init:singleton.init,captureIfNeeded:singleton.captureIfNeeded,
     confirmDraft:singleton.confirmDraft,confirmAll:singleton.confirmAll,cancelDraft:singleton.cancelDraft,
-    render:singleton.render,tombstoneRecord:singleton.tombstoneRecord,restoreRecord:singleton.restoreRecord,
+    render:singleton.render,updateRecord:singleton.updateRecord,completeRecord:singleton.completeRecord,tombstoneRecord:singleton.tombstoneRecord,restoreRecord:singleton.restoreRecord,
     purgeRecord:singleton.purgeRecord,augmentBackup:singleton.augmentBackup,
     importBackupSidecars:singleton.importBackupSidecars,saveSnapshotSidecar:singleton.saveSnapshotSidecar,
     restoreSnapshotSidecar:singleton.restoreSnapshotSidecar,hasPendingDrafts:singleton.hasPendingDrafts,

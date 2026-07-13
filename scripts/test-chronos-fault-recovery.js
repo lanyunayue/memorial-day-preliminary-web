@@ -25,6 +25,9 @@ function temporalMemoryDriver(){
     async remove(name,id){store(name).delete(id);return true;}
   };
 }
+function operationPayloadMemoryDriver(){
+  const values=new Map();return {async get(id){const value=values.get(id);return value&&JSON.parse(JSON.stringify(value));},async put(item){values.set(item.id,JSON.parse(JSON.stringify(item)));return item;},async remove(id){values.delete(id);return true;}};
+}
 
 async function runRecoveryScenario(config){
   const journal=journalApi.create(journalApi.memoryDriver());
@@ -50,7 +53,7 @@ async function runRecoveryScenario(config){
 function createWebHarness(shared,fault){
   const controller=controllerApi.create({
     temporalRepository:shared.temporalRepository,graphRepository:shared.graphRepository,waitingRepository:shared.waitingRepository,
-    correctionStore:shared.correctionStore,operationJournal:shared.journal,operationLock:lockApi.create(lockApi.memoryDriver()),fault
+    correctionStore:shared.correctionStore,operationJournal:shared.journal,operationPayloadStore:shared.operationPayloadStore,operationLock:lockApi.create(lockApi.memoryDriver()),fault
   });
   const api={
     getRecords:()=>shared.records,
@@ -96,12 +99,12 @@ function createWebHarness(shared,fault){
   let checksumRejected=false;try{await checksumJournal.prepare({operationId:'checksum_case',operationType:'create_record',recordId:'record_1',payload:{value:'b'},pendingSteps:[]});}catch(error){checksumRejected=error.message==='operation_checksum_mismatch';}
   check('checksum mismatch is rejected and quarantined',checksumRejected&&(await checksumJournal.diagnostics()).quarantined===1);
 
-  const shared={records:[],sequence:0,temporalRepository:temporalRepositoryApi.create(temporalMemoryDriver()),graphRepository:graphRepositoryApi.create(graphRepositoryApi.memoryDriver()),waitingRepository:waitingRepositoryApi.create(waitingRepositoryApi.memoryDriver()),correctionStore:correctionStoreApi.create(correctionStoreApi.memoryDriver()),journal:journalApi.create(journalApi.memoryDriver())};
+  const shared={records:[],sequence:0,temporalRepository:temporalRepositoryApi.create(temporalMemoryDriver()),graphRepository:graphRepositoryApi.create(graphRepositoryApi.memoryDriver()),waitingRepository:waitingRepositoryApi.create(waitingRepositoryApi.memoryDriver()),correctionStore:correctionStoreApi.create(correctionStoreApi.memoryDriver()),journal:journalApi.create(journalApi.memoryDriver()),operationPayloadStore:operationPayloadMemoryDriver()};
   const fault=faultApi.create();const first=createWebHarness(shared,fault);await first.controller.init(first.api);
   const source='周五前把实习材料交给老师，小王说合同明天回复，下个月妈妈生日，毕业后想买车，这周练三次英语口语。';
   first.controller.captureIfNeeded(source);await new Promise((resolve)=>setTimeout(resolve,0));fault.arm('before:sidecars',new Error('third_graph_write_failed'),3);await first.controller.confirmAll();
   check('batch stops with third Record durably present',shared.records.length===3);
-  check('batch keeps a recoverable third operation',(await shared.journal.listPending()).length===1);
+  check('batch and third create remain recoverable',(await shared.journal.listPending()).length===2);
   check('batch never duplicates first two Records',new Set(shared.records.map((record)=>record.id)).size===3);
   fault.clear();const second=createWebHarness(shared,fault);await second.controller.init(second.api);const afterRestart=await second.controller.diagnostics();
   check('restart recovers the interrupted third operation',afterRestart.recovery.recovered===1&&afterRestart.consistency.valid);
