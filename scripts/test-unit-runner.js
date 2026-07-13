@@ -26,6 +26,7 @@ const unitTests = [
   'test-chronos-fault-recovery.js',
   'test-chronos-multi-tab-contract.js',
   'test-chronos-conflict-engine.js',
+  'test-chronos-adaptation.js',
 ];
 
 let passed = 0, failed = 0;

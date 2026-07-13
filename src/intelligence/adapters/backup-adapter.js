@@ -48,17 +48,18 @@
     }).filter(Boolean);
   }
   function create(options){
-    options=options||{};var graphRepository=options.graphRepository;var waitingRepository=options.waitingRepository;
+    options=options||{};var graphRepository=options.graphRepository;var waitingRepository=options.waitingRepository;var adaptationStore=options.adaptationStore||null;
     if(!graphRepository||!waitingRepository)throw new Error('backup_adapter_repositories_required');
     async function augment(payload){
       var graph=modules.serializer.serialize(await graphRepository.snapshot());
       var waiting=await waitingRepository.list();
-      return Object.assign({},payload,{temporalSchemaVersion:1,temporalGraph:graph,temporalWaiting:copy(waiting)});
+      var rules=adaptationStore?await adaptationStore.list():[];
+      return Object.assign({},payload,{temporalSchemaVersion:1,temporalGraph:graph,temporalWaiting:copy(waiting),temporalAdaptationRules:copy(rules)});
     }
     async function importPrepared(prepared){
       var meta=prepared&&prepared.temporal||{};
-      if(!meta.temporalGraph&&!Array.isArray(meta.temporalWaiting))return {imported:false,reason:'legacy_without_temporal_data'};
-      var previousGraph=await graphRepository.snapshot();var previousWaiting=await waitingRepository.list();
+      if(!meta.temporalGraph&&!Array.isArray(meta.temporalWaiting)&&!Array.isArray(meta.temporalAdaptationRules))return {imported:false,reason:'legacy_without_temporal_data'};
+      var previousGraph=await graphRepository.snapshot();var previousWaiting=await waitingRepository.list();var previousRules=adaptationStore?await adaptationStore.list():[];
       var incoming=meta.temporalGraph?remapGraph(meta.temporalGraph,prepared.idMap||{}):{schemaVersion:1,nodes:[],edges:[],tombstones:[]};
       var nextGraph=mergeGraph(previousGraph,incoming);
       var importedWaiting=remapWaiting(meta.temporalWaiting,prepared.idMap||{});
@@ -67,12 +68,14 @@
       try{
         await graphRepository.replaceAll(nextGraph);
         await waitingRepository.replaceAll([...waitingById.values()]);
+        if(adaptationStore&&Array.isArray(meta.temporalAdaptationRules))await adaptationStore.importData(meta.temporalAdaptationRules);
       }catch(error){
         await graphRepository.replaceAll(previousGraph).catch(function(){});
         await waitingRepository.replaceAll(previousWaiting).catch(function(){});
+        if(adaptationStore)await adaptationStore.importData(previousRules).catch(function(){});
         throw error;
       }
-      return {imported:true,nodeCount:incoming.nodes.length,edgeCount:incoming.edges.length,waitingCount:importedWaiting.length};
+      return {imported:true,nodeCount:incoming.nodes.length,edgeCount:incoming.edges.length,waitingCount:importedWaiting.length,adaptationRuleCount:Array.isArray(meta.temporalAdaptationRules)?meta.temporalAdaptationRules.length:0};
     }
     return Object.freeze({augment:augment,importPrepared:importPrepared,remapGraph:remapGraph});
   }

@@ -3,7 +3,7 @@
     intelligence:global.ShikeTemporalIntelligence,temporalRepository:global.ShikeTemporalRepository,
     graphBuilder:global.ShikeGraphBuilder,graphRepository:global.ShikeGraphRepository,graphIntegrity:global.ShikeGraphIntegrity,graphSerializer:global.ShikeGraphSerializer,
     waitingEngine:global.ShikeWaitingForEngine,waitingRepository:global.ShikeWaitingForRepository,nextAction:global.ShikeNextActionEngine,
-    daily:global.ShikeDailyBrief,weekly:global.ShikeWeeklyReview,correctionStore:global.ShikeCorrectionStore,memory:global.ShikeTemporalMemory,
+    daily:global.ShikeDailyBrief,weekly:global.ShikeWeeklyReview,correctionStore:global.ShikeCorrectionStore,adaptationStore:global.ShikeAdaptationRuleStore,adaptationEngine:global.ShikeAdaptationEngine,memory:global.ShikeTemporalMemory,
     operation:global.ShikeTemporalOperation,operationJournal:global.ShikeOperationJournal,operationLock:global.ShikeTemporalOperationLock,
     operationCoordinator:global.ShikeOperationCoordinator,operationRecovery:global.ShikeOperationRecovery,consistencyAuditor:global.ShikeTemporalConsistencyAuditor,
     backupAdapter:global.ShikeChronosBackupAdapter,inboxView:global.ShikeLifeInboxPreview,actionView:global.ShikeNextActionCard,reviewView:global.ShikeTemporalReviewPanel,legacyAdapter:global.ShikeLegacyRecordAdapter
@@ -12,7 +12,7 @@
     intelligence:require('./intelligence-controller.js'),temporalRepository:require('./temporal-repository.js'),
     graphBuilder:require('../graph/graph-builder.js'),graphRepository:require('../graph/graph-repository.js'),graphIntegrity:require('../graph/graph-integrity.js'),graphSerializer:require('../graph/graph-serializer.js'),
     waitingEngine:require('./waiting-for-engine.js'),waitingRepository:require('./waiting-for-repository.js'),nextAction:require('./next-action-engine.js'),
-    daily:require('./daily-brief.js'),weekly:require('./weekly-review.js'),correctionStore:require('./correction-store.js'),memory:require('./temporal-memory.js'),
+    daily:require('./daily-brief.js'),weekly:require('./weekly-review.js'),correctionStore:require('./correction-store.js'),adaptationStore:require('./adaptation-rule-store.js'),adaptationEngine:require('./adaptation-engine.js'),memory:require('./temporal-memory.js'),
     operation:require('./transactions/temporal-operation.js'),operationJournal:require('./transactions/operation-journal.js'),operationLock:require('./transactions/operation-lock.js'),
     operationCoordinator:require('./transactions/operation-coordinator.js'),operationRecovery:require('./transactions/operation-recovery.js'),consistencyAuditor:require('./transactions/consistency-auditor.js'),
     backupAdapter:require('./adapters/backup-adapter.js'),inboxView:require('./ui/life-inbox-preview.js'),actionView:require('./ui/next-action-card.js'),reviewView:require('./ui/review-panel.js'),legacyAdapter:require('./adapters/legacy-record-adapter.js')
@@ -34,21 +34,26 @@
     clearInput:function(){},onCaptureStart:function(){},openDetail:function(){},notify:function(){},refresh:function(){},download:function(){}
   };}
   function create(options){
-    options=options||{};var api=defaultApi();var temporalRepository=null;var graphRepository=null;var waitingRepository=null;var correctionStore=null;var operationJournal=null;var operationLock=null;var operationCoordinator=null;var operationRecovery=null;var backupAdapter=null;var initialized=false;var renderToken=0;
+    options=options||{};var api=defaultApi();var temporalRepository=null;var graphRepository=null;var waitingRepository=null;var correctionStore=null;var adaptationStore=null;var operationJournal=null;var operationLock=null;var operationCoordinator=null;var operationRecovery=null;var backupAdapter=null;var initialized=false;var renderToken=0;
     var waitingTombstones=new Map();
-    var state={sourceText:'',drafts:[],rejected:[],persisting:false,error:'',saving:new Set(),ignored:new Set(),never:readNever(),lastModel:null,lastReview:null,memoryIndex:null,lastRecovery:null,lastConsistency:null};
+    var state={sourceText:'',drafts:[],rejected:[],persisting:false,error:'',saving:new Set(),ignored:new Set(),never:readNever(),lastModel:null,lastReview:null,memoryIndex:null,adaptationRules:[],lastRecovery:null,lastConsistency:null};
     function notify(message,type){api.notify(message,type||'warn');}
     function previewContainer(){return global.document&&global.document.getElementById('temporalInboxBlock');}
     function actionContainer(){return global.document&&global.document.getElementById('temporalActionBlock');}
     function reviewContainer(){return global.document&&global.document.getElementById('temporalReviewBlock');}
-    function logCorrection(input){if(correctionStore)correctionStore.record(input).catch(function(){});}
+    async function refreshAdaptationRules(){
+      if(!adaptationStore||!correctionStore)return[];var existing=await adaptationStore.list();var byId=new Map(existing.map(function(rule){return [rule.ruleId,rule];}));var derived=modules.adaptationEngine.deriveFromCorrections(await correctionStore.list());
+      for(var index=0;index<derived.length;index++){var previous=byId.get(derived[index].ruleId);if(!previous)await adaptationStore.put(derived[index]);else await adaptationStore.put(Object.assign({},derived[index],previous,{sourceCorrectionIds:[...new Set(previous.sourceCorrectionIds.concat(derived[index].sourceCorrectionIds))]}));}
+      state.adaptationRules=await adaptationStore.list();return copy(state.adaptationRules);
+    }
+    function logCorrection(input){if(correctionStore)correctionStore.record(input).then(refreshAdaptationRules).catch(function(){});}
     function renderPreview(){modules.inboxView.render(previewContainer(),state,{confirm:confirmDraft,confirmAll:confirmAll,update:updateDraft,updateTime:updateDraftTime,cancel:cancelDraft,dismiss:dismiss});}
     function removeDraftFromState(id){state.drafts=state.drafts.filter(function(draft){return draft.id!==id;});if(!state.drafts.length){state.rejected=[];api.clearInput(state.sourceText);state.sourceText='';}renderPreview();}
     function dismiss(){state.drafts=[];state.rejected=[];state.error='';api.clearInput(state.sourceText);state.sourceText='';renderPreview();}
     function shouldCapture(result){return result.rejected.length>0||result.drafts.length>1||result.drafts.some(function(draft){return ['commitment','waiting_for','goal','anniversary','habit','thought'].includes(draft.type);});}
     function captureIfNeeded(text){
       text=String(text||'').trim();if(!text)return false;
-      var result=modules.intelligence.analyze(text,{referenceDate:new Date()});if(!shouldCapture(result))return false;
+      var result=modules.intelligence.analyze(text,{referenceDate:new Date()});result.drafts=result.drafts.map(function(draft){return modules.adaptationEngine.applyDraft(draft,state.adaptationRules).draft;});if(!shouldCapture(result))return false;
       if(state.sourceText===text&&(state.drafts.length||state.rejected.length)){renderPreview();return true;}
       api.onCaptureStart(text);
       state.sourceText=text;state.drafts=result.drafts;state.rejected=result.rejected;state.error='';state.persisting=state.drafts.length>0;renderPreview();
@@ -160,12 +165,14 @@
       graphRepository=options.graphRepository||modules.graphRepository.create();
       waitingRepository=options.waitingRepository||modules.waitingRepository.create();
       correctionStore=options.correctionStore||modules.correctionStore.create(global.ShikeIndexedDb?undefined:modules.correctionStore.memoryDriver());
+      adaptationStore=options.adaptationStore||modules.adaptationStore.create(global.ShikeIndexedDb?undefined:modules.adaptationStore.memoryDriver());
       operationJournal=options.operationJournal||modules.operationJournal.create(global.ShikeIndexedDb?undefined:modules.operationJournal.memoryDriver());
       operationLock=options.operationLock||modules.operationLock.create(global.ShikeIndexedDb?undefined:modules.operationLock.memoryDriver(),options.lockOptions);
       operationCoordinator=options.operationCoordinator||modules.operationCoordinator.create({journal:operationJournal,lock:operationLock,fault:options.fault});
       operationRecovery=options.operationRecovery||modules.operationRecovery.create({journal:operationJournal,coordinator:operationCoordinator,resolvePlan:resolveRecoveryPlan,maxRetries:3});
-      backupAdapter=options.backupAdapter||modules.backupAdapter.create({graphRepository:graphRepository,waitingRepository:waitingRepository});initialized=true;
+      backupAdapter=options.backupAdapter||modules.backupAdapter.create({graphRepository:graphRepository,waitingRepository:waitingRepository,adaptationStore:adaptationStore});initialized=true;
       try{
+        state.adaptationRules=await adaptationStore.list();
         var drafts=await temporalRepository.listDrafts();
         state.drafts=drafts.filter(function(draft){return draft.status==='draft';});
         if(state.drafts.length)state.sourceText=state.drafts[0].sourceText;
@@ -194,23 +201,43 @@
     function augmentBackup(payload){return initialized?backupAdapter.augment(payload):Promise.resolve(payload);}
     async function importBackupSidecars(prepared){
       if(!initialized)return {imported:false,reason:'not_initialized'};
-      var result=await backupAdapter.importPrepared(prepared);await renderInsights(api.getRecords());return result;
+      var result=await backupAdapter.importPrepared(prepared);state.adaptationRules=await adaptationStore.list();await renderInsights(api.getRecords());return result;
     }
-    async function saveSnapshotSidecar(snapshotId){if(!initialized||!global.ShikeIndexedDb)return false;var payload=await backupAdapter.augment({});await global.ShikeIndexedDb.put('temporal_meta',{id:'snapshot:'+snapshotId,schemaVersion:1,createdAt:new Date().toISOString(),temporalGraph:payload.temporalGraph,temporalWaiting:payload.temporalWaiting});return true;}
+    async function saveSnapshotSidecar(snapshotId){
+      if(!initialized||!global.ShikeIndexedDb)return false;var payload=await backupAdapter.augment({});
+      await global.ShikeIndexedDb.put('temporal_meta',{id:'snapshot:'+snapshotId,schemaVersion:1,createdAt:new Date().toISOString(),temporalGraph:payload.temporalGraph,temporalWaiting:payload.temporalWaiting,temporalAdaptationRules:payload.temporalAdaptationRules});return true;
+    }
     async function restoreSnapshotSidecar(snapshotId){
       if(!initialized||!global.ShikeIndexedDb)return false;var payload=await global.ShikeIndexedDb.get('temporal_meta','snapshot:'+snapshotId);if(!payload)return false;
-      var graph=modules.graphSerializer.deserialize(payload.temporalGraph);var previousGraph=await graphRepository.snapshot();var previousWaiting=await waitingRepository.list();
-      try{await graphRepository.replaceAll(graph);await waitingRepository.replaceAll(payload.temporalWaiting||[]);}catch(error){await graphRepository.replaceAll(previousGraph).catch(function(){});await waitingRepository.replaceAll(previousWaiting).catch(function(){});throw error;}await renderInsights(api.getRecords());return true;
+      var graph=modules.graphSerializer.deserialize(payload.temporalGraph);var previousGraph=await graphRepository.snapshot();var previousWaiting=await waitingRepository.list();var previousRules=await adaptationStore.list();
+      try{
+        await graphRepository.replaceAll(graph);await waitingRepository.replaceAll(payload.temporalWaiting||[]);
+        if(Array.isArray(payload.temporalAdaptationRules))await adaptationStore.importData(payload.temporalAdaptationRules);
+      }catch(error){
+        await graphRepository.replaceAll(previousGraph).catch(function(){});await waitingRepository.replaceAll(previousWaiting).catch(function(){});
+        await adaptationStore.importData(previousRules).catch(function(){});throw error;
+      }
+      state.adaptationRules=await adaptationStore.list();await renderInsights(api.getRecords());return true;
     }
     function hasPendingDrafts(){return state.drafts.length>0||state.persisting||state.saving.size>0;}
     async function queryMemory(question,options){if(!initialized)return {query:question,answer:'时间记忆尚未初始化。',sources:[]};var graph=await auditGraph();state.memoryIndex=modules.memory.buildIndex(api.getRecords(),graph);return modules.memory.query(state.memoryIndex,question,options);}
-    async function diagnostics(){return {initialized:initialized,pendingDrafts:state.drafts.length,graph:initialized?await graphRepository.snapshot():null,waiting:initialized?await waitingRepository.list():[],corrections:initialized?await correctionStore.list():[],operations:initialized?await operationJournal.diagnostics():null,recovery:copy(state.lastRecovery),consistency:initialized?await runConsistencyAudit():null,model:copy(state.lastModel),review:copy(state.lastReview)};}
+    async function listAdaptationRules(){return initialized?adaptationStore.list():[];}
+    async function disableAdaptationRule(ruleId){if(!initialized)return false;var result=await adaptationStore.disable(ruleId);state.adaptationRules=await adaptationStore.list();return result;}
+    async function removeAdaptationRule(ruleId){if(!initialized)return false;await adaptationStore.remove(ruleId);state.adaptationRules=await adaptationStore.list();return true;}
+    async function resetAdaptationRules(){if(!initialized)return false;await adaptationStore.reset();state.adaptationRules=[];return true;}
+    async function exportAdaptationRules(){return initialized?adaptationStore.exportData():null;}
+    async function diagnostics(){
+      return {initialized:initialized,pendingDrafts:state.drafts.length,graph:initialized?await graphRepository.snapshot():null,
+        waiting:initialized?await waitingRepository.list():[],corrections:initialized?await correctionStore.list():[],adaptationRules:initialized?await adaptationStore.list():[],
+        operations:initialized?await operationJournal.diagnostics():null,recovery:copy(state.lastRecovery),consistency:initialized?await runConsistencyAudit():null,model:copy(state.lastModel),review:copy(state.lastReview)};
+    }
     return Object.freeze({
       init:init,captureIfNeeded:captureIfNeeded,confirmDraft:confirmDraft,confirmAll:confirmAll,
       cancelDraft:cancelDraft,render:renderInsights,renderReviews:renderReviews,queryMemory:queryMemory,runConsistencyAudit:runConsistencyAudit,rebuildConsistency:rebuildConsistency,
       tombstoneRecord:tombstoneRecord,restoreRecord:restoreRecord,purgeRecord:purgeRecord,
       augmentBackup:augmentBackup,importBackupSidecars:importBackupSidecars,
       saveSnapshotSidecar:saveSnapshotSidecar,restoreSnapshotSidecar:restoreSnapshotSidecar,
+      listAdaptationRules:listAdaptationRules,disableAdaptationRule:disableAdaptationRule,removeAdaptationRule:removeAdaptationRule,resetAdaptationRules:resetAdaptationRules,exportAdaptationRules:exportAdaptationRules,
       hasPendingDrafts:hasPendingDrafts,diagnostics:diagnostics
     });
   }
@@ -222,6 +249,7 @@
     purgeRecord:singleton.purgeRecord,augmentBackup:singleton.augmentBackup,
     importBackupSidecars:singleton.importBackupSidecars,saveSnapshotSidecar:singleton.saveSnapshotSidecar,
     restoreSnapshotSidecar:singleton.restoreSnapshotSidecar,hasPendingDrafts:singleton.hasPendingDrafts,
+    listAdaptationRules:singleton.listAdaptationRules,disableAdaptationRule:singleton.disableAdaptationRule,removeAdaptationRule:singleton.removeAdaptationRule,resetAdaptationRules:singleton.resetAdaptationRules,exportAdaptationRules:singleton.exportAdaptationRules,
     renderReviews:singleton.renderReviews,queryMemory:singleton.queryMemory,runConsistencyAudit:singleton.runConsistencyAudit,rebuildConsistency:singleton.rebuildConsistency,
     diagnostics:singleton.diagnostics
   });
