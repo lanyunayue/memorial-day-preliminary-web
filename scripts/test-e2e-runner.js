@@ -49,10 +49,16 @@ if (hasPlaywright) {
 }
 
 function findEdge() {
+  const explicitPath = process.env.SHIKE_BROWSER_PATH;
+  if (explicitPath) {
+    if (fs.existsSync(explicitPath)) return explicitPath;
+    console.log('SHIKE_BROWSER_PATH set but not found: ' + explicitPath);
+  }
   const candidates = [
     process.env.MSEDGE_PATH,
     process.env.CHROME_PATH,
     process.env.CHROMIUM_PATH,
+    process.env.EDGE_PATH,
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
     'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
     '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
@@ -66,7 +72,31 @@ function findEdge() {
     '/snap/bin/chromium',
     '/snap/bin/chromium-browser'
   ].filter(Boolean);
+  // Also check PATH for common browser names
+  const pathNames = ['google-chrome','google-chrome-stable','chromium','chromium-browser','microsoft-edge','microsoft-edge-stable','msedge.exe'];
+  if (process.env.PATH) {
+    const sep = process.platform === 'win32' ? ';' : ':';
+    for (const dir of process.env.PATH.split(sep)) {
+      for (const name of pathNames) {
+        const p = path.join(dir, name);
+        if (fs.existsSync(p)) candidates.push(p);
+      }
+    }
+  }
   return candidates.find((candidate) => fs.existsSync(candidate));
+}
+
+function getBrowserVersion(browserPath) {
+  try {
+    // Use --version flag
+    const result = require('child_process').spawnSync(browserPath, ['--version'], {
+      encoding: 'utf8',
+      timeout: 5000
+    });
+    return (result.stdout || result.stderr || '').trim();
+  } catch(e) {
+    return 'unknown';
+  }
 }
 
 function mimeType(file) {
@@ -185,8 +215,7 @@ async function writeBrowserMetadata(cdpUrl, appUrl, artifactDir) {
 async function runLocalCdpFallback() {
   console.log('Playwright not installed - running CDP E2E validation when available');
   if (typeof WebSocket === 'undefined') {
-    skip('WebSocket global is not available (Node 22+ required for CDP browser tests)');
-    return;
+    throw new Error('WebSocket global is not available. Node.js 22+ is required for CDP browser tests.');
   }
   if (process.env.SHIKE_CDP_URL) {
     const artifactDir = configuredArtifactDir || fs.mkdtempSync(path.join(os.tmpdir(), 'shike-e2e-artifacts-'));
@@ -208,6 +237,8 @@ async function runLocalCdpFallback() {
     skip('no Playwright or Edge/Chromium executable found');
     return;
   }
+  const browserVersion = getBrowserVersion(edge);
+  console.log('Using browser: ' + edge + ' (' + browserVersion + ')');
 
   const server = await startServer();
   const appPort = server.address().port;

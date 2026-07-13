@@ -19,6 +19,25 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm run ci:install
+      - name: Detect browser
+        id: browser_detect
+        run: |
+          echo "Checking for available browsers..."
+          for b in google-chrome google-chrome-stable chromium chromium-browser microsoft-edge microsoft-edge-stable; do
+            if command -v $b >/dev/null 2>&1; then
+              BP=$(command -v $b)
+              BV=$($b --version 2>/dev/null || echo "version-unknown")
+              echo "Found browser: $b at $BP ($BV)"
+              echo "SHIKE_BROWSER_PATH=$BP" >> $GITHUB_ENV
+              echo "browser_path=$BP" >> $GITHUB_OUTPUT
+              echo "browser_version=$BV" >> $GITHUB_OUTPUT
+              break
+            fi
+          done
+          if [ -z "$SHIKE_BROWSER_PATH" ]; then
+            echo "No browser found in PATH"
+            exit 1
+          fi
       - name: Lint
         run: npm run lint
       - name: Format check
@@ -39,14 +58,16 @@ jobs:
         run: npm run test:integrity
       - name: Browser E2E
         id: browser_e2e
-        run: npm run test:e2e -- --autostart --layout --artifact-dir=artifacts/ci-e2e
+        run: npm run test:e2e:ci
+        env:
+          SHIKE_BROWSER_PATH: ${{ steps.browser_detect.outputs.browser_path }}
       - name: Upload browser evidence
-        if: always() && (steps.browser_e2e.outcome == 'success' || steps.browser_e2e.outcome == 'failure')
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: browser-evidence
           path: artifacts/ci-e2e/
-          if-no-files-found: warn
+          if-no-files-found: error
       - name: Static asset validation
         if: always()
         run: node scripts/test-shike-offline-assets.js
