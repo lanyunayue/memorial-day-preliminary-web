@@ -27,7 +27,7 @@ function createHarness(){
   let sequence=0;
   const api={
     getRecords:()=>records,
-    saveRecord:(draft)=>{const record=intelligence.toRecord(draft,()=>`record_${++sequence}`);records.push(record);return record;},
+    saveRecord:(draft,forcedId)=>{const record=intelligence.toRecord(draft,()=>forcedId||`record_${++sequence}`);records.push(record);return record;},
     removeRecord:(id)=>{const index=records.findIndex((record)=>record.id===id);if(index>=0)records.splice(index,1);},
     updateRecord:(id,changes)=>{const record=records.find((item)=>item.id===id);if(!record)return false;Object.assign(record,changes);return true;},
     clearInput:()=>{},openDetail:()=>{},notify:()=>{},refresh:()=>{}
