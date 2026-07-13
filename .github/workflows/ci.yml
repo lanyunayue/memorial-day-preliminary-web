@@ -23,11 +23,13 @@ jobs:
         id: browser_detect
         run: |
           echo "Checking for available browsers..."
+          SHIKE_BROWSER_PATH=""
           for b in google-chrome google-chrome-stable chromium chromium-browser microsoft-edge microsoft-edge-stable; do
             if command -v $b >/dev/null 2>&1; then
               BP=$(command -v $b)
               BV=$($b --version 2>/dev/null || echo "version-unknown")
               echo "Found browser: $b at $BP ($BV)"
+              SHIKE_BROWSER_PATH="$BP"
               echo "SHIKE_BROWSER_PATH=$BP" >> $GITHUB_ENV
               echo "browser_path=$BP" >> $GITHUB_OUTPUT
               echo "browser_version=$BV" >> $GITHUB_OUTPUT
@@ -38,6 +40,7 @@ jobs:
             echo "No browser found in PATH"
             exit 1
           fi
+          echo "Selected browser: $SHIKE_BROWSER_PATH"
       - name: Lint
         run: npm run lint
       - name: Format check
