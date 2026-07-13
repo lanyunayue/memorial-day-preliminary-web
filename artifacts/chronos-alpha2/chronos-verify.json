@@ -1,0 +1,134 @@
+{
+  "classification": "PASS_HUMAN_CORPUS_NOT_AVAILABLE",
+  "generatedAt": "2026-07-13T16:28:29.981Z",
+  "runtime": "v24.16.0",
+  "coreOnly": false,
+  "checks": [
+    {
+      "name": "domain-unit",
+      "classification": "PASS",
+      "durationMs": 152,
+      "command": "node scripts/test-shike-temporal-domain.js"
+    },
+    {
+      "name": "corpus",
+      "classification": "PASS",
+      "durationMs": 141,
+      "command": "node scripts/test-shike-temporal-corpus.js"
+    },
+    {
+      "name": "property",
+      "classification": "PASS",
+      "durationMs": 170,
+      "command": "node scripts/test-shike-temporal-property.js"
+    },
+    {
+      "name": "fault-recovery",
+      "classification": "PASS",
+      "durationMs": 189,
+      "command": "node scripts/test-chronos-fault-recovery.js"
+    },
+    {
+      "name": "graph-consistency",
+      "classification": "PASS",
+      "durationMs": 153,
+      "command": "node scripts/test-shike-temporal-graph.js"
+    },
+    {
+      "name": "operation-coverage",
+      "classification": "PASS",
+      "durationMs": 167,
+      "command": "node scripts/test-chronos-operation-coverage.js"
+    },
+    {
+      "name": "migration",
+      "classification": "PASS",
+      "durationMs": 131,
+      "command": "node scripts/test-shike-storage-migration.js"
+    },
+    {
+      "name": "multi-tab-contract",
+      "classification": "PASS",
+      "durationMs": 132,
+      "command": "node scripts/test-chronos-multi-tab-contract.js"
+    },
+    {
+      "name": "conflict",
+      "classification": "PASS",
+      "durationMs": 134,
+      "command": "node scripts/test-chronos-conflict-engine.js"
+    },
+    {
+      "name": "memory",
+      "classification": "PASS",
+      "durationMs": 115,
+      "command": "node scripts/test-chronos-temporal-memory.js"
+    },
+    {
+      "name": "adaptation",
+      "classification": "PASS",
+      "durationMs": 144,
+      "command": "node scripts/test-chronos-adaptation.js"
+    },
+    {
+      "name": "corpus-provenance",
+      "classification": "PASS",
+      "durationMs": 128,
+      "command": "node scripts/test-chronos-corpus-provenance.js"
+    },
+    {
+      "name": "human-corpus",
+      "classification": "NOT_AVAILABLE",
+      "durationMs": 0,
+      "command": "reviewed blind set required"
+    },
+    {
+      "name": "canonical-parser-hash",
+      "classification": "PASS",
+      "durationMs": 124,
+      "command": "node scripts/test-chronos-parser-hash.js"
+    },
+    {
+      "name": "performance-node",
+      "classification": "PASS",
+      "durationMs": 2937,
+      "command": "node scripts/benchmark-shike-chronos.js"
+    },
+    {
+      "name": "security",
+      "classification": "PASS",
+      "durationMs": 153,
+      "command": "node scripts/test-security-runner.js"
+    },
+    {
+      "name": "test-integrity",
+      "classification": "PASS",
+      "durationMs": 155,
+      "command": "node scripts/test-shike-test-integrity.js"
+    },
+    {
+      "name": "lint",
+      "classification": "PASS",
+      "durationMs": 152,
+      "command": "node scripts/lint-check.js"
+    },
+    {
+      "name": "format",
+      "classification": "PASS",
+      "durationMs": 160,
+      "command": "node scripts/format-check.js"
+    },
+    {
+      "name": "browser-e2e",
+      "classification": "PASS",
+      "durationMs": 140155,
+      "command": "node scripts/test-e2e-runner.js --autostart --layout --artifact-dir=artifacts/chronos-alpha2/browser"
+    },
+    {
+      "name": "indexeddb-stress",
+      "classification": "PASS",
+      "durationMs": 77563,
+      "command": "node scripts/test-e2e-runner.js --autostart --stress-only --artifact-dir=artifacts/chronos-alpha2/stress"
+    }
+  ]
+}
