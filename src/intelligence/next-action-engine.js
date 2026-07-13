@@ -2,10 +2,11 @@
   'use strict';
   function daysUntil(dateKey,now){if(!dateKey)return null;var target=new Date(dateKey+'T23:59:00');return Math.ceil((target-new Date(now||Date.now()))/86400000);}
   function compute(input){
-    input=input||{};var candidates=[];var now=input.now||Date.now();var ignored=new Set(input.neverSuggestRecordIds||[]);
+    input=input||{};var candidates=[];var now=input.now||Date.now();var ignored=new Set(input.neverSuggestRecordIds||[]);var nodeByRecord=new Map();
+    (input.graph&&input.graph.nodes||[]).forEach(function(node){if(!['Commitment','Goal','Task'].includes(node.type))return;(node.sourceRecordIds||[]).forEach(function(id){if(!nodeByRecord.has(id))nodeByRecord.set(id,node);});});
     (input.records||[]).forEach(function(record){
       if(!record||ignored.has(record.id)||record.recordState==='completed'||record.archived)return;
-      var node=(input.graph&&input.graph.nodes||[]).find(function(item){return (item.sourceRecordIds||[]).includes(record.id)&&['Commitment','Goal','Task'].includes(item.type);});
+      var node=nodeByRecord.get(record.id);
       var due=daysUntil(record.dateKey,now);var rank=0;var reasons=[];
       if(due!==null&&due<0){rank+=100;reasons.push('已经逾期');}
       else if(due!==null&&due<=2){rank+=70-due*10;reasons.push(due===0?'今天到期':'将在'+due+'天后到期');}
