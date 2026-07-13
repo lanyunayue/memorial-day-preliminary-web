@@ -3045,6 +3045,7 @@ function renderMy(){
   $('weatherSwitch').classList.toggle('on',!!settings.weatherEnabled);
   // Notifications
   updateNotifyStatus();
+  if(window.ShikeChronosWeb)ShikeChronosWeb.renderReviews();
 }
 function getUsageDays(){
   if(!settings.firstVisitAt)return 1;
@@ -4036,9 +4037,14 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
           if(window.ShikeComposerView)ShikeComposerView.updateButtonStates();
         }
       },
+      onCaptureStart:function(){
+        if(parsePreviewTimer)clearTimeout(parsePreviewTimer);
+        pendingParsePreview=null;renderParsePreview();
+      },
       openDetail:function(id){openDetail(id);},
       notify:function(message,type){showToast(message,type);},
-      refresh:function(){renderCurrent();}
+      refresh:function(){renderCurrent();},
+      download:function(filename,content,type){downloadTextFile(filename,content,type);}
     });
   }
   // Ensure scroll at top after initial render

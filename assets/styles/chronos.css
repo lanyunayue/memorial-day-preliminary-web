@@ -131,6 +131,40 @@
   text-align: right;
 }
 
+.temporal-review-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.temporal-review-grid > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+  font-size: 12px;
+}
+
+.temporal-review-grid strong {
+  min-width: 72px;
+}
+
+.temporal-review-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.temporal-review-buttons button {
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.18));
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+}
+
 @media (max-width: 420px) {
   .temporal-inbox,
   .temporal-actions {

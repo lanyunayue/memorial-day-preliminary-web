@@ -3,8 +3,9 @@
   function esc(value){return String(value==null?'':value).replace(/[&<>'"]/g,function(character){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character];});}
   function render(container,model,handlers){
     if(!container)return;model=model||{};var suggestions=model.suggestions||[];var waiting=model.waiting||{};
+    var brief=model.dailyBrief||{};
     if(!suggestions.length&&!(waiting.waitingOn||[]).length){container.innerHTML='';return;}
-    var html='<section class="temporal-actions"><div class="card-section-head"><div><div class="card-section-title">下一步建议</div><div class="temporal-action-summary">等待 '+(waiting.waitingOn||[]).length+' · 逾期 '+(waiting.overdue||[]).length+' · 今日跟进 '+(waiting.dueToday||[]).length+'</div></div></div>';
+    var html='<section class="temporal-actions"><div class="card-section-head"><div><div class="card-section-title">下一步建议</div><div class="temporal-action-summary">今日 '+(brief.mustHandle||[]).length+' · 逾期 '+(brief.overdue||[]).length+' · 等待 '+(waiting.waitingOn||[]).length+' · 今日跟进 '+(waiting.dueToday||[]).length+'</div></div></div>';
     if(!suggestions.length)html+='<div class="timeline-empty">当前没有需要立即处理的建议。</div>';
     suggestions.slice(0,3).forEach(function(item){
       html+='<article class="temporal-action" data-record-id="'+esc(item.sourceRecordId)+'">'+

@@ -20,6 +20,9 @@ const unitTests = [
   'test-shike-temporal-graph.js',
   'test-shike-action-intelligence.js',
   'test-shike-chronos-vertical.js',
+  'test-shike-temporal-review-memory.js',
+  'test-shike-temporal-corpus.js',
+  'test-shike-temporal-property.js',
 ];
 
 let passed = 0, failed = 0;
