@@ -77,18 +77,19 @@ jobs:
         env:
           SHIKE_BROWSER_PATH: ${{ steps.browser_detect.outputs.browser_path }}
       - name: IndexedDB quota and stress
+        id: stress_e2e
         run: node scripts/test-e2e-runner.js --required --autostart --stress-only --artifact-dir=artifacts/chronos-alpha2/stress
         env:
           SHIKE_BROWSER_PATH: ${{ steps.browser_detect.outputs.browser_path }}
       - name: Upload browser evidence
-        if: always()
+        if: always() && steps.browser_e2e.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: browser-evidence
           path: artifacts/ci-e2e/
           if-no-files-found: error
       - name: Upload Chronos stress evidence
-        if: always()
+        if: always() && steps.stress_e2e.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: chronos-alpha2-stress
