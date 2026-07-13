@@ -1,11 +1,13 @@
 const CDP_URL=process.env.SHIKE_CDP_URL||'http://127.0.0.1:9224';
 const APP_URL=process.env.SHIKE_APP_URL||'http://127.0.0.1:8090/index.html';
-const EXPECTED_VERSION=process.env.SHIKE_EXPECTED_VERSION||'v1.3.0';
+const EXPECTED_VERSION=process.env.SHIKE_EXPECTED_VERSION;
 const delay=(ms)=>new Promise((resolve)=>setTimeout(resolve,ms));
 
 async function main(){
-  const targets=await fetch(`${CDP_URL}/json`).then((response)=>response.json());
-  const page=targets.find((target)=>target.type==='page');
+  if(!EXPECTED_VERSION)throw new Error('SHIKE_EXPECTED_VERSION is required');
+  let page=null;
+  try{const response=await fetch(`${CDP_URL}/json/new?${encodeURIComponent(APP_URL)}`,{method:'PUT'});if(response.ok)page=await response.json();}catch(error){}
+  if(!page){const targets=await fetch(`${CDP_URL}/json`).then((response)=>response.json());page=targets.find((target)=>target.type==='page');}
   if(!page)throw new Error('no CDP page target');
   const ws=new WebSocket(page.webSocketDebuggerUrl);
   const pending=new Map();let id=0;
