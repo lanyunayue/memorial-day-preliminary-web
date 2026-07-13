@@ -25,6 +25,7 @@ async function main(){
 
   await send('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});
   await send('Page.navigate',{url:APP_URL});await delay(1500);
+  for(let index=0;index<100;index++){if(await evaluate(`document.readyState==='complete'`))break;await delay(100);}
   const offline=await evaluate(`({ready:document.readyState,version:window.APP_VERSION,modules:!!window.ShikeModules,body:document.body&&document.body.textContent.length})`);
   await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
   ws.close();

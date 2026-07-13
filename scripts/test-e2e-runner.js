@@ -298,6 +298,10 @@ async function runCdpScripts(env, artifactDir) {
       env: {}
     },
     {
+      name: 'test-shike-multi-tab-runtime-cdp.js',
+      env: {}
+    },
+    {
       name: 'test-shike-offline-runtime-cdp.js',
       env: {}
     }
