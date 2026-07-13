@@ -12,6 +12,7 @@
     "test:e2e": "node scripts/test-e2e-runner.js",
     "test:e2e:ci": "node scripts/test-e2e-runner.js --required --autostart --layout --artifact-dir=artifacts/ci-e2e",
     "test:chronos:stress": "node scripts/test-e2e-runner.js --required --autostart --stress-only --artifact-dir=artifacts/chronos-alpha2/stress",
+    "test:chronos:human": "node scripts/evaluate-chronos-human-corpus.js",
     "test:ci-gates": "node scripts/test-ci-gates.js",
     "test:a11y": "node scripts/test-a11y-runner.js",
     "test:security": "node scripts/test-security-runner.js",

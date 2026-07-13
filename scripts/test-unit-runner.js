@@ -29,6 +29,7 @@ const unitTests = [
   'test-chronos-adaptation.js',
   'test-chronos-temporal-memory.js',
   'test-chronos-parser-hash.js',
+  'test-chronos-corpus-provenance.js',
 ];
 
 let passed = 0, failed = 0;
