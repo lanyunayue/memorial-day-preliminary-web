@@ -26,8 +26,9 @@
      * ------------------------------------------------------------------ */
 
     var DB_NAME = 'shike_db';
-    var DB_VERSION = 1;
+    var DB_VERSION = 2;
     var TRASH_STORE = 'shike_trash';
+    var SNAPSHOT_STORE = 'shike_snapshots';
     var DEFAULT_MAIN_STORE = 'shike_records';
     var DEFAULT_MAX_AGE_DAYS = 30;
 
@@ -147,6 +148,10 @@
                     store.createIndex('deletedAt', 'deletedAt', {
                         unique: false
                     });
+                }
+
+                if (!db.objectStoreNames.contains(SNAPSHOT_STORE)) {
+                    db.createObjectStore(SNAPSHOT_STORE, { keyPath: 'id' });
                 }
 
                 // Main store - created so softDelete can remove from it

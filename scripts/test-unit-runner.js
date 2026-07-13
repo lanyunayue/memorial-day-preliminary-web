@@ -19,6 +19,7 @@ const unitTests = [
   'test-shike-life-inbox.js',
   'test-shike-temporal-graph.js',
   'test-shike-action-intelligence.js',
+  'test-shike-chronos-vertical.js',
 ];
 
 let passed = 0, failed = 0;

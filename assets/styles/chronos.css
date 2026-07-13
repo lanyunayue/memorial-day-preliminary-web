@@ -1,0 +1,149 @@
+.temporal-inbox,
+.temporal-actions {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.16));
+  border-radius: 8px;
+  background: var(--card, rgba(255, 255, 255, 0.76));
+}
+
+.temporal-inbox-head,
+.temporal-draft-fields,
+.temporal-draft-buttons,
+.temporal-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.temporal-inbox-head {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.temporal-inbox-head span,
+.temporal-action-summary {
+  margin-left: 8px;
+  color: var(--text-secondary, #766f67);
+  font-size: 12px;
+}
+
+.temporal-draft,
+.temporal-action {
+  padding: 12px 0;
+  border-top: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+}
+
+.temporal-draft:first-of-type,
+.temporal-action:first-of-type {
+  border-top: 0;
+}
+
+.temporal-draft-source,
+.temporal-action-kind {
+  color: var(--text-secondary, #766f67);
+  font-size: 12px;
+}
+
+.temporal-draft-action,
+.temporal-action-title {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.temporal-draft-fields {
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.temporal-draft-fields label {
+  display: grid;
+  gap: 4px;
+  color: var(--text-secondary, #766f67);
+  font-size: 11px;
+}
+
+.temporal-draft-fields select,
+.temporal-draft-fields input {
+  min-height: 34px;
+  max-width: 145px;
+  padding: 6px 8px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.18));
+  border-radius: 6px;
+  background: var(--input-bg, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.temporal-draft-meta,
+.temporal-condition,
+.temporal-missing,
+.temporal-action-reason,
+.temporal-state-note,
+.temporal-rejected {
+  margin-top: 8px;
+  color: var(--text-secondary, #766f67);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.temporal-draft-meta span + span {
+  margin-left: 8px;
+}
+
+.temporal-state-note.is-error,
+.temporal-missing {
+  color: var(--danger, #a14f45);
+}
+
+.temporal-draft-buttons,
+.temporal-action-buttons {
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.temporal-inbox button,
+.temporal-actions button {
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.18));
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+}
+
+.temporal-confirm,
+.temporal-confirm-all {
+  background: var(--accent, #76624c) !important;
+  color: #fff !important;
+}
+
+.temporal-rejected {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+}
+
+.temporal-rejected small {
+  text-align: right;
+}
+
+@media (max-width: 420px) {
+  .temporal-inbox,
+  .temporal-actions {
+    padding: 12px;
+  }
+
+  .temporal-draft-fields label {
+    flex: 1 1 120px;
+  }
+
+  .temporal-draft-fields select,
+  .temporal-draft-fields input {
+    width: 100%;
+    max-width: none;
+  }
+}

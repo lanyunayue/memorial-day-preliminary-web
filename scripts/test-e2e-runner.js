@@ -282,6 +282,10 @@ async function runCdpScripts(env, artifactDir) {
     {
       name: 'test-shike-runtime-cdp.js',
       env: captureLayout ? { SHIKE_CAPTURE_SCREENSHOTS: '1' } : {}
+    },
+    {
+      name: 'test-shike-chronos-runtime-cdp.js',
+      env: {}
     }
   ];
   for (let index = 0; index < scripts.length; index++) {

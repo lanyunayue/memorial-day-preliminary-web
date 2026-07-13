@@ -222,7 +222,7 @@ const tests = [
   {
     name: 'IndexedDB repository',
     script: 'test-shike-indexeddb-repository.js',
-    expected: 'IndexedDB repository regression passed: 12/12'
+    expected: 'IndexedDB repository regression passed: 13/13'
   },
   {
     name: 'Storage migration',
