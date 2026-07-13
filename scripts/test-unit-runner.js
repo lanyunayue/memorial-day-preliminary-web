@@ -17,6 +17,8 @@ const unitTests = [
   'test-shike-data-integrity.js',
   'test-shike-temporal-domain.js',
   'test-shike-life-inbox.js',
+  'test-shike-temporal-graph.js',
+  'test-shike-action-intelligence.js',
 ];
 
 let passed = 0, failed = 0;
