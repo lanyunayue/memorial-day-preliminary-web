@@ -25,6 +25,7 @@ const unitTests = [
   'test-shike-temporal-property.js',
   'test-chronos-fault-recovery.js',
   'test-chronos-multi-tab-contract.js',
+  'test-chronos-conflict-engine.js',
 ];
 
 let passed = 0, failed = 0;
