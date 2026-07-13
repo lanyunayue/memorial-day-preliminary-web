@@ -134,7 +134,7 @@
         if(JSON.stringify(waiting)!==JSON.stringify(refreshed))await waitingRepository.replaceAll(refreshed);
         var hidden=[...state.never,...state.ignored];var suggestions=modules.nextAction.compute({records:records||api.getRecords(),graph:graph,waiting:refreshed,neverSuggestRecordIds:hidden,now:new Date()});
         var waitingQueries=modules.waitingEngine.queries(refreshed,new Date());var dailyBrief=modules.daily.generate({records:records||api.getRecords(),graph:graph,waiting:refreshed,suggestions:suggestions,now:new Date()});if(token!==renderToken)return;
-        state.memoryIndex=modules.memory.buildIndex(records||api.getRecords(),graph);
+        state.memoryIndex=modules.memory.buildIndex(records||api.getRecords(),graph,{waiting:refreshed});
         state.lastModel={suggestions:suggestions,waiting:waitingQueries,dailyBrief:dailyBrief,graph:{nodeCount:graph.nodes.length,edgeCount:graph.edges.length}};
         modules.actionView.render(actionContainer(),state.lastModel,{action:handleSuggestionAction});
         if(reviewContainer())await renderReviews();
@@ -220,7 +220,7 @@
       state.adaptationRules=await adaptationStore.list();await renderInsights(api.getRecords());return true;
     }
     function hasPendingDrafts(){return state.drafts.length>0||state.persisting||state.saving.size>0;}
-    async function queryMemory(question,options){if(!initialized)return {query:question,answer:'时间记忆尚未初始化。',sources:[]};var graph=await auditGraph();state.memoryIndex=modules.memory.buildIndex(api.getRecords(),graph);return modules.memory.query(state.memoryIndex,question,options);}
+    async function queryMemory(question,options){if(!initialized)return {query:question,answer:'时间记忆尚未初始化。',sources:[]};var graph=await auditGraph();var waiting=await waitingRepository.list();state.memoryIndex=modules.memory.buildIndex(api.getRecords(),graph,{waiting:waiting});return modules.memory.query(state.memoryIndex,question,options);}
     async function listAdaptationRules(){return initialized?adaptationStore.list():[];}
     async function disableAdaptationRule(ruleId){if(!initialized)return false;var result=await adaptationStore.disable(ruleId);state.adaptationRules=await adaptationStore.list();return result;}
     async function removeAdaptationRule(ruleId){if(!initialized)return false;await adaptationStore.remove(ruleId);state.adaptationRules=await adaptationStore.list();return true;}
