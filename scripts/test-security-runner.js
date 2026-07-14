@@ -1,8 +1,8 @@
 // Security checks
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const V = path.resolve(__dirname, '..');
+const parserHash = require('./chronos-parser-hash.js');
 
 let issues = 0;
 
@@ -35,10 +35,14 @@ function walk(dir) {
 
 walk(V);
 
-// 2. Verify parser hash unchanged
-const parser = fs.readFileSync(path.join(V, 'src/parser/parser-adapter.js'), 'utf8');
-const hash = crypto.createHash('sha256').update(parser).digest('hex');
-console.log('Parser hash:', hash.substring(0, 16));
+// 2. Verify the normalized parser hash. Raw bytes are diagnostic only.
+const hashes = parserHash.calculate();
+console.log('Working-tree parser hash:', hashes.workingTreeHash);
+console.log('Canonical parser hash:', hashes.canonicalNormalizedHash);
+if (hashes.canonicalNormalizedHash !== parserHash.EXPECTED_CANONICAL_HASH) {
+  console.log('SECURITY: Canonical parser hash changed');
+  issues++;
+}
 
 console.log(issues === 0 ? 'Security check passed: no issues' : `Security check: ${issues} issues`);
 process.exit(issues > 0 ? 1 : 0);

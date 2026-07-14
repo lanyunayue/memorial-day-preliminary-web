@@ -1,0 +1,16 @@
+{
+  "classification": "PASS",
+  "generatedAt": "2026-07-13T17:11:57.066Z",
+  "cdpUrl": "http://127.0.0.1:9527",
+  "appUrl": "http://127.0.0.1:55517/",
+  "browser": "Edg/150.0.4078.65",
+  "protocolVersion": "1.3",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0",
+  "pageTargets": [
+    {
+      "title": "",
+      "url": "http://127.0.0.1:55517/"
+    }
+  ],
+  "completedAt": "2026-07-13T17:13:08.535Z"
+}

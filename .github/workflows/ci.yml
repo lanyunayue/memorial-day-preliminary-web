@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'program-*']
   pull_request:
-    branches: [main]
+    branches: ['**']
 
 permissions:
   contents: read
@@ -51,6 +51,18 @@ jobs:
         run: npm run test:legacy
       - name: Parser regression
         run: node scripts/test-shike-sprite-create-intent.js
+      - name: Chronos corpus
+        run: node scripts/test-shike-temporal-corpus.js
+      - name: Chronos property tests
+        run: node scripts/test-shike-temporal-property.js
+      - name: Chronos fault recovery
+        run: node scripts/test-chronos-fault-recovery.js
+      - name: Chronos migration
+        run: node scripts/test-shike-storage-migration.js
+      - name: Chronos conflict coverage
+        run: node scripts/test-chronos-conflict-engine.js
+      - name: Chronos memory and adaptation
+        run: node scripts/test-chronos-temporal-memory.js && node scripts/test-chronos-adaptation.js
       - name: Accessibility
         run: npm run test:a11y
       - name: Security checks
@@ -64,12 +76,24 @@ jobs:
         run: npm run test:e2e:ci
         env:
           SHIKE_BROWSER_PATH: ${{ steps.browser_detect.outputs.browser_path }}
+      - name: IndexedDB quota and stress
+        id: stress_e2e
+        run: node scripts/test-e2e-runner.js --required --autostart --stress-only --artifact-dir=artifacts/chronos-alpha2/stress
+        env:
+          SHIKE_BROWSER_PATH: ${{ steps.browser_detect.outputs.browser_path }}
       - name: Upload browser evidence
-        if: always()
+        if: always() && steps.browser_e2e.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: browser-evidence
           path: artifacts/ci-e2e/
+          if-no-files-found: error
+      - name: Upload Chronos stress evidence
+        if: always() && steps.stress_e2e.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: chronos-alpha2-stress
+          path: artifacts/chronos-alpha2/stress/
           if-no-files-found: error
       - name: Static asset validation
         if: always()

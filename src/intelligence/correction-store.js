@@ -7,11 +7,11 @@
     if(!globalThis.ShikeIndexedDb)throw new Error('correction_store_unavailable');
     return {list:function(){return globalThis.ShikeIndexedDb.getAll(STORE);},put:function(item){return globalThis.ShikeIndexedDb.put(STORE,item);},async clear(){var db=await globalThis.ShikeIndexedDb.open();return new Promise(function(resolve,reject){var tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).clear();tx.oncomplete=function(){resolve(true);};tx.onerror=function(){reject(tx.error);};});}};
   }
-  function memoryDriver(initial){var items=copy(initial||[]);return {async list(){return copy(items);},async put(item){items.push(copy(item));return copy(item);},async clear(){items=[];return true;}};}
+  function memoryDriver(initial){var items=copy(initial||[]);return {async list(){return copy(items);},async put(item){items=items.filter(function(current){return current.id!==item.id;});items.push(copy(item));return copy(item);},async clear(){items=[];return true;}};}
   function create(driver){
     driver=driver||browserDriver();var queue=Promise.resolve();
     function record(input){
-      input=input||{};var item={id:'correction_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8),schemaVersion:1,eventType:clean(input.eventType),recordId:clean(input.recordId),draftId:clean(input.draftId),sourceText:clean(input.sourceText),originalType:clean(input.originalType),correctedType:clean(input.correctedType),modifiedFields:Array.isArray(input.modifiedFields)?input.modifiedFields.map(clean):[],createdAt:new Date().toISOString()};
+      input=input||{};var item={id:clean(input.id)||'correction_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8),schemaVersion:1,eventType:clean(input.eventType),recordId:clean(input.recordId),draftId:clean(input.draftId),sourceText:clean(input.sourceText),originalType:clean(input.originalType),correctedType:clean(input.correctedType),modifiedFields:Array.isArray(input.modifiedFields)?input.modifiedFields.map(clean):[],createdAt:input.createdAt||new Date().toISOString()};
       var run=queue.then(function(){return driver.put(item);});queue=run.catch(function(){});return run;
     }
     async function list(){await queue;var items=await driver.list();return items.sort(function(a,b){return b.createdAt.localeCompare(a.createdAt);});}

@@ -23,6 +23,14 @@ const unitTests = [
   'test-shike-temporal-review-memory.js',
   'test-shike-temporal-corpus.js',
   'test-shike-temporal-property.js',
+  'test-chronos-fault-recovery.js',
+  'test-chronos-multi-tab-contract.js',
+  'test-chronos-conflict-engine.js',
+  'test-chronos-adaptation.js',
+  'test-chronos-temporal-memory.js',
+  'test-chronos-parser-hash.js',
+  'test-chronos-corpus-provenance.js',
+  'test-chronos-operation-coverage.js',
 ];
 
 let passed = 0, failed = 0;

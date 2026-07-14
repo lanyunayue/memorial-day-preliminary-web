@@ -720,6 +720,13 @@ function saveRecords(){
   }
   catch(e){showToast(t('storageError')||'存储空间已满','error');return false;}
 }
+async function persistRecordsDurably(){
+  if(!saveRecords())throw new Error('records_cache_write_failed');
+  if(!window.ShikeLocalFirst)return true;
+  var result=await window.ShikeLocalFirst.persist(records);
+  if(result&&result.fallback)throw new Error('records_indexeddb_write_unavailable');
+  return true;
+}
 function saveLastGoodRecords(arr){
   try{
     ShikeLegacyStorage.setJson(LAST_GOOD_RECORDS_KEY,{
@@ -4013,13 +4020,20 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   if(window.ShikeChronosWeb){
     ShikeChronosWeb.init({
       getRecords:function(){return records;},
-      saveRecord:function(draft){
-        var item=normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,genId));
+      createRecordId:function(){return genId();},
+      prepareRecord:function(draft,id){return normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,function(){return id||genId();}));},
+      saveRecord:function(draft,forcedId){
+        var item=normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,function(){return forcedId||genId();}));
         records.unshift(item);
         if(!saveRecords()){records=records.filter(function(record){return record.id!==item.id;});return null;}
         return item;
       },
+      writeRecord:async function(item){
+        var existing=records.find(function(record){return record.id===item.id;});if(existing)return existing;
+        records.unshift(item);await persistRecordsDurably();return item;
+      },
       removeRecord:function(id){records=records.filter(function(record){return record.id!==id;});saveRecords();},
+      removeRecordDurably:async function(id){records=records.filter(function(record){return record.id!==id;});await persistRecordsDurably();return true;},
       updateRecord:function(id,changes){
         var record=records.find(function(item){return item.id===id;});if(!record)return false;
         if(changes.recordState)record.recordState=changes.recordState;
@@ -4028,6 +4042,10 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
           record.dateKey=dateKeyFromDate(current);record.dateText=record.dateKey;record.postponeCount=Number(record.postponeCount||0)+1;
         }
         record.updatedAt=Date.now();return saveRecords();
+      },
+      updateRecordDurably:async function(id,changes){
+        var record=records.find(function(item){return item.id===id;});if(!record)return false;
+        Object.keys(changes||{}).forEach(function(key){record[key]=changes[key];});record.updatedAt=Date.now();await persistRecordsDurably();return true;
       },
       clearInput:function(source){
         var input=$('quickInput');var agentInput=$('agentInput');

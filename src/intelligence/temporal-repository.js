@@ -40,6 +40,7 @@
       var drafts=await driver.getAll(DRAFT_STORE);
       return (drafts||[]).sort(function(a,b){return a.createdAt-b.createdAt;});
     }
+    async function getDraft(id){await initialize();return driver.get(DRAFT_STORE,id);}
     async function removeDraft(id){await driver.remove(DRAFT_STORE,id);return true;}
     async function setStatus(id,status){
       var draft=await driver.get(DRAFT_STORE,id);
@@ -53,6 +54,7 @@
       initialize:initialize,
       saveDrafts:saveDrafts,
       listDrafts:listDrafts,
+      getDraft:getDraft,
       removeDraft:removeDraft,
       setStatus:setStatus
     });

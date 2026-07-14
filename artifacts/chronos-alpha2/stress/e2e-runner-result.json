@@ -1,0 +1,9 @@
+{
+  "classification": "PASS",
+  "generatedAt": "2026-07-13T17:13:08.590Z",
+  "scripts": [
+    "test-chronos-indexeddb-stress-cdp.js"
+  ],
+  "passed": 1,
+  "failed": 0
+}

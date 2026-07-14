@@ -10,6 +10,8 @@ const artifactArg = process.argv.slice(2).find((arg) => arg.startsWith('--artifa
 const required = args.has('--required') || process.env.SHIKE_E2E_REQUIRED === '1';
 const autostart = args.has('--autostart') || process.env.SHIKE_AUTOSTART_EDGE === '1';
 const captureLayout = args.has('--layout') || process.env.SHIKE_E2E_LAYOUT === '1';
+const chronosStress = args.has('--chronos-stress') || process.env.SHIKE_CHRONOS_STRESS === '1';
+const stressOnly = args.has('--stress-only') || process.env.SHIKE_CHRONOS_STRESS_ONLY === '1';
 const configuredArtifactDir = artifactArg
   ? path.resolve(V, artifactArg.slice('--artifact-dir='.length))
   : process.env.SHIKE_ARTIFACT_DIR;
@@ -288,7 +290,7 @@ async function runLocalCdpFallback() {
 async function runCdpScripts(env, artifactDir) {
   let passed = 0;
   let failed = 0;
-  const scripts = [
+  const regularScripts = [
     {
       name: 'test-shike-runtime-cdp.js',
       env: captureLayout ? { SHIKE_CAPTURE_SCREENSHOTS: '1' } : {}
@@ -298,10 +300,16 @@ async function runCdpScripts(env, artifactDir) {
       env: {}
     },
     {
+      name: 'test-shike-multi-tab-runtime-cdp.js',
+      env: {}
+    },
+    {
       name: 'test-shike-offline-runtime-cdp.js',
       env: {}
     }
   ];
+  const stressScripts = [{name:'test-chronos-indexeddb-stress-cdp.js',env:{}}];
+  const scripts = stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
   for (let index = 0; index < scripts.length; index++) {
     const script = scripts[index];
     if (index > 0) {

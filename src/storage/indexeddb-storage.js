@@ -1,7 +1,8 @@
 (function(global){
   var STORE_NAMES=[
     'records','settings','conversations','subscriptions','feed_items','migrations','audit_log','quarantined_records',
-    'temporal_drafts','temporal_nodes','temporal_edges','temporal_waiting','temporal_corrections','temporal_meta','temporal_tombstones'
+    'temporal_drafts','temporal_nodes','temporal_edges','temporal_waiting','temporal_corrections','temporal_meta','temporal_tombstones',
+    'temporal_operations','temporal_operation_quarantine','temporal_locks','temporal_adaptation_rules'
   ];
   var dbPromise=null;
   function requestResult(request){return new Promise(function(resolve,reject){request.onsuccess=function(){resolve(request.result);};request.onerror=function(){reject(request.error||new Error('indexeddb_request_failed'));};});}
