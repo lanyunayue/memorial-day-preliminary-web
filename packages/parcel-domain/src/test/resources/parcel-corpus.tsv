@@ -1,0 +1,37 @@
+id	classification	parcel	carrier	status	pickupCode	text
+001	synthetic-template	true	cainiao	READY_FOR_PICKUP	4-2-6187	菜鸟提醒：您的快递已到达南苑菜鸟驿站，取件码 4-2-6187
+002	synthetic-template	true	fengchao	READY_FOR_PICKUP	12-3456	丰巢提醒：包裹已存入 8 号快递柜，取件码 12-3456
+003	synthetic-template	true	sf	OUT_FOR_DELIVERY	-	顺丰快件 SF1234567890 正在派送
+004	synthetic-template	true	jd	SHIPPED	-	京东物流通知：您的快递已发货，运单号 JD123456789012
+005	synthetic-template	true	unknown	DISCOVERED	-	淘宝物流提醒：您有一个包裹状态更新
+006	synthetic-template	true	unknown	IN_TRANSIT	-	拼多多订单包裹运输中
+007	synthetic-template	true	yto	READY_FOR_PICKUP	3-5-2201	圆通快递已到南苑驿站，请凭取件码 3-5-2201 领取
+008	synthetic-template	true	zto	IN_TRANSIT	-	中通快递运输途中，运单号 ZT9876543210
+009	synthetic-template	true	sto	OUT_FOR_DELIVERY	-	申通快递派送中，快递员即将送达
+010	synthetic-template	true	yunda	ARRIVED_LOCAL_STATION	-	韵达快递到达站点
+011	synthetic-template	true	jnt	DELIVERED	-	极兔快递已签收
+012	synthetic-template	true	ems	IN_TRANSIT	-	EMS 快件正在转运中
+013	synthetic-template	true	unknown	OUT_FOR_DELIVERY	-	同城配送包裹正在派送
+014	sanitized-example	true	cainiao	READY_FOR_PICKUP	8-1-3022	驿站通知：菜鸟包裹已到达，请凭取件码 8-1-3022 领取
+015	sanitized-example	true	fengchao	READY_FOR_PICKUP	2-7788	快递柜通知：丰巢包裹已存入，取件码 2-7788
+016	synthetic-template	true	sf	OUT_FOR_DELIVERY	-	顺丰快件正在派送，预计今日 18 点前送达
+017	synthetic-template	true	unknown	EXCEPTION	-	包裹因天气原因延迟，请耐心等待
+018	synthetic-template	true	zto	RETURNED	-	中通快递因地址错误已退回
+019	synthetic-template	true	sf	DELIVERED	-	您的顺丰快件已签收
+020	synthetic-template	true	yto	IN_TRANSIT	-	圆通快递运输中
+021	synthetic-template	true	yto	IN_TRANSIT	-	圆通快递运输中
+022	sanitized-example	true	cainiao	READY_FOR_PICKUP	9-6-1024	菜鸟快递已到达驿站，取件码 9-6-1024
+023	synthetic-template	true	jd	OUT_FOR_DELIVERY	-	京东快递正在派送，预计今日送达
+024	synthetic-template	true	unknown	READY_FOR_PICKUP	-	您的快递已到达北门驿站，请尽快领取
+025	synthetic-template	false	-	-	-	验证码 428761，用于登录，请勿泄露
+026	synthetic-template	false	-	-	-	银行通知：尾号 6187 账户支出 42 元
+027	synthetic-template	false	-	-	-	好友小林：晚上一起去拿东西吗
+028	synthetic-template	false	-	-	-	营销优惠通知：今日满 100 减 20
+029	synthetic-template	true	cainiao	READY_FOR_PICKUP	7-2-8899	菜鸟快递取件地点变更至西门驿站，取件码 7-2-8899
+030	synthetic-template	true	sf	OUT_FOR_DELIVERY	-	顺丰包裹 SF1111111111 与 SF2222222222 正在派送
+031	sanitized-example	true	cainiao	READY_FOR_PICKUP	6-3-7712	菜鸟提酲：快递己到驿站，取件码6-3-7712
+032	synthetic-template	true	yto	READY_FOR_PICKUP	4-2-6187	圆通快递已到达菜鸟驿站，取件码 4-2-6187
+033	synthetic-template	true	ems	EXCEPTION	-	EMS 包裹派送异常，请联系服务点
+034	synthetic-template	true	jnt	RETURNED	-	极兔快递退货中
+035	synthetic-template	true	sto	SHIPPED	-	申通快递已揽收
+036	synthetic-template	true	yunda	PICKED_UP	-	韵达快递已取件

@@ -1,0 +1,2 @@
+-keep class com.chronos.shike.storage.** { *; }
+-keepattributes *Annotation*

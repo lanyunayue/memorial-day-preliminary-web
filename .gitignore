@@ -5,6 +5,15 @@ playwright-report/
 *.log
 .tmp/
 
+# Android / Gradle local state and build outputs
+.gradle/
+**/build/
+local.properties
+*.jks
+*.keystore
+captures/
+.idea/
+
 # Real participant research data must stay outside version control.
 shike-research-*.json
 shike-product-validation-study.json

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">时刻</string>
+    <string name="notification_access_label">时刻快递事件发现</string>
+</resources>
