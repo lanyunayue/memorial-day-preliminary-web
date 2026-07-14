@@ -40,6 +40,9 @@ interface ParcelDao {
     @Query("UPDATE parcel_events SET parcelId = :newParcelId WHERE parcelId = :oldParcelId")
     suspend fun reassignEvents(oldParcelId: String, newParcelId: String)
 
+    @Query("UPDATE parcel_events SET parcelId = :newParcelId WHERE id IN (:eventIds)")
+    suspend fun reassignEventsByIds(eventIds: List<String>, newParcelId: String)
+
     @Query("SELECT * FROM parcels WHERE id IN (:ids)")
     suspend fun findByIds(ids: List<String>): List<ParcelEntity>
 

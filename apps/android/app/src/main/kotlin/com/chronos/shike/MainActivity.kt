@@ -3,7 +3,10 @@ package com.chronos.shike
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
@@ -12,20 +15,38 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import java.io.IOException
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : FragmentActivity() {
     private lateinit var viewModel: ShikeViewModel
     private var pendingExport: String? = null
     private var notificationAccessGranted by mutableStateOf(false)
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Log.e("MainActivity", "Coroutine exception", throwable)
+    }
+
     private val exportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         val payload = pendingExport
         pendingExport = null
-        if (uri != null && payload != null) contentResolver.openOutputStream(uri)?.use { it.write(payload.toByteArray()) }
+        if (uri != null && payload != null) {
+            lifecycleScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+                try {
+                    contentResolver.openOutputStream(uri)?.use { it.write(payload.toByteArray()) }
+                } catch (e: IOException) {
+                    Log.e("MainActivity", "Failed to write export file", e)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity, "导出失败：${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +105,18 @@ class MainActivity : FragmentActivity() {
                     super.onAuthenticationSucceeded(result)
                     onSuccess()
                 }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Log.w("MainActivity", "Biometric authentication failed")
+                    Toast.makeText(this@MainActivity, "验证未通过，请重试", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    Log.w("MainActivity", "Biometric authentication error: code=$errorCode, msg=$errString")
+                    Toast.makeText(this@MainActivity, "验证错误：$errString", Toast.LENGTH_SHORT).show()
+                }
             },
         )
         prompt.authenticate(
@@ -96,9 +129,9 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun exportData() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(coroutineExceptionHandler) {
             pendingExport = viewModel.exportMasked()
-            exportLauncher.launch("shike-parcels-masked.json")
+            exportLauncher.launch("shike-parcels-${BuildConfig.VERSION_NAME}.json")
         }
     }
 

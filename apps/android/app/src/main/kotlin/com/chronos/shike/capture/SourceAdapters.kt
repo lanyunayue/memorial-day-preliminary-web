@@ -17,8 +17,7 @@ import com.chronos.shike.parcel.ParcelParser
 import com.chronos.shike.parcel.ParcelAutomationPolicy
 import com.chronos.shike.storage.CaptureResult
 import com.chronos.shike.storage.ParcelRepository
-import java.nio.charset.StandardCharsets
-import java.security.MessageDigest
+import com.chronos.shike.util.CryptoUtils
 import java.time.Instant
 
 data class NotificationInput(
@@ -32,7 +31,7 @@ data class NotificationInput(
 class NotificationSourceAdapter(
     private val context: Context,
     private val repository: ParcelRepository,
-    private val preferences: ChronosPreferences = ChronosPreferences(context),
+    private val preferences: ChronosPreferences,
     private val parser: ParcelParser = ParcelParser(),
 ) : EventSourceAdapter<NotificationInput> {
     private val automationPolicy = ParcelAutomationPolicy()
@@ -73,7 +72,7 @@ class NotificationSourceAdapter(
             sensitivity = if (parsed.pickupCode == null) Sensitivity.PERSONAL else Sensitivity.HIGHLY_SENSITIVE,
             confidenceBand = parsed.confidenceBand,
             consentScope = ConsentScope(input.sourcePackage, true, now),
-            deduplicationKey = sha256("${input.sourcePackage}:${parsed.fingerprint}:${parsed.status}"),
+            deduplicationKey = CryptoUtils.sha256("${input.sourcePackage}:${parsed.fingerprint}:${parsed.status}"),
             rawContentRetained = false,
         )
     }
@@ -92,9 +91,6 @@ class NotificationSourceAdapter(
     override fun redact(input: NotificationInput): String = parser.redact(normalize(input))
     override fun health() = SourceHealth(active && permissionStatus() == PermissionStatus.GRANTED, "notification-listener")
     override fun revoke() { stop() }
-
-    private fun sha256(value: String) = MessageDigest.getInstance("SHA-256")
-        .digest(value.toByteArray(StandardCharsets.UTF_8)).joinToString("") { "%02x".format(it) }
 }
 
 data class UserProvidedInput(val text: String, val occurredAt: Instant = Instant.now())
@@ -123,16 +119,13 @@ class UserProvidedSourceAdapter(
             sensitivity = if (parsed.pickupCode == null) Sensitivity.PERSONAL else Sensitivity.HIGHLY_SENSITIVE,
             confidenceBand = parsed.confidenceBand,
             consentScope = ConsentScope(sourcePackage, true, now),
-            deduplicationKey = sha256("$sourceType:${parsed.fingerprint}"),
+            deduplicationKey = CryptoUtils.sha256("$sourceType:${parsed.fingerprint}"),
         )
     }
     override fun normalize(input: UserProvidedInput) = parser.normalize(input.text)
     override fun redact(input: UserProvidedInput) = parser.redact(input.text)
     override fun health() = SourceHealth(active, sourceType.name.lowercase())
     override fun revoke() { stop() }
-
-    private fun sha256(value: String) = MessageDigest.getInstance("SHA-256")
-        .digest(value.toByteArray(StandardCharsets.UTF_8)).joinToString("") { "%02x".format(it) }
 }
 
 class ShareSourceAdapter(parser: ParcelParser = ParcelParser()) : EventSourceAdapter<UserProvidedInput> by

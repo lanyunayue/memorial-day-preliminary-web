@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.chronos.shike.BuildConfig
 
 @Database(
     entities = [ParcelEntity::class, ParcelEventEntity::class, ParcelDraftEntity::class, OperationEntity::class],
@@ -20,6 +21,14 @@ abstract class ChronosDatabase : RoomDatabase() {
             context.applicationContext,
             ChronosDatabase::class.java,
             "chronos-parcel.db",
-        ).fallbackToDestructiveMigrationOnDowngrade().build()
+        )
+            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigrationOnDowngrade()
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    allowMainThreadQueries()
+                }
+            }
+            .build()
     }
 }

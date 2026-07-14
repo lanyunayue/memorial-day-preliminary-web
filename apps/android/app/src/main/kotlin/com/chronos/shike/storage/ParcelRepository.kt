@@ -1,18 +1,18 @@
-package com.chronos.shike.storage
+﻿package com.chronos.shike.storage
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.chronos.shike.contract.ConfidenceBand
 import com.chronos.shike.contract.EventEnvelope
 import com.chronos.shike.parcel.Parcel
 import com.chronos.shike.parcel.ParcelDeduplicator
-import com.chronos.shike.parcel.ParcelEvent
 import com.chronos.shike.parcel.ParcelLifecycle
 import com.chronos.shike.parcel.ParcelParser
 import com.chronos.shike.parcel.ParcelStatus
 import com.chronos.shike.security.PickupCodeCipher
 import com.chronos.shike.temporal.DynamicTimeWindow
-import java.nio.charset.StandardCharsets
-import java.security.MessageDigest
+import com.chronos.shike.util.CryptoUtils
+import com.chronos.shike.util.safeEnumValueOf
 import java.time.Instant
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
@@ -65,10 +65,10 @@ class ParcelRepository(
         val parsed = parser.parse(safeText)?.copy(
             carrier = draft.carrier,
             trackingNumber = draft.trackingNumber,
-            status = ParcelStatus.valueOf(draft.status),
+            status = safeEnumValueOf(draft.status, ParcelStatus.EXCEPTION),
             pickupLocation = draft.pickupLocation,
             pickupCode = draft.pickupCodeEncrypted?.let(crypto::decrypt),
-            confidenceBand = ConfidenceBand.valueOf(draft.confidenceBand),
+            confidenceBand = safeEnumValueOf(draft.confidenceBand, ConfidenceBand.LOW),
             fingerprint = draft.deduplicationKey,
             parcelLikely = true,
         ) ?: return null
@@ -144,12 +144,15 @@ class ParcelRepository(
         val id = UUID.randomUUID().toString()
         val safePayload = listOfNotNull(type, parcelId).joinToString(":")
         val inserted = database.operationDao().insert(
-            OperationEntity(id, type, parcelId, idempotencyKey, sha256(safePayload), "PENDING", safePayload, System.currentTimeMillis(), null, 0),
+            OperationEntity(id, type, parcelId, idempotencyKey, CryptoUtils.sha256(safePayload), "PENDING", safePayload, System.currentTimeMillis(), null, 0),
         )
         if (inserted == -1L) return
         runCatching { block() }
             .onSuccess { database.operationDao().complete(id, "COMPLETED", System.currentTimeMillis()) }
-            .onFailure { database.operationDao().complete(id, "QUARANTINED", System.currentTimeMillis()) }
+            .onFailure {
+                Log.e("ParcelRepository", "Operation $type ($idempotencyKey) failed", it)
+                database.operationDao().complete(id, "QUARANTINED", System.currentTimeMillis())
+            }
             .getOrThrow()
     }
 
@@ -182,10 +185,10 @@ class ParcelRepository(
         maskedTrackingNumber = row.maskedTrackingNumber,
         merchant = row.merchant,
         orderReference = row.orderReference,
-        currentStatus = ParcelStatus.valueOf(row.currentStatus),
+        currentStatus = safeEnumValueOf(row.currentStatus, ParcelStatus.EXCEPTION),
         eta = if (row.etaStartEpochMs != null && row.etaEndEpochMs != null && row.etaConfidence != null) DynamicTimeWindow(
             Instant.ofEpochMilli(row.etaStartEpochMs), Instant.ofEpochMilli(row.etaEndEpochMs),
-            ConfidenceBand.valueOf(row.etaConfidence), "local-storage", Instant.ofEpochMilli(row.lastUpdatedAtEpochMs), true,
+            safeEnumValueOf(row.etaConfidence, ConfidenceBand.LOW), "local-storage", Instant.ofEpochMilli(row.lastUpdatedAtEpochMs), true,
         ) else null,
         pickupLocation = row.pickupLocation,
         pickupCode = row.pickupCodeEncrypted?.let(crypto::decrypt),
@@ -194,7 +197,7 @@ class ParcelRepository(
         lastUpdatedAt = Instant.ofEpochMilli(row.lastUpdatedAtEpochMs),
         completedAt = row.completedAtEpochMs?.let(Instant::ofEpochMilli),
         deduplicationKeys = row.deduplicationKeys.split('|').filter(String::isNotBlank).toSet(),
-        confidenceBand = ConfidenceBand.valueOf(row.confidenceBand),
+        confidenceBand = safeEnumValueOf(row.confidenceBand, ConfidenceBand.LOW),
         schemaVersion = row.schemaVersion,
     )
 
@@ -210,15 +213,32 @@ class ParcelRepository(
             eventType = "parcel.confirmed",
             entities = emptyMap(),
             sensitivity = com.chronos.shike.contract.Sensitivity.SENSITIVE,
-            confidenceBand = ConfidenceBand.valueOf(draft.confidenceBand),
+            confidenceBand = safeEnumValueOf(draft.confidenceBand, ConfidenceBand.LOW),
             consentScope = com.chronos.shike.contract.ConsentScope(draft.sourcePackage, true, occurred),
             deduplicationKey = draft.deduplicationKey,
         )
     }
 
-    private fun sha256(value: String) = MessageDigest.getInstance("SHA-256")
-        .digest(value.toByteArray(StandardCharsets.UTF_8)).joinToString("") { "%02x".format(it) }
-    private fun escape(value: String) = value.replace("\\", "\\\\").replace("\"", "\\\"")
+    private fun escape(value: String): String = buildString {
+        for (c in value) {
+            when (c) {
+                '\\' -> append("\\\\")
+                '"' -> append("\\\"")
+                '\n' -> append("\\n")
+                '\r' -> append("\\r")
+                '\t' -> append("\\t")
+                '\b' -> append("\\b")
+                '\u000C' -> append("\\f")
+                '/' -> append("\\/")
+                else -> if (c.code < 0x20) {
+                    append("\\u%04x".format(c.code))
+                } else {
+                    append(c)
+                }
+            }
+        }
+    }
+
     private fun jsonString(value: String?) = value?.let { "\"${escape(it)}\"" } ?: "null"
 
     suspend fun mergeParcels(sourceId: String, targetId: String): MergeResult {
@@ -234,7 +254,7 @@ class ParcelRepository(
         val payload = "MERGE:$sourceId:$targetId"
 
         database.operationDao().insert(
-            OperationEntity(operationId, "MERGE", targetId, idempotencyKey, sha256(payload), "PENDING", payload, System.currentTimeMillis(), null, 0),
+            OperationEntity(operationId, "MERGE", targetId, idempotencyKey, CryptoUtils.sha256(payload), "PENDING", payload, System.currentTimeMillis(), null, 0),
         )
 
         try {
@@ -247,6 +267,7 @@ class ParcelRepository(
             database.operationDao().complete(operationId, "COMPLETED", System.currentTimeMillis())
             return MergeResult.Done(targetId)
         } catch (e: Exception) {
+            Log.e("ParcelRepository", "mergeParcels failed", e)
             database.operationDao().complete(operationId, "QUARANTINED", System.currentTimeMillis())
             throw e
         }
@@ -267,8 +288,12 @@ class ParcelRepository(
         val payload = "SPLIT:$sourceId:$newParcelId:" + eventIds.sorted().joinToString(",")
 
         database.operationDao().insert(
-            OperationEntity(operationId, "SPLIT", newParcelId, idempotencyKey, sha256(payload), "PENDING", payload, System.currentTimeMillis(), null, 0),
+            OperationEntity(operationId, "SPLIT", newParcelId, idempotencyKey, CryptoUtils.sha256(payload), "PENDING", payload, System.currentTimeMillis(), null, 0),
         )
+
+        // Determine currentStatus from the event with the latest occurredAt in the split set
+        val latestSplitEvent = toSplit.maxByOrNull { it.occurredAtEpochMs }
+        val splitCurrentStatus = latestSplitEvent?.type ?: toSplit.last().type
 
         try {
             database.withTransaction {
@@ -279,7 +304,7 @@ class ParcelRepository(
                     maskedTrackingNumber = source.maskedTrackingNumber,
                     merchant = source.merchant,
                     orderReference = source.orderReference,
-                    currentStatus = toSplit.last().type,
+                    currentStatus = splitCurrentStatus,
                     etaStartEpochMs = source.etaStartEpochMs,
                     etaEndEpochMs = source.etaEndEpochMs,
                     etaConfidence = source.etaConfidence,
@@ -294,13 +319,22 @@ class ParcelRepository(
                     schemaVersion = source.schemaVersion,
                 )
                 database.parcelDao().insert(newEntity)
-                database.parcelDao().reassignEvents(sourceId, newParcelId)
-                val updatedSource = source.copy(lastUpdatedAtEpochMs = System.currentTimeMillis())
+                database.parcelDao().reassignEventsByIds(eventIds.toList(), newParcelId)
+
+                // Update source parcel's currentStatus to its remaining latest event
+                val remainingEvents = events.filter { it.id !in eventIds }
+                val remainingLatest = remainingEvents.maxByOrNull { it.occurredAtEpochMs }
+                val updatedSource = if (remainingLatest != null) {
+                    source.copy(currentStatus = remainingLatest.type, lastUpdatedAtEpochMs = System.currentTimeMillis())
+                } else {
+                    source.copy(lastUpdatedAtEpochMs = System.currentTimeMillis())
+                }
                 database.parcelDao().update(updatedSource)
             }
             database.operationDao().complete(operationId, "COMPLETED", System.currentTimeMillis())
             return SplitResult.Done(newParcelId)
         } catch (e: Exception) {
+            Log.e("ParcelRepository", "splitParcel failed", e)
             database.operationDao().complete(operationId, "QUARANTINED", System.currentTimeMillis())
             throw e
         }

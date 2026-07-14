@@ -582,7 +582,7 @@ private fun SettingsScreen(viewModel: ShikeViewModel, onApplyScreenProtection: (
             )
         }
         item {
-            Text("版本 2.3.0-alpha1-debug", style = MaterialTheme.typography.bodySmall)
+            Text("版本 ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
             Text("核心能力离线可用，不申请网络权限。", style = MaterialTheme.typography.bodySmall)
         }
     }
