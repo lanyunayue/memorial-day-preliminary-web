@@ -12,6 +12,7 @@ const autostart = args.has('--autostart') || process.env.SHIKE_AUTOSTART_EDGE ==
 const captureLayout = args.has('--layout') || process.env.SHIKE_E2E_LAYOUT === '1';
 const chronosStress = args.has('--chronos-stress') || process.env.SHIKE_CHRONOS_STRESS === '1';
 const stressOnly = args.has('--stress-only') || process.env.SHIKE_CHRONOS_STRESS_ONLY === '1';
+const validationOnly = args.has('--validation-only') || process.env.SHIKE_VALIDATION_ONLY === '1';
 const configuredArtifactDir = artifactArg
   ? path.resolve(V, artifactArg.slice('--artifact-dir='.length))
   : process.env.SHIKE_ARTIFACT_DIR;
@@ -300,6 +301,10 @@ async function runCdpScripts(env, artifactDir) {
       env: {}
     },
     {
+      name: 'test-product-validation-runtime-cdp.js',
+      env: {}
+    },
+    {
       name: 'test-shike-multi-tab-runtime-cdp.js',
       env: {}
     },
@@ -309,7 +314,8 @@ async function runCdpScripts(env, artifactDir) {
     }
   ];
   const stressScripts = [{name:'test-chronos-indexeddb-stress-cdp.js',env:{}}];
-  const scripts = stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
+  const validationScripts=regularScripts.filter((script)=>script.name==='test-product-validation-runtime-cdp.js');
+  const scripts = validationOnly ? validationScripts : stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
   for (let index = 0; index < scripts.length; index++) {
     const script = scripts[index];
     if (index > 0) {

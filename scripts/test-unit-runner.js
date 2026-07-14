@@ -31,6 +31,8 @@ const unitTests = [
   'test-chronos-parser-hash.js',
   'test-chronos-corpus-provenance.js',
   'test-chronos-operation-coverage.js',
+  'test-product-validation-research.js',
+  'test-product-validation-tools.js',
 ];
 
 let passed = 0, failed = 0;
