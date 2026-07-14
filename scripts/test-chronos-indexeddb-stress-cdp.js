@@ -49,8 +49,8 @@ async function main(){
   assert(writeResult.recordsAt1000===1000,'1,000 record stage was not persisted');
   assert(writeResult.counts.records===10000&&writeResult.counts.temporal_nodes===50000&&writeResult.counts.temporal_edges===100000,'record or graph stress counts are wrong');
   assert(writeResult.counts.temporal_corrections===10000&&writeResult.counts.temporal_operations===5000,'correction or operation stress counts are wrong');
-  const startupStarted=Date.now();await client.send('Page.reload',{ignoreCache:true});
-  await waitFor(client,runtimeReady,'10k record startup');const startupMs=Date.now()-startupStarted;
+  const previousTimeOrigin=await client.evaluate('performance.timeOrigin');const startupStarted=Date.now();await client.send('Page.reload',{ignoreCache:true});
+  await waitFor(client,`performance.timeOrigin!==${previousTimeOrigin}&&${runtimeReady}`,'10k record startup');const startupMs=Date.now()-startupStarted;
   let workload;try{workload=await client.evaluate(`(async()=>{
     const storeNames=['records','temporal_nodes','temporal_edges','temporal_corrections','temporal_operations'];
     const db=await window.ShikeIndexedDb.open();const metrics={pointRead:[],graphRebuild:[],nextAction:[],weeklyReview:[],backupExport:[],backupRestore:[]};
