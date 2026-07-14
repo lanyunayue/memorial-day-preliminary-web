@@ -26,7 +26,8 @@ async function main(){
   assert(CDP_URL&&APP_URL,'CDP and app URLs are required');const targets=await json(`${CDP_URL}/json`);let page=targets.find((target)=>target.type==='page');
   if(!page){const response=await fetch(`${CDP_URL}/json/new?${encodeURIComponent(APP_URL)}`,{method:'PUT'});page=await response.json();}
   const client=new Client(page.webSocketDebuggerUrl);await client.connect();await client.send('Page.enable');await client.send('Runtime.enable');await client.send('Network.enable');
-  await waitFor(client,"document.readyState==='complete'&&!!window.ShikeIndexedDb&&!!window.ShikeLocalFirst&&window.ShikeLocalFirst.getStatus().ready",'stress bootstrap');
+  const runtimeReady="document.readyState==='complete'&&!!window.ShikeIndexedDb&&typeof window.ShikeIndexedDb.open==='function'&&!!window.ShikeLocalFirst&&window.ShikeLocalFirst.getStatus().ready";
+  await waitFor(client,runtimeReady,'stress bootstrap');
   const writeResult=await client.evaluate(`(async()=>{
     const stores=['records','temporal_nodes','temporal_edges','temporal_corrections','temporal_operations'];
     const db=await window.ShikeIndexedDb.open();const metrics={records1000:[],records10000:[],nodes:[],edges:[],corrections:[],operations:[]};
@@ -48,8 +49,8 @@ async function main(){
   assert(writeResult.recordsAt1000===1000,'1,000 record stage was not persisted');
   assert(writeResult.counts.records===10000&&writeResult.counts.temporal_nodes===50000&&writeResult.counts.temporal_edges===100000,'record or graph stress counts are wrong');
   assert(writeResult.counts.temporal_corrections===10000&&writeResult.counts.temporal_operations===5000,'correction or operation stress counts are wrong');
-  const startupStarted=Date.now();await client.send('Page.reload',{ignoreCache:true});
-  await waitFor(client,"document.readyState==='complete'&&!!window.ShikeLocalFirst&&window.ShikeLocalFirst.getStatus().ready",'10k record startup');const startupMs=Date.now()-startupStarted;
+  const previousTimeOrigin=await client.evaluate('performance.timeOrigin');const startupStarted=Date.now();await client.send('Page.reload',{ignoreCache:true});
+  await waitFor(client,`performance.timeOrigin!==${previousTimeOrigin}&&${runtimeReady}`,'10k record startup');const startupMs=Date.now()-startupStarted;
   let workload;try{workload=await client.evaluate(`(async()=>{
     const storeNames=['records','temporal_nodes','temporal_edges','temporal_corrections','temporal_operations'];
     const db=await window.ShikeIndexedDb.open();const metrics={pointRead:[],graphRebuild:[],nextAction:[],weeklyReview:[],backupExport:[],backupRestore:[]};

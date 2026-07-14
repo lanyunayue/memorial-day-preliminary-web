@@ -47,6 +47,8 @@ jobs:
         run: npm run format:check
       - name: Unit tests
         run: npm run test:unit
+      - name: Build product validation preview
+        run: npm run build:validation-preview
       - name: Legacy regression
         run: npm run test:legacy
       - name: Parser regression
@@ -87,6 +89,13 @@ jobs:
         with:
           name: browser-evidence
           path: artifacts/ci-e2e/
+          if-no-files-found: error
+      - name: Upload product validation preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: product-validation-preview
+          path: artifacts/product-validation/preview/
           if-no-files-found: error
       - name: Upload Chronos stress evidence
         if: always() && steps.stress_e2e.outcome != 'skipped'

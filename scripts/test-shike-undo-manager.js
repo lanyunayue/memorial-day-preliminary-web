@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.2 Undo Manager Tests
+ * v2.2.0-alpha3 Undo Manager Tests
  */
 const fs = require('fs');
 const path = require('path');
