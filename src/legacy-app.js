@@ -798,6 +798,7 @@ function prepareBackupImport(parsed){
   records.forEach(function(r){if(r&&r.id)existing[r.id]=true;});
   var seenInput={},used=Object.assign({},existing);
   var out=[];
+  var idMap={};
   var quarantined=[];
   var summary={
     total:(parsed.records||[]).length,valid:0,invalid:0,missing:0,duplicates:0,conflicts:0,
@@ -817,10 +818,14 @@ function prepareBackupImport(parsed){
     migrateRecord(r);
     while(!r.id||used[r.id])r.id=genId();
     used[r.id]=true;
+    if(originalId&&!idMap[originalId])idMap[originalId]=r.id;
     summary.valid++;
     out.push(r);
   });
-  return {records:out,quarantined:quarantined,summary:summary};
+  return {
+    records:out,quarantined:quarantined,summary:summary,idMap:idMap,
+    temporal:{temporalGraph:parsed.meta&&parsed.meta.temporalGraph,temporalWaiting:parsed.meta&&parsed.meta.temporalWaiting}
+  };
 }
 function sourceTypeLabel(sourceType){
   if(sourceType==='newBackup')return t('sourceNewBackup');
@@ -898,7 +903,12 @@ function mergePreparedImport(prepared){
     if(window.ShikeLocalFirst&&prepared.quarantined&&prepared.quarantined.length)ShikeLocalFirst.quarantine(prepared.quarantined).catch(function(){});
     renderCurrent();
     renderMy();
-    showToast(tf('importResult',{added:prepared.records.length,skipped:prepared.summary.invalid}),'success');
+    var temporalImport=window.ShikeChronosWeb&&prepared.temporal&&(prepared.temporal.temporalGraph||Array.isArray(prepared.temporal.temporalWaiting));
+    if(temporalImport){
+      ShikeChronosWeb.importBackupSidecars(prepared).then(function(){
+        showToast(tf('importResult',{added:prepared.records.length,skipped:prepared.summary.invalid}),'success');
+      }).catch(function(){showToast('记录已导入，但时间图谱未能导入。','warn');});
+    }else showToast(tf('importResult',{added:prepared.records.length,skipped:prepared.summary.invalid}),'success');
     return {added:prepared.records.length,skipped:prepared.summary.invalid};
   }catch(e){
     records=before;
@@ -909,13 +919,17 @@ function mergePreparedImport(prepared){
 }
 function exportBackupFile(){
   try{
-    var blob=new Blob([JSON.stringify(buildBackupPayload(),null,2)],{type:'application/json'});
+    var basePayload=buildBackupPayload();
+    var payloadPromise=window.ShikeChronosWeb?ShikeChronosWeb.augmentBackup(basePayload):Promise.resolve(basePayload);
+    payloadPromise.then(function(payload){
+    var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
     var url=URL.createObjectURL(blob);
     var a=document.createElement('a');a.href=url;a.download='shike-backup-'+ymdForFile(new Date())+'.json';a.click();
     setTimeout(function(){URL.revokeObjectURL(url);},0);
     markBackupExported();
     renderMy();
     showToast(t('exportDone'),'success');
+    }).catch(function(){showToast(t('importFailed'),'error');});
   }catch(e){showToast(t('importFailed'),'error');}
 }
 function exportQuarantinedData(){
@@ -2230,6 +2244,7 @@ function directSaveFromInput(){
   var inp=$('quickInput');
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
+  if(window.ShikeChronosWeb&&window.ShikeChronosWeb.captureIfNeeded(text))return;
   if(captureBatchFromInput(text))return;
   var parsed=normalizeCapturePreviewParsed(text,parseReminderText(text));
   inputSaveLocked=true;
@@ -2665,6 +2680,7 @@ function renderHome(){
   }
   rh+='</div>';
   recentBlock.innerHTML=rh;
+  if(window.ShikeChronosWeb)ShikeChronosWeb.render(records);
 }
 
 /* ========== Week strip ========== */
@@ -2958,7 +2974,8 @@ function hasUnsavedWork(){
     (quick&&(quick.value||'').trim())||
     (importText&&(importText.value||'').trim())||
     (importDrafts&&importDrafts.length)||
-    pendingParsePreview
+    pendingParsePreview||
+    (window.ShikeChronosWeb&&window.ShikeChronosWeb.hasPendingDrafts())
   );
 }
 function registerUnsavedWorkGuard(){
@@ -3028,6 +3045,7 @@ function renderMy(){
   $('weatherSwitch').classList.toggle('on',!!settings.weatherEnabled);
   // Notifications
   updateNotifyStatus();
+  if(window.ShikeChronosWeb)ShikeChronosWeb.renderReviews();
 }
 function getUsageDays(){
   if(!settings.firstVisitAt)return 1;
@@ -3222,6 +3240,7 @@ function saveFromInput(){
   var inp=$('quickInput');
   var text=(inp.value||'').trim();
   if(!text){showToast(t('emptyInput'),'warn');return;}
+  if(window.ShikeChronosWeb&&ShikeChronosWeb.captureIfNeeded(text))return;
   if(captureBatchFromInput(text))return;
   if(isParsePreviewEnabled()){
     if(isPendingPreviewForText(text)){confirmParsePreview();return;}
@@ -3234,9 +3253,22 @@ function deleteRecord(id){
   var r=records.find(function(x){return x.id===id;});
   if(!r)return;
   showConfirm(t('delete'),'确定删除「'+r.title+'」？',t('delete'),t('cancel'),function(){
-    records=records.filter(function(x){return x.id!==id;});
-    saveRecords();closeDrawer();
-    renderCurrent();showToast(t('deleted'),'success');
+    var trashEntry=null;var graphMoved=false;
+    var trashPromise=window.ShikeTrashRepository?ShikeTrashRepository.softDelete(r,'user_delete',currentPage):Promise.reject(new Error('trash_unavailable'));
+    trashPromise.then(function(entry){
+      trashEntry=entry;
+      if(!window.ShikeChronosWeb)return false;
+      return ShikeChronosWeb.tombstoneRecord(id).then(function(result){graphMoved=!!result;return result;});
+    }).then(function(){
+      records=records.filter(function(x){return x.id!==id;});
+      if(!saveRecords())throw new Error('delete_save_failed');
+      closeDrawer();renderCurrent();showToast(t('deleted'),'success');
+    }).catch(function(){
+      if(!records.some(function(item){return item.id===id;})){records.unshift(r);saveRecords();}
+      if(graphMoved&&window.ShikeChronosWeb)ShikeChronosWeb.restoreRecord(id).catch(function(){});
+      if(trashEntry&&window.ShikeTrashRepository)ShikeTrashRepository.restore(trashEntry.id).catch(function(){});
+      showToast('删除未完成，原记录已保留。','error');
+    });
   });
 }
 function togglePin(id){
@@ -3640,15 +3672,23 @@ function renderTrashList(){
       btn.addEventListener('click',function(){
         var id=btn.getAttribute('data-id');
         ShikeTrashRepository.restore(id).then(function(record){
-          if(record){records.push(record);saveRecords();renderCurrent();}
-          showToast(t('restoreRecord')+' OK');
-        });
+          if(!record)return null;
+          records.push(record);
+          if(!saveRecords())throw new Error('restore_save_failed');
+          var restoreGraph=window.ShikeChronosWeb?ShikeChronosWeb.restoreRecord(record.id):Promise.resolve(false);
+          return restoreGraph.then(function(){renderCurrent();showToast(t('restoreRecord')+' OK','success');return record;});
+        }).catch(function(){showToast('恢复失败，请重试。','error');});
       });
     });
     container.querySelectorAll('.btn-perm-delete').forEach(function(btn){
       btn.addEventListener('click',function(){
         var id=btn.getAttribute('data-id');
-        if(confirm(t('permanentlyDelete')+'?')){ShikeTrashRepository.permanentlyDelete(id).then(function(){renderTrashList();});}
+        var tombstone=items.find(function(item){return item.id===id;});
+        if(confirm(t('permanentlyDelete')+'?')){
+          ShikeTrashRepository.permanentlyDelete(id).then(function(){
+            if(window.ShikeChronosWeb&&tombstone&&tombstone.originalRecord)return ShikeChronosWeb.purgeRecord(tombstone.originalRecord.id);
+          }).then(function(){renderTrashList();}).catch(function(){showToast('永久删除未完成。','error');});
+        }
       });
     });
   }).catch(function(){container.innerHTML='<div class="empty-state">'+t('trashEmpty')+'</div>';});
@@ -3675,8 +3715,10 @@ function renderSnapshotList(){
           ShikeSnapshotService.getSnapshot(id).then(function(snap){
             if(snap&&snap.data&&confirm(t('restoreSnapshot')+'?')){
               if(confirm('This will replace current data. Continue?')){
-                records=snap.data.slice();saveRecords();renderCurrent();
-                showToast(t('restoreSnapshot')+' OK');
+                records=snap.data.slice();
+                if(!saveRecords()){showToast('快照恢复失败。','error');return;}
+                var restoreSidecar=window.ShikeChronosWeb?ShikeChronosWeb.restoreSnapshotSidecar(id):Promise.resolve(false);
+                restoreSidecar.then(function(){renderCurrent();showToast(t('restoreSnapshot')+' OK','success');}).catch(function(){showToast('记录已恢复，但时间图谱恢复失败。','warn');});
               }
             }
           });
@@ -3692,9 +3734,10 @@ function renderSnapshotList(){
     var createBtn=container.querySelector('.btn-create-snapshot');
     if(createBtn){
       createBtn.addEventListener('click',function(){
-        ShikeSnapshotService.createSnapshot('Manual snapshot',records).then(function(){
-          renderSnapshotList();showToast(t('createSnapshot')+' OK');
-        });
+        ShikeSnapshotService.createSnapshot('Manual snapshot',records).then(function(snapshot){
+          var saveSidecar=window.ShikeChronosWeb&&snapshot?ShikeChronosWeb.saveSnapshotSidecar(snapshot.id):Promise.resolve(false);
+          return saveSidecar.then(function(){renderSnapshotList();showToast(t('createSnapshot')+' OK','success');});
+        }).catch(function(){showToast('快照创建失败。','error');});
       });
     }
   }).catch(function(e){container.innerHTML='<div class="empty-state">--</div>';});
@@ -3743,12 +3786,9 @@ function init(){
   initSwipeActions();
   initTimeSprite();
   try{
-// Initialize trash repository with empty adapter
+// Keep the legacy trash database isolated from the main local-first database.
 if(window.ShikeTrashRepository&&ShikeTrashRepository.setMainStore){
-  ShikeTrashRepository.setMainStore({
-    getAll:function(){return Promise.resolve([]);},
-    softDelete:function(){return Promise.resolve(null);}
-  });
+  ShikeTrashRepository.setMainStore('shike_records');
 }
 if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='function')window.ShikePermissionCenter.init();
   // Start reminder scheduler
@@ -3970,6 +4010,43 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
     if(typeof showReleaseNotes==='function')showReleaseNotes();
   // Initial render
   renderHome();
+  if(window.ShikeChronosWeb){
+    ShikeChronosWeb.init({
+      getRecords:function(){return records;},
+      saveRecord:function(draft){
+        var item=normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,genId));
+        records.unshift(item);
+        if(!saveRecords()){records=records.filter(function(record){return record.id!==item.id;});return null;}
+        return item;
+      },
+      removeRecord:function(id){records=records.filter(function(record){return record.id!==id;});saveRecords();},
+      updateRecord:function(id,changes){
+        var record=records.find(function(item){return item.id===id;});if(!record)return false;
+        if(changes.recordState)record.recordState=changes.recordState;
+        if(changes.postpone){
+          var current=record.dateKey?new Date(record.dateKey+'T12:00:00'):new Date();current.setDate(current.getDate()+1);
+          record.dateKey=dateKeyFromDate(current);record.dateText=record.dateKey;record.postponeCount=Number(record.postponeCount||0)+1;
+        }
+        record.updatedAt=Date.now();return saveRecords();
+      },
+      clearInput:function(source){
+        var input=$('quickInput');var agentInput=$('agentInput');
+        if(input&&input.value.trim()===String(source||'').trim()){
+          input.value='';if(agentInput)agentInput.value='';autoResizeInput();
+          if(window.ShikeComposerState)ShikeComposerState.clearDraft();
+          if(window.ShikeComposerView)ShikeComposerView.updateButtonStates();
+        }
+      },
+      onCaptureStart:function(){
+        if(parsePreviewTimer)clearTimeout(parsePreviewTimer);
+        pendingParsePreview=null;renderParsePreview();
+      },
+      openDetail:function(id){openDetail(id);},
+      notify:function(message,type){showToast(message,type);},
+      refresh:function(){renderCurrent();},
+      download:function(filename,content,type){downloadTextFile(filename,content,type);}
+    });
+  }
   // Ensure scroll at top after initial render
   requestAnimationFrame(function(){window.scrollTo(0,0);});
   setTimeout(function(){window.scrollTo(0,0);},150);

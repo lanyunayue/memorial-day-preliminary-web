@@ -1,0 +1,1102 @@
+[
+  {
+    "id": "multi_001",
+    "text": "周一前把实习材料交给老师，后天项目上线周年。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "anniversary"
+      ]
+    }
+  },
+  {
+    "id": "multi_002",
+    "text": "周二前把实习材料交给老师，周五项目上线周年。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "anniversary"
+      ]
+    }
+  },
+  {
+    "id": "multi_003",
+    "text": "周三前把实习材料交给老师，下周一项目上线周年。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "anniversary"
+      ]
+    }
+  },
+  {
+    "id": "multi_004",
+    "text": "周四前把实习材料交给老师，每天练英语口语。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_005",
+    "text": "周五前把实习材料交给老师，每日练英语口语。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_006",
+    "text": "下周一前把实习材料交给老师，每周练英语口语三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_007",
+    "text": "下周三前把实习材料交给老师，本周练英语口语两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_008",
+    "text": "明天之前把实习材料交给老师，这周练英语口语四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_009",
+    "text": "后天之前把实习材料交给老师，每天跑步。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_010",
+    "text": "本周日之前把实习材料交给老师，每日跑步。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_011",
+    "text": "周一前把项目周报发给导师，每周跑步三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_012",
+    "text": "周二前把项目周报发给导师，本周跑步两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_013",
+    "text": "周三前把项目周报发给导师，这周跑步四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_014",
+    "text": "周四前把项目周报发给导师，每天阅读专业书。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_015",
+    "text": "周五前把项目周报发给导师，每日阅读专业书。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_016",
+    "text": "下周一前把项目周报发给导师，每周阅读专业书三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_017",
+    "text": "下周三前把项目周报发给导师，本周阅读专业书两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_018",
+    "text": "明天之前把项目周报发给导师，这周阅读专业书四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_019",
+    "text": "后天之前把项目周报发给导师，每天整理桌面。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_020",
+    "text": "本周日之前把项目周报发给导师，每日整理桌面。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_021",
+    "text": "周一前把报价单提交给客户，每周整理桌面三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_022",
+    "text": "周二前把报价单提交给客户，本周整理桌面两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_023",
+    "text": "周三前把报价单提交给客户，这周整理桌面四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_024",
+    "text": "周四前把报价单提交给客户，每天复盘当天工作。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_025",
+    "text": "周五前把报价单提交给客户，每日复盘当天工作。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_026",
+    "text": "下周一前把报价单提交给客户，每周复盘当天工作三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_027",
+    "text": "下周三前把报价单提交给客户，本周复盘当天工作两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_028",
+    "text": "明天之前把报价单提交给客户，这周复盘当天工作四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_029",
+    "text": "后天之前把报价单提交给客户，每天练习钢琴。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_030",
+    "text": "本周日之前把报价单提交给客户，每日练习钢琴。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_031",
+    "text": "周一前把会议纪要发给同事，每周练习钢琴三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_032",
+    "text": "周二前把会议纪要发给同事，本周练习钢琴两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_033",
+    "text": "周三前把会议纪要发给同事，这周练习钢琴四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_034",
+    "text": "周四前把会议纪要发给同事，每天做拉伸。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_035",
+    "text": "周五前把会议纪要发给同事，每日做拉伸。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_036",
+    "text": "下周一前把会议纪要发给同事，每周做拉伸三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_037",
+    "text": "下周三前把会议纪要发给同事，本周做拉伸两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_038",
+    "text": "明天之前把会议纪要发给同事，这周做拉伸四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_039",
+    "text": "后天之前把会议纪要发给同事，每天背单词。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_040",
+    "text": "本周日之前把会议纪要发给同事，每日背单词。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_041",
+    "text": "周一前把审批文件交给老板，每周背单词三次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_042",
+    "text": "周二前把审批文件交给老板，本周背单词两次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_043",
+    "text": "周三前把审批文件交给老板，这周背单词四次。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "habit"
+      ]
+    }
+  },
+  {
+    "id": "multi_044",
+    "text": "周四前把审批文件交给老板，毕业后想买车。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_045",
+    "text": "周五前把审批文件交给老板，未来计划买车。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_046",
+    "text": "下周一前把审批文件交给老板，以后想要买车。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_047",
+    "text": "下周三前把审批文件交给老板，希望有一天买车。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_048",
+    "text": "明天之前把审批文件交给老板，目标是未来买车。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_049",
+    "text": "后天之前把审批文件交给老板，毕业后想完成毕业作品。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_050",
+    "text": "本周日之前把审批文件交给老板，未来计划完成毕业作品。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "commitment",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_051",
+    "text": "等小王今天回复合同，以后想要完成毕业作品。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_052",
+    "text": "等小王明天回复合同，希望有一天完成毕业作品。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_053",
+    "text": "等小王后天回复合同，目标是未来完成毕业作品。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_054",
+    "text": "等小王周二回复合同，毕业后想学习一门新语言。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_055",
+    "text": "等小王周三回复合同，未来计划学习一门新语言。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_056",
+    "text": "等小王周四回复合同，以后想要学习一门新语言。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_057",
+    "text": "等小王周五回复合同，希望有一天学习一门新语言。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_058",
+    "text": "等小王下周一回复合同，目标是未来学习一门新语言。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_059",
+    "text": "等小王下周三回复合同，毕业后想搬到新的城市。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_060",
+    "text": "等小王本周日回复合同，未来计划搬到新的城市。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_061",
+    "text": "等小李今天回复发票，以后想要搬到新的城市。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_062",
+    "text": "等小李明天回复发票，希望有一天搬到新的城市。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_063",
+    "text": "等小李后天回复发票，目标是未来搬到新的城市。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_064",
+    "text": "等小李周二回复发票，毕业后想建立个人作品集。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_065",
+    "text": "等小李周三回复发票，未来计划建立个人作品集。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_066",
+    "text": "等小李周四回复发票，以后想要建立个人作品集。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_067",
+    "text": "等小李周五回复发票，希望有一天建立个人作品集。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_068",
+    "text": "等小李下周一回复发票，目标是未来建立个人作品集。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_069",
+    "text": "等小李下周三回复发票，毕业后想参加行业会议。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_070",
+    "text": "等小李本周日回复发票，未来计划参加行业会议。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_071",
+    "text": "等老周今天回复设计稿，以后想要参加行业会议。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_072",
+    "text": "等老周明天回复设计稿，希望有一天参加行业会议。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_073",
+    "text": "等老周后天回复设计稿，目标是未来参加行业会议。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_074",
+    "text": "等老周周二回复设计稿，毕业后想读完专业书单。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_075",
+    "text": "等老周周三回复设计稿，未来计划读完专业书单。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_076",
+    "text": "等老周周四回复设计稿，以后想要读完专业书单。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_077",
+    "text": "等老周周五回复设计稿，希望有一天读完专业书单。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_078",
+    "text": "等老周下周一回复设计稿，目标是未来读完专业书单。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_079",
+    "text": "等老周下周三回复设计稿，毕业后想开始长期储蓄。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_080",
+    "text": "等老周本周日回复设计稿，未来计划开始长期储蓄。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_081",
+    "text": "等老师今天回复成绩，以后想要开始长期储蓄。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_082",
+    "text": "等老师明天回复成绩，希望有一天开始长期储蓄。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_083",
+    "text": "等老师后天回复成绩，目标是未来开始长期储蓄。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "goal"
+      ]
+    }
+  },
+  {
+    "id": "multi_084",
+    "text": "等老师周二回复成绩，今天上午九点开项目会。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_085",
+    "text": "等老师周三回复成绩，明天下午三点开项目会。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_086",
+    "text": "等老师周四回复成绩，后天晚上八点开项目会。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_087",
+    "text": "等老师周五回复成绩，周五10:30开项目会。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_088",
+    "text": "等老师下周一回复成绩，下周二下午两点开项目会。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_089",
+    "text": "等老师下周三回复成绩，今天上午九点去医院复查。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_090",
+    "text": "等老师本周日回复成绩，明天下午三点去医院复查。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_091",
+    "text": "等客户今天回复确认函，后天晚上八点去医院复查。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_092",
+    "text": "等客户明天回复确认函，周五10:30去医院复查。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_093",
+    "text": "等客户后天回复确认函，下周二下午两点去医院复查。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_094",
+    "text": "等客户周二回复确认函，今天上午九点领取证件。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_095",
+    "text": "等客户周三回复确认函，明天下午三点领取证件。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_096",
+    "text": "等客户周四回复确认函，后天晚上八点领取证件。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_097",
+    "text": "等客户周五回复确认函，周五10:30领取证件。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_098",
+    "text": "等客户下周一回复确认函，下周二下午两点领取证件。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_099",
+    "text": "等客户下周三回复确认函，今天上午九点整理报销材料。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  },
+  {
+    "id": "multi_100",
+    "text": "等客户本周日回复确认函，明天下午三点整理报销材料。",
+    "expected": {
+      "draftCount": 2,
+      "types": [
+        "waiting_for",
+        "task"
+      ]
+    }
+  }
+]

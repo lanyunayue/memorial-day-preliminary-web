@@ -31,8 +31,10 @@
      * ------------------------------------------------------------------ */
 
     var DB_NAME = 'shike_db';
-    var DB_VERSION = 1;
+    var DB_VERSION = 2;
     var SNAPSHOT_STORE = 'shike_snapshots';
+    var TRASH_STORE = 'shike_trash';
+    var MAIN_STORE = 'shike_records';
     var META_KEY = 'shike_snapshots';
     var MAX_SNAPSHOTS = 20;
 
@@ -308,6 +310,13 @@
                 var db = event.target.result;
                 if (!db.objectStoreNames.contains(SNAPSHOT_STORE)) {
                     db.createObjectStore(SNAPSHOT_STORE, { keyPath: 'id' });
+                }
+                if (!db.objectStoreNames.contains(TRASH_STORE)) {
+                    var trashStore = db.createObjectStore(TRASH_STORE, { keyPath: 'id' });
+                    trashStore.createIndex('deletedAt', 'deletedAt', { unique: false });
+                }
+                if (!db.objectStoreNames.contains(MAIN_STORE)) {
+                    db.createObjectStore(MAIN_STORE, { keyPath: 'id' });
                 }
             };
         });

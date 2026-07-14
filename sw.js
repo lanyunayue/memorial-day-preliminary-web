@@ -1,12 +1,22 @@
 ﻿// Service Worker for 时刻 (Shike) - v1.5.0
 var CACHE_NAME = 'shike-v200rc52-v62';
 var PRECACHE_URLS = [
-  './','./index.html','./manifest.json','./assets/styles/app.css','./src/config/release-notes.js',
+  './','./index.html','./manifest.json','./assets/styles/app.css','./assets/styles/chronos.css','./src/config/release-notes.js',
   './src/config/version.js','./src/config/constants.js','./src/utilities/sanitize.js','./src/utilities/ids.js','./src/storage/legacy-storage.js','./src/storage/data-integrity.js','./src/storage/indexeddb-storage.js','./src/storage/local-first-bridge.js','./src/legacy-app.js','./src/app.js',
   './src/core/event-bus.js','./src/core/state.js','./src/core/errors.js','./src/core/router.js',
   './src/storage/repository.js','./src/storage/migrations.js','./src/storage/backup.js',
   './src/records/record-service.js','./src/records/record-normalizer.js','./src/records/dedupe.js','./src/records/recurrence.js',
   './src/parser/parser-adapter.js','./src/calendar/calendar-service.js','./src/calendar/ics-export.js',
+  './src/intelligence/temporal-domain.js','./src/intelligence/temporal-validator.js','./src/intelligence/temporal-normalizer.js',
+  './src/intelligence/multi-intent-segmenter.js','./src/intelligence/negation-detector.js','./src/intelligence/condition-detector.js',
+  './src/intelligence/commitment-detector.js','./src/intelligence/waiting-for-detector.js','./src/intelligence/goal-detector.js',
+  './src/intelligence/anniversary-detector.js','./src/intelligence/habit-detector.js','./src/intelligence/confidence-model.js','./src/intelligence/explanation-builder.js',
+  './src/intelligence/intelligence-controller.js','./src/intelligence/temporal-repository.js','./src/intelligence/waiting-for-engine.js','./src/intelligence/waiting-for-repository.js',
+  './src/intelligence/next-action-engine.js','./src/intelligence/conflict-engine.js','./src/intelligence/temporal-web-controller.js',
+  './src/intelligence/daily-brief.js','./src/intelligence/weekly-review.js','./src/intelligence/correction-store.js','./src/intelligence/temporal-memory.js',
+  './src/intelligence/adapters/legacy-record-adapter.js','./src/intelligence/adapters/backup-adapter.js',
+  './src/intelligence/ui/life-inbox-preview.js','./src/intelligence/ui/next-action-card.js','./src/intelligence/ui/review-panel.js',
+  './src/graph/graph-domain.js','./src/graph/graph-builder.js','./src/graph/graph-integrity.js','./src/graph/graph-migration.js','./src/graph/graph-serializer.js','./src/graph/graph-repository.js',
   './src/views/view-registry.js','./src/components/legacy-components.js','./src/i18n/index.js',
   './src/utilities/dates.js','./src/utilities/clipboard.js','./src/utilities/downloads.js',
   './src/composer/composer-state.js','./src/composer/composer-controller.js','./src/composer/composer-classifier.js','./src/composer/composer-view.js',

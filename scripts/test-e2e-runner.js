@@ -99,6 +99,14 @@ function getBrowserVersion(browserPath) {
   }
 }
 
+function getExpectedAppVersion() {
+  if (process.env.SHIKE_EXPECTED_VERSION) return process.env.SHIKE_EXPECTED_VERSION;
+  const source = fs.readFileSync(path.join(V, 'src', 'config', 'version.js'), 'utf8');
+  const match = source.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
+  if (!match) throw new Error('APP_VERSION could not be read from src/config/version.js');
+  return match[1];
+}
+
 function mimeType(file) {
   const ext = path.extname(file).toLowerCase();
   return {
@@ -224,7 +232,8 @@ async function runLocalCdpFallback() {
     await runCdpScripts({
       SHIKE_CDP_URL: process.env.SHIKE_CDP_URL,
       SHIKE_APP_URL: appUrl,
-      SHIKE_ARTIFACT_DIR: artifactDir
+      SHIKE_ARTIFACT_DIR: artifactDir,
+      SHIKE_EXPECTED_VERSION: getExpectedAppVersion()
     }, artifactDir);
     return;
   }
@@ -267,7 +276,8 @@ async function runLocalCdpFallback() {
     await runCdpScripts({
       SHIKE_CDP_URL: cdpUrl,
       SHIKE_APP_URL: appUrl,
-      SHIKE_ARTIFACT_DIR: artifactDir
+      SHIKE_ARTIFACT_DIR: artifactDir,
+      SHIKE_EXPECTED_VERSION: getExpectedAppVersion()
     }, artifactDir);
   } finally {
     server.close();
@@ -282,6 +292,14 @@ async function runCdpScripts(env, artifactDir) {
     {
       name: 'test-shike-runtime-cdp.js',
       env: captureLayout ? { SHIKE_CAPTURE_SCREENSHOTS: '1' } : {}
+    },
+    {
+      name: 'test-shike-chronos-runtime-cdp.js',
+      env: {}
+    },
+    {
+      name: 'test-shike-offline-runtime-cdp.js',
+      env: {}
     }
   ];
   for (let index = 0; index < scripts.length; index++) {

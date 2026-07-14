@@ -45,6 +45,10 @@
     return global.ShikeComposerController;
   }
 
+  function captureWithChronos(text){
+    return !!(global.ShikeChronosWeb&&typeof global.ShikeChronosWeb.captureIfNeeded==='function'&&global.ShikeChronosWeb.captureIfNeeded(text));
+  }
+
   /** Show a toast message if available. */
   function toast(msg, type){
     if(typeof global.showToast === 'function'){
@@ -239,6 +243,11 @@
         showEmptyPrompt();
         return;
       }
+      if(captureWithChronos(text)){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
       // If a controller is available, intercept the submit
       var controller = getController();
       if(controller && typeof controller.submit === 'function'){
@@ -293,6 +302,12 @@
     // Check debounce / processing
     var state = getState();
     if(state && !state.canSubmit()){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
+
+    if(isHome&&captureWithChronos(text)){
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
