@@ -1,0 +1,153 @@
+{
+  "$schema": "sensitive-data-audit.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "testScenario": "Audit all local data storage and runtime surfaces to confirm no plaintext sensitive data (pickup codes, notification content, phone numbers) persists anywhere accessible.",
+  "auditItems": [
+    {
+      "id": "SDA-01",
+      "name": "Room 数据库无明文 (Room database — no plaintext)",
+      "description": "Pickup codes and notification content stored in Room must be encrypted, not plaintext.",
+      "method": "adb shell run-as <package> sqlite3 databases/*.db 'SELECT * FROM parcels;' | inspect for plaintext codes",
+      "expected": "No plaintext pickup codes or notification content in any Room table.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-02",
+      "name": "SharedPreferences 无明文 (SharedPrefs — no plaintext)",
+      "description": "SharedPreferences files must not contain plaintext sensitive data.",
+      "method": "adb shell run-as <package> cat shared_prefs/*.xml",
+      "expected": "No plaintext codes, tokens, or PII in any SharedPrefs XML.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-03",
+      "name": "日志无敏感数据 (Logcat — no sensitive data)",
+      "description": "Application logs must never print pickup codes, notification content, or phone numbers.",
+      "method": "adb logcat -d | grep -iE 'code|pickup|parcel|<package>'",
+      "expected": "No sensitive values appear in logcat output.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-04",
+      "name": "截图无敏感数据 (Screenshots — no sensitive data)",
+      "description": "Captured screenshots must redact or mask pickup codes.",
+      "method": "Visually inspect all collected screenshots; verify codes are masked.",
+      "expected": "All screenshots redact sensitive fields.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-05",
+      "name": "剪贴板无敏感数据 (Clipboard — no sensitive data)",
+      "description": "App must not copy raw pickup codes to the system clipboard without masking/auto-clear.",
+      "method": "Trigger copy action, inspect `adb shell cmd clipboard`.",
+      "expected": "Clipboard either empty, masked, or auto-cleared after short delay.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-06",
+      "name": "崩溃日志无敏感数据 (Crash logs — no sensitive data)",
+      "description": "Crash stacktraces and tombstones must not contain sensitive data in fields/locals.",
+      "method": "Trigger/inspect crash logs: adb logcat -d *:E; check dropbox.",
+      "expected": "No sensitive data in crash output.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-07",
+      "name": "备份未开启 (Backup disabled)",
+      "description": "android:allowBackup must be false; no cloud/auto backup of app data.",
+      "method": "Confirm manifest allowBackup=false (see manifest-audit.json); check `adb shell bmgr`.",
+      "expected": "Backup disabled; no data exported to backup transport.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-08",
+      "name": "允许明文流量=false (Cleartext traffic disabled)",
+      "description": "usesCleartextTraffic must be false; no plaintext network (N/A offline, but verify flag).",
+      "method": "Confirm manifest usesCleartextTraffic=false (see manifest-audit.json).",
+      "expected": "Cleartext traffic disabled.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-09",
+      "name": "数据目录权限 (Data directory permissions)",
+      "description": "App private data directory must have restrictive permissions (0700).",
+      "method": "adb shell run-as <package> ls -la /data/data/<package>",
+      "expected": "Directory and files not world/group readable.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-10",
+      "name": "ContentProvider 未导出 (ContentProvider not exported)",
+      "description": "No ContentProvider should be exported to other apps.",
+      "method": "adb shell dumpsys package <package> | grep -A5 'ContentProvider'",
+      "expected": "No exported ContentProviders exposing sensitive data.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-11",
+      "name": "文件存储加密 (File storage encrypted)",
+      "description": "Files written to external/cache storage must be encrypted or not contain sensitive data.",
+      "method": "adb shell run-as <package> find files cache -type f -exec cat {} \\;",
+      "expected": "No plaintext sensitive data in files or cache.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "SDA-12",
+      "name": "临时文件清理 (Temp file cleanup)",
+      "description": "Temporary files created during processing must be cleaned up after use.",
+      "method": "Trigger operations, then inspect cache/temp dirs for leftover sensitive files.",
+      "expected": "No leftover temp files containing sensitive data.",
+      "actual": "",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    }
+  ],
+  "summary": {
+    "total": 12,
+    "passed": 0,
+    "failed": 0,
+    "pending": 12,
+    "overallResult": "PENDING"
+  },
+  "_meta": {
+    "description": "Sensitive-data audit template with 12 checks covering Room, SharedPrefs, logcat, screenshots, clipboard, crash logs, backup, cleartext traffic, directory permissions, ContentProviders, file storage, and temp files.",
+    "resultEnum": "PENDING | PASS | FAIL | BLOCKED",
+    "redactionPolicy": "Store only hashes of sensitive values in evidence fields. Never paste real pickup codes or notification text.",
+    "userInteractionRequired": true
+  }
+}

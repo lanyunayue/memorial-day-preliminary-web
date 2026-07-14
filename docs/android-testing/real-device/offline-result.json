@@ -1,0 +1,42 @@
+{
+  "testTime": "",
+  "checks": {
+    "manifestNoInternet": {
+      "result": "PASS",
+      "details": "AndroidManifest.xml only declares USE_BIOMETRIC. No INTERNET permission."
+    },
+    "airplaneModeLaunch": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "airplaneModeManualInput": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "airplaneModeProcessNotification": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "airplaneModeAssistantQuery": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "airplaneModeExport": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "noNetworkErrorDialogs": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "noRemoteRequests": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    },
+    "noThirdPartySdkConnections": {
+      "result": "PENDING",
+      "details": "Requires real device"
+    }
+  },
+  "status": "PENDING_DEVICE_CONNECTION"
+}

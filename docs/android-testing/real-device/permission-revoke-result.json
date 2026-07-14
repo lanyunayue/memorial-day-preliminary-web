@@ -1,0 +1,160 @@
+{
+  "$schema": "permission-revoke-result.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "testScenario": "Verify app resilience when individual permissions / capabilities are revoked. Each step revokes a permission, checks the degraded behavior, and confirms graceful fallback.",
+  "steps": [
+    {
+      "step": 1,
+      "name": "撤销通知监听权限 (Revoke notification-listener access)",
+      "description": "Disable notification access for the app via system settings.",
+      "method": "adb shell settings put secure enabled_notification_listeners \"\" (or revoke via UI)",
+      "expectedBehavior": "Listener service unbinds; no further capture.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 2,
+      "name": "检查监听服务停止 (Verify listener stopped)",
+      "description": "Confirm the listener component is no longer enabled.",
+      "method": "adb shell dumpsys notification | grep <package>",
+      "expectedBehavior": "Component not listed as enabled.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 3,
+      "name": "撤销生物识别 (Revoke biometric / remove fingerprint)",
+      "description": "Remove enrolled biometrics or disable biometric auth.",
+      "method": "Settings > Security > Biometrics, remove fingerprints.",
+      "expectedBehavior": "App falls back to lock-screen/PIN auth or locks sensitive views.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 4,
+      "name": "检查应用锁定 (Verify app locks down)",
+      "description": "Confirm sensitive data is hidden when biometric unavailable.",
+      "method": "Launch app, attempt to view parcel codes.",
+      "expectedBehavior": "Sensitive views hidden; biometric prompt unavailable gracefully.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 5,
+      "name": "撤销存储权限 (Revoke storage / media access)",
+      "description": "Revoke READ/WRITE external storage or scoped storage access.",
+      "method": "adb shell pm revoke <package> android.permission.READ_EXTERNAL_STORAGE",
+      "expectedBehavior": "Export/screenshot-save disabled gracefully; no crash.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 6,
+      "name": "检查无法导出 (Verify export disabled)",
+      "description": "Confirm export-to-file feature degrades without storage permission.",
+      "method": "Attempt export from settings.",
+      "expectedBehavior": "Export button disabled or shows permission rationale.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 7,
+      "name": "撤销前台服务 (Revoke / block foreground service)",
+      "description": "Stop or disallow the foreground service used for reminders.",
+      "method": "adb shell am stopservice; or disable via battery settings.",
+      "expectedBehavior": "Reminders degrade; no crash; user informed.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 8,
+      "name": "检查后台限制 (Verify background limits handled)",
+      "description": "Confirm the app handles background execution limits without errors.",
+      "method": "Background the app, observe logcat.",
+      "expectedBehavior": "No unhandled exceptions; graceful degradation.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 9,
+      "name": "撤销开机自启 (Revoke boot-completed behavior)",
+      "description": "Prevent auto-start on boot (OEM auto-start management).",
+      "method": "Disable auto-start in OEM settings; reboot device.",
+      "expectedBehavior": "App does not auto-capture until user launches it manually.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 10,
+      "name": "检查不自启 (Verify no silent auto-start)",
+      "description": "Confirm no background capture occurs before manual launch.",
+      "method": "After reboot, send courier notification before launching app.",
+      "expectedBehavior": "No capture until app is launched by user.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 11,
+      "name": "撤销精确闹钟 (Revoke SCHEDULE_EXACT_ALARM)",
+      "description": "Revoke exact-alarm capability (Android 12+).",
+      "method": "adb shell pm revoke <package> android.permission.SCHEDULE_EXACT_ALARM",
+      "expectedBehavior": "Reminders fall back to inexact alarms; timing less precise but no failure.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 12,
+      "name": "检查提醒降级 (Verify reminder degradation)",
+      "description": "Confirm reminders still fire (within inexact window) without crash.",
+      "method": "Schedule a reminder, wait, observe notification.",
+      "expectedBehavior": "Reminder fires in degraded (inexact) mode; user notified.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 13,
+      "name": "重新授权恢复 (Re-grant permissions)",
+      "description": "Re-grant all previously revoked permissions.",
+      "method": "Re-enable notification access, biometrics, storage, exact alarm.",
+      "expectedBehavior": "App restores full functionality without reinstall.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    },
+    {
+      "step": 14,
+      "name": "功能恢复正常 (Verify full function restored)",
+      "description": "Confirm all features work again after re-grant.",
+      "method": "Trigger capture, reminder, biometric unlock, export.",
+      "expectedBehavior": "All features operational; no residual error state.",
+      "actualBehavior": "",
+      "passed": false,
+      "result": "PENDING"
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "passed": 0,
+    "failed": 0,
+    "pending": 14,
+    "overallResult": "PENDING"
+  },
+  "_meta": {
+    "description": "Permission-revoke resilience verification with 14 steps covering notification access, biometric, storage, foreground service, boot-start, and exact-alarm revocation and recovery.",
+    "resultEnum": "PENDING | PASS | FAIL | BLOCKED",
+    "userInteractionRequired": true
+  }
+}

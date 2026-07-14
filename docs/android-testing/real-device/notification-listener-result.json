@@ -1,0 +1,111 @@
+{
+  "$schema": "notification-listener-result.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "listenerEnabled": false,
+  "listenerComponent": "",
+  "verificationItems": [
+    {
+      "id": "NL-01",
+      "name": "未授权时不捕获 (No capture when unauthorized)",
+      "description": "When notification-listener permission is NOT granted, the app must not capture or store any notification content.",
+      "method": "Disable listener in settings, send test notification, check database for new records.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-02",
+      "name": "用户授权后绑定服务 (Service binds after user authorization)",
+      "description": "After the user grants notification access, the listener service binds and becomes active.",
+      "method": "Grant permission, verify `adb shell dumpsys notification` shows the component as enabled.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-03",
+      "name": "空白名单不提取 (Empty whitelist yields no extras)",
+      "description": "With an empty courier whitelist, no pickup codes are extracted even from valid courier notifications.",
+      "method": "Clear whitelist, send courier notification, verify no parcel record created.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-04",
+      "name": "非白名单应用不捕获 (Non-whitelisted app not captured)",
+      "description": "Notifications from apps not in the whitelist are ignored entirely.",
+      "method": "Send notification from non-whitelisted app, verify no record and no log of content.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-05",
+      "name": "白名单应用捕获取件码 (Whitelisted courier captures pickup code)",
+      "description": "Notifications from whitelisted courier apps are parsed and the pickup code extracted correctly.",
+      "method": "Add courier to whitelist, send notification with pickup code, verify parcel record with correct code.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-06",
+      "name": "通知删除后处理 (Notification removed handling)",
+      "description": "When the source notification is dismissed by the user, the stored parcel record remains intact (not auto-deleted).",
+      "method": "Capture a parcel, swipe away the source notification, verify parcel record persists.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-07",
+      "name": "相同取件码去重 (Duplicate pickup code deduplication)",
+      "description": "Repeated notifications with the same pickup code do not create duplicate parcel records.",
+      "method": "Send same courier notification twice, verify only one parcel record exists.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-08",
+      "name": "后台被杀后恢复 (Recovery after background kill)",
+      "description": "After the system kills the app process, the listener resumes capturing on the next notification.",
+      "method": "Force-stop the app, send courier notification, verify capture resumes.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-09",
+      "name": "锁屏时不泄露 (No leak on lock screen)",
+      "description": "Pickup codes are not exposed in notification text or lock-screen visibility; app uses private/redacted notifications.",
+      "method": "Lock screen, verify system notifications from the app do not reveal pickup codes.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "NL-10",
+      "name": "权限撤销后停止 (Stops after permission revoked)",
+      "description": "When notification access is revoked, the listener stops immediately and no further capture occurs.",
+      "method": "Revoke notification access, send courier notification, verify no capture and clean shutdown.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 0,
+    "failed": 0,
+    "pending": 10,
+    "overallResult": "PENDING"
+  },
+  "_meta": {
+    "description": "Notification listener verification template with 10 mandatory checks for the alpha2 real-device test.",
+    "resultEnum": "PENDING | PASS | FAIL | BLOCKED",
+    "userInteractionRequired": true
+  }
+}

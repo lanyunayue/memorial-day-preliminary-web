@@ -1,0 +1,32 @@
+{
+  "$schema": "manifest-audit.v1",
+  "testTime": "2026-07-14",
+  "apkRef": "alpha2 release APK",
+  "permissions": [
+    "android.permission.USE_BIOMETRIC"
+  ],
+  "hasInternetPermission": false,
+  "hasAccessNetworkStatePermission": false,
+  "hasInternetDeclared": false,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "usesCleartextTraffic": false,
+  "auditResult": "PASS",
+  "notes": "Manifest only declares USE_BIOMETRIC. No INTERNET, ACCESS_NETWORK_STATE, or any network-related permission. Offline-first design confirmed.",
+  "details": {
+    "extractionMethod": "aapt dump permissions / apktool d AndroidManifest.xml",
+    "allDeclaredPermissions": [
+      "android.permission.USE_BIOMETRIC"
+    ],
+    "networkRelatedPermissions": [],
+    "dangerousPermissions": [],
+    "normalPermissions": [
+      "android.permission.USE_BIOMETRIC"
+    ],
+    "exportedComponents": [],
+    "usesCleartextTrafficValue": false,
+    "allowBackupValue": false,
+    "fullBackupContentValue": null,
+    "dataExtractionRules": "Not declared (acceptable: allowBackup=false)"
+  }
+}

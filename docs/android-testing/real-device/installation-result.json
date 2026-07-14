@@ -1,0 +1,56 @@
+{
+  "$schema": "installation-result.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "apkPath": "",
+  "apkSha256": "",
+  "install": {
+    "command": "adb install -r -t <apk>",
+    "exitCode": 0,
+    "output": "",
+    "success": false,
+    "durationMs": 0
+  },
+  "packageName": "",
+  "versionName": "",
+  "versionCode": 0,
+  "launch": {
+    "command": "adb shell monkey -p <package> -c android.intent.category.LAUNCHER 1",
+    "exitCode": 0,
+    "output": "",
+    "started": false,
+    "durationMs": 0
+  },
+  "crashCheck": {
+    "logcatFilter": "adb logcat -d *:E | grep -E 'FATAL|AndroidRuntime|CRASH'",
+    "crashed": false,
+    "crashStacktrace": "",
+    "anrDetected": false,
+    "anrTrace": ""
+  },
+  "coldStartTime": {
+    "measured": false,
+    "milliseconds": 0,
+    "method": "adb shell am start -W -n <package>/<mainActivity>",
+    "totalTime": 0,
+    "waitTime": 0
+  },
+  "firstScreen": {
+    "captured": false,
+    "screenshotPath": "",
+    "description": "",
+    "expectedView": "Onboarding / privacy consent screen"
+  },
+  "_meta": {
+    "description": "Installation result template for the alpha2 APK on a real Android device.",
+    "fillInstructions": {
+      "apkPath": "Absolute path to the alpha2 APK used for testing.",
+      "apkSha256": "SHA-256 of the APK for integrity: `certutil -hashfile <apk> SHA256` (Windows) or `sha256sum <apk>`.",
+      "packageName": "Confirmed via `adb shell pm list packages | grep <keyword>` after install.",
+      "versionName": "Output of `adb shell dumpsys package <pkg> | grep versionName`.",
+      "versionCode": "Output of `adb shell dumpsys package <pkg> | grep versionCode` as integer.",
+      "coldStartTime": "Use `am start -W` WaitTime as the cold-start metric.",
+      "firstScreen": "Screenshot captured immediately after cold launch; verify it shows the expected first-run view."
+    }
+  }
+}

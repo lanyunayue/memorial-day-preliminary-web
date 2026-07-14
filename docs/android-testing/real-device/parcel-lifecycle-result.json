@@ -1,0 +1,196 @@
+{
+  "$schema": "parcel-lifecycle-result.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "testScenario": "End-to-end parcel lifecycle verification: from pickup-code capture through active tracking, pickup confirmation, archival, soft-delete, restore, and permanent deletion.",
+  "steps": [
+    {
+      "step": 1,
+      "name": "取件码捕获 (Pickup code captured)",
+      "description": "Pickup code is extracted from a whitelisted courier notification or manual entry.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 2,
+      "name": "自动解析通知内容 (Notification content auto-parsed)",
+      "description": "Courier, code, and pickup location parsed from notification text.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 3,
+      "name": "入库存储 (Persisted to database)",
+      "description": "Parcel record written to Room database with encrypted fields.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 4,
+      "name": "状态=待取件 (Status = pending pickup)",
+      "description": "Initial status set to 'pending pickup'.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 5,
+      "name": "列表展示 (Displayed in active list)",
+      "description": "New parcel appears at the top of the active parcel list.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 6,
+      "name": "提醒推送 (Reminder scheduled)",
+      "description": "Pickup reminder scheduled via AlarmManager / WorkManager.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 7,
+      "name": "用户标记已取 (User marks as picked up)",
+      "description": "User taps 'mark picked up' action on the parcel.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 8,
+      "name": "状态=已取件 (Status = picked up)",
+      "description": "Status transitions to 'picked up'.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 9,
+      "name": "取件时间记录 (Pickup timestamp recorded)",
+      "description": "Pickup timestamp stored on the record.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 10,
+      "name": "取件码失效标记 (Code marked invalid)",
+      "description": "Pickup code marked as used/invalid to prevent reuse confusion.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 11,
+      "name": "移至历史 (Moved to history)",
+      "description": "Picked-up parcel moves from active list to history list.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 12,
+      "name": "历史列表展示 (History list display)",
+      "description": "Parcel visible in the history tab with correct status and timestamp.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 13,
+      "name": "用户编辑备注 (User edits notes)",
+      "description": "User adds/edits a note on the parcel record.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 14,
+      "name": "备注保存 (Notes persisted)",
+      "description": "Notes saved to database and survive app restart.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 15,
+      "name": "用户删除 (User initiates delete)",
+      "description": "User deletes the parcel from the history list.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 16,
+      "name": "软删除标记 (Soft-delete marked)",
+      "description": "Record is soft-deleted (deleted_at set), not removed from database.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 17,
+      "name": "回收站展示 (Trash / recycle bin display)",
+      "description": "Deleted parcel appears in the trash/recycle bin view.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 18,
+      "name": "恢复操作 (Restore operation)",
+      "description": "User restores the parcel from the trash.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 19,
+      "name": "状态恢复 (Status restored)",
+      "description": "Parcel returns to the history list with its prior status intact.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 20,
+      "name": "彻底删除 (Permanent delete)",
+      "description": "User permanently deletes the parcel from the trash.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 21,
+      "name": "数据库清理 (Database row removed)",
+      "description": "Permanent delete removes the row from the database; encrypted code wiped.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    },
+    {
+      "step": 22,
+      "name": "审计日志记录 (Audit log entry)",
+      "description": "Lifecycle events (create, status change, delete, restore, purge) recorded in the local audit log.",
+      "passed": false,
+      "evidence": "",
+      "result": "PENDING"
+    }
+  ],
+  "summary": {
+    "total": 22,
+    "passed": 0,
+    "failed": 0,
+    "pending": 22,
+    "overallResult": "PENDING"
+  },
+  "_meta": {
+    "description": "Parcel lifecycle verification template with 22 sequential steps from capture to permanent deletion.",
+    "resultEnum": "PENDING | PASS | FAIL | BLOCKED",
+    "userInteractionRequired": true
+  }
+}

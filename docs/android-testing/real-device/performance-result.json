@@ -1,0 +1,121 @@
+{
+  "testTime": "",
+  "deviceProfile": "",
+  "metrics": {
+    "coldStart": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "Requires 10 warmup + 30 formal samples via am start -W"
+    },
+    "hotStart": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "Requires 10 warmup + 30 formal samples"
+    },
+    "notificationToDraft": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "Time from notification received to draft created"
+    },
+    "parserLatency": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "ParcelParser.parse() execution time"
+    },
+    "databaseWrite": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "Room insert/update latency"
+    },
+    "assistantQuery": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "AssistantQueryEngine query latency"
+    },
+    "query100Parcels": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "Query with 100 parcels in database"
+    },
+    "query1000Parcels": {
+      "samples": [],
+      "statistics": {
+        "min": null,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "p99": null,
+        "max": null,
+        "mean": null
+      },
+      "note": "Query with 1000 parcels in database"
+    }
+  },
+  "memory": {
+    "background": null,
+    "foreground": null,
+    "note": "Use adb shell dumpsys meminfo <package>"
+  },
+  "power": {
+    "standby1h": null,
+    "notification1h": null,
+    "note": "Power measurement requires OEM-specific tools or Batterystats. Report tool used and limitations."
+  },
+  "status": "PENDING_DEVICE_CONNECTION"
+}

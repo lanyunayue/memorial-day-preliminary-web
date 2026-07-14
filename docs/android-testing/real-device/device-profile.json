@@ -1,0 +1,34 @@
+{
+  "$schema": "device-profile.v1",
+  "testTime": "",
+  "manufacturer": "",
+  "model": "",
+  "androidVersion": "",
+  "apiLevel": 0,
+  "rom": "",
+  "abi": "",
+  "screenSize": "",
+  "screenLockEnabled": false,
+  "biometricSupported": false,
+  "batteryOptimization": false,
+  "adbVersion": "",
+  "status": "PENDING_DEVICE_CONNECTION",
+  "_meta": {
+    "description": "Real Android device profile template. Fill all fields after connecting a physical device via ADB.",
+    "fillInstructions": {
+      "testTime": "ISO-8601 timestamp when the device profile was captured (e.g. 2026-07-14T10:30:00+08:00).",
+      "manufacturer": "Output of `adb shell getprop ro.product.manufacturer` (e.g. Xiaomi, HUAWEI, samsung).",
+      "model": "Output of `adb shell getprop ro.product.model` (e.g. 23116PN5BC).",
+      "androidVersion": "Output of `adb shell getprop ro.build.version.release` (e.g. 14).",
+      "apiLevel": "Output of `adb shell getprop ro.build.version.sdk` as integer (e.g. 34).",
+      "rom": "ROM / system version, `adb shell getprop ro.build.display.id` (e.g. HyperOS 1.0.5.0).",
+      "abi": "Primary ABI, `adb shell getprop ro.product.cpu.abi` (e.g. arm64-v8a).",
+      "screenSize": "Output of `adb shell wm size` resolution (e.g. 1080x2400).",
+      "screenLockEnabled": "Whether a screen lock (PIN/pattern/password) is set: `adb shell locksettings get-disabled`.",
+      "biometricSupported": "Whether biometric hardware is present: `adb shell cmd biometric list`.",
+      "batteryOptimization": "Whether the app is exempt from battery optimization: `adb shell dumpsys devicepolicy`.",
+      "adbVersion": "Output of `adb version`.",
+      "status": "PENDING_DEVICE_CONNECTION | CONNECTED | DISCONNECTED | ERROR"
+    }
+  }
+}

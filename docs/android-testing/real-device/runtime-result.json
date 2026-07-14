@@ -1,0 +1,98 @@
+{
+  "$schema": "runtime-result.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "onboarding": {
+    "description": "First-launch onboarding flow",
+    "stepsVerified": [
+      { "step": 1, "name": "Welcome screen displayed", "passed": false, "notes": "" },
+      { "step": 2, "name": "Feature introduction shown", "passed": false, "notes": "" },
+      { "step": 3, "name": "Onboarding can be skipped", "passed": false, "notes": "" },
+      { "step": 4, "name": "Skipped state persisted on relaunch", "passed": false, "notes": "" }
+    ],
+    "screenshotPath": "",
+    "result": "PENDING"
+  },
+  "privacyNotice": {
+    "description": "Privacy notice / consent screen",
+    "stepsVerified": [
+      { "step": 1, "name": "Privacy notice displayed before any data collection", "passed": false, "notes": "" },
+      { "step": 2, "name": "Data scope clearly described (local-only, no network)", "passed": false, "notes": "" },
+      { "step": 3, "name": "User must explicitly accept to proceed", "passed": false, "notes": "" },
+      { "step": 4, "name": "Acceptance state persisted", "passed": false, "notes": "" },
+      { "step": 5, "name": "Privacy notice re-accessible from settings", "passed": false, "notes": "" }
+    ],
+    "screenshotPath": "",
+    "result": "PENDING"
+  },
+  "threeModes": {
+    "description": "Three notification-capture operating modes",
+    "modes": [
+      {
+        "id": "auto",
+        "name": "自动模式 (Auto)",
+        "description": "Automatically captures and parses pickup codes from whitelisted courier notifications",
+        "verified": false,
+        "screenshotPath": "",
+        "notes": ""
+      },
+      {
+        "id": "confirm",
+        "name": "确认模式 (Confirm)",
+        "description": "Captures notifications but requires user confirmation before storing the parcel",
+        "verified": false,
+        "screenshotPath": "",
+        "notes": ""
+      },
+      {
+        "id": "manual",
+        "name": "手动模式 (Manual)",
+        "description": "No automatic capture; user manually enters pickup codes",
+        "verified": false,
+        "screenshotPath": "",
+        "notes": ""
+      }
+    ],
+    "result": "PENDING"
+  },
+  "defaultMode": {
+    "description": "Default operating mode on first launch",
+    "expectedDefault": "confirm",
+    "actualDefault": "",
+    "verified": false,
+    "notes": "Default mode should be the least-privileged 'confirm' mode, requiring explicit opt-in for auto capture.",
+    "screenshotPath": "",
+    "result": "PENDING"
+  },
+  "unauthorizedState": {
+    "description": "App behavior when notification-listener permission is NOT granted",
+    "stepsVerified": [
+      { "step": 1, "name": "App launches without crashing", "passed": false, "notes": "" },
+      { "step": 2, "name": "Clear guidance shown to grant notification access", "passed": false, "notes": "" },
+      { "step": 3, "name": "No notification captured before permission granted", "passed": false, "notes": "" },
+      { "step": 4, "name": "Manual mode still fully functional", "passed": false, "notes": "" },
+      { "step": 5, "name": "Deep-link to notification settings works", "passed": false, "notes": "" }
+    ],
+    "screenshotPath": "",
+    "result": "PENDING"
+  },
+  "manualMode": {
+    "description": "Manual pickup-code entry mode",
+    "stepsVerified": [
+      { "step": 1, "name": "Manual entry form accessible", "passed": false, "notes": "" },
+      { "step": 2, "name": "Courier source selectable", "passed": false, "notes": "" },
+      { "step": 3, "name": "Pickup code validated (format)", "passed": false, "notes": "" },
+      { "step": 4, "name": "Entry saved to local database", "passed": false, "notes": "" },
+      { "step": 5, "name": "Saved entry appears in parcel list", "passed": false, "notes": "" },
+      { "step": 6, "name": "Duplicate code detection", "passed": false, "notes": "" }
+    ],
+    "screenshotPath": "",
+    "result": "PENDING"
+  },
+  "overallResult": "PENDING",
+  "_meta": {
+    "description": "Runtime functional verification template covering onboarding, privacy, three operating modes, default mode, unauthorized state, and manual mode.",
+    "resultEnum": "PENDING | PASS | FAIL | BLOCKED",
+    "userInteractionRequired": true
+  }
+}

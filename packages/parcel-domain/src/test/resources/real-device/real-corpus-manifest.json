@@ -1,0 +1,47 @@
+{
+  "version": "2.3.0-alpha2",
+  "generatedAt": "2026-07-14T14:04:17.371Z",
+  "status": "REAL_NOTIFICATION_CORPUS_REQUIRED",
+  "classifications": {
+    "synthetic-template": {
+      "description": "Machine-generated from known logistics templates",
+      "count": 36,
+      "source": "parcel-corpus.tsv (alpha1)"
+    },
+    "sanitized-example": {
+      "description": "Real notification with PII removed, structure preserved",
+      "count": 0,
+      "source": "pending real device collection"
+    },
+    "real-notification-consented": {
+      "description": "Real notification from user-consented source, PII redacted",
+      "count": 0,
+      "source": "pending real device collection"
+    },
+    "human-reviewed": {
+      "description": "Human-reviewed and labeled by team member",
+      "count": 0,
+      "source": "pending human review"
+    }
+  },
+  "requirements": {
+    "minRealNotifications": 20,
+    "minSourcePackages": 3,
+    "minLogisticsStatuses": 5,
+    "minNonParcelInterference": 10,
+    "minMultiDigitInterference": 5,
+    "minTruncatedOrMalformed": 5
+  },
+  "redactionPolicy": {
+    "forbidden": [
+      "real names",
+      "phone numbers",
+      "addresses",
+      "full tracking numbers",
+      "pickup codes",
+      "order numbers",
+      "private message content"
+    ],
+    "method": "Replace PII with [REDACTED] placeholders, preserve structure and format"
+  }
+}

@@ -1,0 +1,5 @@
+id	classification	source_package	carrier	status	tracking_masked	pickup_code_masked	location	safe_text	expected_parcel_likely	expected_confidence	notes
+real-001	real-notification-consented	[REDACTED_PACKAGE]	[REDACTED_CARRIER]	READY_FOR_PICKUP	[REDACTED_TRACK]	[REDACTED_CODE]	[REDACTED_LOCATION]	[REDACTED_SAFE_TEXT]	true	HIGH	Waiting for user to provide real notification
+real-002	real-notification-consented	[REDACTED_PACKAGE]	[REDACTED_CARRIER]	IN_TRANSIT	[REDACTED_TRACK]		[REDACTED_LOCATION]	[REDACTED_SAFE_TEXT]	true	MEDIUM	Waiting for user to provide real notification
+interference-001	real-notification-consented	[REDACTED_PACKAGE]	unknown	DISCOVERED				银行验证码 8234 请勿泄露	false		Non-parcel interference: bank verification code
+interference-002	real-notification-consented	[REDACTED_PACKAGE]	unknown	DISCOVERED				您的验证码是 123456	false		Non-parcel interference: SMS code

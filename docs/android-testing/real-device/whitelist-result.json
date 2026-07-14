@@ -1,0 +1,84 @@
+{
+  "$schema": "whitelist-result.v1",
+  "testTime": "",
+  "deviceProfileRef": "device-profile.json",
+  "testScenario": "Verify that the courier whitelist correctly filters notification sources. Three sources are tested: a whitelisted courier, a non-whitelisted app, and a non-parcel sensitive app.",
+  "sources": [
+    {
+      "id": "source-a",
+      "label": "Source A — Whitelisted courier app",
+      "packageName": "",
+      "appName": "",
+      "inWhitelist": true,
+      "isCourier": true,
+      "testNotification": {
+        "title": "[REDACTED_COURIER_NOTIFICATION_TITLE]",
+        "text": "[REDACTED_PICKUP_CODE_PLACEHOLDER]",
+        "sentAt": ""
+      },
+      "expectedBehavior": "Pickup code extracted and stored as a new parcel record.",
+      "actualBehavior": "",
+      "parcelCreated": false,
+      "extractedCodeHash": "",
+      "screenshotPath": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "source-b",
+      "label": "Source B — Non-whitelisted app",
+      "packageName": "",
+      "appName": "",
+      "inWhitelist": false,
+      "isCourier": false,
+      "testNotification": {
+        "title": "[REDACTED_APP_NOTIFICATION_TITLE]",
+        "text": "[REDACTED_CONTENT_PLACEHOLDER]",
+        "sentAt": ""
+      },
+      "expectedBehavior": "Notification ignored. No parcel record created. No content logged.",
+      "actualBehavior": "",
+      "parcelCreated": false,
+      "extractedCodeHash": "",
+      "screenshotPath": "",
+      "result": "PENDING"
+    },
+    {
+      "id": "source-c",
+      "label": "Source C — Non-parcel sensitive app",
+      "packageName": "",
+      "appName": "",
+      "inWhitelist": false,
+      "isCourier": false,
+      "isSensitive": true,
+      "testNotification": {
+        "title": "[REDACTED_SENSITIVE_NOTIFICATION_TITLE]",
+        "text": "[REDACTED_SENSITIVE_CONTENT_PLACEHOLDER]",
+        "sentAt": ""
+      },
+      "expectedBehavior": "Notification ignored entirely. Sensitive content never parsed, stored, or logged.",
+      "actualBehavior": "",
+      "parcelCreated": false,
+      "extractedCodeHash": "",
+      "logcatLeakCheck": {
+        "sensitiveDataInLogcat": false,
+        "checked": false,
+        "filter": "adb logcat -d | grep -i <packageName>"
+      },
+      "screenshotPath": "",
+      "result": "PENDING"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 0,
+    "failed": 0,
+    "pending": 3,
+    "overallResult": "PENDING"
+  },
+  "_meta": {
+    "description": "Whitelist filtering verification across three notification sources (A: whitelisted courier, B: non-whitelisted app, C: non-parcel sensitive app).",
+    "redactionPolicy": "All real notification titles, text, and pickup codes MUST be redacted. Store only SHA-256 hashes of extracted codes, never plaintext.",
+    "resultEnum": "PENDING | PASS | FAIL | BLOCKED",
+    "userInteractionRequired": true
+  }
+}
