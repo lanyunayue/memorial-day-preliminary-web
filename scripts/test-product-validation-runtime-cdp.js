@@ -69,8 +69,12 @@ async function main(){
   assert(await client.evaluate('ShikeResearchEventLog.list().length===0&&ShikeResearchSession.list().length===0'),'research delete did not clear local data');
   await client.evaluate("document.getElementById('researchWithdrawBtn').click();ShikeResearchEventLog.clear();document.getElementById('quickInput').dispatchEvent(new Event('input',{bubbles:true}))");
   assert(await client.evaluate('!ShikeParticipantConsent.status().active&&ShikeResearchEventLog.list().length===0'),'opt-out did not stop research logging');
+  const managerUrl=new URL('tools/product-validation/participant-manager.html',APP_URL).href;await client.send('Page.navigate',{url:managerUrl});
+  await waitFor(client,"document.readyState==='complete'&&!!window.ShikeSessionAnalyzer&&!!window.ShikeStudyExporter&&!!document.getElementById('metrics')",'participant manager bootstrap');
+  const manager=await client.evaluate(`(()=>{var privacyRejected=false;var orphanRejected=false;try{ShikeSessionAnalyzer.assertExport({schema:'shike-product-validation-export',schemaVersion:1,containsRawUserText:false,remoteAnalytics:false,sessions:[{sessionId:'rs_test_browser',participantCode:'TEST-BROWSER',startedAt:new Date().toISOString(),phone:'TEST_VALUE'}],events:[]});}catch(error){privacyRejected=true;}try{ShikeStudyExporter.validateCodes({sessions:[]},[{participantCode:'TEST-BROWSER',sessionId:'rs_missing',issueCode:'copy_confusion',humanCoded:true}]);}catch(error){orphanRejected=true;}return {privacyRejected:privacyRejected,orphanRejected:orphanRejected,emptyReport:document.getElementById('metrics').textContent.includes('HUMAN PARTICIPANTS REQUIRED'),exportDisabled:document.getElementById('exportStudy').disabled};})()`);
+  assert(manager.privacyRejected&&manager.orphanRejected,'participant manager accepted invalid evidence');assert(manager.emptyReport&&manager.exportDisabled,'participant manager empty state is dishonest');
   assert(client.consoleErrors.length===0,`console errors: ${client.consoleErrors.join(' | ')}`);assert(client.runtimeErrors.length===0,`runtime errors: ${client.runtimeErrors.join(' | ')}`);assert(client.networkErrors.length===0,`network errors: ${client.networkErrors.join(' | ')}`);
-  client.close();console.log('Product validation browser E2E passed: 20/20');
+  client.close();console.log('Product validation browser E2E passed: 22/22');
 }
 
 main().catch((error)=>{console.error(error.stack||error);process.exit(1);});
