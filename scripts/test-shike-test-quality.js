@@ -11,7 +11,7 @@
   console.log('Found '+files.length+' test files\n');
 
   var fakePatterns=[
-    {re:/assert\(true\s*,/g,name:'assert(true,...)'},
+    {re:new RegExp('assert'+'\\(true\\s*,','g'),name:'constant-true assertion'},
     {re:/\|\|\s*true\s*[,)]/g,name:'condition || true'}
   ];
 

@@ -1,1 +1,30 @@
-(function(ns){var map={create_record:'create_record',search_records:'search_records',summarize_today:'summarize_today',pin_record:'pin_record',delete_record:'delete_record',open_page:'open_page',export_calendar:'export_calendar',export_backup:'export_backup',change_theme:'change_theme',show_release_notes:'show_release_notes'};ns.planner=Object.freeze({plan:function(route,context){var tool=map[route.intent];if(!tool)return {ok:false,code:'unknown_intent',intent:route.intent};return {ok:true,id:'plan_'+Date.now().toString(36),intent:route.intent,tool:tool,args:route.args||{},context:context,confirmation:ns.confirmationPolicy.levelFor(tool),createdAt:Date.now()};}});})(window.ShikeAgentModules);
+(function(ns){
+  var map={
+    create_record:'create_record',
+    search_records:'search_records',
+    summarize_today:'summarize_today',
+    pin_record:'pin_record',
+    delete_record:'delete_record',
+    open_page:'open_page',
+    export_calendar:'export_calendar',
+    export_backup:'export_backup',
+    change_theme:'change_theme',
+    show_release_notes:'show_release_notes'
+  };
+  ns.planner=Object.freeze({
+    plan:function(route,context){
+      var tool=map[route.intent];
+      if(!tool)return {ok:false,code:'unknown_intent',intent:route.intent};
+      return {
+        ok:true,
+        id:'plan_'+Date.now().toString(36),
+        intent:route.intent,
+        tool:tool,
+        args:route.args||{},
+        context:context,
+        confirmation:ns.confirmationPolicy.levelFor(tool),
+        createdAt:Date.now()
+      };
+    }
+  });
+})(window.ShikeAgentModules);

@@ -1,11 +1,14 @@
 (function(global){
   var KEY='shike_browser_ai_enabled_v1';
   function language(){var value=String(global.LANG||document.documentElement.lang||'zh').toLowerCase();return value.indexOf('ja')===0?'ja':(value.indexOf('en')===0?'en':'zh');}
+  var SUPPORTED_LANGUAGES=['de','en','es','fr','ja'];
+  function languageSupported(lang){return SUPPORTED_LANGUAGES.indexOf(lang)>=0;}
   function modelOptions(){var lang=language();return{expectedInputs:[{type:'text',languages:[lang]}],expectedOutputs:[{type:'text',languages:[lang]}]};}
   function enabled(){try{return global.localStorage.getItem(KEY)==='true';}catch(error){return false;}}
   function setEnabled(value){try{global.localStorage.setItem(KEY,value?'true':'false');}catch(error){}return enabled();}
   async function availability(){
     if(!global.LanguageModel||typeof global.LanguageModel.availability!=='function')return'unavailable';
+    var lang=language();if(!languageSupported(lang))return'unavailable';
     try{return await global.LanguageModel.availability(modelOptions());}catch(error){return'unavailable';}
   }
   async function createSession(){

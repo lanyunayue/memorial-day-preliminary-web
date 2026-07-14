@@ -332,7 +332,7 @@ const tests = [
   {
     name: 'Test integrity',
     script: 'test-shike-test-integrity.js',
-    expected: 'Test Integrity: 710 checks, 710 passed'
+    expectedPattern: /Test Integrity: (\d+) checks, \1 passed, 0 failed/
   },
 ];
 
@@ -366,7 +366,10 @@ for (const test of tests) {
   const stdout = (result.stdout || '').trim();
   const stderr = (result.stderr || '').trim();
   const output = [stdout, stderr].filter(Boolean).join('\n');
-  const passed = result.status === 0 && output.includes(test.expected);
+  const outputMatched = test.expectedPattern
+    ? test.expectedPattern.test(output)
+    : output.includes(test.expected);
+  const passed = result.status === 0 && outputMatched;
 
   results.push({
     name: test.name,

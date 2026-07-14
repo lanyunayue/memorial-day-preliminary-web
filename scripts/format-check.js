@@ -29,4 +29,4 @@ function walk(dir) {
 
 walk(path.join(V, 'src'));
 console.log(issues === 0 ? 'Format check passed' : `Format check: ${issues} issues`);
-process.exit(0); // Non-blocking for now
+process.exit(issues > 0 ? 1 : 0);
