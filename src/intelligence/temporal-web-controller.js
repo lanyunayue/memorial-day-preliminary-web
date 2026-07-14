@@ -48,6 +48,7 @@
     async function readPayload(operationId){var item=await operationPayloadStore.get(payloadId(operationId));return item&&item.payload;}
     function clearPayload(operationId){return operationPayloadStore.remove(payloadId(operationId));}
     function notify(message,type){api.notify(message,type||'warn');}
+    function researchTrack(eventType,properties){try{return global.ShikeResearchEventLog&&global.ShikeResearchEventLog.track(eventType,properties||{});}catch(error){return null;}}
     function previewContainer(){return global.document&&global.document.getElementById('temporalInboxBlock');}
     function actionContainer(){return global.document&&global.document.getElementById('temporalActionBlock');}
     function reviewContainer(){return global.document&&global.document.getElementById('temporalReviewBlock');}
@@ -67,6 +68,7 @@
       if(state.sourceText===text&&(state.drafts.length||state.rejected.length)){renderPreview();return true;}
       api.onCaptureStart(text);
       state.sourceText=text;state.drafts=result.drafts;state.rejected=result.rejected;state.error='';state.persisting=state.drafts.length>0;renderPreview();
+      researchTrack('draft_generated',{draftCount:state.drafts.length,rejectedCount:state.rejected.length});
       if(!state.drafts.length)return true;
       temporalRepository.saveDrafts(state.drafts).then(function(){state.persisting=false;renderPreview();}).catch(function(){state.persisting=false;state.error='草稿未能写入本地存储，暂不能确认。';renderPreview();notify(state.error,'error');});
       return true;
@@ -75,7 +77,11 @@
       var index=state.drafts.findIndex(function(draft){return draft.id===id;});if(index<0||state.saving.has(id))return;
       try{
         var previous=state.drafts[index];var next=modules.intelligence.updateDraft(previous,changes);state.drafts[index]=next;state.error='';renderPreview();
-        temporalRepository.saveDrafts([next]).then(function(){logCorrection({eventType:'draft_edited',draftId:id,sourceText:previous.sourceText,originalType:previous.type,correctedType:next.type,modifiedFields:Object.keys(changes)});}).catch(function(){state.error='修改未能保存，请重试。';renderPreview();});
+        temporalRepository.saveDrafts([next]).then(function(){
+          logCorrection({eventType:'draft_edited',draftId:id,sourceText:previous.sourceText,originalType:previous.type,correctedType:next.type,modifiedFields:Object.keys(changes)});researchTrack('draft_edited',{field:Object.keys(changes)[0]||'unknown'});
+          if(previous.type!==next.type)researchTrack('type_corrected',{fromType:previous.type,toType:next.type});
+          if(changes.normalizedTime)researchTrack('time_corrected',{field:Object.keys(changes.normalizedTime).find(function(key){return (previous.normalizedTime||{})[key]!==changes.normalizedTime[key];})||'time'});
+        }).catch(function(){state.error='修改未能保存，请重试。';renderPreview();});
       }catch(error){notify('草稿修改无效','error');}
     }
     function updateDraftTime(id,key,value){
@@ -86,7 +92,7 @@
     function cancelDraft(id){
       if(state.saving.has(id))return;state.saving.add(id);renderPreview();
       var draft=state.drafts.find(function(item){return item.id===id;});
-      temporalRepository.setStatus(id,'cancelled').catch(function(){return temporalRepository.removeDraft(id);}).then(function(){logCorrection({eventType:'draft_cancelled',draftId:id,sourceText:draft&&draft.sourceText,originalType:draft&&draft.type});removeDraftFromState(id);}).catch(function(){state.saving.delete(id);state.error='取消操作未能保存。';renderPreview();});
+      temporalRepository.setStatus(id,'cancelled').catch(function(){return temporalRepository.removeDraft(id);}).then(function(){logCorrection({eventType:'draft_cancelled',draftId:id,sourceText:draft&&draft.sourceText,originalType:draft&&draft.type});researchTrack('draft_cancelled',{draftType:draft&&draft.type||'unknown'});removeDraftFromState(id);}).catch(function(){state.saving.delete(id);state.error='取消操作未能保存。';renderPreview();});
     }
     function createPayload(draft,recordId){
       return {operationType:'create_record',recordId:recordId,draftId:draft.id,type:draft.type,sourceSpan:draft.sourceSpan,personRefs:draft.personRefs||[],normalizedTime:draft.normalizedTime||null,recurrence:draft.recurrence||null,action:draft.action||'',object:draft.object||''};
@@ -165,7 +171,7 @@
       var operationId='create:'+draft.id;var existingOperation=await operationJournal.get(operationId);if(!existingOperation&&modules.legacyAdapter.isDuplicate(draft,api.getRecords())){notify('这条记录已存在，未重复保存。','warn');return false;}
       state.saving.add(id);renderPreview();var recordId=existingOperation&&existingOperation.recordId||api.createRecordId();
       try{
-        await operationCoordinator.execute(createPlan(draft,recordId));state.saving.delete(id);state.error='';removeDraftFromState(id);api.refresh();await renderInsights(api.getRecords());await runConsistencyAudit();return true;
+        await operationCoordinator.execute(createPlan(draft,recordId));researchTrack('draft_confirmed',{draftType:draft.type});if(draft.type==='waiting_for')researchTrack('waiting_for_created',{});state.saving.delete(id);state.error='';removeDraftFromState(id);api.refresh();await renderInsights(api.getRecords());await runConsistencyAudit();return true;
       }catch(error){
         state.saving.delete(id);state.error='记录写入被中断，恢复日志已保留；重新打开页面会安全恢复。';renderPreview();notify(state.error,'error');return false;
       }
@@ -188,17 +194,18 @@
         var waitingQueries=modules.waitingEngine.queries(refreshed,new Date());var dailyBrief=modules.daily.generate({records:records||api.getRecords(),graph:graph,waiting:refreshed,suggestions:suggestions,now:new Date()});if(token!==renderToken)return;
         state.memoryIndex=modules.memory.buildIndex(records||api.getRecords(),graph,{waiting:refreshed});
         state.lastModel={suggestions:suggestions,waiting:waitingQueries,dailyBrief:dailyBrief,graph:{nodeCount:graph.nodes.length,edgeCount:graph.edges.length}};
+        var suggestionSignature=suggestions.map(function(item){return item.recordId;}).join('|');if(suggestions.length&&state.researchSuggestionSignature!==suggestionSignature){state.researchSuggestionSignature=suggestionSignature;researchTrack('next_action_viewed',{suggestionCount:suggestions.length});}
         modules.actionView.render(actionContainer(),state.lastModel,{action:handleSuggestionAction});
         if(reviewContainer())await renderReviews();
       }catch(error){if(token===renderToken){var container=actionContainer();if(container)container.innerHTML='';notify('时间建议暂时不可用，记录功能仍可使用。','warn');}}
     }
     async function handleSuggestionAction(action,recordId){
       if(action==='detail'){api.openDetail(recordId);return;}
-      if(action==='ignore'){state.ignored.add(recordId);logCorrection({eventType:'suggestion_ignored',recordId:recordId});await renderInsights(api.getRecords());return;}
+      if(action==='ignore'){state.ignored.add(recordId);logCorrection({eventType:'suggestion_ignored',recordId:recordId});researchTrack('next_action_ignored',{});await renderInsights(api.getRecords());return;}
       if(action==='never'){state.never.add(recordId);writeNever(state.never);logCorrection({eventType:'suggestion_never',recordId:recordId});await renderInsights(api.getRecords());return;}
       if(action==='later'){await updateRecord(recordId,{postpone:true});logCorrection({eventType:'suggestion_later',recordId:recordId});notify('已按你的选择稍后处理。','success');api.refresh();await renderInsights(api.getRecords());return;}
       if(action==='complete'){
-        await completeRecord(recordId);logCorrection({eventType:'suggestion_accepted',recordId:recordId});notify('已标记完成。','success');api.refresh();await renderInsights(api.getRecords());
+        await completeRecord(recordId);logCorrection({eventType:'suggestion_accepted',recordId:recordId});researchTrack('next_action_accepted',{});notify('已标记完成。','success');api.refresh();await renderInsights(api.getRecords());
       }
     }
     async function renderReviews(){
@@ -254,12 +261,12 @@
       if(waiting){await waitingRepository.upsert(waiting);waitingTombstones.delete(recordId);if(global.ShikeIndexedDb)await global.ShikeIndexedDb.remove('temporal_meta','waiting_tombstone:'+recordId);restored=true;}
       await renderInsights(api.getRecords());return restored;
     }
-    async function restoreRecord(recordId){if(!initialized)return false;var operationId=nextOperationId('restore_record',recordId);await operationCoordinator.execute(createSidecarPlan(operationId,'restore_record',recordId));return true;}
+    async function restoreRecord(recordId){if(!initialized)return false;var operationId=nextOperationId('restore_record',recordId);await operationCoordinator.execute(createSidecarPlan(operationId,'restore_record',recordId));researchTrack('trash_restored',{});return true;}
     async function purgeRecordRaw(recordId){
       if(!initialized)return false;await graphRepository.purgeRecord(recordId);var waiting=await waitingRepository.list();var item=waiting.find(function(entry){return entry.recordId===recordId;});if(item)await waitingRepository.remove(item.id);waitingTombstones.delete(recordId);if(global.ShikeIndexedDb)await global.ShikeIndexedDb.remove('temporal_meta','waiting_tombstone:'+recordId);return true;
     }
     async function purgeRecord(recordId){if(!initialized)return false;var operationId=nextOperationId('purge_record',recordId);await operationCoordinator.execute(createSidecarPlan(operationId,'purge_record',recordId));return true;}
-    function augmentBackup(payload){return initialized?backupAdapter.augment(payload):Promise.resolve(payload);}
+    function augmentBackup(payload){if(!initialized)return Promise.resolve(payload);return backupAdapter.augment(payload).then(function(result){researchTrack('backup_exported',{});return result;});}
     async function importBackupSidecars(prepared){
       if(!initialized)return {imported:false,reason:'not_initialized'};
       var operationId=nextOperationId('import_backup','temporal_sidecars');var plan=createImportPlan(operationId,prepared);await operationCoordinator.execute(plan);return plan.result()||{imported:true,recovered:false};

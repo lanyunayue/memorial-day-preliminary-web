@@ -181,3 +181,164 @@
     max-width: none;
   }
 }
+
+/* Product validation is an explicit first-use research mode, not a new app theme. */
+.product-validation-mode #opening,
+.product-validation-mode .hero-greeting,
+.product-validation-mode .home-clock-big,
+.product-validation-mode .weather-card,
+.product-validation-mode .home-muted-entry,
+.product-validation-mode #todayOverviewBlock,
+.product-validation-mode #homeContent,
+.product-validation-mode .time-sprite,
+.product-validation-mode .release-mask,
+.product-validation-mode .release-box {
+  display: none !important;
+}
+
+.product-validation-mode .home-hero {
+  min-height: calc(100dvh - 76px);
+  padding-top: max(34px, env(safe-area-inset-top));
+}
+
+.product-validation-mode .hero-title {
+  margin-bottom: 4px;
+}
+
+.product-validation-mode .hero-subtitle {
+  margin-bottom: 20px;
+}
+
+.validation-intro {
+  margin: 0 auto 18px;
+  max-width: 620px;
+  text-align: left;
+}
+
+.validation-intro h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.validation-intro p {
+  display: none;
+}
+
+.research-panel {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.16));
+  border-radius: 8px;
+  background: var(--card, rgba(255, 255, 255, 0.76));
+  text-align: left;
+}
+
+.research-panel-head,
+.research-actions,
+.research-consent-row,
+.research-feedback-grid {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.research-panel-head {
+  justify-content: space-between;
+}
+
+.research-panel-head strong,
+.research-panel-head span {
+  display: block;
+}
+
+.research-panel-head span,
+.research-privacy,
+.research-status,
+.research-consent-row label span,
+.research-feedback-grid label span {
+  color: var(--text-secondary, #766f67);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.research-local-badge {
+  padding: 2px 6px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.16));
+  border-radius: 6px;
+}
+
+.research-consent-row label,
+.research-feedback-grid label {
+  display: grid;
+  flex: 1 1 150px;
+  gap: 4px;
+}
+
+.research-consent-row input,
+.research-feedback-grid select,
+.research-panel button {
+  min-height: 36px;
+  padding: 7px 9px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.18));
+  border-radius: 6px;
+  background: var(--input-bg, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.research-check {
+  display: flex !important;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+}
+
+.research-check input {
+  min-height: auto;
+}
+
+.research-actions,
+.research-feedback {
+  margin-top: 10px;
+}
+
+.research-data-table-wrap {
+  max-height: 220px;
+  margin-top: 8px;
+  overflow: auto;
+}
+
+.research-data-viewer table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.research-data-viewer th,
+.research-data-viewer td {
+  padding: 6px;
+  border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.research-status[data-tone="error"] {
+  color: var(--danger, #a14f45);
+}
+
+@media (max-width: 420px) {
+  .product-validation-mode .home-hero {
+    padding-top: max(24px, env(safe-area-inset-top));
+  }
+
+  .validation-intro h2 {
+    font-size: 18px;
+  }
+
+  .research-consent-row > button,
+  .research-actions button {
+    flex: 1 1 130px;
+  }
+}

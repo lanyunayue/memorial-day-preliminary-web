@@ -17,6 +17,7 @@ var PRECACHE_URLS = [
   './src/intelligence/transactions/temporal-operation.js','./src/intelligence/transactions/operation-journal.js','./src/intelligence/transactions/operation-lock.js','./src/intelligence/transactions/multi-tab-coordinator.js','./src/intelligence/transactions/operation-coordinator.js','./src/intelligence/transactions/operation-recovery.js','./src/intelligence/transactions/consistency-auditor.js','./src/intelligence/testing/fault-injection.js',
   './src/intelligence/adapters/legacy-record-adapter.js','./src/intelligence/adapters/backup-adapter.js',
   './src/intelligence/ui/life-inbox-preview.js','./src/intelligence/ui/next-action-card.js','./src/intelligence/ui/review-panel.js',
+  './src/research/participant-consent.js','./src/research/research-session.js','./src/research/local-event-log.js','./src/research/validation-metrics.js','./src/research/feedback-exporter.js','./src/research/research-data-viewer.js','./src/research/research-data-cleaner.js','./src/research/product-validation-mode.js',
   './src/graph/graph-domain.js','./src/graph/graph-builder.js','./src/graph/graph-integrity.js','./src/graph/graph-migration.js','./src/graph/graph-serializer.js','./src/graph/graph-repository.js',
   './src/views/view-registry.js','./src/components/legacy-components.js','./src/i18n/index.js',
   './src/utilities/dates.js','./src/utilities/clipboard.js','./src/utilities/downloads.js',
