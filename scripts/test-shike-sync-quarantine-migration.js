@@ -1,4 +1,4 @@
-// v2.0.0-rc5.2 Sync Quarantine Migration Test
+// v2.2.0-alpha3 Sync Quarantine Migration Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
@@ -18,7 +18,7 @@
         setItem:function(k,v){try{fakeStorage[k]=JSON.parse(v);}catch(e){fakeStorage[k]=v;}},
         removeItem:function(k){delete fakeStorage[k];}
       },
-      ShikeVersion:{version:'v2.0.0-rc5.2'},
+      ShikeVersion:{version:'v2.2.0-alpha3'},
       document:{readyState:'complete',addEventListener:function(){}},
       setTimeout:function(fn,t){/*don't auto-run in test*/},
       clearTimeout:function(){},

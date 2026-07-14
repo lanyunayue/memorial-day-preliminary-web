@@ -1,5 +1,5 @@
 /**
- * v2.0.0-rc5.2 Encrypted Backup Tests
+ * v2.2.0-alpha3 Encrypted Backup Tests
  */
 const fs = require('fs');
 const path = require('path');
