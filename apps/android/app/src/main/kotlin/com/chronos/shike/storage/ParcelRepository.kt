@@ -220,7 +220,6 @@ class ParcelRepository(
         .digest(value.toByteArray(StandardCharsets.UTF_8)).joinToString("") { "%02x".format(it) }
     private fun escape(value: String) = value.replace("\\", "\\\\").replace("\"", "\\\"")
     private fun jsonString(value: String?) = value?.let { "\"${escape(it)}\"" } ?: "null"
-}
 
     suspend fun mergeParcels(sourceId: String, targetId: String): MergeResult {
         if (sourceId == targetId) return MergeResult.InvalidArgument("source and target are the same")
