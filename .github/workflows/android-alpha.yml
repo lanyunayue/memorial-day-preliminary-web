@@ -1,6 +1,7 @@
 name: Android Alpha
 
 on:
+  workflow_dispatch:
   push:
     branches: [program-v230a1-android-parcel]
   pull_request:
