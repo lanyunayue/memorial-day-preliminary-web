@@ -25,7 +25,7 @@ async function ready(client){for(let index=0;index<200;index++){try{if(await cli
   await clients[1].send('Page.reload',{ignoreCache:true});stage='second bootstrap after clear';await ready(clients[1]);
   const source='周五前把实习材料交给老师';stage='capture shared draft';await clients[0].evaluate(`window.ShikeChronosWeb.captureIfNeeded(${JSON.stringify(source)})`);await delay(300);
   await clients[1].send('Page.reload',{ignoreCache:true});stage='second bootstrap with draft';await ready(clients[1]);stage='read draft ids';
-  const draftIds=await Promise.all(clients.map((client)=>client.evaluate(`window.ShikeChronosWeb.diagnostics().then((item)=>{const cards=[...document.querySelectorAll('.temporal-draft')];return {pending:item.pendingDrafts,id:cards[0]&&cards[0].getAttribute('data-draft-id')};})`)));
+  let draftIds=[];for(let attempt=0;attempt<100;attempt++){draftIds=await Promise.all(clients.map((client)=>client.evaluate(`window.ShikeChronosWeb.diagnostics().then((item)=>{const cards=[...document.querySelectorAll('.temporal-draft')];return {pending:item.pendingDrafts,id:cards[0]&&cards[0].getAttribute('data-draft-id')};})`)));if(draftIds.every((item)=>item.pending===1&&item.id&&item.id===draftIds[0].id))break;await delay(100);}
   check('both tabs load one shared draft',draftIds.every((item)=>item.pending===1&&item.id===draftIds[0].id));
   stage='concurrent confirm';const confirmResults=await Promise.all(clients.map((client)=>client.evaluate(`window.ShikeChronosWeb.confirmDraft(${JSON.stringify(draftIds[0].id)})`)));await delay(500);stage='inspect durable state';
   check('only one tab commits the shared draft',confirmResults.filter(Boolean).length===1);
