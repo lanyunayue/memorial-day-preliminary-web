@@ -222,6 +222,167 @@ class ParcelRepository(
     private fun jsonString(value: String?) = value?.let { "\"${escape(it)}\"" } ?: "null"
 }
 
+    suspend fun mergeParcels(sourceId: String, targetId: String): MergeResult {
+        if (sourceId == targetId) return MergeResult.InvalidArgument("source and target are the same")
+        val source = database.parcelDao().find(sourceId) ?: return MergeResult.NotFound(sourceId)
+        val target = database.parcelDao().find(targetId) ?: return MergeResult.NotFound(targetId)
+
+        val idempotencyKey = "merge:$sourceId:$targetId"
+        val existing = database.operationDao().findByIdempotencyKey(idempotencyKey)
+        if (existing != null && existing.state == "COMPLETED") return MergeResult.AlreadyDone(targetId)
+
+        val operationId = UUID.randomUUID().toString()
+        val payload = "MERGE:$sourceId:$targetId"
+
+        database.operationDao().insert(
+            OperationEntity(operationId, "MERGE", targetId, idempotencyKey, sha256(payload), "PENDING", payload, System.currentTimeMillis(), null, 0),
+        )
+
+        try {
+            database.withTransaction {
+                database.parcelDao().reassignEvents(sourceId, targetId)
+                val merged = mergeInto(target, source)
+                database.parcelDao().update(merged)
+                database.parcelDao().delete(sourceId)
+            }
+            database.operationDao().complete(operationId, "COMPLETED", System.currentTimeMillis())
+            return MergeResult.Done(targetId)
+        } catch (e: Exception) {
+            database.operationDao().complete(operationId, "QUARANTINED", System.currentTimeMillis())
+            throw e
+        }
+    }
+
+    suspend fun splitParcel(sourceId: String, eventIds: Set<String>): SplitResult {
+        val source = database.parcelDao().find(sourceId) ?: return SplitResult.NotFound(sourceId)
+        val events = database.parcelDao().eventsForParcel(sourceId)
+        val toSplit = events.filter { it.id in eventIds }
+        if (toSplit.isEmpty()) return SplitResult.NoEventsMatched
+
+        val newParcelId = UUID.randomUUID().toString()
+        val idempotencyKey = "split:$sourceId:" + eventIds.sorted().joinToString(",")
+        val existing = database.operationDao().findByIdempotencyKey(idempotencyKey)
+        if (existing != null && existing.state == "COMPLETED") return SplitResult.AlreadyDone(newParcelId)
+
+        val operationId = UUID.randomUUID().toString()
+        val payload = "SPLIT:$sourceId:$newParcelId:" + eventIds.sorted().joinToString(",")
+
+        database.operationDao().insert(
+            OperationEntity(operationId, "SPLIT", newParcelId, idempotencyKey, sha256(payload), "PENDING", payload, System.currentTimeMillis(), null, 0),
+        )
+
+        try {
+            database.withTransaction {
+                val newEntity = ParcelEntity(
+                    id = newParcelId,
+                    carrier = source.carrier,
+                    trackingNumber = source.trackingNumber,
+                    maskedTrackingNumber = source.maskedTrackingNumber,
+                    merchant = source.merchant,
+                    orderReference = source.orderReference,
+                    currentStatus = toSplit.last().type,
+                    etaStartEpochMs = source.etaStartEpochMs,
+                    etaEndEpochMs = source.etaEndEpochMs,
+                    etaConfidence = source.etaConfidence,
+                    pickupLocation = source.pickupLocation,
+                    pickupCodeEncrypted = source.pickupCodeEncrypted,
+                    sourcePackages = source.sourcePackages,
+                    firstSeenAtEpochMs = toSplit.minOf { it.occurredAtEpochMs },
+                    lastUpdatedAtEpochMs = System.currentTimeMillis(),
+                    completedAtEpochMs = null,
+                    deduplicationKeys = source.deduplicationKeys,
+                    confidenceBand = source.confidenceBand,
+                    schemaVersion = source.schemaVersion,
+                )
+                database.parcelDao().insert(newEntity)
+                database.parcelDao().reassignEvents(sourceId, newParcelId)
+                val updatedSource = source.copy(lastUpdatedAtEpochMs = System.currentTimeMillis())
+                database.parcelDao().update(updatedSource)
+            }
+            database.operationDao().complete(operationId, "COMPLETED", System.currentTimeMillis())
+            return SplitResult.Done(newParcelId)
+        } catch (e: Exception) {
+            database.operationDao().complete(operationId, "QUARANTINED", System.currentTimeMillis())
+            throw e
+        }
+    }
+
+    suspend fun recoverPendingOperations(): RecoveryReport {
+        val pending = database.operationDao().pendingOperations()
+        if (pending.isEmpty()) return RecoveryReport(0, 0, 0)
+        var recovered = 0
+        var quarantined = 0
+        for (op in pending) {
+            database.operationDao().incrementRetry(op.id)
+            val parts = op.safePayload.split(":")
+            val canRecover = when (op.type) {
+                "UPSERT", "MARK_PICKED_UP", "DELETE", "CLEAR_ALL" -> true
+                "MERGE" -> {
+                    if (parts.size >= 3) {
+                        val sourceId = parts[1]
+                        val targetId = parts[2]
+                        val sourceExists = database.parcelDao().find(sourceId) != null
+                        val targetExists = database.parcelDao().find(targetId) != null
+                        !sourceExists && targetExists
+                    } else false
+                }
+                "SPLIT" -> {
+                    if (parts.size >= 3) {
+                        val newId = parts[2]
+                        database.parcelDao().find(newId) != null
+                    } else false
+                }
+                else -> false
+            }
+            if (canRecover) {
+                database.operationDao().complete(op.id, "COMPLETED", System.currentTimeMillis())
+                recovered++
+            } else {
+                database.operationDao().complete(op.id, "QUARANTINED", System.currentTimeMillis())
+                quarantined++
+            }
+        }
+        return RecoveryReport(pending.size, recovered, quarantined)
+    }
+
+    private fun mergeInto(target: ParcelEntity, source: ParcelEntity): ParcelEntity {
+        val mergedSourcePackages = (target.sourcePackages.split("|").filter(String::isNotBlank) +
+            source.sourcePackages.split("|").filter(String::isNotBlank)).distinct().sorted().joinToString("|")
+        val mergedDedupKeys = (target.deduplicationKeys.split("|").filter(String::isNotBlank) +
+            source.deduplicationKeys.split("|").filter(String::isNotBlank)).distinct().sorted().joinToString("|")
+        return target.copy(
+            trackingNumber = target.trackingNumber ?: source.trackingNumber,
+            maskedTrackingNumber = target.maskedTrackingNumber ?: source.maskedTrackingNumber,
+            pickupLocation = target.pickupLocation ?: source.pickupLocation,
+            pickupCodeEncrypted = target.pickupCodeEncrypted ?: source.pickupCodeEncrypted,
+            sourcePackages = mergedSourcePackages,
+            deduplicationKeys = mergedDedupKeys,
+            lastUpdatedAtEpochMs = System.currentTimeMillis(),
+        )
+    }
+
+}
+
+sealed interface MergeResult {
+    data class Done(val targetId: String) : MergeResult
+    data class AlreadyDone(val targetId: String) : MergeResult
+    data class NotFound(val id: String) : MergeResult
+    data class InvalidArgument(val message: String) : MergeResult
+}
+
+sealed interface SplitResult {
+    data class Done(val newParcelId: String) : SplitResult
+    data class AlreadyDone(val newParcelId: String) : SplitResult
+    data class NotFound(val id: String) : SplitResult
+    data object NoEventsMatched : SplitResult
+}
+
+data class RecoveryReport(
+    val totalPending: Int,
+    val recovered: Int,
+    val quarantined: Int,
+)
+
 sealed interface CaptureResult {
     data object Ignored : CaptureResult
     data object Duplicate : CaptureResult

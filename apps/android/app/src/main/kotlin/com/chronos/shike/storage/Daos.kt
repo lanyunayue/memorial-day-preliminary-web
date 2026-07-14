@@ -34,6 +34,15 @@ interface ParcelDao {
     @Query("DELETE FROM parcels WHERE id = :id")
     suspend fun delete(id: String)
 
+    @Query("SELECT * FROM parcel_events WHERE parcelId = :parcelId ORDER BY occurredAtEpochMs ASC")
+    suspend fun eventsForParcel(parcelId: String): List<ParcelEventEntity>
+
+    @Query("UPDATE parcel_events SET parcelId = :newParcelId WHERE parcelId = :oldParcelId")
+    suspend fun reassignEvents(oldParcelId: String, newParcelId: String)
+
+    @Query("SELECT * FROM parcels WHERE id IN (:ids)")
+    suspend fun findByIds(ids: List<String>): List<ParcelEntity>
+
     @Query("DELETE FROM parcels")
     suspend fun clearParcels()
 
@@ -75,6 +84,15 @@ interface OperationDao {
 
     @Query("SELECT * FROM parcel_operation_journal ORDER BY createdAtEpochMs DESC LIMIT :limit")
     fun observeRecent(limit: Int = 100): Flow<List<OperationEntity>>
+
+    @Query("SELECT * FROM parcel_operation_journal WHERE state = 'PENDING' ORDER BY createdAtEpochMs ASC")
+    suspend fun pendingOperations(): List<OperationEntity>
+
+    @Query("UPDATE parcel_operation_journal SET retryCount = retryCount + 1 WHERE id = :id")
+    suspend fun incrementRetry(id: String)
+
+    @Query("SELECT * FROM parcel_operation_journal WHERE idempotencyKey = :key LIMIT 1")
+    suspend fun findByIdempotencyKey(key: String): OperationEntity?
 
     @Query("DELETE FROM parcel_operation_journal")
     suspend fun clear()
