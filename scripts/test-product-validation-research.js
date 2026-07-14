@@ -25,6 +25,7 @@ eventLog.track('session_opened',{revisit:false});eventLog.track('first_input',{e
 assert(eventLog.list().length===4,'allowlisted events were not stored');checks++;
 rejected=false;try{eventLog.track('draft_generated',{sourceText:'真实生活原文'});}catch(error){rejected=true;}assert(rejected,'source text property was accepted');checks++;
 rejected=false;try{eventLog.track('error',{category:'runtime',code:'包含 私密内容'});}catch(error){rejected=true;}assert(rejected,'unsafe free text was accepted');checks++;
+rejected=false;try{eventLog.track('feedback_submitted',{understandingScore:6,frictionCode:'none'});}catch(error){rejected=true;}assert(rejected&&eventLog.list().length===4,'out-of-range feedback score entered the local event log');checks++;
 const report=metrics.summarize(eventLog.list(),sessions.list());assert(report.participantCount===1&&report.draftCount===3&&report.confirmedDraftCount===1,'metrics did not aggregate real events');checks++;
 assert(report.usableDraftRate===null&&report.day7ReturnCount===null,'human outcome was fabricated');checks++;
 const payload=exporter.build();assert(payload.schema==='shike-product-validation-export'&&payload.containsRawUserText===false&&payload.events.length===4,'participant export schema is invalid');checks++;

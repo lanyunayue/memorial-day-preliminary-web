@@ -19,7 +19,7 @@
     var allowed=RULES[eventType];var input=properties||{};var output={};
     Object.keys(input).forEach(function(key){
       if(!allowed.includes(key))throw new Error('Research property is not allowlisted: '+key);
-      var value=input[key];if(typeof value==='number'&&Number.isFinite(value))output[key]=Math.max(0,Math.round(value));
+      var value=input[key];if(typeof value==='number'&&Number.isFinite(value)){value=Math.max(0,Math.round(value));if(key==='understandingScore'&&(value<1||value>5))throw new Error('Research understanding score must be between 1 and 5.');output[key]=value;}
       else if(typeof value==='boolean')output[key]=value;
       else if(typeof value==='string'&&SAFE_TEXT.test(value))output[key]=value;
       else throw new Error('Research property has an unsafe value: '+key);
