@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
 }
 
-kotlin { jvmToolchain(21) }
+kotlin { jvmToolchain(17) }
 
 dependencies { testImplementation(kotlin("test")) }
 
