@@ -1,5 +1,6 @@
 ﻿package com.chronos.shike.recovery
 
+import com.chronos.shike.load.CancellationPolicy
 import com.chronos.shike.load.LoadAnalysis
 import com.chronos.shike.load.LoadItem
 import com.chronos.shike.load.Negotiability
@@ -16,10 +17,14 @@ class DeLoadPlanner {
         val ordered = items.filter { it.status.name !in setOf("DONE", "CANCELLED") }
             .sortedWith(compareByDescending<LoadItem> { it.importance }.thenBy { it.dueAt })
         val keep = ordered.firstOrNull()?.let { listOf(it.id) }.orEmpty()
-        val flexible = ordered.drop(1).filter { it.negotiability == Negotiability.FLEXIBLE }.map { it.id }
-        val discussable = ordered.drop(1).filter { it.negotiability == Negotiability.DISCUSSABLE }.map { it.id }
-        val cancel = ordered.drop(1).filter { it.negotiability == Negotiability.FIXED }.map { it.id }
-        val lower = ordered.drop(1).filter { it.id !in flexible && it.id !in discussable && it.id !in cancel }.take(2).map { it.id }
+        val remaining = ordered.drop(1)
+        val cancel = remaining.filter { it.cancellationPolicy == CancellationPolicy.SAFE_TO_SUGGEST }.map { it.id }
+        val flexible = remaining.filter { it.negotiability == Negotiability.FLEXIBLE && it.id !in cancel }.map { it.id }
+        val discussable = remaining.filter { it.negotiability == Negotiability.DISCUSSABLE }.map { it.id }
+        val lower = remaining
+            .filter { it.id !in cancel && it.id !in flexible && it.id !in discussable }
+            .take(2)
+            .map { it.id }
         return DeLoadPlan(UUID.randomUUID().toString(), date, keep, flexible, lower, discussable, cancel, true, false, null, null)
     }
 
@@ -41,7 +46,7 @@ class RecoveryRecommendationEngine {
             RecoveryActionType.SEEK_MEDICAL_HELP -> "你主动记录了明显身体不适；先暂停普通效率建议，症状持续、反复或严重时及时寻求医疗评估。"
             RecoveryActionType.SAVE_AND_STOP -> "你记录的精力很低，保存进度并结束今天是可撤销的低风险选择。"
             RecoveryActionType.DEFER -> "记录的预计耗时超过剩余可用时间，先预览可延期事项。"
-            else -> "现有记录尚未显示需要整体降载，可以只选择一个十五分钟启动动作。"
+            else -> "现有记录尚未显示需要整体降载，可以选择一个十五分钟启动动作。"
         }
         return RecoverySuggestion(UUID.randomUUID().toString(), date, action, emptyList(), rationale, true, analysis.explanation.confidenceBand, action != RecoveryActionType.SEEK_MEDICAL_HELP, now, now.plus(Duration.ofHours(12)))
     }

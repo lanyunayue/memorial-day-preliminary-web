@@ -1,4 +1,4 @@
-package com.chronos.shike.safety
+﻿package com.chronos.shike.safety
 
 import com.chronos.shike.wellbeing.BodyTag
 import java.time.Instant
@@ -149,11 +149,12 @@ class SafetyRouterTest {
         )
         assertFalse(response.uploadsData, "不静默上传")
         assertTrue(response.requiresClinicalAndLegalReview, "需要临床和法律审查")
-        val knownProperties = listOf("route", "message", "requiresClinicalAndLegalReview", "uploadsData")
-        assertFalse(
-            knownProperties.any { it.contains("notify") || it.contains("contact") || it.contains("send") || it.contains("alert") },
-            "响应不应包含自动通知他人的字段",
-        )
+        // 不通过手写字段列表检查"不存在某个字段"——这属于假证明。
+        // 真实的安全保障来自：
+        //   1. 行为测试：所有路由执行后 uploadsData == false（见 does not auto upload data for any route）
+        //   2. 架构扫描：SafetyRouter 仅依赖 BodyTag / Instant / UUID，不导入网络、联系人、短信、通知或后台服务 API
+        //   3. SafetyResponse 仅有 4 个字段：route, message, requiresClinicalAndLegalReview, uploadsData
+        //      若新增字段涉及自动联系他人，需在代码审查中拦截，而非依赖运行时测试。
     }
 
     @Test

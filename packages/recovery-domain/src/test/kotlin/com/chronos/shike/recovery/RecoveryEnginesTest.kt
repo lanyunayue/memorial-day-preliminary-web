@@ -1,4 +1,4 @@
-package com.chronos.shike.recovery
+﻿package com.chronos.shike.recovery
 
 import com.chronos.shike.load.LoadExplanationEngine
 import com.chronos.shike.load.LoadItem
@@ -223,7 +223,8 @@ class RecoveryEnginesTest {
     @Test
     fun `deload plan preview keeps highest importance item`() {
         val items = listOf(
-            makeItem("flex", importance = 1, negotiability = Negotiability.FLEXIBLE),
+            makeItem("flex-low", importance = 1, negotiability = Negotiability.FLEXIBLE),
+            makeItem("flex-mid", importance = 2, negotiability = Negotiability.FLEXIBLE),
             makeItem("discuss", importance = 2, negotiability = Negotiability.DISCUSSABLE),
             makeItem("fixed", importance = 1, negotiability = Negotiability.FIXED),
             makeItem("high", importance = 3, negotiability = Negotiability.FIXED),
@@ -231,9 +232,11 @@ class RecoveryEnginesTest {
         val plan = deLoadPlanner.preview(items, today, now)
         assertEquals(1, plan.keepItemIds.size, "应保留一项")
         assertEquals("high", plan.keepItemIds.first(), "应保留最高重要性的任务")
-        assertTrue(plan.deferItemIds.contains("flex"), "灵活事项应进入延期列表")
+        assertTrue(plan.cancelItemIds.contains("flex-low"), "低重要性灵活事项可建议取消")
+        assertTrue(plan.deferItemIds.contains("flex-mid"), "中高重要性灵活事项应进入延期列表")
         assertTrue(plan.renegotiateItemIds.contains("discuss"), "可协商事项应进入重新协商列表")
-        assertTrue(plan.cancelItemIds.contains("fixed"), "固定事项应进入取消列表")
+        assertFalse(plan.cancelItemIds.contains("fixed"), "固定事项不应进入取消列表")
+        assertTrue(plan.lowerStandardItemIds.contains("fixed"), "固定低重要性事项应进入降低标准列表")
     }
 
     @Test

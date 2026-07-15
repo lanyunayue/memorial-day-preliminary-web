@@ -1,4 +1,4 @@
-package com.chronos.shike.load
+﻿package com.chronos.shike.load
 
 import java.time.Instant
 import java.time.LocalDate
@@ -7,6 +7,7 @@ enum class LoadSourceType { TASK, COMMITMENT, WAITING_FOR, GOAL_STEP }
 enum class ResponsibilityType { SELF_CHOSEN, PROMISED_TO_OTHERS, ASSIGNED_BY_OTHERS, WAITING_ON_OTHERS }
 enum class Negotiability { FIXED, DISCUSSABLE, FLEXIBLE }
 enum class LoadStatus { ACTIVE, DEFERRED, LOWERED_STANDARD, CANCELLED, DONE }
+enum class CancellationPolicy { NOT_CANCELLABLE, USER_DECISION_REQUIRED, SAFE_TO_SUGGEST }
 
 data class LoadItem(
     val id: String,
@@ -28,6 +29,13 @@ data class LoadItem(
         require(importance in 1..3)
         require(sourceType == LoadSourceType.WAITING_FOR || waitingSince == null)
     }
+
+    val cancellationPolicy: CancellationPolicy
+        get() = when {
+            negotiability == Negotiability.FIXED -> CancellationPolicy.NOT_CANCELLABLE
+            negotiability == Negotiability.FLEXIBLE && importance <= 1 -> CancellationPolicy.SAFE_TO_SUGGEST
+            else -> CancellationPolicy.USER_DECISION_REQUIRED
+        }
 }
 
 data class LoadSnapshot(
