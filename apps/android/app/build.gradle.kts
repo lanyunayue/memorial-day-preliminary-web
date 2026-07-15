@@ -1,4 +1,4 @@
-plugins {
+﻿plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
@@ -14,12 +14,14 @@ android {
         applicationId = "com.chronos.shike"
         minSdk = 26
         targetSdk = 35
-        versionCode = 23002
-        versionName = "2.3.0-alpha2"
+        versionCode = 24001
+        versionName = "2.4.0-alpha1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        buildConfigField("String", "STAGE_NAME", "\"Android Parcel Intelligence Engineering Alpha\"")
+        buildConfigField("String", "STAGE_NAME", "\"Overload & Recovery Engineering Alpha\"")
+        buildConfigField("boolean", "PARCEL_CONNECTOR_ENABLED", "false")
+        buildConfigField("boolean", "OVERLOAD_RESEARCH_MODE", "false")
     }
 
     buildTypes {
@@ -58,6 +60,10 @@ dependencies {
     implementation(project(":packages:event-contract"))
     implementation(project(":packages:parcel-domain"))
     implementation(project(":packages:temporal-contract"))
+    implementation(project(":packages:wellbeing-contract"))
+    implementation(project(":packages:load-domain"))
+    implementation(project(":packages:recovery-domain"))
+    implementation(project(":packages:safety-contract"))
 
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
     implementation(composeBom)
