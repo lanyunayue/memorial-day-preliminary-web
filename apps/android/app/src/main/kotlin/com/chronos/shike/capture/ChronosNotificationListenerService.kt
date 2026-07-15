@@ -17,17 +17,17 @@ class ChronosNotificationListenerService : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        adapter.start()
+        adapter?.start()
     }
 
     override fun onListenerDisconnected() {
-        adapter.stop()
+        adapter?.stop()
         super.onListenerDisconnected()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        // Check consent before reading any notification fields.
-        if (!adapter.isAllowed(sbn.packageName)) return
+        val source = adapter ?: return
+        if (!source.isAllowed(sbn.packageName)) return
         val extras = sbn.notification.extras
         val input = NotificationInput(
             sourcePackage = sbn.packageName,
@@ -38,11 +38,11 @@ class ChronosNotificationListenerService : NotificationListenerService() {
             text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString(),
             occurredAt = Instant.ofEpochMilli(sbn.postTime),
         )
-        scope.launch { adapter.process(input) }
+        scope.launch { source.process(input) }
     }
 
     override fun onDestroy() {
-        adapter.stop()
+        adapter?.stop()
         scope.cancel()
         super.onDestroy()
     }

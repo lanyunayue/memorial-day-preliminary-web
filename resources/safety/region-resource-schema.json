@@ -1,0 +1,129 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "区域安全资源",
+  "description": "定义各区域心理健康危机干预和安全资源的数据结构，用于 overload-recovery 产品的安全引导功能",
+  "type": "object",
+  "required": ["version", "lastUpdated", "regions"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "资源版本号"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "最后更新日期"
+    },
+    "globalDisclaimer": {
+      "type": "string",
+      "description": "全局免责声明"
+    },
+    "regions": {
+      "type": "array",
+      "description": "区域资源列表",
+      "items": {
+        "type": "object",
+        "required": ["regionCode", "regionName", "resources"],
+        "properties": {
+          "regionCode": {
+            "type": "string",
+            "description": "区域代码（ISO 3166-1 国家代码）",
+            "examples": ["CN", "US", "GB", "JP"]
+          },
+          "regionName": {
+            "type": "string",
+            "description": "区域名称"
+          },
+          "locale": {
+            "type": "string",
+            "description": "主要语言（BCP 47 语言标签）",
+            "examples": ["zh-CN", "en-US", "ja-JP"]
+          },
+          "resources": {
+            "type": "array",
+            "description": "该区域的资源列表",
+            "items": {
+              "type": "object",
+              "required": ["type", "name", "contact"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "crisis_hotline",
+                    "emergency_service",
+                    "professional_referral",
+                    "online_resource",
+                    "support_group"
+                  ],
+                  "description": "资源类型：crisis_hotline=危机热线, emergency_service=紧急服务, professional_referral=专业转介, online_resource=在线资源, support_group=支持团体"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "资源名称"
+                },
+                "contact": {
+                  "type": "object",
+                  "description": "联系方式",
+                  "properties": {
+                    "phone": {
+                      "type": "string",
+                      "description": "联系电话"
+                    },
+                    "website": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "网站 URL"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "电子邮箱"
+                    }
+                  }
+                },
+                "availability": {
+                  "type": "string",
+                  "enum": ["24/7", "business_hours", "limited"],
+                  "description": "可用性：24/7=全天候, business_hours=工作时间, limited=有限时段"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "资源描述"
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "是否已验证资源有效性",
+                  "default": false
+                },
+                "verifiedDate": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "验证日期"
+                },
+                "languageSupport": {
+                  "type": "array",
+                  "description": "支持的语言列表",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "disclaimer": {
+            "type": "string",
+            "description": "区域特定免责声明"
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "version": "0.1.0",
+      "lastUpdated": "2026-07-15",
+      "globalDisclaimer": "本产品不是医疗设备，不提供医疗诊断或治疗建议。如您正在经历心理危机，请立即联系当地危机干预热线或紧急服务。",
+      "regions": []
+    }
+  ]
+}

@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.chronos.shike.BuildConfig
 import java.io.IOException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -86,8 +87,12 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun refreshPermission() {
-        notificationAccessGranted = (application as ChronosApplication).container.notificationSource.permissionStatus() ==
-            com.chronos.shike.contract.PermissionStatus.GRANTED
+        if (BuildConfig.PARCEL_CONNECTOR_ENABLED) {
+            notificationAccessGranted = (application as ChronosApplication).container.notificationSource?.permissionStatus() ==
+                com.chronos.shike.contract.PermissionStatus.GRANTED
+        } else {
+            notificationAccessGranted = false
+        }
     }
 
     private fun openNotificationAccess() {

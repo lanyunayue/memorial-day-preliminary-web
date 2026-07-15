@@ -112,7 +112,7 @@ class ShikeViewModel(
     }
 
     fun revokeAndClear(after: () -> Unit) {
-        container.notificationSource.revoke()
+        container.notificationSource?.revoke()
         container.preferences.clearCaptureSettings()
         clearAll(after)
     }
