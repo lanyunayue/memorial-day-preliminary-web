@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Overload Recovery Pilot Study Data",
+  "description": "真人试用数据收集 Schema - HUMAN OVERLOAD PILOT REQUIRED",
+  "type": "object",
+  "required": ["participantCode", "sessions", "metadata"],
+  "properties": {
+    "participantCode": {
+      "type": "string",
+      "description": "匿名参与者编码，如 P01、P02，不关联真实身份",
+      "pattern": "^P\\d{2}$",
+      "examples": ["P01", "P02", "P15"]
+    },
+    "sessions": {
+      "type": "array",
+      "description": "签到会话记录列表",
+      "items": {
+        "type": "object",
+        "required": [
+          "sessionId",
+          "date",
+          "firstUse",
+          "checkInDurationMs",
+          "viewedLoadExplanation",
+          "openedDeLoad",
+          "suggestionDecision",
+          "usedUndo",
+          "returnedNextDay",
+          "feltPreachy"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "会话唯一标识",
+            "minLength": 1
+          },
+          "date": {
+            "type": "string",
+            "description": "会话日期 (ISO 8601)",
+            "format": "date",
+            "examples": ["2026-07-15"]
+          },
+          "firstUse": {
+            "type": "boolean",
+            "description": "是否为首次使用"
+          },
+          "checkInDurationMs": {
+            "type": "number",
+            "description": "签到耗时（毫秒）",
+            "minimum": 0,
+            "maximum": 3600000,
+            "examples": [12000, 25000, 45000]
+          },
+          "viewedLoadExplanation": {
+            "type": "boolean",
+            "description": "是否查看负荷解释页面"
+          },
+          "openedDeLoad": {
+            "type": "boolean",
+            "description": "是否打开降载选项"
+          },
+          "suggestionDecision": {
+            "type": "string",
+            "description": "建议决策结果",
+            "enum": ["accepted", "modified", "rejected", "not_shown"]
+          },
+          "usedUndo": {
+            "type": "boolean",
+            "description": "是否使用撤销功能"
+          },
+          "returnedNextDay": {
+            "type": "boolean",
+            "description": "次日是否返回使用"
+          },
+          "feltPreachy": {
+            "type": "boolean",
+            "description": "用户认为建议是否说教"
+          },
+          "foundHelpful": {
+            "type": ["boolean", "null"],
+            "description": "用户认为建议是否有帮助（null 表示未回答）",
+            "default": null
+          },
+          "willingToContinue": {
+            "type": ["boolean", "null"],
+            "description": "用户是否愿意继续使用（null 表示未回答）",
+            "default": null
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "metadata": {
+      "type": "object",
+      "description": "研究元数据",
+      "required": [
+        "studyStartDate",
+        "studyEndDate",
+        "participantCount",
+        "dataExportDate"
+      ],
+      "properties": {
+        "studyStartDate": {
+          "type": "string",
+          "description": "研究开始日期 (ISO 8601)",
+          "format": "date"
+        },
+        "studyEndDate": {
+          "type": "string",
+          "description": "研究结束日期 (ISO 8601)",
+          "format": "date"
+        },
+        "participantCount": {
+          "type": "integer",
+          "description": "参与者总数",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "dataExportDate": {
+          "type": "string",
+          "description": "数据导出日期 (ISO 8601)",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
