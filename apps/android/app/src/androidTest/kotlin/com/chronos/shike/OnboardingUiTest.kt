@@ -24,9 +24,9 @@ class OnboardingUiTest {
 
     @Test
     fun onboardingExplainsPrivacyAndEntersNativeHome() {
-        compose.onNodeWithText("先说明隐私边界").assertIsDisplayed()
-        compose.onNodeWithText("发现后让我确认").assertIsDisplayed().performClick()
-        compose.onNodeWithText("进入时刻").performClick()
-        compose.onNodeWithText("我要拿快递了").assertIsDisplayed()
+        compose.onNodeWithText("负荷与恢复助手").assertIsDisplayed()
+        compose.onNodeWithText("非临床声明").assertIsDisplayed()
+        compose.onNodeWithText("开始使用").performClick()
+        compose.onNodeWithText("事项与承诺").assertIsDisplayed()
     }
 }

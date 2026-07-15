@@ -20,6 +20,10 @@ class ChronosPreferences(context: Context) {
         get() = prefs.getBoolean(KEY_PROTECT_SCREENS, true)
         set(value) = prefs.edit().putBoolean(KEY_PROTECT_SCREENS, value).apply()
 
+    var availableTimeMinutes: Int
+        get() = prefs.getInt(KEY_AVAILABLE_TIME_MINUTES, 240).coerceIn(30, 24 * 60)
+        set(value) = prefs.edit().putInt(KEY_AVAILABLE_TIME_MINUTES, value.coerceIn(30, 24 * 60)).apply()
+
     fun allowedPackages(): Set<String> = prefs.getStringSet(KEY_ALLOWED_PACKAGES, emptySet())?.toSet().orEmpty()
 
     fun setPackageAllowed(packageName: String, allowed: Boolean) {
@@ -36,6 +40,7 @@ class ChronosPreferences(context: Context) {
         private const val KEY_ONBOARDING = "onboarding_complete"
         private const val KEY_MODE = "automation_mode"
         private const val KEY_PROTECT_SCREENS = "protect_screens"
+        private const val KEY_AVAILABLE_TIME_MINUTES = "available_time_minutes"
         private const val KEY_ALLOWED_PACKAGES = "allowed_packages"
     }
 }
