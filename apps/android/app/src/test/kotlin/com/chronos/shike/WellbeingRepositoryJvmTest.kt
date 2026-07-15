@@ -1,4 +1,4 @@
-﻿package com.chronos.shike
+package com.chronos.shike
 
 import android.content.Context
 import androidx.room.Room
@@ -68,7 +68,7 @@ class WellbeingRepositoryJvmTest {
     @Test
     fun `deload confirmation is reversible and fixed items remain active`() = runBlocking {
         val fixed = item("fixed", Negotiability.FIXED, importance = 3)
-        val flexible = item("flexible", Negotiability.FLEXIBLE, importance = 1)
+        val flexible = item("flexible", Negotiability.FLEXIBLE, importance = 2)
         repository.addLoadItem(fixed)
         repository.addLoadItem(flexible)
         val plan = DeLoadPlanner().preview(listOf(fixed, flexible), LocalDate.of(2026, 7, 15), now)

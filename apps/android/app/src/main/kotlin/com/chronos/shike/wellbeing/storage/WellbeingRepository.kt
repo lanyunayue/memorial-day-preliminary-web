@@ -88,7 +88,12 @@ class WellbeingRepository(
     }
 
     suspend fun saveInterventionPreference(preference: InterventionPreference) {
-        journaled("SAVE_PREFERENCE", null, "preference:1") {
+        // Use a UUID suffix in the idempotency key so that consecutive user updates
+        // (last-write-wins semantics) are never suppressed by the journal guard,
+        // even when two calls happen within the same millisecond.
+        // The guard exists for crash-recovery deduplication, not to block explicit
+        // user actions that legitimately overwrite prior state.
+        journaled("SAVE_PREFERENCE", null, "preference:1:${UUID.randomUUID()}") {
             database.interventionPreferenceDao().upsert(toPreferenceEntity(preference))
         }
     }
@@ -109,6 +114,7 @@ class WellbeingRepository(
     suspend fun confirmDeLoadPlan(planId: String): Boolean {
         val plan = database.deLoadPlanDao().findLatest() ?: return false
         if (plan.id != planId) return false
+        if (plan.userConfirmed) return true // idempotent re-confirm
         val now = System.currentTimeMillis()
         val undoWindowMs = 30L * 60 * 1000 // 30 minutes
         val updated = plan.copy(
@@ -117,7 +123,29 @@ class WellbeingRepository(
             undoUntilEpochMs = now + undoWindowMs,
         )
         journaled("CONFIRM_DELOAD", planId, "deload-confirm:$planId") {
-            database.deLoadPlanDao().insert(updated)
+            database.withTransaction {
+                database.deLoadPlanDao().insert(updated)
+                // Apply DeLoad status changes to load items, mirroring
+                // OverloadViewModel.confirmDeLoadPlan() semantics:
+                //   defer          -> DEFERRED
+                //   lower standard -> LOWERED_STANDARD
+                //   cancel         -> CANCELLED
+                //   keep / renegotiate -> unchanged (remain ACTIVE, user acts manually)
+                val deferIds = plan.deferItemIds.split('|').filter(String::isNotBlank).toSet()
+                val lowerIds = plan.lowerStandardItemIds.split('|').filter(String::isNotBlank).toSet()
+                val cancelIds = plan.cancelItemIds.split('|').filter(String::isNotBlank).toSet()
+                for (item in database.loadItemDao().findAll()) {
+                    val newStatus = when (item.id) {
+                        in deferIds -> LoadStatus.DEFERRED.name
+                        in lowerIds -> LoadStatus.LOWERED_STANDARD.name
+                        in cancelIds -> LoadStatus.CANCELLED.name
+                        else -> continue // keep / renegotiate / untouched items: no-op
+                    }
+                    if (newStatus != item.status) {
+                        database.loadItemDao().update(item.copy(status = newStatus))
+                    }
+                }
+            }
         }
         return true
     }
@@ -129,7 +157,21 @@ class WellbeingRepository(
         if (plan.undoUntilEpochMs == null) return false
         if (now > plan.undoUntilEpochMs) return false
         journaled("UNDO_DELOAD", planId, "deload-undo:$planId") {
-            database.deLoadPlanDao().clear()
+            database.withTransaction {
+                // Restore items that were changed by confirmDeLoadPlan back to ACTIVE.
+                // keepItemIds and renegotiateItemIds were never modified, so skip them.
+                val affectedIds = (
+                    plan.deferItemIds.split('|').filter(String::isNotBlank) +
+                        plan.lowerStandardItemIds.split('|').filter(String::isNotBlank) +
+                        plan.cancelItemIds.split('|').filter(String::isNotBlank)
+                    ).toSet()
+                for (item in database.loadItemDao().findAll()) {
+                    if (item.id in affectedIds && item.status != LoadStatus.ACTIVE.name) {
+                        database.loadItemDao().update(item.copy(status = LoadStatus.ACTIVE.name))
+                    }
+                }
+                database.deLoadPlanDao().clear()
+            }
         }
         return true
     }
