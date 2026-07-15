@@ -1,4 +1,4 @@
-package com.chronos.shike.recovery
+﻿package com.chronos.shike.recovery
 
 import com.chronos.shike.load.LoadAnalysis
 import com.chronos.shike.load.LoadItem
@@ -18,8 +18,9 @@ class DeLoadPlanner {
         val keep = ordered.firstOrNull()?.let { listOf(it.id) }.orEmpty()
         val flexible = ordered.drop(1).filter { it.negotiability == Negotiability.FLEXIBLE }.map { it.id }
         val discussable = ordered.drop(1).filter { it.negotiability == Negotiability.DISCUSSABLE }.map { it.id }
-        val lower = ordered.drop(1).filter { it.id !in flexible && it.id !in discussable }.take(2).map { it.id }
-        return DeLoadPlan(UUID.randomUUID().toString(), date, keep, flexible, lower, discussable, emptyList(), true, false, null, null)
+        val cancel = ordered.drop(1).filter { it.negotiability == Negotiability.FIXED }.map { it.id }
+        val lower = ordered.drop(1).filter { it.id !in flexible && it.id !in discussable && it.id !in cancel }.take(2).map { it.id }
+        return DeLoadPlan(UUID.randomUUID().toString(), date, keep, flexible, lower, discussable, cancel, true, false, null, null)
     }
 
     fun confirm(plan: DeLoadPlan, now: Instant): DeLoadPlan = plan.copy(
@@ -42,6 +43,6 @@ class RecoveryRecommendationEngine {
             RecoveryActionType.DEFER -> "记录的预计耗时超过剩余可用时间，先预览可延期事项。"
             else -> "现有记录尚未显示需要整体降载，可以只选择一个十五分钟启动动作。"
         }
-        return RecoverySuggestion(UUID.randomUUID().toString(), date, action, emptyList(), rationale, action != RecoveryActionType.SEEK_MEDICAL_HELP, analysis.explanation.confidenceBand, true, now, now.plus(Duration.ofHours(12)))
+        return RecoverySuggestion(UUID.randomUUID().toString(), date, action, emptyList(), rationale, true, analysis.explanation.confidenceBand, action != RecoveryActionType.SEEK_MEDICAL_HELP, now, now.plus(Duration.ofHours(12)))
     }
 }
