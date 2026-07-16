@@ -18,11 +18,14 @@ add('sprite visual is character-based', () => {
   });
 });
 
-add('sprite animation is subtle and CSS-only', () => {
+add('sprite defaults to subtle CSS 2.5D with opt-in isolated WebGL', () => {
   assert(style.includes('@keyframes spriteFloat'), 'float animation missing');
   assert(style.includes('@keyframes spriteBlink'), 'blink animation missing');
-  assert(!html.includes('<canvas'), 'sprite should not use canvas');
-  assert(!html.includes('three'), 'sprite should not use 3D engine');
+  assert(script.includes("renderer:'2d'"), '2.5D should be the default renderer');
+  assert(html.includes('id="sprite3dCanvas"'), 'optional 3D canvas missing');
+  assert(style.includes('.sprite-3d-canvas{display:none'), '3D canvas must be hidden by default');
+  assert(script.includes("preferences.renderer==='3d'"), 'WebGL must start only after explicit 3D selection');
+  assert(!html.includes('three.min.js') && !html.includes('.gltf'), 'no remote 3D engine or model should load by default');
 });
 
 add('sprite assistant actions exist', () => {
@@ -35,7 +38,7 @@ add('sprite actions call existing product flows', () => {
   assert(script.includes("b('timeSpriteTodayBtn','click',function(){switchPage('home')"), 'today action missing');
   assert(script.includes("b('timeSpriteBatchBtn','click',function(){switchPage('import')"), 'batch action missing');
   assert(script.includes("b('timeSpriteCalendarBtn','click',function(){switchPage('calendar')"), 'calendar action missing');
-  assert(script.includes("b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataSafetySection')"), 'backup action missing');
+  assert(script.includes("b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection')"), 'backup action missing');
   assert(script.includes("b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true)"), 'update action missing');
 });
 

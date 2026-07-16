@@ -161,6 +161,18 @@
       };
     }
     if(parsed){
+<<<<<<< HEAD
+=======
+      if(!norm.hasTime){
+        parsed.dateKey = null;
+        parsed.dateText = '';
+        parsed.timeText = '';
+        parsed.repeat = 'none';
+        parsed.repeatText = '';
+        parsed.recordKind = 'note';
+        parsed.isAllDay = true;
+      }
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       parsed.sourceText = norm.sourceText;
       parsed.cleanedInput = norm.cleaned;
     }

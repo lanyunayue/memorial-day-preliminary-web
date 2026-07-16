@@ -6,7 +6,11 @@ const listMatch=sw.match(/var PRECACHE_URLS\s*=\s*\[([\s\S]*?)\];/);
 const assets=listMatch?[...listMatch[1].matchAll(/['"]([^'"]+)['"]/g)].map((match)=>match[1]):[];
 const missing=assets.filter((asset)=>asset!=='./'&&!fs.existsSync(path.join(root,asset.replace(/^\.\//,''))));
 const checks=[
+<<<<<<< HEAD
   ['cache version is v1.4.0',sw.includes("shike-v140-v52")],
+=======
+  ['cache version is v2.2.0-alpha3',sw.includes("shike-v220alpha3-v63")],
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   ['precache list exists',!!listMatch],
   ['root and index are precached',assets.includes('./')&&assets.includes('./index.html')],
   ['manifest is precached',assets.includes('./manifest.json')],

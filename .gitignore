@@ -1,0 +1,12 @@
+artifacts/
+test-results/
+playwright-report/
+.playwright/
+*.log
+.tmp/
+
+# Real participant research data must stay outside version control.
+shike-research-*.json
+shike-product-validation-study.json
+participant-exports/
+research-data/

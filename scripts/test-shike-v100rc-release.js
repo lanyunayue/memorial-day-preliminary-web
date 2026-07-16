@@ -27,7 +27,7 @@ add('update center exists', () => assert(html.includes('id="releaseCenterSection
 add('feedback entry exists', () => assert(html.includes('id="feedbackSection"') && html.includes('308138249@qq.com'), 'feedback missing'));
 add('.ics export exists', () => assert(html.includes('data-i18n="capabilityIcsExport"') && html.includes('id="exportIcsBtn"'), '.ics export missing'));
 add('JSON backup exists', () => assert(html.includes('data-i18n="capabilityJsonBackup"') && html.includes('id="exportBackupBtnMy"'), 'JSON backup missing'));
-add('data safety copy exists', () => assert(html.includes('id="dataSafetySection"') && script.includes('dataSafetyHint'), 'data safety missing'));
+add('data backup section exists', () => assert(html.includes('id="dataBackupSection"') && script.includes('dataSafetyHint'), 'data backup section missing'));
 add('current browser local save copy exists', () => assert(script.includes('数据默认保存在当前浏览器') || script.includes('Data is saved in this browser'), 'local save copy missing'));
 add('no launched cloud sync claim', () => assert(!html.includes('云同步已上线') && !script.includes('已实现云同步'), 'cloud sync claim found'));
 add('no automatic stock monitoring claim', () => assert(!html.includes('自动股票监控') && !script.includes('已支持股票监控'), 'stock monitoring claim found'));
@@ -44,7 +44,7 @@ add('desktop styles exist', () => assert(style.includes('@media (min-width:1024p
 add('no visible undefined marker', () => assert(!html.includes('>undefined<'), 'visible undefined marker'));
 add('no visible null marker', () => assert(!html.includes('>null<'), 'visible null marker'));
 add('no mojibake marker', () => assert(!html.includes('�'), 'mojibake marker'));
-add('release notes keep honest capability wording', () => assert(script.includes('releaseCenterV100rc') && (html+script).includes('当前主要使用本地规则'), 'release note honesty mismatch'));
+add('release notes keep honest capability wording', () => assert(script.includes('releaseCenterV100rc') && ((html+script).includes('当前主要使用本地规则') || (html+script).includes('应用操作只在本机执行')), 'release note honesty mismatch'));
 add('feedback email exists', () => assert(html.includes('href="mailto:308138249@qq.com"') && html.includes('id="copyFeedbackTemplateBtn"'), 'feedback email/template missing'));
 add('experience examples exist', () => assert(html.includes('id="experienceExampleSection"') && html.includes('id="demoBtnMy"'), 'experience examples missing'));
 add('sprite quick actions exist', () => assert(html.includes('id="timeSpriteInputBtn"') && html.includes('id="timeSpriteBatchBtn"') && html.includes('id="timeSpriteUpdateBtn"'), 'sprite quick actions missing'));

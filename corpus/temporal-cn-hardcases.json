@@ -1,0 +1,752 @@
+[
+  {
+    "id": "hard_condition_001",
+    "text": "如果小王周一还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_002",
+    "text": "如果小李周一还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_003",
+    "text": "如果老周周一还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_004",
+    "text": "如果老师周一还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_005",
+    "text": "如果客户周一还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_006",
+    "text": "如果小王周二还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_007",
+    "text": "如果小李周二还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_008",
+    "text": "如果老周周二还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_009",
+    "text": "如果老师周二还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_010",
+    "text": "如果客户周二还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_011",
+    "text": "如果小王周三还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_012",
+    "text": "如果小李周三还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_013",
+    "text": "如果老周周三还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_014",
+    "text": "如果老师周三还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_015",
+    "text": "如果客户周三还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_016",
+    "text": "如果小王周四还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_017",
+    "text": "如果小李周四还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_018",
+    "text": "如果老周周四还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_019",
+    "text": "如果老师周四还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_020",
+    "text": "如果客户周四还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_021",
+    "text": "如果小王周五还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_022",
+    "text": "如果小李周五还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_023",
+    "text": "如果老周周五还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_024",
+    "text": "如果老师周五还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_025",
+    "text": "如果客户周五还不回我，我再提醒他",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_026",
+    "text": "如果小王周一还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_027",
+    "text": "如果小李周一还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_028",
+    "text": "如果老周周一还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_029",
+    "text": "如果老师周一还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_030",
+    "text": "如果客户周一还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_031",
+    "text": "如果小王周二还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_032",
+    "text": "如果小李周二还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_033",
+    "text": "如果老周周二还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_034",
+    "text": "如果老师周二还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_035",
+    "text": "如果客户周二还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_036",
+    "text": "如果小王周三还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_037",
+    "text": "如果小李周三还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_038",
+    "text": "如果老周周三还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_039",
+    "text": "如果老师周三还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_040",
+    "text": "如果客户周三还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_041",
+    "text": "如果小王周四还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_042",
+    "text": "如果小李周四还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_043",
+    "text": "如果老周周四还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_044",
+    "text": "如果老师周四还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_045",
+    "text": "如果客户周四还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_046",
+    "text": "如果小王周五还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_047",
+    "text": "如果小李周五还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_048",
+    "text": "如果老周周五还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_049",
+    "text": "如果老师周五还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_condition_050",
+    "text": "如果客户周五还不回我，我再发消息确认",
+    "expected": {
+      "type": "waiting_for",
+      "conditional": true
+    }
+  },
+  {
+    "id": "hard_negated_001",
+    "text": "不用提醒妈妈生日1",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_002",
+    "text": "不要记录客户电话2",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_003",
+    "text": "别再添加明天会议3",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_004",
+    "text": "无需安排周五复查4",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_005",
+    "text": "不用创建还款提醒5",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_006",
+    "text": "不要提醒妈妈生日6",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_007",
+    "text": "别再记录客户电话7",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_008",
+    "text": "无需添加明天会议8",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_009",
+    "text": "不用安排周五复查9",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_010",
+    "text": "不要创建还款提醒10",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_011",
+    "text": "别再提醒妈妈生日11",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_012",
+    "text": "无需记录客户电话12",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_013",
+    "text": "不用添加明天会议13",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_014",
+    "text": "不要安排周五复查14",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_015",
+    "text": "别再创建还款提醒15",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_016",
+    "text": "无需提醒妈妈生日16",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_017",
+    "text": "不用记录客户电话17",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_018",
+    "text": "不要添加明天会议18",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_019",
+    "text": "别再安排周五复查19",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_020",
+    "text": "无需创建还款提醒20",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_021",
+    "text": "不用提醒妈妈生日21",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_022",
+    "text": "不要记录客户电话22",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_023",
+    "text": "别再添加明天会议23",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_024",
+    "text": "无需安排周五复查24",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_negated_025",
+    "text": "不用创建还款提醒25",
+    "expected": {
+      "rejected": "negated"
+    }
+  },
+  {
+    "id": "hard_completed_001",
+    "text": "昨天已经提交材料（记录号1）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_002",
+    "text": "前天已经处理周报（记录号2）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_003",
+    "text": "刚才已经完成合同（记录号3）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_004",
+    "text": "早就做完了申请表（记录号4）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_005",
+    "text": "昨天已经提交设计稿（记录号5）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_006",
+    "text": "前天已经处理材料（记录号6）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_007",
+    "text": "刚才已经完成周报（记录号7）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_008",
+    "text": "早就做完了合同（记录号8）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_009",
+    "text": "昨天已经提交申请表（记录号9）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_010",
+    "text": "前天已经处理设计稿（记录号10）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_011",
+    "text": "刚才已经完成材料（记录号11）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_012",
+    "text": "早就做完了周报（记录号12）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_013",
+    "text": "昨天已经提交合同（记录号13）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_014",
+    "text": "前天已经处理申请表（记录号14）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_015",
+    "text": "刚才已经完成设计稿（记录号15）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_016",
+    "text": "早就做完了材料（记录号16）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_017",
+    "text": "昨天已经提交周报（记录号17）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_018",
+    "text": "前天已经处理合同（记录号18）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_019",
+    "text": "刚才已经完成申请表（记录号19）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_020",
+    "text": "早就做完了设计稿（记录号20）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_021",
+    "text": "昨天已经提交材料（记录号21）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_022",
+    "text": "前天已经处理周报（记录号22）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_023",
+    "text": "刚才已经完成合同（记录号23）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_024",
+    "text": "早就做完了申请表（记录号24）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  },
+  {
+    "id": "hard_completed_025",
+    "text": "昨天已经提交设计稿（记录号25）",
+    "expected": {
+      "rejected": "completed_fact"
+    }
+  }
+]

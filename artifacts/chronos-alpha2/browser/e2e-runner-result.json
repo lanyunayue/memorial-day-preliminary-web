@@ -1,0 +1,12 @@
+{
+  "classification": "PASS",
+  "generatedAt": "2026-07-13T16:27:12.182Z",
+  "scripts": [
+    "test-shike-runtime-cdp.js",
+    "test-shike-chronos-runtime-cdp.js",
+    "test-shike-multi-tab-runtime-cdp.js",
+    "test-shike-offline-runtime-cdp.js"
+  ],
+  "passed": 4,
+  "failed": 0
+}

@@ -1,0 +1,27 @@
+{
+  "name": "shike-web",
+  "version": "2.2.0-alpha3",
+  "description": "时刻 - 你的贴心记事助手 (Release Candidate)",
+  "private": true,
+  "scripts": {
+    "ci:install": "node scripts/ci-install.js",
+    "lint": "node scripts/lint-check.js",
+    "format:check": "node scripts/format-check.js",
+    "test:unit": "node scripts/test-unit-runner.js",
+    "test:legacy": "node scripts/test-shike-regression-suite.js",
+    "test:e2e": "node scripts/test-e2e-runner.js",
+    "test:e2e:ci": "node scripts/test-e2e-runner.js --required --autostart --layout --artifact-dir=artifacts/ci-e2e",
+    "test:validation:e2e": "node scripts/test-e2e-runner.js --required --autostart --validation-only --artifact-dir=artifacts/product-validation/e2e",
+    "test:chronos:stress": "node scripts/test-e2e-runner.js --required --autostart --stress-only --artifact-dir=artifacts/chronos-alpha2/stress",
+    "test:chronos:human": "node scripts/evaluate-chronos-human-corpus.js",
+    "chronos:verify": "node scripts/chronos-verify.js",
+    "build:validation-preview": "node scripts/build-product-validation-preview.js",
+    "test:ci-gates": "node scripts/test-ci-gates.js",
+    "test:a11y": "node scripts/test-a11y-runner.js",
+    "test:security": "node scripts/test-security-runner.js",
+    "test:integrity": "node scripts/test-shike-test-integrity.js",
+    "test:all": "npm run lint && npm run format:check && npm run test:unit && npm run test:legacy && npm run test:a11y && npm run test:security && npm run test:ci-gates && npm run test:integrity && npm run test:e2e"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

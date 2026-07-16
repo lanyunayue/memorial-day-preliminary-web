@@ -11,7 +11,7 @@ var LAST_GOOD_RECORDS_KEY='shike_records_last_good_v1';
 var LAST_BACKUP_KEY='shike_last_backup_at';
 var BACKUP_SCHEMA_VERSION=2;
 var LOCAL_DB_NAME='shike_local_db';
-var LOCAL_DB_VERSION=2;
+var LOCAL_DB_VERSION=4;
 
 window.ShikeConstants=Object.freeze({
   STORAGE_KEY:STORAGE_KEY,

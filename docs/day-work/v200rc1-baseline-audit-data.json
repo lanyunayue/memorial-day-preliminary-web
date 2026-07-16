@@ -1,0 +1,372 @@
+{
+  "git": {
+    "branch": "rematch-v200rc1-release",
+    "head": "4d58580da85a04883ed68cf3933b0b33811f26b1",
+    "originMain": "4d58580da85a04883ed68cf3933b0b33811f26b1",
+    "statusShort": "",
+    "log5": "4d58580 report v1.5.0 deployment\n1d4dc75 report v1.5.0 release audit\nf91ef43 build v1.5.0 adaptive bear workbench\nafa0016 report v1.4.1 experience deployment\n8e9fae0 report v1.4.1 experience stabilization candidate"
+  },
+  "version": {
+    "appVersion": "v1.5.0",
+    "cacheName": "shike-v150-v54"
+  },
+  "parser": {
+    "hash": "d6298d52d56beddfc407b329569fe81f179fcf50652425ed29dda6fa6eb6be32",
+    "lines": 5,
+    "parseReminderTextExists": true
+  },
+  "storage": {
+    "idbName": "unknown",
+    "idbVersion": 0,
+    "stores": [],
+    "localStorageKeys": [
+      "shike_assistant_collapsed",
+      "shike_sprite_pos",
+      "shike_sprite_collapsed",
+      "shike_sprite_last_tip",
+      "shike_demo_route_collapsed",
+      "shike_seen_release_note_version",
+      "shike_last_backup_at",
+      "shike_local_db"
+    ]
+  },
+  "sw": {
+    "cacheName": "shike-v150-v54",
+    "precacheCount": 71,
+    "precacheFiles": [
+      "./index.html",
+      "./manifest.json",
+      "./assets/styles/app.css",
+      "./src/config/release-notes.js",
+      "./src/config/version.js",
+      "./src/config/constants.js",
+      "./src/utilities/sanitize.js",
+      "./src/utilities/ids.js",
+      "./src/storage/legacy-storage.js",
+      "./src/storage/data-integrity.js",
+      "./src/storage/indexeddb-storage.js",
+      "./src/storage/local-first-bridge.js",
+      "./src/legacy-app.js",
+      "./src/app.js",
+      "./src/core/event-bus.js",
+      "./src/core/state.js",
+      "./src/core/errors.js",
+      "./src/core/router.js",
+      "./src/storage/repository.js",
+      "./src/storage/migrations.js",
+      "./src/storage/backup.js",
+      "./src/records/record-service.js",
+      "./src/records/record-normalizer.js",
+      "./src/records/dedupe.js",
+      "./src/records/recurrence.js",
+      "./src/parser/parser-adapter.js",
+      "./src/calendar/calendar-service.js",
+      "./src/calendar/ics-export.js",
+      "./src/views/view-registry.js",
+      "./src/components/legacy-components.js",
+      "./src/i18n/index.js",
+      "./src/utilities/dates.js",
+      "./src/utilities/clipboard.js",
+      "./src/utilities/downloads.js",
+      "./src/assistant/sprite-create-intent.js",
+      "./src/assistant/bear-state-machine.js",
+      "./src/assistant/sprite-customization.js",
+      "./src/assistant/sprite-renderer-2d.js",
+      "./src/assistant/sprite-renderer-3d.js",
+      "./src/assistant/sprite-audio.js",
+      "./src/agent/namespace.js",
+      "./src/agent/safety-policy.js",
+      "./src/agent/confirmation-policy.js",
+      "./src/agent/intent-router.js",
+      "./src/agent/context-builder.js",
+      "./src/retrieval/query-classifier.js",
+      "./src/retrieval/provider-registry.js",
+      "./src/retrieval/result-normalizer.js",
+      "./src/retrieval/result-ranker.js",
+      "./src/retrieval/extractive-summarizer.js",
+      "./src/retrieval/source-cache.js",
+      "./src/retrieval/search-fallback.js",
+      "./src/retrieval/browser-ai.js",
+      "./src/retrieval/providers/wikipedia.js",
+      "./src/retrieval/providers/wikidata.js",
+      "./src/retrieval/providers/github.js",
+      "./src/retrieval/providers/stackexchange.js",
+      "./src/retrieval/providers/open-meteo.js",
+      "./src/retrieval/retrieval-engine.js",
+      "./src/agent/proactive-task-detector.js",
+      "./src/agent/session-context.js",
+      "./src/agent/tool-registry.js",
+      "./src/agent/tools/tool-definitions.js",
+      "./src/agent/planner.js",
+      "./src/agent/executor.js",
+      "./src/agent/conversation-repository.js",
+      "./src/agent/result-formatter.js",
+      "./src/agent/agent-core.js",
+      "./src/agent/ui.js",
+      "./src/watch/watch-storage.js",
+      "./src/watch/watch-center.js"
+    ]
+  },
+  "pages": [
+    "page-watch"
+  ],
+  "agentTools": [
+    "create_record",
+    "edit_record",
+    "delete_record",
+    "pin_record",
+    "search_records",
+    "summarize_today",
+    "open_page",
+    "batch_parse",
+    "export_calendar",
+    "export_backup",
+    "change_theme",
+    "show_release_notes",
+    "manage_subscription"
+  ],
+  "retrieval": {
+    "providers": [
+      "browser-ai.js",
+      "extractive-summarizer.js",
+      "provider-registry.js",
+      "github.js",
+      "open-meteo.js",
+      "stackexchange.js",
+      "wikidata.js",
+      "wikipedia.js",
+      "query-classifier.js",
+      "result-normalizer.js",
+      "result-ranker.js",
+      "retrieval-engine.js",
+      "search-fallback.js",
+      "source-cache.js"
+    ],
+    "hasEngine": true,
+    "hasRss": false
+  },
+  "assistant": [
+    "bear-state-machine.js",
+    "sprite-audio.js",
+    "sprite-create-intent.js",
+    "sprite-customization.js",
+    "sprite-renderer-2d.js",
+    "sprite-renderer-3d.js"
+  ],
+  "sprite": {
+    "has2D": true,
+    "has3D": true,
+    "hasAudio": true,
+    "hasCustomization": true,
+    "hasBearState": true
+  },
+  "tests": [
+    "test-shike-a11y-static.js",
+    "test-shike-agent-confirmation.js",
+    "test-shike-agent-context-proactive.js",
+    "test-shike-agent-conversation.js",
+    "test-shike-agent-core.js",
+    "test-shike-agent-runtime-cdp.js",
+    "test-shike-agent-security.js",
+    "test-shike-agent-tools.js",
+    "test-shike-backup-hardening.js",
+    "test-shike-batch-capture-inbox.js",
+    "test-shike-batch-dedupe.js",
+    "test-shike-batch-save-feedback.js",
+    "test-shike-card-export.js",
+    "test-shike-correction-chips.js",
+    "test-shike-corruption-quarantine.js",
+    "test-shike-data-integrity.js",
+    "test-shike-data-safety-center.js",
+    "test-shike-demo-examples.js",
+    "test-shike-demo-route.js",
+    "test-shike-draft-edit-handoff.js",
+    "test-shike-draft-existing-dedupe.js",
+    "test-shike-example-chips.js",
+    "test-shike-experience-runtime-cdp.js",
+    "test-shike-feature-hub-cleanup.js",
+    "test-shike-feedback-entry.js",
+    "test-shike-home-initial-layout.js",
+    "test-shike-home-simplification.js",
+    "test-shike-html-integrity.js",
+    "test-shike-i18n-placeholders.js",
+    "test-shike-ics-deep.js",
+    "test-shike-ics-export.js",
+    "test-shike-import-graph.js",
+    "test-shike-import-preview.js",
+    "test-shike-indexeddb-repository.js",
+    "test-shike-keyboard-capture.js",
+    "test-shike-later-inbox.js",
+    "test-shike-module-boundaries.js",
+    "test-shike-my-page-priority.js",
+    "test-shike-offline-assets.js",
+    "test-shike-offline-runtime-cdp.js",
+    "test-shike-parse-preview.js",
+    "test-shike-pwa-assets.js",
+    "test-shike-pwa-notice.js",
+    "test-shike-record-actions-polish.js",
+    "test-shike-record-actions-responsive.js",
+    "test-shike-regression-suite.js",
+    "test-shike-release-feedback-center.js",
+    "test-shike-release-notes.js",
+    "test-shike-responsive-css.js",
+    "test-shike-runtime-cdp.js",
+    "test-shike-sprite-assistant-2.js",
+    "test-shike-sprite-create-intent.js",
+    "test-shike-sprite-upgrade.js",
+    "test-shike-storage-migration.js",
+    "test-shike-storage-runtime-cdp.js",
+    "test-shike-swipe-actions.js",
+    "test-shike-time-sprite.js",
+    "test-shike-timeline.js",
+    "test-shike-today-overview.js",
+    "test-shike-unsaved-work-guard.js",
+    "test-shike-v100-stable.js",
+    "test-shike-v100rc-release.js",
+    "test-shike-v150-bear-workbench.js",
+    "test-shike-v150-network-cdp.js",
+    "test-shike-v150-responsive-cdp.js",
+    "test-shike-v2-backup.js",
+    "test-shike-watch-center.js"
+  ],
+  "sizes": {
+    "totalJs": null,
+    "totalCss": null
+  },
+  "secrets": {
+    "possibleKeys": [],
+    "hardcodedUrls": [
+      {
+        "file": "src\\agent\\ui.js",
+        "urls": [
+          "https://www.bing.com/search?q="
+        ]
+      },
+      {
+        "file": "src\\legacy-app.js",
+        "urls": [
+          "https://api.open-meteo.com/v1/forecast?latitude="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\github.js",
+        "urls": [
+          "https://api.github.com/search/repositories?q="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\open-meteo.js",
+        "urls": [
+          "https://geocoding-api.open-meteo.com/v1/search?count=1&language=zh&format=json&name=",
+          "https://api.open-meteo.com/v1/forecast?latitude=",
+          "https://open-meteo.com/"
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\stackexchange.js",
+        "urls": [
+          "https://api.stackexchange.com/2.3/search/advanced?site=stackoverflow&order=desc&sort=relevance&pagesize=5&filter=withbody&q="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\wikidata.js",
+        "urls": [
+          "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=",
+          "https://www.wikidata.org/wiki/"
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\wikipedia.js",
+        "urls": [
+          "https://zh.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=",
+          "https://zh.wikipedia.org/?curid="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\search-fallback.js",
+        "urls": [
+          "https://www.bing.com/search?q=",
+          "https://www.baidu.com/s?wd=",
+          "https://www.google.com/search?q="
+        ]
+      },
+      {
+        "file": "src\\watch\\watch-center.js",
+        "urls": [
+          "https://example.com/feed.xml"
+        ]
+      },
+      {
+        "file": "src\\agent\\ui.js",
+        "urls": [
+          "https://www.bing.com/search?q="
+        ]
+      },
+      {
+        "file": "src\\legacy-app.js",
+        "urls": [
+          "https://api.open-meteo.com/v1/forecast?latitude="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\github.js",
+        "urls": [
+          "https://api.github.com/search/repositories?q="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\open-meteo.js",
+        "urls": [
+          "https://geocoding-api.open-meteo.com/v1/search?count=1&language=zh&format=json&name=",
+          "https://api.open-meteo.com/v1/forecast?latitude=",
+          "https://open-meteo.com/"
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\stackexchange.js",
+        "urls": [
+          "https://api.stackexchange.com/2.3/search/advanced?site=stackoverflow&order=desc&sort=relevance&pagesize=5&filter=withbody&q="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\wikidata.js",
+        "urls": [
+          "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=",
+          "https://www.wikidata.org/wiki/"
+        ]
+      },
+      {
+        "file": "src\\retrieval\\providers\\wikipedia.js",
+        "urls": [
+          "https://zh.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=",
+          "https://zh.wikipedia.org/?curid="
+        ]
+      },
+      {
+        "file": "src\\retrieval\\search-fallback.js",
+        "urls": [
+          "https://www.bing.com/search?q=",
+          "https://www.baidu.com/s?wd=",
+          "https://www.google.com/search?q="
+        ]
+      },
+      {
+        "file": "src\\watch\\watch-center.js",
+        "urls": [
+          "https://example.com/feed.xml"
+        ]
+      }
+    ]
+  },
+  "tempFiles": [],
+  "pkg": {
+    "exists": false,
+    "hasPlaywright": false,
+    "hasVitest": false,
+    "hasEslint": false
+  },
+  "ci": {
+    "exists": false,
+    "workflows": []
+  }
+}

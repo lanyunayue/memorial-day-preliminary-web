@@ -1,0 +1,127 @@
+{
+  "classification": "PASS",
+  "generatedAt": "2026-07-14T08:22:26.437Z",
+  "provenance": "synthetic_stress_fixture",
+  "counts": {
+    "records": 10000,
+    "temporal_nodes": 50000,
+    "temporal_edges": 100000,
+    "temporal_corrections": 10000,
+    "temporal_operations": 5000
+  },
+  "recordsAt1000": 1000,
+  "metrics": {
+    "write_records1000": {
+      "samples": 1,
+      "p50Ms": 125.4,
+      "p95Ms": 125.4,
+      "p99Ms": 125.4
+    },
+    "write_records10000": {
+      "samples": 9,
+      "p50Ms": 143.7,
+      "p95Ms": 203.6,
+      "p99Ms": 203.6
+    },
+    "write_nodes": {
+      "samples": 50,
+      "p50Ms": 138.1,
+      "p95Ms": 181.6,
+      "p99Ms": 191.8
+    },
+    "write_edges": {
+      "samples": 100,
+      "p50Ms": 126.2,
+      "p95Ms": 140.8,
+      "p99Ms": 147.6
+    },
+    "write_corrections": {
+      "samples": 10,
+      "p50Ms": 125.6,
+      "p95Ms": 141.6,
+      "p99Ms": 141.6
+    },
+    "write_operations": {
+      "samples": 5,
+      "p50Ms": 121.8,
+      "p95Ms": 142.8,
+      "p99Ms": 142.8
+    },
+    "pointRead": {
+      "samples": 50,
+      "p50Ms": 0.2,
+      "p95Ms": 1316.7,
+      "p99Ms": 1397.1
+    },
+    "graphRebuild": {
+      "samples": 3,
+      "p50Ms": 1308.6,
+      "p95Ms": 1340,
+      "p99Ms": 1340
+    },
+    "nextAction": {
+      "samples": 5,
+      "p50Ms": 27.7,
+      "p95Ms": 36.4,
+      "p99Ms": 36.4
+    },
+    "weeklyReview": {
+      "samples": 5,
+      "p50Ms": 8.8,
+      "p95Ms": 10.5,
+      "p99Ms": 10.5
+    },
+    "backupExport": {
+      "samples": 3,
+      "p50Ms": 1515.3,
+      "p95Ms": 1566,
+      "p99Ms": 1566
+    },
+    "backupRestore": {
+      "samples": 175,
+      "p50Ms": 126.3,
+      "p95Ms": 202.6,
+      "p99Ms": 327.5
+    },
+    "pageStartup": {
+      "samples": 1,
+      "p50Ms": 1254,
+      "p95Ms": 1254,
+      "p99Ms": 1254
+    }
+  },
+  "storage": {
+    "before": {
+      "quota": 10737437656,
+      "usage": 19416,
+      "usageDetails": {
+        "indexedDB": 19416
+      }
+    },
+    "afterWrite": {
+      "quota": 10764026143,
+      "usage": 26607903,
+      "usageDetails": {
+        "caches": 2465024,
+        "indexedDB": 24135364,
+        "serviceWorkerRegistrations": 7515
+      }
+    },
+    "afterRestore": {
+      "quota": 10766330207,
+      "usage": 28911967,
+      "usageDetails": {
+        "caches": 2465024,
+        "indexedDB": 26439428,
+        "serviceWorkerRegistrations": 7515
+      }
+    }
+  },
+  "memory": {
+    "usedJSHeapSize": 163481946,
+    "totalJSHeapSize": 167286602,
+    "jsHeapSizeLimit": 4395630592
+  },
+  "atomicAbort": true,
+  "consoleNetworkErrors": []
+}

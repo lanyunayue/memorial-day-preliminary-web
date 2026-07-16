@@ -46,12 +46,12 @@ add('index references manifest and theme metadata', () => {
 });
 
 add('app version and service worker cache version align', () => {
-  const appVersion = matchOne(script, /var APP_VERSION='(v(?:\d+\.\d+\.\d+|1\.0\.0-rc))'/, 'APP_VERSION should be present');
-  const swCache = matchOne(sw, /CACHE_NAME\s*=\s*'shike-(v(?:\d{3}|100rc))-v(\d+)'/, 'CACHE_NAME should be present');
-  const expectedToken = appVersion[1] === 'v1.0.0-rc'
-    ? 'v100rc'
-    : `v${appVersion[1].replace(/^v/, '').split('.').join('')}`;
+  const appVersion = matchOne(script, /var APP_VERSION='(v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)'/, 'APP_VERSION should be present');
+  const swCache = matchOne(sw, /CACHE_NAME\s*=\s*'shike-(v[0-9a-z]+)-v(\d+)'/, 'CACHE_NAME should be present');
+  var verClean = appVersion[1].replace(/^v/, '');
+  var expectedToken = verClean === '1.0.0-rc' ? 'v100rc' : 'v' + verClean.replace(/[-.]/g, '');
   assertEqual(swCache[1], expectedToken, 'service worker cache version token should match APP_VERSION');
+
 });
 
 add('manifest required fields are stable', () => {

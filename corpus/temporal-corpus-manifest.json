@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "taxonomy": [
+    "generated",
+    "handwritten",
+    "adversarial",
+    "production-like",
+    "human-reviewed"
+  ],
+  "datasets": [
+    {"file": "temporal-cn-core.json", "fixtures": 300, "provenance": "generated", "generator": "scripts/generate-temporal-corpus.js"},
+    {"file": "temporal-cn-multi-intent.json", "fixtures": 100, "provenance": "generated", "generator": "scripts/generate-temporal-corpus.js"},
+    {"file": "temporal-cn-hardcases.json", "fixtures": 100, "provenance": "generated", "generator": "scripts/generate-temporal-corpus.js"},
+    {"file": "temporal-cn-time-boundaries.json", "fixtures": 100, "provenance": "generated", "generator": "scripts/generate-temporal-corpus.js"},
+    {"file": "temporal-cn-adversarial.json", "fixtures": 100, "provenance": "adversarial", "generator": "scripts/generate-temporal-corpus.js"}
+  ],
+  "summary": {
+    "total": 700,
+    "generated": 600,
+    "adversarial": 100,
+    "handwritten": 0,
+    "productionLike": 0,
+    "humanReviewed": 0
+  },
+  "humanCorpusStatus": "not_available",
+  "blindSetStatus": "protocol_ready_no_reviewed_fixtures"
+}

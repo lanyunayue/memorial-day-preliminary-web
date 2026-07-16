@@ -48,7 +48,11 @@ add('11. action buttons have fixed min height', () => {
   assert(style.includes('min-height')||style.includes('height:'), 'swipe-action should have height');
 });
 add('12. no dangerous negative margin on action rail', () => {
+<<<<<<< HEAD
   assert(!style.includes('margin:-')||true, 'no dangerous negative margins (sanity check)');
+=======
+  assert(!style.includes('margin:-') || style.includes('margin:-0') || style.includes('margin:-0px'), 'no dangerous negative margins (sanity check)');
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 add('13. transform translateX has max limit', () => {
   assert(script.includes('getSwipeRailWidth')||script.includes('maxSwipe')||script.includes('Math.max(-'), 'max swipe distance not limited');
@@ -145,11 +149,19 @@ add('40. dark theme styles exist', () => {
 add('41. reduced-motion support exists', () => {
   assert(style.includes('prefers-reduced-motion')||script.includes('prefers-reduced-motion'), 'reduced-motion support missing');
 });
+<<<<<<< HEAD
 add('42. APP_VERSION = v1.4.0', () => {
   assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v1.4.0"), 'APP_VERSION should be v1.4.0');
 });
 add('43. cache name shike-v140-v52', () => {
   assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v140-v52'), 'CACHE_NAME should be shike-v140-v52');
+=======
+add('42. APP_VERSION = v2.2.0-alpha3', () => {
+  assert(fs.readFileSync(path.join(root,'src/config/version.js'),'utf8').includes("v2.2.0-alpha3"), 'APP_VERSION should be v2.2.0-alpha3');
+});
+add('43. cache name shike-v220alpha3-v63', () => {
+  assert(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes('shike-v220alpha3-v63'), 'CACHE_NAME should be shike-v220alpha3-v63');
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 add('44. original swipe functionality not regressed', () => {
   assert(script.includes('record-swipe')&&script.includes('swiped')&&script.includes('translateX'), 'core swipe functionality preserved');

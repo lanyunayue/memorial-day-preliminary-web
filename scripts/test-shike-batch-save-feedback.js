@@ -84,6 +84,7 @@ function createSandbox() {
     renderCalendar=function(){};
     renderMy=function(){};
     switchPage=function(p){currentPage=p;};
+    saveRecords=function(){return true;};
     showToast=function(msg,type){__toasts.push({msg:msg,type:type});};
   `, sandbox);
   return sandbox;

@@ -3,10 +3,12 @@ const root=path.resolve(__dirname,'..');
 const source=fs.readFileSync(path.join(root,'src','storage','indexeddb-storage.js'),'utf8');
 const constants=fs.readFileSync(path.join(root,'src','config','constants.js'),'utf8');
 const requiredStores=['records','settings','conversations','subscriptions','feed_items','migrations','audit_log','quarantined_records'];
+const temporalStores=['temporal_drafts','temporal_nodes','temporal_edges','temporal_waiting','temporal_corrections','temporal_meta','temporal_tombstones','temporal_operations','temporal_operation_quarantine','temporal_locks','temporal_adaptation_rules'];
 const checks=[
  ['database name is stable',constants.includes("LOCAL_DB_NAME='shike_local_db'")],
- ['schema version is 2',constants.includes('LOCAL_DB_VERSION=2')],
+ ['schema version is 4',constants.includes('LOCAL_DB_VERSION=4')],
  ['all eight stores declared',requiredStores.every((store)=>source.includes(`'${store}'`))],
+ ['temporal sidecar stores declared',temporalStores.every((store)=>source.includes(`'${store}'`))],
  ['stores use keyPath id',source.includes("{keyPath:'id'}")],
  ['upgrade creates missing stores',source.includes('onupgradeneeded')&&source.includes('createObjectStore')],
  ['open handles blocked state',source.includes('onblocked')],

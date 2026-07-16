@@ -13,9 +13,15 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
+<<<<<<< HEAD
 add('version and cache are v1.4.0', () => {
   assert(script.includes("APP_VERSION='v1.4.0'"), 'APP_VERSION should be v1.4.0');
   assert(sw.includes("shike-v140-v52"), 'sw cache should be shike-v140-v52');
+=======
+add('version and cache are v2.2.0-alpha3', () => {
+  assert(script.includes("APP_VERSION='v2.2.0-alpha3'"), 'APP_VERSION should be v2.2.0-alpha3');
+  assert(sw.includes("shike-v220alpha3-v63"), 'sw cache should be shike-v220alpha3-v63');
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 
 add('release center section exists', () => {
@@ -25,13 +31,13 @@ add('release center section exists', () => {
 });
 
 add('recent version list is visible', () => {
-  ['v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
-    assert(html.includes(version), `${version} missing from release center`);
+  ['v2.2.0-alpha3', 'v1.4.1', 'v1.4.0', 'v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
+    assert((html+script).includes(version), `${version} missing from release center`);
   });
 });
 
 add('release center content labels exist', () => {
-  ['releaseCenterV130', 'releaseCenterV120', 'releaseCenterV100rc', 'releaseCenterV098', 'releaseCenterV097', 'releaseCenterV096', 'releaseCenterV095', 'releaseCenterV094', 'releaseCenterV093'].forEach((key) => {
+  ['releaseCenterV141', 'releaseCenterV140', 'releaseCenterV130', 'releaseCenterV120', 'releaseCenterV100rc', 'releaseCenterV098', 'releaseCenterV097', 'releaseCenterV096', 'releaseCenterV095', 'releaseCenterV094', 'releaseCenterV093'].forEach((key) => {
     assert(script.includes(`${key}:`), `${key} i18n missing`);
   });
 });
@@ -109,14 +115,14 @@ add('forbidden launched capability claims are absent', () => {
   });
 });
 
-add('release notes describe v1.3.0', () => {
-  ['Agent', 'tool', 'double confirmation', 'local-rule', 'v1.3.0'].forEach((token) => {
+add('release notes remain available for the current release', () => {
+  ['事项、日期、时间和类型', '提交锁', 'Service Worker', 'NLP parser'].forEach((token) => {
     assert(script.includes(token), `release note token missing: ${token}`);
   });
 });
 
 add('i18n keys exist in four languages', () => {
-  ['releaseCenterTitle', 'viewCurrentRelease', 'copyFeedbackTemplate', 'feedbackTemplateText', 'feedbackNoUpload', 'futurePlan1'].forEach((key) => {
+  ['releaseCenterTitle', 'releaseCenterV141', 'releaseCenterV140', 'viewCurrentRelease', 'copyFeedbackTemplate', 'feedbackTemplateText', 'feedbackNoUpload', 'futurePlan1'].forEach((key) => {
     const count = (script.match(new RegExp(`${key}:`, 'g')) || []).length;
     assert(count >= 4, `${key} should exist for four languages`);
   });

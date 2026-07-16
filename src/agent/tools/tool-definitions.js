@@ -21,7 +21,11 @@
     throw new Error('record_not_found');
   }
   ns.createTools=function(){return [
+<<<<<<< HEAD
     {name:'create_record',describe:'创建记录',validate:function(a){return !!String(a&&a.text||a&&a.title||'').trim();},execute:function(a,ctx){
+=======
+    {name:'create_record',describe:'创建记录',validate:function(a){return !!String(a&&a.text||a&&a.title||'').trim();},execute:async function(a,ctx){
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       var text=a.text||a.title||'';var sourceText=a.sourceText||text;var parsed=null;
       if(window.ShikeSpriteCreateIntent){
         parsed=window.ShikeSpriteCreateIntent.extract(sourceText);
@@ -35,7 +39,21 @@
       if(a.dateKey)parsed.dateKey=a.dateKey;
       if(a.timeText)parsed.timeText=a.timeText;
       if(a.temporalPhrase)parsed.temporalPhrase=a.temporalPhrase;
+<<<<<<< HEAD
       var saved=saveParsedRecord(parsed,sourceText);
+=======
+      if(a.title)parsed.title=a.title;
+      var saved=saveParsedRecord(parsed,sourceText);
+      if(!saved)throw new Error('records_write_failed');
+      if(window.ShikeLocalFirst){
+        try{await window.ShikeLocalFirst.persist(records);}
+        catch(error){
+          records=records.filter(function(record){return record.id!==saved.id;});
+          saveRecords();
+          throw new Error('records_write_failed');
+        }
+      }
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       if(ns.sessionContext)ns.sessionContext.setLastCreated(saved);
       renderCurrent();
       return {message:'已帮你记住：'+(parsed.title||text),record:saved};
@@ -64,6 +82,7 @@
     {name:'export_calendar',describe:'导出日历',validate:function(){return true;},execute:function(){exportIcsFile();return {message:'已开始导出日历'};}},
     {name:'export_backup',describe:'备份数据',validate:function(){return true;},execute:function(){exportBackupFile();return {message:'已开始导出备份'};}},
     {name:'change_theme',describe:'切换主题',validate:function(a){return ['paper','night'].includes(a&&a.theme);},execute:function(a){settings.theme=a.theme;saveSettings(settings);applyTheme(a.theme);return {message:'主题已切换'};}},
+<<<<<<< HEAD
     {name:'show_release_notes',describe:'查看更新',validate:function(){return true;},execute:function(){showReleaseNotes(true);return {message:'已打开更新说明'};}},
     {name:'manage_subscription',describe:'新增关注',validate:function(a){return !!String(a&&a.keyword||'').trim();},execute:function(a){
       var keyword=String(a.keyword||'').trim();
@@ -77,5 +96,8 @@
       }
       return {message:'已添加关注：'+keyword+'（可在关注中心管理）',keyword:keyword,duplicate:false};
     }}
+=======
+    {name:'show_release_notes',describe:'查看更新',validate:function(){return true;},execute:function(){showReleaseNotes(true);return {message:'已打开更新说明'};}}
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   ];};
 })(window.ShikeAgentModules);

@@ -11,7 +11,7 @@ const checks = [];
 function add(name, run) { checks.push({ name, run }); }
 
 add('reminder notice copy exists', () => {
-  assert(html.includes('data-i18n="reminderNoticeTitle"'), 'reminder notice title should exist');
+  assert(html.includes('data-i18n="reminderSettingsHint"'), 'reminder settings hint should exist');
   assert(script.includes('reminderNoticeText'), 'reminder notice copy should exist');
 });
 

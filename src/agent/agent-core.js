@@ -148,6 +148,18 @@
       await remember('assistant',doneMsg,{acknowledged:true});
       return {ok:true,message:doneMsg};
     }
+<<<<<<< HEAD
+=======
+    if(route.intent==='unknown'&&global.ShikeRetrievalEngine){
+      var classification=global.ShikeRetrievalEngine.classify(text);
+      if(classification.kind==='network'){
+        if(global.ShikeBearState)global.ShikeBearState.transition('searching',{reason:'public-retrieval'});
+        var retrieval=await global.ShikeRetrievalEngine.search(text,{classification:classification,timeout:7000});
+        await remember('assistant',retrieval.answer,{retrieval:true,sources:retrieval.sources.map(function(source){return{title:source.title,url:source.url,source:source.source};})});
+        return retrieval;
+      }
+    }
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
     ctx=ns.contextBuilder.build();
     var plan=ns.planner.plan(route,ctx);
     if(!plan.ok){
@@ -212,6 +224,10 @@
       ns.conversationRepository.clear();
       if(ns.sessionContext)ns.sessionContext.clear();
     },
+<<<<<<< HEAD
+=======
+    clearContext:function(){if(ns.sessionContext)ns.sessionContext.clear();},
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
     localRules:true
   });
 })(window,window.ShikeAgentModules);

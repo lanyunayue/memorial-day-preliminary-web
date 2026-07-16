@@ -21,7 +21,7 @@ function posInMy(id) { return mySection.indexOf(`id="${id}"`); }
 
 add('My page exists', () => { assert(myPageStart > 0, 'page-my not found'); assert(mySection.length > 500, 'page-my too short'); });
 add('Personalize section exists', () => { assert(mySection.includes('id="personalizeSection"'), 'personalizeSection missing'); assert(mySection.includes('data-i18n="personalize"'), 'personalize title missing'); });
-add('Personalize before dataSafety', () => { const p=posInMy('personalizeSection'),d=posInMy('dataSafetySection'); assert(p>0&&d>0,'not found'); assert(p<d,'personalize must be before dataSafety'); });
+add('Personalize before dataSafety', () => { const p=posInMy('personalizeSection'),d=posInMy('dataBackupSection'); assert(p>0&&d>0,'not found'); assert(p<d,'personalize must be before dataBackup'); });
 add('Personalize before feedback', () => { const p=posInMy('personalizeSection'),f=posInMy('feedbackSection'); assert(p>0&&f>0,'not found'); assert(p<f,'personalize must be before feedback'); });
 add('Personalize is first setting-group after settings-list', () => { const sl=mySection.indexOf('class="settings-list"'); const fg=mySection.indexOf('class="setting-group',sl); assert(fg>0,'no setting-group found'); const near=mySection.substring(fg,fg+120); assert(near.includes('personalizeSection'),'first setting-group must be personalizeSection'); });
 add('Theme dots still exist', () => { assert(mySection.includes('data-i18n="theme"'),'theme label missing'); assert(mySection.includes('class="theme-dots"'),'theme-dots missing'); assert(mySection.includes('data-theme="night"'),'night theme missing'); });
@@ -31,15 +31,20 @@ add('Weather switch still exists', () => { assert(mySection.includes('data-i18n=
 add('Username input still exists', () => { assert(mySection.includes('id="usernameInput"'),'usernameInput missing'); });
 add('Experience example on My page still exists', () => { assert(mySection.includes('id="experienceExampleSection"'),'experienceExampleSection missing'); assert(mySection.includes('id="demoBtnMy"'),'demoBtnMy missing'); });
 add('Feedback email 308138249@qq.com still visible', () => { assert(mySection.includes('308138249@qq.com'),'email missing'); assert(mySection.includes('href="mailto:308138249@qq.com"'),'mailto missing'); });
-add('Data safety/backup still exists', () => { assert(mySection.includes('id="dataSafetySection"'),'dataSafetySection missing'); assert(mySection.includes('id="exportBackupBtnMy"'),'exportBackupBtnMy missing'); assert(mySection.includes('id="restoreFileInputMy"'),'restoreFileInputMy missing'); });
+add('Data backup section exists', () => { assert(mySection.includes('id="dataBackupSection"'),'dataBackupSection missing'); assert(mySection.includes('id="exportBackupBtnMy"'),'exportBackupBtnMy missing'); assert(mySection.includes('id="restoreFileInputMy"'),'restoreFileInputMy missing'); });
 add('Calendar export still exists', () => { assert(mySection.includes('id="calendarExportSection"'),'calendarExportSection missing'); assert(mySection.includes('id="exportIcsBtn"'),'exportIcsBtn missing'); });
 add('No duplicate demoBtnMy', () => { const c=(mySection.match(/id="demoBtnMy"/g)||[]).length; assert(c===1,`expected 1 demoBtnMy, got ${c}`); });
 add('No duplicate feedbackSection', () => { const c=(mySection.match(/id="feedbackSection"/g)||[]).length; assert(c===1,`expected 1 feedbackSection, got ${c}`); });
-add('No duplicate dataSafetySection', () => { const c=(mySection.match(/id="dataSafetySection"/g)||[]).length; assert(c===1,`expected 1 dataSafetySection, got ${c}`); });
+add('No duplicate dataBackupSection', () => { const c=(mySection.match(/id="dataBackupSection"/g)||[]).length; assert(c===1,`expected 1 dataBackupSection, got ${c}`); });
 add('No undefined visible', () => { assert(!mySection.includes('>undefined<'),'undefined visible'); assert(!mySection.includes('>null<'),'null visible'); });
 add('No garbled chars', () => { assert(!mySection.includes('\uFFFD'),'replacement char found'); });
+<<<<<<< HEAD
 add('APP_VERSION = v1.4.0', () => { assert(script.includes("APP_VERSION='v1.4.0'"),'APP_VERSION not v1.4.0'); });
 add('SW cache = shike-v140-v52', () => { assert(sw.includes('shike-v140-v52'),'cache not v140'); assert(!sw.includes('shike-v132-v51'),'old cache v132 still present'); });
+=======
+add('APP_VERSION = v2.2.0-alpha3', () => { assert(script.includes("APP_VERSION='v2.2.0-alpha3'"),'APP_VERSION not v2.2.0-alpha3'); });
+add('SW cache = shike-v220alpha3-v63', () => { assert(sw.includes('shike-v220alpha3-v63'),'cache not v62'); assert(!sw.includes('shike-v141-v53'),'old cache still present'); });
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 add('Featured CSS classes exist', () => { assert(html.includes('setting-group-featured'),'setting-group-featured missing'); assert(html.includes('feature-chips'),'feature-chips missing'); assert(html.includes('feature-chip'),'feature-chip missing'); });
 add('Personalize description exists', () => { assert(mySection.includes('data-i18n="personalizeDesc"'),'personalizeDesc missing'); assert(mySection.includes('让时刻更像你的助手'),'desc text missing'); });
 add('Feature chips cover 4 areas', () => { assert(mySection.includes('data-i18n="chipTheme"'),'chipTheme missing'); assert(mySection.includes('data-i18n="chipLanguage"'),'chipLanguage missing'); assert(mySection.includes('data-i18n="chipSprite"'),'chipSprite missing'); assert(mySection.includes('data-i18n="chipDisplay"'),'chipDisplay missing'); });

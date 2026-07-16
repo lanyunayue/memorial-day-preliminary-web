@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 (function(ns){var labels={empty_input:'请输入一句话。',input_too_long:'内容过长，请缩短后再试。',unsafe_input:'这个请求不安全或超出本地助手边界。',unknown_intent:'我还没理解这句话。你可以试试："帮我记明天下午三点交作业"，或者直接说出要记住的事情。',watch_center_not_available:'关注中心将在下一阶段接入，目前没有伪造数据。',multiple_records:'找到多条记录，请说得更具体。',record_not_found:'没有找到对应记录。'};ns.resultFormatter=Object.freeze({error:function(code){return labels[code]||'操作没有完成。';},result:function(value){return value&&value.message?value.message:'操作已完成。';}});})(window.ShikeAgentModules);
+=======
+(function(ns){var labels={empty_input:'请输入一句话。',input_too_long:'内容过长，请缩短后再试。',unsafe_input:'这个请求不安全或超出本地助手边界。',unknown_intent:'我还没理解这句话。你可以试试："帮我记明天下午三点交作业"，或者直接说出要记住的事情。',multiple_records:'找到多条记录，请说得更具体。',record_not_found:'没有找到对应记录。'};ns.resultFormatter=Object.freeze({error:function(code){return labels[code]||'操作没有完成。';},result:function(value){return value&&value.message?value.message:'操作已完成。';}});})(window.ShikeAgentModules);
+>>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34

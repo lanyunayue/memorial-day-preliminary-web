@@ -1,0 +1,902 @@
+[
+  {
+    "id": "time_001",
+    "text": "今天上午九点开项目会1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_002",
+    "text": "今天下午三点去医院复查1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_003",
+    "text": "今天晚上八点领取证件1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_004",
+    "text": "今天10:30整理报销材料1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_005",
+    "text": "今天下午两点半联系房东1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_006",
+    "text": "今天上午九点提交报名表1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_007",
+    "text": "今天下午三点参加线上课程1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_008",
+    "text": "今天晚上八点检查设备1",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_009",
+    "text": "今天10:30开项目会2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_010",
+    "text": "今天下午两点半去医院复查2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_011",
+    "text": "今天上午九点领取证件2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_012",
+    "text": "今天下午三点整理报销材料2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_013",
+    "text": "今天晚上八点联系房东2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_014",
+    "text": "今天10:30提交报名表2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_015",
+    "text": "今天下午两点半参加线上课程2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_016",
+    "text": "今天上午九点检查设备2",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_017",
+    "text": "今天下午三点开项目会3",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_018",
+    "text": "今天晚上八点去医院复查3",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_019",
+    "text": "今天10:30领取证件3",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_020",
+    "text": "今天下午两点半整理报销材料3",
+    "expected": {
+      "dateKey": "2026-07-13",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_021",
+    "text": "明天上午九点开项目会1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_022",
+    "text": "明天下午三点去医院复查1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_023",
+    "text": "明天晚上八点领取证件1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_024",
+    "text": "明天10:30整理报销材料1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_025",
+    "text": "明天下午两点半联系房东1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_026",
+    "text": "明天上午九点提交报名表1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_027",
+    "text": "明天下午三点参加线上课程1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_028",
+    "text": "明天晚上八点检查设备1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_029",
+    "text": "明天10:30开项目会2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_030",
+    "text": "明天下午两点半去医院复查2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_031",
+    "text": "明天上午九点领取证件2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_032",
+    "text": "明天下午三点整理报销材料2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_033",
+    "text": "明天晚上八点联系房东2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_034",
+    "text": "明天10:30提交报名表2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_035",
+    "text": "明天下午两点半参加线上课程2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_036",
+    "text": "明天上午九点检查设备2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_037",
+    "text": "明天下午三点开项目会3",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_038",
+    "text": "明天晚上八点去医院复查3",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_039",
+    "text": "明天10:30领取证件3",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_040",
+    "text": "明天下午两点半整理报销材料3",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_041",
+    "text": "后天上午九点开项目会1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_042",
+    "text": "后天下午三点去医院复查1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_043",
+    "text": "后天晚上八点领取证件1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_044",
+    "text": "后天10:30整理报销材料1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_045",
+    "text": "后天下午两点半联系房东1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_046",
+    "text": "后天上午九点提交报名表1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_047",
+    "text": "后天下午三点参加线上课程1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_048",
+    "text": "后天晚上八点检查设备1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_049",
+    "text": "后天10:30开项目会2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_050",
+    "text": "后天下午两点半去医院复查2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_051",
+    "text": "后天上午九点领取证件2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_052",
+    "text": "后天下午三点整理报销材料2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_053",
+    "text": "后天晚上八点联系房东2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_054",
+    "text": "后天10:30提交报名表2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_055",
+    "text": "后天下午两点半参加线上课程2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_056",
+    "text": "后天上午九点检查设备2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_057",
+    "text": "后天下午三点开项目会3",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_058",
+    "text": "后天晚上八点去医院复查3",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_059",
+    "text": "后天10:30领取证件3",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_060",
+    "text": "后天下午两点半整理报销材料3",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "14:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_061",
+    "text": "周一上午九点开项目会边界1",
+    "expected": {
+      "dateKey": "2026-07-20",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_062",
+    "text": "周一下午三点去医院复查边界2",
+    "expected": {
+      "dateKey": "2026-07-20",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_063",
+    "text": "周一晚上八点领取证件边界3",
+    "expected": {
+      "dateKey": "2026-07-20",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_064",
+    "text": "周一10:30整理报销材料边界4",
+    "expected": {
+      "dateKey": "2026-07-20",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_065",
+    "text": "周二上午九点开项目会边界1",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_066",
+    "text": "周二下午三点去医院复查边界2",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_067",
+    "text": "周二晚上八点领取证件边界3",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_068",
+    "text": "周二10:30整理报销材料边界4",
+    "expected": {
+      "dateKey": "2026-07-14",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_069",
+    "text": "周三上午九点开项目会边界1",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_070",
+    "text": "周三下午三点去医院复查边界2",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_071",
+    "text": "周三晚上八点领取证件边界3",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_072",
+    "text": "周三10:30整理报销材料边界4",
+    "expected": {
+      "dateKey": "2026-07-15",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_073",
+    "text": "周四上午九点开项目会边界1",
+    "expected": {
+      "dateKey": "2026-07-16",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_074",
+    "text": "周四下午三点去医院复查边界2",
+    "expected": {
+      "dateKey": "2026-07-16",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_075",
+    "text": "周四晚上八点领取证件边界3",
+    "expected": {
+      "dateKey": "2026-07-16",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_076",
+    "text": "周四10:30整理报销材料边界4",
+    "expected": {
+      "dateKey": "2026-07-16",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_077",
+    "text": "周五上午九点开项目会边界1",
+    "expected": {
+      "dateKey": "2026-07-17",
+      "timeText": "09:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_078",
+    "text": "周五下午三点去医院复查边界2",
+    "expected": {
+      "dateKey": "2026-07-17",
+      "timeText": "15:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_079",
+    "text": "周五晚上八点领取证件边界3",
+    "expected": {
+      "dateKey": "2026-07-17",
+      "timeText": "20:00",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_080",
+    "text": "周五10:30整理报销材料边界4",
+    "expected": {
+      "dateKey": "2026-07-17",
+      "timeText": "10:30",
+      "precision": "day"
+    }
+  },
+  {
+    "id": "time_081",
+    "text": "下个月纪念事项1",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_082",
+    "text": "下个月纪念事项2",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_083",
+    "text": "下个月纪念事项3",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_084",
+    "text": "下个月纪念事项4",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_085",
+    "text": "下个月纪念事项5",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_086",
+    "text": "下个月纪念事项6",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_087",
+    "text": "下个月纪念事项7",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_088",
+    "text": "下个月纪念事项8",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_089",
+    "text": "下个月纪念事项9",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_090",
+    "text": "下个月纪念事项10",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "month"
+    }
+  },
+  {
+    "id": "time_091",
+    "text": "毕业后计划事项1",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_092",
+    "text": "毕业后计划事项2",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_093",
+    "text": "毕业后计划事项3",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_094",
+    "text": "毕业后计划事项4",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_095",
+    "text": "毕业后计划事项5",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_096",
+    "text": "毕业后计划事项6",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_097",
+    "text": "毕业后计划事项7",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_098",
+    "text": "毕业后计划事项8",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_099",
+    "text": "毕业后计划事项9",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  },
+  {
+    "id": "time_100",
+    "text": "毕业后计划事项10",
+    "expected": {
+      "dateKey": "",
+      "timeText": "",
+      "precision": "milestone"
+    }
+  }
+]

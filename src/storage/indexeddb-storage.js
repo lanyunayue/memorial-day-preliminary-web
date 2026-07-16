@@ -1,5 +1,9 @@
 (function(global){
-  var STORE_NAMES=['records','settings','conversations','subscriptions','feed_items','migrations','audit_log','quarantined_records'];
+  var STORE_NAMES=[
+    'records','settings','conversations','subscriptions','feed_items','migrations','audit_log','quarantined_records',
+    'temporal_drafts','temporal_nodes','temporal_edges','temporal_waiting','temporal_corrections','temporal_meta','temporal_tombstones',
+    'temporal_operations','temporal_operation_quarantine','temporal_locks','temporal_adaptation_rules'
+  ];
   var dbPromise=null;
   function requestResult(request){return new Promise(function(resolve,reject){request.onsuccess=function(){resolve(request.result);};request.onerror=function(){reject(request.error||new Error('indexeddb_request_failed'));};});}
   function open(){
@@ -20,7 +24,40 @@
   function count(store){return open().then(function(db){return requestResult(db.transaction(store,'readonly').objectStore(store).count());});}
   function put(store,value){return withTransaction([store],'readwrite',function(tx){tx.objectStore(store).put(value);return value;});}
   function remove(store,id){return withTransaction([store],'readwrite',function(tx){tx.objectStore(store).delete(id);return true;});}
-  function replaceRecords(records,quarantined){return withTransaction(['records','quarantined_records','audit_log'],'readwrite',function(tx){var recordStore=tx.objectStore('records');recordStore.clear();records.forEach(function(record){recordStore.put(record);});var quarantineStore=tx.objectStore('quarantined_records');(quarantined||[]).forEach(function(item){quarantineStore.put(item);});tx.objectStore('audit_log').put({id:'audit_'+Date.now().toString(36),type:'records_replace',count:records.length,quarantined:(quarantined||[]).length,at:new Date().toISOString()});return {count:records.length,quarantined:(quarantined||[]).length};});}
-  function migrateLegacy(records,quarantined,marker){return withTransaction(['records','quarantined_records','migrations','audit_log'],'readwrite',function(tx){var recordStore=tx.objectStore('records');recordStore.clear();records.forEach(function(record){recordStore.put(record);});var quarantineStore=tx.objectStore('quarantined_records');(quarantined||[]).forEach(function(item){quarantineStore.put(item);});tx.objectStore('migrations').put(marker);tx.objectStore('audit_log').put({id:'audit_'+Date.now().toString(36),type:'legacy_migration',count:records.length,quarantined:(quarantined||[]).length,at:new Date().toISOString()});return {count:records.length,quarantined:(quarantined||[]).length};});}
+  function replaceRecords(records,quarantined){
+    return withTransaction(['records','quarantined_records','audit_log'],'readwrite',function(tx){
+      var recordStore=tx.objectStore('records');
+      recordStore.clear();
+      records.forEach(function(record){recordStore.put(record);});
+      var quarantineStore=tx.objectStore('quarantined_records');
+      (quarantined||[]).forEach(function(item){quarantineStore.put(item);});
+      tx.objectStore('audit_log').put({
+        id:'audit_'+Date.now().toString(36),
+        type:'records_replace',
+        count:records.length,
+        quarantined:(quarantined||[]).length,
+        at:new Date().toISOString()
+      });
+      return {count:records.length,quarantined:(quarantined||[]).length};
+    });
+  }
+  function migrateLegacy(records,quarantined,marker){
+    return withTransaction(['records','quarantined_records','migrations','audit_log'],'readwrite',function(tx){
+      var recordStore=tx.objectStore('records');
+      recordStore.clear();
+      records.forEach(function(record){recordStore.put(record);});
+      var quarantineStore=tx.objectStore('quarantined_records');
+      (quarantined||[]).forEach(function(item){quarantineStore.put(item);});
+      tx.objectStore('migrations').put(marker);
+      tx.objectStore('audit_log').put({
+        id:'audit_'+Date.now().toString(36),
+        type:'legacy_migration',
+        count:records.length,
+        quarantined:(quarantined||[]).length,
+        at:new Date().toISOString()
+      });
+      return {count:records.length,quarantined:(quarantined||[]).length};
+    });
+  }
   global.ShikeIndexedDb=Object.freeze({open:open,get:get,getAll:getAll,count:count,put:put,remove:remove,replaceRecords:replaceRecords,migrateLegacy:migrateLegacy,stores:STORE_NAMES.slice()});
 })(window);
