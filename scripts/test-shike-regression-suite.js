@@ -268,7 +268,32 @@ const tests = [
     name: 'Agent security',
     script: 'test-shike-agent-security.js',
     expected: 'Agent security regression passed: 12/12'
-  }
+  },
+  {
+    name: 'Home initial layout',
+    script: 'test-shike-home-initial-layout.js',
+    expected: 'Home initial layout regression passed'
+  },
+  {
+    name: 'Sprite create intent',
+    script: 'test-shike-sprite-create-intent.js',
+    expected: 'Sprite create intent tests passed'
+  },
+  {
+    name: 'Record actions responsive',
+    script: 'test-shike-record-actions-responsive.js',
+    expected: 'Responsive actions tests passed: 45/45'
+  },
+  {
+    name: 'Agent context proactive',
+    script: 'test-shike-agent-context-proactive.js',
+    expected: 'Agent context tests passed: 65/65'
+  },
+  {
+    name: 'Watch center',
+    script: 'test-shike-watch-center.js',
+    expected: 'Watch center regression passed: 37/37'
+  },
 ];
 
 [

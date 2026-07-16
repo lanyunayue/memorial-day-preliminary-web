@@ -36,7 +36,7 @@ add('no trading advice claim', () => assert(!html.includes('智能交易建议')
 add('demo route entry exists', () => assert(html.includes('data-i18n="demoRouteEntryTitle"') && html.includes('id="demoRouteBlock"'), 'demo route missing'));
 add('feature hub exists', () => assert(html.includes('id="featureHubSection"') && html.includes('data-feature-action="updates"'), 'feature hub missing'));
 add('personalization remains before feature hub', () => assert(html.indexOf('id="personalizeSection"') > 0 && html.indexOf('id="personalizeSection"') < html.indexOf('id="featureHubSection"'), 'personalization order changed'));
-add('record actions still exist', () => assert((html+style+script).includes('record-more-btn') && script.includes('copyRecordText') && script.includes('togglePin'), 'record actions missing'));
+add('record actions still exist', () => assert((html+style+script).includes('rc-more-btn') && script.includes('copyRecordText') && script.includes('togglePin') && script.includes('toggleCardMoreMenu'), 'record actions missing'));
 add('home remains concise', () => assert(html.includes('id="quickInput"') && html.includes('id="todayOverviewBlock"') && html.includes('home-muted-entry'), 'home core missing'));
 add('dark theme readable tokens exist', () => assert(style.includes('.theme-dot.t-night') && style.includes('[data-theme="night"]'), 'night theme tokens missing'));
 add('mobile styles exist', () => assert(style.includes('@media (max-width:767px)') && style.includes('safe-bottom'), 'mobile styles missing'));
