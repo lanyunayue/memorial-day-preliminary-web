@@ -148,8 +148,6 @@
       await remember('assistant',doneMsg,{acknowledged:true});
       return {ok:true,message:doneMsg};
     }
-<<<<<<< HEAD
-=======
     if(route.intent==='unknown'&&global.ShikeRetrievalEngine){
       var classification=global.ShikeRetrievalEngine.classify(text);
       if(classification.kind==='network'){
@@ -159,7 +157,6 @@
         return retrieval;
       }
     }
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
     ctx=ns.contextBuilder.build();
     var plan=ns.planner.plan(route,ctx);
     if(!plan.ok){
@@ -224,10 +221,7 @@
       ns.conversationRepository.clear();
       if(ns.sessionContext)ns.sessionContext.clear();
     },
-<<<<<<< HEAD
-=======
     clearContext:function(){if(ns.sessionContext)ns.sessionContext.clear();},
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
     localRules:true
   });
 })(window,window.ShikeAgentModules);

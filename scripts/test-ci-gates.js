@@ -44,6 +44,23 @@ try {
   fs.rmSync(fixture, { recursive: true, force: true });
 }
 
+const lintFixture = fs.mkdtempSync(path.join(os.tmpdir(), 'shike-lint-gate-'));
+try {
+  fs.mkdirSync(path.join(lintFixture, 'src'));
+  fs.writeFileSync(
+    path.join(lintFixture, 'src', 'broken.js'),
+    '<<<<<<< HEAD\nconst value = 1;\n=======\nconst value = 2;\n>>>>>>> branch\n'
+  );
+  const conflictMarkers = run('lint-check.js', [], { SHIKE_PROJECT_ROOT: lintFixture });
+  check(
+    'lint rejects unresolved merge conflict markers',
+    conflictMarkers.status !== 0 && /unresolved merge conflict marker/.test(conflictMarkers.stdout),
+    conflictMarkers.stderr || conflictMarkers.stdout
+  );
+} finally {
+  fs.rmSync(lintFixture, { recursive: true, force: true });
+}
+
 const optionalE2e = run('test-e2e-runner.js');
 check(
   'optional local E2E reports SKIPPED explicitly',

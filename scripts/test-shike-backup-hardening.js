@@ -150,11 +150,7 @@ add('new backup JSON includes metadata', () => {
   setRecords([record({ id: 'a' }), record({ id: 'b', title: u('\\u5988\\u5988\\u751f\\u65e5') })]);
   const payload = call('buildBackupPayload');
   assertEqual(payload.app, 'shike', 'backup app');
-<<<<<<< HEAD
-  assertEqual(payload.appVersion, 'v1.4.0', 'backup appVersion');
-=======
   assertEqual(payload.appVersion, 'v2.2.0-alpha3', 'backup appVersion');
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   assertEqual(payload.schemaVersion, 2, 'backup schemaVersion');
   assert(payload.exportedAt, 'backup exportedAt');
   assertEqual(payload.recordCount, 2, 'backup recordCount');

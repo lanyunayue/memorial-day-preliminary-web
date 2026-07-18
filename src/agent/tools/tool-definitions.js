@@ -21,11 +21,7 @@
     throw new Error('record_not_found');
   }
   ns.createTools=function(){return [
-<<<<<<< HEAD
-    {name:'create_record',describe:'创建记录',validate:function(a){return !!String(a&&a.text||a&&a.title||'').trim();},execute:function(a,ctx){
-=======
     {name:'create_record',describe:'创建记录',validate:function(a){return !!String(a&&a.text||a&&a.title||'').trim();},execute:async function(a,ctx){
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       var text=a.text||a.title||'';var sourceText=a.sourceText||text;var parsed=null;
       if(window.ShikeSpriteCreateIntent){
         parsed=window.ShikeSpriteCreateIntent.extract(sourceText);
@@ -39,9 +35,6 @@
       if(a.dateKey)parsed.dateKey=a.dateKey;
       if(a.timeText)parsed.timeText=a.timeText;
       if(a.temporalPhrase)parsed.temporalPhrase=a.temporalPhrase;
-<<<<<<< HEAD
-      var saved=saveParsedRecord(parsed,sourceText);
-=======
       if(a.title)parsed.title=a.title;
       var saved=saveParsedRecord(parsed,sourceText);
       if(!saved)throw new Error('records_write_failed');
@@ -53,7 +46,6 @@
           throw new Error('records_write_failed');
         }
       }
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       if(ns.sessionContext)ns.sessionContext.setLastCreated(saved);
       renderCurrent();
       return {message:'已帮你记住：'+(parsed.title||text),record:saved};
@@ -77,27 +69,11 @@
     }},
     {name:'search_records',describe:'搜索记录',validate:function(a){return !!String(a&&a.query||'').trim();},execute:function(a){var matches=find(a.query);if(ns.sessionContext&&matches.length>0)ns.sessionContext.setLastReferenced(matches[0]);return {message:'找到 '+matches.length+' 条记录',records:matches.map(function(r){return {id:r.id,title:r.title,dateKey:r.dateKey||''};})};}},
     {name:'summarize_today',describe:'查看今天',validate:function(){return true;},execute:function(){var data=getTodayOverviewData();return {message:'今天有 '+((data&&data.today&&data.today.length)||0)+' 条记录',data:data};}},
-    {name:'open_page',describe:'打开页面',validate:function(a){return ['home','all','calendar','import','my','watch'].includes(a&&a.page);},execute:function(a){switchPage(a.page);return {message:'已打开'+(a.page==='watch'?'关注中心':a.page)};}},
+    {name:'open_page',describe:'打开页面',validate:function(a){return ['home','all','calendar','import','my'].includes(a&&a.page);},execute:function(a){switchPage(a.page);return {message:'已打开'+a.page};}},
     {name:'batch_parse',describe:'批量整理',validate:function(a){return !!String(a&&a.text||'').trim();},execute:function(a){captureBatchFromInput(a.text);return {message:'已生成批量草稿'};}},
     {name:'export_calendar',describe:'导出日历',validate:function(){return true;},execute:function(){exportIcsFile();return {message:'已开始导出日历'};}},
     {name:'export_backup',describe:'备份数据',validate:function(){return true;},execute:function(){exportBackupFile();return {message:'已开始导出备份'};}},
     {name:'change_theme',describe:'切换主题',validate:function(a){return ['paper','night'].includes(a&&a.theme);},execute:function(a){settings.theme=a.theme;saveSettings(settings);applyTheme(a.theme);return {message:'主题已切换'};}},
-<<<<<<< HEAD
-    {name:'show_release_notes',describe:'查看更新',validate:function(){return true;},execute:function(){showReleaseNotes(true);return {message:'已打开更新说明'};}},
-    {name:'manage_subscription',describe:'新增关注',validate:function(a){return !!String(a&&a.keyword||'').trim();},execute:function(a){
-      var keyword=String(a.keyword||'').trim();
-      if(!keyword)throw new Error('invalid_arguments');
-      if(keyword.length>50)throw new Error('keyword_too_long');
-      if(!window.ShikeWatchCenter)throw new Error('watch_center_not_available');
-      var result=window.ShikeWatchCenter.addWatchKeyword(keyword);
-      if(typeof updateWatchBadge==='function')updateWatchBadge();
-      if(result.duplicate){
-        return {message:'你已经关注了「'+keyword+'」',keyword:keyword,duplicate:true};
-      }
-      return {message:'已添加关注：'+keyword+'（可在关注中心管理）',keyword:keyword,duplicate:false};
-    }}
-=======
     {name:'show_release_notes',describe:'查看更新',validate:function(){return true;},execute:function(){showReleaseNotes(true);return {message:'已打开更新说明'};}}
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   ];};
 })(window.ShikeAgentModules);

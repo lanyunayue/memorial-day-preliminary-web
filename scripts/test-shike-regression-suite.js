@@ -267,11 +267,7 @@ const tests = [
   {
     name: 'Agent security',
     script: 'test-shike-agent-security.js',
-<<<<<<< HEAD
-    expected: 'Agent security regression passed: 12/12'
-=======
     expected: 'Agent security regression passed: 11/11'
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   },
   {
     name: 'Home initial layout',
@@ -281,11 +277,7 @@ const tests = [
   {
     name: 'Sprite create intent',
     script: 'test-shike-sprite-create-intent.js',
-<<<<<<< HEAD
-    expected: 'Sprite create intent tests passed'
-=======
     expected: 'Sprite create intent tests passed: 102/102'
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   },
   {
     name: 'Record actions responsive',
@@ -298,11 +290,6 @@ const tests = [
     expected: 'Agent context tests passed: 65/65'
   },
   {
-<<<<<<< HEAD
-    name: 'Watch center',
-    script: 'test-shike-watch-center.js',
-    expected: 'Watch center regression passed: 37/37'
-=======
     name: 'v1.5 bear workbench',
     script: 'test-shike-v150-bear-workbench.js',
     expected: 'v1.5 bear workbench regression passed'
@@ -346,7 +333,6 @@ const tests = [
     name: 'Test integrity',
     script: 'test-shike-test-integrity.js',
     expectedPattern: /Test Integrity: (\d+) checks, \1 passed, 0 failed/
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   },
 ];
 
