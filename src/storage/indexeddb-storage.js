@@ -24,6 +24,13 @@
   function getAll(store){return open().then(function(db){return requestResult(db.transaction(store,'readonly').objectStore(store).getAll());});}
   function count(store){return open().then(function(db){return requestResult(db.transaction(store,'readonly').objectStore(store).count());});}
   function put(store,value){return withTransaction([store],'readwrite',function(tx){tx.objectStore(store).put(value);return value;});}
+  function putIfAbsent(store,value){
+    return open().then(function(db){return new Promise(function(resolve,reject){
+      var result=null;var tx=db.transaction(store,'readwrite');var objectStore=tx.objectStore(store);var request=objectStore.get(value.id);
+      request.onsuccess=function(){if(request.result){result={created:false,value:request.result};return;}objectStore.put(value);result={created:true,value:value};};
+      tx.oncomplete=function(){resolve(result);};tx.onerror=function(){reject(tx.error||new Error('indexeddb_put_if_absent_failed'));};tx.onabort=function(){reject(tx.error||new Error('indexeddb_put_if_absent_aborted'));};
+    });});
+  }
   function remove(store,id){return withTransaction([store],'readwrite',function(tx){tx.objectStore(store).delete(id);return true;});}
   function replaceRecords(records,quarantined){
     return withTransaction(['records','quarantined_records','audit_log'],'readwrite',function(tx){
@@ -116,5 +123,20 @@
       tx.onabort=function(){if(!verificationFailed)reject(tx.error||new Error('portable_import_transaction_aborted'));};
     });});
   }
-  global.ShikeIndexedDb=Object.freeze({open:open,get:get,getAll:getAll,count:count,put:put,remove:remove,replaceRecords:replaceRecords,migrateLegacy:migrateLegacy,importPortable:importPortable,stores:STORE_NAMES.slice()});
+  function applyDeLoad(payload){
+    payload=payload||{};
+    return withTransaction(['records','portable_records','audit_log'],'readwrite',function(tx){
+      (payload.records||[]).forEach(function(record){tx.objectStore('records').put(record);});
+      (payload.portableEntities||[]).forEach(function(entity){tx.objectStore('portable_records').put(entity);});
+      tx.objectStore('audit_log').put({
+        id:'audit_'+String(payload.operationId||Date.now().toString(36)),
+        type:'deload_commit',
+        action:String(payload.action||''),
+        targetRecordIds:(payload.targetRecordIds||[]).map(String),
+        at:new Date().toISOString()
+      });
+      return {recordCount:(payload.records||[]).length,portableCount:(payload.portableEntities||[]).length,operationId:payload.operationId};
+    });
+  }
+  global.ShikeIndexedDb=Object.freeze({open:open,get:get,getAll:getAll,count:count,put:put,putIfAbsent:putIfAbsent,remove:remove,replaceRecords:replaceRecords,migrateLegacy:migrateLegacy,importPortable:importPortable,applyDeLoad:applyDeLoad,stores:STORE_NAMES.slice()});
 })(window);

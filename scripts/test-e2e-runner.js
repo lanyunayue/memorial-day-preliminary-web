@@ -14,6 +14,8 @@ const chronosStress = args.has('--chronos-stress') || process.env.SHIKE_CHRONOS_
 const stressOnly = args.has('--stress-only') || process.env.SHIKE_CHRONOS_STRESS_ONLY === '1';
 const validationOnly = args.has('--validation-only') || process.env.SHIKE_VALIDATION_ONLY === '1';
 const portableOnly = args.has('--portable-only') || process.env.SHIKE_PORTABLE_ONLY === '1';
+const multiTabOnly = args.has('--multi-tab-only') || process.env.SHIKE_MULTI_TAB_ONLY === '1';
+const runtimeOnly = args.has('--runtime-only') || process.env.SHIKE_RUNTIME_ONLY === '1';
 const configuredArtifactDir = artifactArg
   ? path.resolve(V, artifactArg.slice('--artifact-dir='.length))
   : process.env.SHIKE_ARTIFACT_DIR;
@@ -306,6 +308,10 @@ async function runCdpScripts(env, artifactDir) {
       env: {}
     },
     {
+      name: 'test-shike-deload-runtime-cdp.js',
+      env: {}
+    },
+    {
       name: 'test-product-validation-runtime-cdp.js',
       env: {}
     },
@@ -321,7 +327,9 @@ async function runCdpScripts(env, artifactDir) {
   const stressScripts = [{name:'test-chronos-indexeddb-stress-cdp.js',env:{}}];
   const validationScripts=regularScripts.filter((script)=>script.name==='test-product-validation-runtime-cdp.js');
   const portableScripts=regularScripts.filter((script)=>script.name==='test-shike-portable-export-runtime-cdp.js');
-  const scripts = portableOnly ? portableScripts : validationOnly ? validationScripts : stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
+  const multiTabScripts=regularScripts.filter((script)=>script.name==='test-shike-multi-tab-runtime-cdp.js');
+  const runtimeScripts=regularScripts.filter((script)=>script.name==='test-shike-runtime-cdp.js');
+  const scripts = portableOnly ? portableScripts : validationOnly ? validationScripts : multiTabOnly ? multiTabScripts : runtimeOnly ? runtimeScripts : stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
   for (let index = 0; index < scripts.length; index++) {
     const script = scripts[index];
     if (index > 0) {

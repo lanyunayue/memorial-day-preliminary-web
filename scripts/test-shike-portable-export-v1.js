@@ -41,7 +41,7 @@ async function main() {
   assert(/^[0-9a-f-]{36}$/.test(uuidA) && uuidA[14] === '5', 'deterministic ID must be a version 5 UUID');
 
   const legacyBundle = await portable.buildBundle({
-    appVersion: 'v2.2.0-alpha3',
+    appVersion: 'v2.2.0-alpha4',
     timezone: 'Asia/Shanghai',
     exportedAt: '2026-07-18T08:00:00.000Z',
     settings: { theme: 'paper', language: 'zh-CN' },
@@ -63,7 +63,7 @@ async function main() {
   originalPlan.businessRecords[0].cardStyle = 'normal';
   originalPlan.businessRecords[0].coverPreset = 0;
   const idempotent = await portable.buildBundle({
-    appVersion: 'v2.2.0-alpha3',
+    appVersion: 'v2.2.0-alpha4',
     timezone: 'Asia/Shanghai',
     exportedAt: '2026-07-20T00:00:00.000Z',
     settings: {},
@@ -90,7 +90,7 @@ async function main() {
   assert(unsupportedPlan.businessRecords.length === 0, 'unsupported domain records must not be invented as legacy records');
   assert(unsupportedPlan.portableEntities[0].canonicalRecord.futureRecordField, 'unknown record fields must be preserved');
   const preservedBundle = await portable.buildBundle({
-    appVersion: 'v2.2.0-alpha3',
+    appVersion: 'v2.2.0-alpha4',
     timezone: 'UTC',
     exportedAt: '2026-07-20T00:00:00.000Z',
     settings: {},

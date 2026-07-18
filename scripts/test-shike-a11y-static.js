@@ -54,7 +54,7 @@ add('document metadata is screen-reader and mobile friendly', () => {
   assert(/<html\s+lang=["']zh-CN["']/.test(html), 'html lang should be zh-CN');
   assert(/<meta\s+charset=["']UTF-8["']>/i.test(html), 'charset should be UTF-8');
   assert(/<meta\s+name=["']viewport["'][^>]+width=device-width/.test(html), 'viewport should include width=device-width');
-  assert(/<title>时刻 - 你的贴心记事助手<\/title>/.test(html), 'title should be readable Chinese');
+  assert(/<title>时刻·个人负荷与恢复助手<\/title>/.test(html), 'title should be readable Chinese');
   assert(/<meta\s+name=["']theme-color["']\s+content=["']#[0-9a-fA-F]{6}["']/.test(html), 'theme-color meta should exist');
 });
 

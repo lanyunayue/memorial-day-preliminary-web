@@ -5,7 +5,7 @@
 /* ========== i18n ========== */
 var I18N={
   'zh-CN':{
-    appName:'时刻',tagline:'你的贴心记事助手',save:'保存',cancel:'取消',delete:'删除',edit:'编辑',
+    appName:'时刻',tagline:'个人负荷与恢复助手',save:'保存',cancel:'取消',delete:'删除',edit:'编辑',
     inputPlaceholder:'试着写下需要记住的事情',inputHint:'可识别时间、重复和纪念日，保存后自动进入日历',
     demoPrefix:'不知道写什么？',demoAction:'体验示例',demoAlready:'示例已经在这里了',
     demoAdded:'已添加 {n} 条示例记录，可以在首页、全部和日历查看',
@@ -24,7 +24,7 @@ var I18N={
     spriteQuietMessage:'我会在这里帮你留意最近的时刻。',
     spriteTodayLine:'今日 {n} 条',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以帮你把一句话变成时刻。',spriteTip2:'今天有什么安排，可以先看看首页。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要记录记得导出备份。',spriteTip5:'有日期的记录可以导出到系统日历。',
-    navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',
+    navHome:'今天',navCal:'日历',navAll:'全部',navAgent:'时刻精灵',navReview:'回顾',navImport:'整理',navMy:'我的',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
     close:'关闭',confirm:'确定',details:'详情',setLarge:'大卡片',setNormal:'普通',setBg:'换背景',
@@ -114,7 +114,7 @@ var I18N={
     noRecordsToday:'今日暂无记录',eventsToday:'今日有 {n} 件事',calQuickAddPh:'为这一天添加记录',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'提醒设置',reminderSettingsHint:'网页版提醒依赖浏览器环境。页面关闭后提醒不一定可靠，重要日程建议导出 .ics 到系统日历。',defaultLeadTime:'默认提前时间',atEventTime:'准时',permissionSettings:'权限设置',permissionSettingsHint:'查看和管理时刻使用的浏览器权限',microphonePerm:'麦克风',pwaInstallStatus:'PWA 安装',requestMic:'请求麦克风权限',requestStoragePersist:'请求持久化存储',dataBackup:'数据与备份',storagePersist:'持久化存储'},
   'zh-TW':{
-    appName:'時刻',tagline:'你的貼心記事助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
+    appName:'時刻',tagline:'個人負荷與恢復助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
     demoPrefix:'不知道寫什麼？',demoAction:'體驗示例',demoAlready:'示例已經在這裡了',
     demoAdded:'已新增 {n} 條示例記錄，可以在首頁、全部和日曆查看',
@@ -133,7 +133,7 @@ var I18N={
     spriteQuietMessage:'我會在這裡幫你留意最近的時刻。',
     spriteTodayLine:'今日 {n} 條',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以幫你把一句話變成時刻。',spriteTip2:'今天有什麼安排，可以先看看首頁。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要記錄記得匯出備份。',spriteTip5:'有日期的記錄可以匯出到系統日曆。',
-    navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',
+    navHome:'今天',navCal:'日曆',navAll:'全部',navAgent:'時刻精靈',navReview:'回顧',navImport:'整理',navMy:'我的',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
     close:'關閉',confirm:'確定',details:'詳情',setLarge:'大卡片',setNormal:'普通',setBg:'換背景',
@@ -205,7 +205,7 @@ var I18N={
     noRecordsToday:'今日暫無記錄',eventsToday:'今日有 {n} 件事',calQuickAddPh:'為這一天新增記錄',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'提醒設定',reminderSettingsHint:'網頁版提醒依賴瀏覽器環境。頁面關閉後提醒不一定可靠，重要日程建議匯出 .ics 到系統日曆。',defaultLeadTime:'默認提前時間',atEventTime:'準時',permissionSettings:'權限設定',permissionSettingsHint:'查看和管理時刻使用的瀏覽器權限',microphonePerm:'麥克風',pwaInstallStatus:'PWA 安裝',requestMic:'請求麥克風權限',requestStoragePersist:'請求持久化存儲',dataBackup:'數據與備份',storagePersist:'持久化存儲'},
   'en':{
-    appName:'Shike',tagline:'Your personal time keeper',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
+    appName:'Shike',tagline:'Personal load and recovery assistant',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
     demoPrefix:'Not sure what to add?',demoAction:'Try examples',demoAlready:'The examples are already here',
     demoAdded:'Added {n} example records. View them on Home, All, and Calendar.',
@@ -224,7 +224,7 @@ var I18N={
     spriteQuietMessage:'I will keep an eye on your upcoming moments here.',
     spriteTodayLine:'Today {n}',spriteNextLine:'Next: {title} · {when}',
     spriteTip1:'I can turn one sentence into a Shike moment.',spriteTip2:'Start with Home to see what is due today.',spriteTip3:'A paragraph of chat can be organized in batch.',spriteTip4:'Export backups for important records.',spriteTip5:'Dated records can be exported to your system calendar.',
-    navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',
+    navHome:'Today',navCal:'Calendar',navAll:'All',navAgent:'Shike Agent',navReview:'Review',navImport:'Organize',navMy:'Me',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
     close:'Close',confirm:'OK',details:'Details',setLarge:'Large Card',setNormal:'Normal',setBg:'Background',
@@ -305,7 +305,7 @@ var I18N={
     noRecordsToday:'Nothing today',eventsToday:'{n} events today',calQuickAddPh:'Add a record for this day',
     jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec',reminderSettings:'Reminder Settings',reminderSettingsHint:'Web reminders depend on the browser environment. Reminders may not be reliable when the page is closed. Export important schedules as .ics to your system calendar.',defaultLeadTime:'Default Lead Time',atEventTime:'At event time',permissionSettings:'Permissions',permissionSettingsHint:'View and manage browser permissions used by Shike',microphonePerm:'Microphone',pwaInstallStatus:'PWA Install',requestMic:'Request Microphone',requestStoragePersist:'Request Persistent Storage',dataBackup:'Data & Backup',storagePersist:'Persistent Storage'},
   'ja':{
-    appName:'時刻',tagline:'あなたの大切な時間を記録',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
+    appName:'時刻',tagline:'個人の負荷と回復を支えるアシスタント',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
     demoPrefix:'何を書くか迷ったら',demoAction:'例を試す',demoAlready:'例はすでに追加されています',
     demoAdded:'{n} 件のサンプル記録を追加しました。ホーム・一覧・カレンダーで確認できます',
@@ -324,7 +324,7 @@ var I18N={
     spriteQuietMessage:'ここで近い時刻をそっと見守ります。',
     spriteTodayLine:'今日 {n} 件',spriteNextLine:'次：{title} · {when}',
     spriteTip1:'一文を時刻に変えるお手伝いができます。',spriteTip2:'今日の予定はまずホームで確認できます。',spriteTip3:'チャットの一段落もまとめて整理できます。',spriteTip4:'大事な記録はバックアップを書き出しましょう。',spriteTip5:'日付付き記録はシステムカレンダーへ書き出せます。',
-    navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',
+    navHome:'今日',navCal:'カレンダー',navAll:'すべて',navAgent:'時刻精霊',navReview:'振り返り',navImport:'整理',navMy:'マイ',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
     close:'閉じる',confirm:'OK',details:'詳細',setLarge:'大カード',setNormal:'通常',setBg:'背景',
@@ -2515,6 +2515,10 @@ function updatePermStatus(){
 /* ========== Page navigation ========== */
 var currentPage='home';
 function switchPage(page){
+  var collapseSprite=page!=='agent'&&window.matchMedia&&window.matchMedia('(max-width:767px)').matches;
+  var spriteRoot=collapseSprite?$('timeSprite'):null;
+  if(spriteRoot)spriteRoot.classList.add('instant-collapse');
+  if(collapseSprite)saveTimeSpriteCollapsed(true);
   currentPage=page;
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   var pg=$('page-'+page);if(pg)pg.classList.add('active');
@@ -2525,10 +2529,72 @@ function switchPage(page){
   if(page==='home')renderHome();
   else if(page==='calendar')renderCalendar();
   else if(page==='all')renderAll();
+  else if(page==='agent')renderAgentPage();
+  else if(page==='review')renderReviewPage();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
   renderTimeSprite();
+  if(spriteRoot)setTimeout(function(){spriteRoot.classList.remove('instant-collapse');},50);
   window.scrollTo(0,0);
+}
+
+function renderAgentPage(){
+  saveTimeSpriteCollapsed(false);
+  var workbench=$('agentWorkbench');if(workbench)workbench.open=true;
+}
+function renderReviewPage(){
+  var summary=$('reviewLoadSummary');
+  if(summary&&window.ShikeDeLoad){
+    var model=ShikeDeLoad.preview(records,new Date());
+    summary.innerHTML='<div><span>当前负荷</span><strong>'+escHtml(model.band)+'</strong><small>按今天到期数量判断</small></div>'+
+      '<div><span>今天及逾期</span><strong>'+model.count+'</strong><small>未自动改动任何状态</small></div>'+
+      '<div><span>其中逾期</span><strong>'+model.overdue+'</strong><small>逾期不等于完成</small></div>';
+  }
+  if(window.ShikeChronosWeb)ShikeChronosWeb.renderReviews();
+}
+function deLoadConfirmCopy(action){
+  var messages={
+    CANCEL:'确认取消这条记录？取消与删除不同，记录会保留。',
+    DEFER:'确认把这条记录延期到明天？只有这次明确选择会改变日期。',
+    LOWER_STANDARD:'确认把完成标准调整为“够用即可”？记录不会被标记完成。',
+    RENEGOTIATE:'确认标记为需要重新协商？记录仍保持未完成。',
+    KEEP_ONLY_ONE:'确认今晚只保留这一项？其他到期记录只会标记为“今晚不做”，不会取消。',
+    SAVE_AND_END_DAY:'确认保存并结束今天？未完成记录不会被批量标记完成。'
+  };
+  return messages[action]||'确认执行这个降载动作？';
+}
+function openDeLoad(){
+  if(!window.ShikeDeLoad){showToast('降载模块暂时不可用','warn');return;}
+  var model=ShikeDeLoad.preview(records,new Date());
+  var body='<div class="deload-overview"><div><span>当前负荷</span><strong>'+escHtml(model.band)+'</strong></div><div><span>今天及逾期</span><strong>'+model.count+'</strong></div><div><span>其中逾期</span><strong>'+model.overdue+'</strong></div></div>';
+  if(!model.candidates.length){body+='<div class="deload-empty">今天没有需要降载的到期记录。这里不会用默认值替你制造负荷。</div>';}
+  else{
+    body+='<div class="deload-candidates">'+model.candidates.slice(0,8).map(function(record){return '<div class="deload-candidate"><div class="deload-candidate-title">'+escHtml(record.title||record.rawText||record.note||'未命名记录')+'</div><div class="deload-candidate-meta">'+escHtml(record.dateKey||'')+'</div><div class="deload-candidate-actions"><button type="button" data-deload-action="KEEP_ONLY_ONE" data-record-id="'+escAttr(record.id)+'">今晚只留这项</button><button type="button" data-deload-action="DEFER" data-record-id="'+escAttr(record.id)+'">明天再处理</button><button type="button" data-deload-action="LOWER_STANDARD" data-record-id="'+escAttr(record.id)+'">降低标准</button><button type="button" data-deload-action="RENEGOTIATE" data-record-id="'+escAttr(record.id)+'">重新协商</button><button type="button" data-deload-action="CANCEL" data-record-id="'+escAttr(record.id)+'">取消事项</button></div></div>';}).join('')+'</div>';
+  }
+  var footer=model.candidates.length?'<button class="btn-cancel" type="button" id="deLoadCloseBtn">返回</button><button class="btn-primary" type="button" id="deLoadEndDayBtn">保存并结束今天</button>':'<button class="btn-primary" type="button" id="deLoadCloseBtn">关闭</button>';
+  openDrawer('一键降载',body,footer);
+  document.querySelectorAll('[data-deload-action]').forEach(function(button){button.addEventListener('click',function(){requestDeLoadAction(button.dataset.deloadAction,button.dataset.recordId);});});
+  b('deLoadCloseBtn','click',closeDrawer);
+  b('deLoadEndDayBtn','click',function(){requestDeLoadAction('SAVE_AND_END_DAY','');});
+}
+function requestDeLoadAction(action,targetId){
+  showConfirm('确认降载动作',deLoadConfirmCopy(action),'确认执行','返回',function(){executeDeLoadAction(action,targetId);});
+}
+async function executeDeLoadAction(action,targetId){
+  try{
+    if(!window.ShikeIndexedDb||typeof ShikeIndexedDb.applyDeLoad!=='function')throw new Error('deload_storage_unavailable');
+    var status=window.ShikeLocalFirst&&ShikeLocalFirst.getStatus();
+    if(status&&status.mode!=='indexeddb')throw new Error('deload_storage_not_ready');
+    var commit=async function(){
+      var result=ShikeDeLoad.apply(records,action,targetId||null,new Date());
+      await ShikeIndexedDb.applyDeLoad({records:result.recordsToPersist,portableEntities:result.portableEntities,operationId:result.operationId,action:action,targetRecordIds:result.affectedRecordIds});
+      records=result.records;
+      ShikeLegacyStorage.setJson(STORAGE_KEY,records);saveLastGoodRecords(records);
+      closeDrawer();renderCurrent();showToast('降载选择已保存','success');
+    };
+    if(navigator.locks&&typeof navigator.locks.request==='function')await navigator.locks.request('shike-deload-write',commit);
+    else await commit();
+  }catch(error){showToast('降载未执行，请确认本地数据仓库可用','error');}
 }
 
 /* ========== Has records state ========== */
@@ -3422,6 +3488,8 @@ function renderCurrent(){
   if(currentPage==='home')renderHome();
   else if(currentPage==='all')renderAll();
   else if(currentPage==='calendar')renderCalendar();
+  else if(currentPage==='agent')renderAgentPage();
+  else if(currentPage==='review')renderReviewPage();
   else if(currentPage==='my')renderMy();
   renderTimeSprite();
 }
@@ -3937,6 +4005,11 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(){switchPage(n.dataset.page);});
   });
+  b('deLoadEntryBtn','click',openDeLoad);
+  b('reviewDeLoadBtn','click',openDeLoad);
+  b('agentPrimaryDeLoadBtn','click',openDeLoad);
+  b('timeSpriteDeLoadBtn','click',openDeLoad);
+  b('agentPrimaryInputBtn','click',function(){saveTimeSpriteCollapsed(false);var input=$('agentInput');if(input)setTimeout(function(){input.focus();},60);});
   // Calendar nav
   b('calPrev','click',function(){calViewDate.setMonth(calViewDate.getMonth()-1);renderCalendar();});
   b('calNext','click',function(){calViewDate.setMonth(calViewDate.getMonth()+1);renderCalendar();});
@@ -4156,6 +4229,7 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
     ShikeChronosWeb.init({
       getRecords:function(){return records;},
       createRecordId:function(){return genId();},
+      createRecordIdForDraft:function(draftId){return 'record_'+String(draftId||'').replace(/[^a-zA-Z0-9_-]/g,'_');},
       prepareRecord:function(draft,id){return normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,function(){return id||genId();}));},
       saveRecord:function(draft,forcedId){
         var item=normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,function(){return forcedId||genId();}));

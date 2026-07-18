@@ -470,9 +470,14 @@
         }
     }
 
-    /* ------------------------------------------------------------------ *
-     * Export
-     * ------------------------------------------------------------------ */
+// SECURITY QUARANTINE v2.0.0-rc5.1: Remote sync disabled due to crypto design flaws
+push = function(){ return Promise.resolve({status:'sync_security_quarantined',count:0}); };
+pull = function(){ return Promise.resolve({status:'sync_security_quarantined',operations:[]}); };
+getStatus = function(){ return {lastSync:null,pending:0,status:'security-quarantined',enabled:false,endpoint:''}; };
+setEndpoint = function(){ try{localStorage.removeItem(ENDPOINT_KEY);}catch(error){} endpoint=''; return false; };
+enable = function(){ return false; };
+disable = function(){ return true; };
+isEnabled = function(){ return false; };
 
     global.ShikeSyncClient = {
         push: push,
@@ -483,17 +488,5 @@
         isEnabled: isEnabled,
         setEndpoint: setEndpoint
     };
-
-// SECURITY QUARANTINE v2.0.0-rc5.1: Remote sync disabled due to crypto design flaws
-var _orig_push = push;
-var _orig_pull = pull;
-var _orig_setEndpoint = setEndpoint;
-var _orig_enable = enable;
-push = function(){ return Promise.resolve({status:'sync_security_quarantined',count:0}); };
-pull = function(){ return Promise.resolve({status:'sync_security_quarantined',operations:[]}); };
-setEndpoint = function(){ return false; };
-enable = function(){ return false; };
-disable = function(){ return true; };
-isEnabled = function(){ return false; };
 
 })(typeof window !== 'undefined' ? window : this);

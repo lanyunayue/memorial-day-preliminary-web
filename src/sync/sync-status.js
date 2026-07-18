@@ -93,14 +93,11 @@
      * @throws {Error} When `mode` is not a valid value.
      */
     function setSyncMode(mode) {
-        try {
-            if (mode !== 'local' && mode !== 'encrypted-sync') {
-                throw new Error('Invalid sync mode: ' + mode + '. Expected "local" or "encrypted-sync".');
-            }
-            localStorage.setItem(MODE_KEY, mode);
-        } catch (e) {
-            throw e;
+        if (mode !== 'local' && mode !== 'disabled') {
+            throw new Error('Remote sync is security quarantined. Only local mode is available.');
         }
+        try{localStorage.setItem(MODE_KEY,'disabled');localStorage.removeItem(ENDPOINT_KEY);}catch(e){}
+        return false;
     }
 
     /**

@@ -35,7 +35,26 @@ function walk(dir) {
 
 walk(V);
 
-// 2. Verify the normalized parser hash. Raw bytes are diagnostic only.
+// 2. Verify browser policy and security quarantine ordering.
+const indexHtml = fs.readFileSync(path.join(V, 'index.html'), 'utf8');
+const syncClient = fs.readFileSync(path.join(V, 'src', 'sync', 'sync-client.js'), 'utf8');
+const cspMatch = indexHtml.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/);
+if (!cspMatch || !cspMatch[1].includes("object-src 'none'") || !cspMatch[1].includes("base-uri 'self'") || cspMatch[1].includes('connect-src *')) {
+  console.log('SECURITY: Browser CSP is missing required restrictions');
+  issues++;
+}
+if (!indexHtml.includes('<meta name="referrer" content="strict-origin-when-cross-origin">')) {
+  console.log('SECURITY: Referrer policy is missing');
+  issues++;
+}
+const quarantineIndex = syncClient.indexOf("push = function(){ return Promise.resolve({status:'sync_security_quarantined'");
+const exportIndex = syncClient.indexOf('global.ShikeSyncClient = {');
+if (quarantineIndex < 0 || exportIndex < quarantineIndex) {
+  console.log('SECURITY: Sync client exports pre-quarantine functions');
+  issues++;
+}
+
+// 3. Verify the normalized parser hash. Raw bytes are diagnostic only.
 const hashes = parserHash.calculate();
 console.log('Working-tree parser hash:', hashes.workingTreeHash);
 console.log('Canonical parser hash:', hashes.canonicalNormalizedHash);

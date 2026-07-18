@@ -217,7 +217,7 @@ const tests = [
   {
     name: 'Offline assets',
     script: 'test-shike-offline-assets.js',
-    expected: 'Offline asset regression passed: 11/11'
+    expected: 'Offline asset regression passed: 17/17'
   },
   {
     name: 'IndexedDB repository',

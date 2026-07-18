@@ -388,7 +388,39 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 .nav-item.active{color:var(--ink);}
 .nav-item:active{opacity:.6;}
 .nav-icon{width:22px;height:22px;}
-.nav-label{font-size:10px;letter-spacing:.04em;}
+.nav-label{font-size:10px;letter-spacing:0;white-space:nowrap;}
+
+/* ========== Unified primary destinations ========== */
+.primary-destination{padding-top:26px;max-width:780px;margin:0 auto;}
+.destination-eyebrow{margin:0 0 8px;color:var(--accent);font-size:12px;font-weight:600;}
+.primary-destination h2{margin:0 0 10px;font-family:var(--font-serif);font-size:24px;font-weight:500;letter-spacing:0;}
+.destination-intro{max-width:620px;margin:0;color:var(--ink-soft);font-size:14px;line-height:1.75;}
+.destination-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.destination-actions .primary-action{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.destination-note{margin:16px 0 0;color:var(--ink-mute);font-size:12px;line-height:1.65;}
+.deload-entry{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0 2px;padding:13px 15px;text-align:left;color:var(--ink);background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:8px;box-shadow:0 4px 14px rgba(44,37,32,.05);}
+.deload-entry span:first-child{display:grid;gap:3px;min-width:0;}
+.deload-entry strong{font-size:14px;font-weight:600;}
+.deload-entry small{color:var(--ink-mute);font-size:11px;line-height:1.4;}
+.deload-entry>span:last-child{font-size:22px;color:var(--ink-mute);}
+.deload-entry.compact{max-width:620px;margin-top:18px;}
+.review-load-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:22px;max-width:620px;}
+.review-load-summary>div{padding:12px;border:1px solid var(--ink-line);border-radius:8px;background:var(--bg-elev);}
+.review-load-summary span,.review-load-summary small{display:block;color:var(--ink-mute);font-size:11px;}
+.review-load-summary strong{display:block;margin:4px 0;font-family:var(--font-serif);font-size:22px;font-weight:500;}
+.review-evidence{margin-top:22px;}
+.deload-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px;}
+.deload-overview>div{padding:10px;background:var(--bg-soft);border-radius:6px;}
+.deload-overview span,.deload-overview strong{display:block;}
+.deload-overview span{font-size:11px;color:var(--ink-mute);}
+.deload-overview strong{margin-top:3px;font-size:18px;font-family:var(--font-serif);font-weight:500;}
+.deload-candidates{display:grid;gap:8px;}
+.deload-candidate{padding:11px;border:1px solid var(--ink-line);border-radius:8px;background:var(--bg-elev);}
+.deload-candidate-title{font-size:13px;font-weight:600;overflow-wrap:anywhere;}
+.deload-candidate-meta{margin-top:3px;color:var(--ink-mute);font-size:11px;}
+.deload-candidate-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+.deload-candidate-actions button{padding:6px 8px;border:1px solid var(--ink-line);border-radius:6px;background:var(--bg-soft);color:var(--ink-soft);font-size:11px;}
+.deload-empty{padding:18px 0;color:var(--ink-mute);font-size:13px;line-height:1.6;}
 
 /* ========== Time Sprite ========== */
 .time-sprite{
@@ -457,6 +489,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 .time-sprite.collapsed .time-sprite-panel{
   opacity:0;visibility:hidden;transform:translateY(8px) scale(.96);pointer-events:none;
 }
+.time-sprite.instant-collapse .time-sprite-panel{transition:none;}
 .time-sprite-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
 .time-sprite-title{font-family:var(--font-serif);font-size:15px;font-weight:600;letter-spacing:.04em;}
 .time-sprite-close{
@@ -941,6 +974,8 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
 }
 
 @media (max-width:359px){
+  .nav-label{font-size:9px;}
+  .review-load-summary,.deload-overview{grid-template-columns:1fr;}
   .sprite-settings-grid{grid-template-columns:1fr;}
   .agent-overview-grid{grid-template-columns:1fr;}
   .agent-overview-grid article{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 8px;}
