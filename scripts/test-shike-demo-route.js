@@ -136,13 +136,8 @@ function loadApp() {
 
 add('route entry and version are present', () => {
   assert(html.includes('id="demoRouteBlock"'), 'missing home route container');
-<<<<<<< HEAD
-  assert(script.includes("var APP_VERSION='v1.4.0'"), 'APP_VERSION should be v1.4.0');
-  assert(sw.includes("shike-v140-v52"), 'service worker cache should be v140');
-=======
   assert(script.includes("var APP_VERSION='v2.2.0-alpha3'"), 'APP_VERSION should be v2.2.0-alpha3');
   assert(sw.includes("shike-v220alpha3-v63"), 'service worker cache should be shike-v220alpha3-v63');
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 
 add('route title and subtitle match requested copy', () => {

@@ -1,9 +1,5 @@
 // test-shike-sprite-create-intent.js
-<<<<<<< HEAD
-// Runtime tests for sprite create intent normalization (v1.3.2)
-=======
 // Runtime tests for sprite create intent normalization (v2.2.0-alpha3)
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 const fs = require('fs');
 const path = require('path');
 
@@ -159,13 +155,10 @@ add('extract produces preview object', () => {
   assert(result.title.indexOf('作业') !== -1, 'title contains 作业: ' + result.title);
   assert(result.isAllDay === true, 'isAllDay true');
   assert(result.sourceText === '今天还有作业要做，帮我登记', 'sourceText preserved');
-<<<<<<< HEAD
-=======
 
   const undated = ShikeSpriteCreateIntent.extract('帮我记一下买牛奶');
   assert(undated.dateKey === null, 'no-date memo keeps dateKey null');
   assert(undated.recordKind === 'note', 'no-date memo is a note');
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 
 add('HTML/script tags do not execute', () => {
@@ -184,18 +177,6 @@ add('Source text preserved in normalization', () => {
   });
 });
 
-<<<<<<< HEAD
-add('Shortcut commands still bypass create intent', () => {
-  // These are not creation requests
-  const shortcuts = ['打开日历', '查看今天', '切换主题', '导出日历'];
-  shortcuts.forEach(cmd => {
-    const norm = ShikeSpriteCreateIntent.normalize(cmd);
-    // Commands like "打开日历" should not match as create - they start with open/view verbs
-    // Actually our current logic might still flag them; but the intent-router checks quick actions FIRST
-    // So this is fine - the router layer handles quick action routing before create intent
-    assert(true, `"${cmd}" routing handled by intent-router quick action layer`);
-  });
-=======
 add('Shortcut commands are routed by intent-router before create intent', () => {
   // These quick-action commands are handled by intent-router, not create_record
   const intentRouter = fs.readFileSync(path.join(root, 'src/agent/intent-router.js'), 'utf8');
@@ -207,7 +188,6 @@ add('Shortcut commands are routed by intent-router before create intent', () => 
   // The intent-router must be evaluated before create intent in agent-core
   const agentCore = fs.readFileSync(path.join(root, 'src/agent/agent-core.js'), 'utf8');
   assert(agentCore.includes('intentRouter.route') || agentCore.includes('ns.intentRouter'), 'agent-core routes via intentRouter before create');
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 
 add('Very long input is limited', () => {
@@ -220,15 +200,6 @@ add('Very long input is limited', () => {
 add('parser-adapter.js hash unchanged', () => {
   const crypto = require('crypto');
   const adapter = fs.readFileSync(path.join(root, 'src/parser/parser-adapter.js'), 'utf8');
-<<<<<<< HEAD
-  const hash = crypto.createHash('sha256').update(adapter).digest('hex').toUpperCase();
-  assert(hash === 'D6298D52D56BEDDFC407B329569FE81F179FCF50652425ED29DDA6FA6EB6BE32', 'parser-adapter hash matches expected');
-});
-
-add('Version is v1.4.0', () => {
-  const version = fs.readFileSync(path.join(root, 'src/config/version.js'), 'utf8');
-  assert(version.includes("v1.4.0"), 'version.js has v1.4.0');
-=======
   const hash = crypto.createHash('sha256').update(adapter.replace(/\r\n/g,'\n')).digest('hex').toUpperCase();
   assert(hash === 'EFBFF968EFD518E26970BAC24AD35396DF8482A32BA56011C6670167D58C4B58', 'parser-adapter hash matches expected');
 });
@@ -264,7 +235,6 @@ add('Create tool waits for durable storage before success', () => {
   assert(tools.includes('if(a.title)parsed.title=a.title'), 'draft title edits override the original parse');
   assert(legacy.includes('if(!saveRecords())'), 'local cache failure is observable');
   assert(legacy.includes('records=records.filter(function(record){return record.id!==item.id;})'), 'failed local writes roll back the in-memory item');
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
 });
 
 console.log(`\n========================================`);

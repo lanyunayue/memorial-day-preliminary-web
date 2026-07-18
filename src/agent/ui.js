@@ -3,9 +3,6 @@
   var currentPlan=null;
   var currentDraft=null;
   var doubleArmed=false;
-<<<<<<< HEAD
-  function escHtml(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-=======
   var executing=false;
   var currentQuery='';
   var lastAnswer='';
@@ -24,7 +21,6 @@
     executing=!!value;
     ['agentExecuteBtn','agentModifyBtn','agentCancelBtn','agentSendBtn'].forEach(function(id){var button=node(id);if(button)button.disabled=executing;});
   }
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   function addMessage(role,text){
     var box=node('agentConversation');if(!box)return;
     var item=document.createElement('div');
@@ -32,13 +28,6 @@
     item.style.whiteSpace='pre-wrap';
     item.textContent=text;
     box.appendChild(item);
-<<<<<<< HEAD
-    box.scrollTop=box.scrollHeight;
-  }
-  function hidePlan(){
-    currentPlan=null;currentDraft=null;doubleArmed=false;
-    var section=node('agentPlan');if(section)section.hidden=true;
-=======
     while(box.children.length>60)box.removeChild(box.firstElementChild);
     box.scrollTop=box.scrollHeight;
   }
@@ -66,7 +55,6 @@
     var section=node('agentPlan');if(section)section.hidden=true;
     var modify=node('agentModifyBtn');if(modify)modify.hidden=true;
     var executeButton=node('agentExecuteBtn');if(executeButton)executeButton.textContent='执行';
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   }
   function renderPlan(plan){
     currentPlan=plan;currentDraft=null;doubleArmed=false;
@@ -76,8 +64,6 @@
     var toolEl=node('agentPlanTool');
     var changeEl=node('agentPlanChange');
     var btn=node('agentExecuteBtn');
-<<<<<<< HEAD
-=======
     var modify=node('agentModifyBtn');
     var preview=null;
     if(plan&&plan.tool==='create_record'&&global.ShikeSpriteCreateIntent){
@@ -92,15 +78,11 @@
       if(modify)modify.hidden=false;
       return;
     }
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
     if(intentEl)intentEl.textContent='意图：'+(plan.intent||'');
     if(toolEl)toolEl.textContent='工具：'+(plan.tool||'');
     if(changeEl)changeEl.textContent='确认：'+(plan.confirmation||'');
     if(btn)btn.textContent=plan.confirmation==='double'?'确认删除':'执行';
-<<<<<<< HEAD
-=======
     if(modify)modify.hidden=true;
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   }
   function renderDraft(draft){
     currentDraft=draft;currentPlan=null;doubleArmed=false;
@@ -110,22 +92,6 @@
     var toolEl=node('agentPlanTool');
     var changeEl=node('agentPlanChange');
     var btn=node('agentExecuteBtn');
-<<<<<<< HEAD
-    if(intentEl)intentEl.textContent='待确认待办';
-    if(toolEl)toolEl.textContent='事项：'+escHtml(draft.title||'');
-    var dateLabel=draft.dateKey||'今天';
-    var timeLabel=draft.timeText||('未指定'+(draft.temporalPhrase?'（'+draft.temporalPhrase+'）':''));
-    if(changeEl)changeEl.textContent=dateLabel+' '+timeLabel;
-    if(btn)btn.textContent='确认登记';
-  }
-  async function send(){
-    var input=node('agentInput');var text=String(input.value||'').trim();if(!text)return;
-    addMessage('user',text);input.value='';
-    var response=await global.ShikeAgent.handle(text);
-    if(response.cancelledDraft||response.cancelled){
-      hidePlan();
-      addMessage('assistant',response.message||'已取消。');
-=======
     var modify=node('agentModifyBtn');
     var labels=previewLabels(draft);
     if(intentEl)intentEl.textContent='我理解为：';
@@ -146,34 +112,17 @@
       hidePlan();
       addMessage('assistant',response.message||'已取消。');
       mode('本地操作',false);bear('idle',{reason:'cancelled'});
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       return;
     }
     if(response.draft){
       renderDraft(response.draft);
       addMessage('assistant',response.message);
-<<<<<<< HEAD
-=======
       mode('等待确认',false);bear('waiting-confirmation',{reason:'draft'});
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       return;
     }
     if(response.pending&&response.plan){
       renderPlan(response.plan);
       if(response.message)addMessage('assistant',response.message);
-<<<<<<< HEAD
-    }else{
-      hidePlan();
-      addMessage('assistant',response.message||'操作已完成。');
-    }
-  }
-  async function execute(){
-    if(currentDraft){
-      // Confirm draft
-      var response=await global.ShikeAgent.handle('确认');
-      hidePlan();
-      addMessage('assistant',response.message||'已登记。');
-=======
       mode('等待确认',false);bear('waiting-confirmation',{reason:'plan'});
     }else if(response.retrieval){
       hidePlan();renderAnswer(response);addMessage('assistant',response.answer||response.message||'暂时没有找到足够可靠的公开资料。');
@@ -195,7 +144,6 @@
       if(response&&response.ok)hidePlan();
       addMessage('assistant',response.message||(response&&response.ok?'已登记。':'登记失败，请重试。'));
       mode('本地操作',false);bear(response&&response.ok?'success':'error',{reason:'draft-result'});renderOverview();
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
       return;
     }
     if(!currentPlan)return;
@@ -206,10 +154,6 @@
     }
     var token=currentPlan.confirmation==='double'?currentPlan.id+':double':currentPlan.id;
     var response=await global.ShikeAgent.execute(currentPlan,token);
-<<<<<<< HEAD
-    hidePlan();
-    addMessage('assistant',response.message);
-=======
     if(response&&response.ok)hidePlan();
     addMessage('assistant',response.message);
     mode('本地操作',false);bear(response&&response.ok?'success':'error',{reason:'tool-result'});renderOverview();
@@ -226,7 +170,6 @@
     if(currentPlan){global.ShikeAgent.cancel();hidePlan();}
     addMessage('assistant','请告诉我要改成什么，例如“改成明天晚上八点”。');
     if(input){input.placeholder='例如：改成明天晚上八点';input.focus();}
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   }
   function cancel(){
     if(currentDraft){
@@ -244,19 +187,13 @@
     await global.ShikeAgent.clearHistory();
     var box=node('agentConversation');if(box)box.textContent='';
     hidePlan();
-<<<<<<< HEAD
-  }
-=======
     var answer=node('agentAnswer');if(answer)answer.hidden=true;
   }
   function clearContext(){if(global.ShikeAgent&&global.ShikeAgent.clearContext)global.ShikeAgent.clearContext();hidePlan();addMessage('assistant','当前上下文已清空，已有记录不会改变。');bear('success',{reason:'context-cleared'});}
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   async function exportHistory(){
     var items=await global.ShikeAgent.history();
     downloadTextFile('shike-agent-conversation.json',JSON.stringify({app:'shike',exportedAt:new Date().toISOString(),messages:items},null,2),'application/json;charset=utf-8');
   }
-<<<<<<< HEAD
-=======
   function setTab(name){
     document.querySelectorAll('[data-agent-tab]').forEach(function(button){var active=button.getAttribute('data-agent-tab')===name;button.classList.toggle('active',active);button.setAttribute('aria-selected',active?'true':'false');});
     document.querySelectorAll('[data-agent-panel]').forEach(function(panel){var active=panel.getAttribute('data-agent-panel')===name;panel.classList.toggle('active',active);panel.hidden=!active;});
@@ -298,16 +235,10 @@
     else if(detail.stage==='provider-failed')setRetrievalProgress(true,detail.provider+' 暂时不可用，继续查询其他来源');
     else if(detail.stage==='complete')setRetrievalProgress(false);
   }
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   function init(){
     if(node('agentSendBtn'))node('agentSendBtn').addEventListener('click',send);
     if(node('agentInput'))node('agentInput').addEventListener('keydown',function(event){if(event.key==='Enter'){event.preventDefault();send();}});
     if(node('agentExecuteBtn'))node('agentExecuteBtn').addEventListener('click',execute);
-<<<<<<< HEAD
-    if(node('agentCancelBtn'))node('agentCancelBtn').addEventListener('click',cancel);
-    if(node('agentClearBtn'))node('agentClearBtn').addEventListener('click',clear);
-    if(node('agentExportBtn'))node('agentExportBtn').addEventListener('click',exportHistory);
-=======
     if(node('agentModifyBtn'))node('agentModifyBtn').addEventListener('click',modify);
     if(node('agentCancelBtn'))node('agentCancelBtn').addEventListener('click',cancel);
     if(node('agentClearBtn'))node('agentClearBtn').addEventListener('click',clear);
@@ -321,7 +252,6 @@
     if(node('agentStopSpeakBtn'))node('agentStopSpeakBtn').addEventListener('click',function(){if(global.ShikeSpriteAudio)global.ShikeSpriteAudio.stop();});
     global.addEventListener('shike:retrieval-progress',onRetrievalProgress);
     bindSettings();renderSettings();renderOverview();mode('本地操作',false);if(global.ShikeBrowserAI)global.ShikeBrowserAI.bindControls(node('agentAiToggle'),node('agentAiHint'));
->>>>>>> fb900d61fab1a0a0ab834a72dacffb83baebcf34
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
