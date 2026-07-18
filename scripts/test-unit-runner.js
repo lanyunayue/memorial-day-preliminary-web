@@ -13,6 +13,7 @@ const unitTests = [
   'test-shike-agent-security.js',
   'test-shike-agent-context-proactive.js',
   'test-shike-indexeddb-repository.js',
+  'test-shike-portable-export-v1.js',
   'test-shike-storage-migration.js',
   'test-shike-data-integrity.js',
   'test-shike-temporal-domain.js',

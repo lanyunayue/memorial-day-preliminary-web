@@ -18,7 +18,7 @@ console.log('[1] Version and cache');
 const vjs = readSafe(path.join(V, 'src/config/version.js'));
 assert(vjs && vjs.includes('v2.2.0-alpha3'), 'APP_VERSION is v2.2.0-alpha3');
 const sw = readSafe(path.join(V, 'sw.js'));
-assert(sw && sw.includes('shike-v220alpha3-v63'), 'CACHE_NAME is shike-v220alpha3-v63');
+assert(sw && sw.includes('shike-v220alpha3-v64'), 'CACHE_NAME is shike-v220alpha3-v64');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');

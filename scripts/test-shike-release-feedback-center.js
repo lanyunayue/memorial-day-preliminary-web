@@ -15,7 +15,7 @@ function add(name, run) { checks.push({ name, run }); }
 
 add('version and cache are v2.2.0-alpha3', () => {
   assert(script.includes("APP_VERSION='v2.2.0-alpha3'"), 'APP_VERSION should be v2.2.0-alpha3');
-  assert(sw.includes("shike-v220alpha3-v63"), 'sw cache should be shike-v220alpha3-v63');
+  assert(sw.includes("shike-v220alpha3-v64"), 'sw cache should be shike-v220alpha3-v64');
 });
 
 add('release center section exists', () => {

@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 7,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:27:00.000Z",
+  "timezone": "America/Los_Angeles",
+  "records": [
+    {
+      "type": "safety-route",
+      "portableId": "00000000-0000-4000-8000-00000000001b",
+      "sourcePlatformId": "source-27",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-10T03:27:00.000Z",
+      "updatedAt": "2026-07-10T03:27:00.000Z",
+      "state": "CANCELLED",
+      "data": {
+        "title": "固定样例 27 · safety-route",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-10",
+        "localTime": "03:27",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 27
+        }
+      },
+      "futureRecordField": "preserve-27"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-27"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 27
+  },
+  "recordCount": 1,
+  "checksum": "sha256:bf477bcb3f2d7b93f17e2f1fb53ee8436688d6ffc8eab4e818ff8b58efd7b69c"
+}

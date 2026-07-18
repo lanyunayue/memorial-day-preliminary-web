@@ -217,12 +217,12 @@ const tests = [
   {
     name: 'Offline assets',
     script: 'test-shike-offline-assets.js',
-    expected: 'Offline asset regression passed: 10/10'
+    expected: 'Offline asset regression passed: 11/11'
   },
   {
     name: 'IndexedDB repository',
     script: 'test-shike-indexeddb-repository.js',
-    expected: 'IndexedDB repository regression passed: 13/13'
+    expected: 'IndexedDB repository regression passed: 16/16'
   },
   {
     name: 'Storage migration',

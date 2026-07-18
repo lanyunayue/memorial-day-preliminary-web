@@ -91,8 +91,8 @@ add('release dialog does not use body overflow:hidden', () => {
     assert(versionJs.includes("APP_VERSION='v2.2.0-alpha3'"), 'version.js has v2.2.0-alpha3');
 });
 
-  add('SW cache is shike-v220alpha3-v63', () => {
-    assert(swJs.includes('shike-v220alpha3-v63'), 'sw.js cache shike-v220alpha3-v63');
+  add('SW cache is shike-v220alpha3-v64', () => {
+    assert(swJs.includes('shike-v220alpha3-v64'), 'sw.js cache shike-v220alpha3-v64');
 });
 
 add('sprite-create-intent module exports normalize function', () => {

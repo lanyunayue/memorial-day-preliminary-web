@@ -1,0 +1,71 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 2,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:36:00.000Z",
+  "timezone": "Australia/Sydney",
+  "records": [
+    {
+      "type": "load-item",
+      "portableId": "00000000-0000-4000-8000-000000000024",
+      "sourcePlatformId": "source-36",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-01T12:36:00.000Z",
+      "updatedAt": "2026-07-01T12:36:00.000Z",
+      "state": "DEFERRED",
+      "data": {
+        "title": "固定样例 36 · load-item",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-01",
+        "localTime": "12:36",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 36
+        },
+        "futureNumericEdge": {
+          "fraction": 1.25,
+          "fixedLowerBoundary": 0.000001,
+          "exponentialBelowBoundary": 1e-7,
+          "fixedUpperRange": 100000000000000000000,
+          "exponentialUpperBoundary": 1e+21
+        }
+      },
+      "futureRecordField": "preserve-36"
+    },
+    {
+      "type": "load-snapshot",
+      "portableId": "00000000-0000-4000-8000-000000000088",
+      "sourcePlatformId": "source-136",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-11T16:16:00.000Z",
+      "updatedAt": "2026-07-11T16:16:00.000Z",
+      "state": "ACTIVE",
+      "data": {
+        "title": "固定样例 136 · load-snapshot",
+        "note": "",
+        "localDate": "2026-07-11",
+        "localTime": "16:16",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 136
+        }
+      },
+      "futureRecordField": "preserve-136"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "ja-JP",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-36"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 36
+  },
+  "recordCount": 2,
+  "checksum": "sha256:08fc0c01a49902115b1f40441dc23ce655f82263c6f8a6d724c14e1d9169890d"
+}

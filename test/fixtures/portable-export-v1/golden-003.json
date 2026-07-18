@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 4,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:03:00.000Z",
+  "timezone": "America/Los_Angeles",
+  "records": [
+    {
+      "type": "waiting-for",
+      "portableId": "00000000-0000-4000-8000-000000000003",
+      "sourcePlatformId": "source-3",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-04T03:03:00.000Z",
+      "updatedAt": "2026-07-04T03:03:00.000Z",
+      "state": "CANCELLED",
+      "data": {
+        "title": "固定样例 3 · waiting-for",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-04",
+        "localTime": "03:03",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 3
+        }
+      },
+      "futureRecordField": "preserve-3"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-3"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 3
+  },
+  "recordCount": 1,
+  "checksum": "sha256:35ee00b00d3ac191ce396e965af7176cef6fa998e1d8fbbb95c87bdf0d46239c"
+}

@@ -46,7 +46,7 @@ add('quick actions call existing navigation', ["switchPage('home')", "switchPage
 add('no heavy 3d library is introduced', !/three(\.min)?\.js|babylon|model-viewer|webgl/i.test(html));
 add('version is v2.2.0-alpha3', script.includes("APP_VERSION='v2.2.0-alpha3'"));
 add('updated timestamp has release format', /APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script));
-add('service worker cache is shike-v220alpha3-v63', sw.includes("CACHE_NAME = 'shike-v220alpha3-v63'"));
+add('service worker cache is shike-v220alpha3-v64', sw.includes("CACHE_NAME = 'shike-v220alpha3-v64'"));
 
 const failed = checks.filter((check) => !check.passed);
 if (failed.length) {

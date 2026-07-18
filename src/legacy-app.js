@@ -510,6 +510,37 @@ var DEMO_ROUTE_I18N={
 Object.keys(I18N).forEach(function(lang){
   Object.assign(I18N[lang],DEMO_ROUTE_I18N[lang]||DEMO_ROUTE_I18N['zh-CN']);
 });
+var PORTABLE_EXPORT_I18N={
+  'zh-CN':{
+    portableExportTitle:'Portable Export',portableExportHint:'用于在 Web、Android 和 HarmonyOS 之间迁移。文件包含私人记录，请妥善保管。',
+    exportPortable:'导出 Portable Export',importPortable:'导入 Portable Export',portablePreviewTitle:'Portable Export 导入预览',
+    portableSourcePlatform:'来源客户端',portableCreate:'新增',portableUpdate:'更新',portableUnchanged:'不变',portableConflict:'冲突',portableUnsupported:'仅保留',portableInvalid:'无效',
+    confirmPortableImport:'确认导入',cancelPortableImport:'取消',portableExported:'Portable Export 已导出',portableImported:'Portable Export 已导入',
+    portableInvalidFile:'文件校验失败，未写入任何数据',portableConflictBlocked:'存在冲突，未写入任何数据',portableStorageRequired:'当前浏览器无法安全导入 Portable Export'
+  },
+  'zh-TW':{
+    portableExportTitle:'Portable Export',portableExportHint:'用於在 Web、Android 與 HarmonyOS 之間遷移。檔案包含私人記錄，請妥善保管。',
+    exportPortable:'匯出 Portable Export',importPortable:'匯入 Portable Export',portablePreviewTitle:'Portable Export 匯入預覽',
+    portableSourcePlatform:'來源用戶端',portableCreate:'新增',portableUpdate:'更新',portableUnchanged:'不變',portableConflict:'衝突',portableUnsupported:'僅保留',portableInvalid:'無效',
+    confirmPortableImport:'確認匯入',cancelPortableImport:'取消',portableExported:'Portable Export 已匯出',portableImported:'Portable Export 已匯入',
+    portableInvalidFile:'檔案驗證失敗，未寫入任何資料',portableConflictBlocked:'存在衝突，未寫入任何資料',portableStorageRequired:'目前瀏覽器無法安全匯入 Portable Export'
+  },
+  en:{
+    portableExportTitle:'Portable Export',portableExportHint:'Move data between Web, Android, and HarmonyOS. This file contains private records; store it securely.',
+    exportPortable:'Export Portable Export',importPortable:'Import Portable Export',portablePreviewTitle:'Portable Export import preview',
+    portableSourcePlatform:'Source client',portableCreate:'Create',portableUpdate:'Update',portableUnchanged:'Unchanged',portableConflict:'Conflicts',portableUnsupported:'Preserve only',portableInvalid:'Invalid',
+    confirmPortableImport:'Confirm import',cancelPortableImport:'Cancel',portableExported:'Portable Export created',portableImported:'Portable Export imported',
+    portableInvalidFile:'File validation failed. No data was written.',portableConflictBlocked:'Conflicts found. No data was written.',portableStorageRequired:'This browser cannot safely import Portable Export.'
+  },
+  ja:{
+    portableExportTitle:'Portable Export',portableExportHint:'Web、Android、HarmonyOS 間の移行に使用します。個人記録を含むため、安全に保管してください。',
+    exportPortable:'Portable Export を出力',importPortable:'Portable Export を取込',portablePreviewTitle:'Portable Export 取込プレビュー',
+    portableSourcePlatform:'移行元',portableCreate:'新規',portableUpdate:'更新',portableUnchanged:'変更なし',portableConflict:'競合',portableUnsupported:'保持のみ',portableInvalid:'無効',
+    confirmPortableImport:'取込を確認',cancelPortableImport:'キャンセル',portableExported:'Portable Export を出力しました',portableImported:'Portable Export を取り込みました',
+    portableInvalidFile:'ファイル検証に失敗しました。データは書き込まれていません。',portableConflictBlocked:'競合があります。データは書き込まれていません。',portableStorageRequired:'このブラウザでは Portable Export を安全に取り込めません。'
+  }
+};
+Object.keys(I18N).forEach(function(lang){Object.assign(I18N[lang],PORTABLE_EXPORT_I18N[lang]||PORTABLE_EXPORT_I18N['zh-CN']);});
 var LANG='zh-CN';
 function t(key){var d=I18N[LANG]||I18N['zh-CN'];return d[key]||key;}
 function tf(key,vars){var s=t(key);if(vars){for(var k in vars){s=s.replace('{'+k+'}',vars[k]);}}return s;}
@@ -938,6 +969,101 @@ function exportBackupFile(){
     showToast(t('exportDone'),'success');
     }).catch(function(){showToast(t('importFailed'),'error');});
   }catch(e){showToast(t('importFailed'),'error');}
+}
+var pendingPortableImport=null;
+async function portableStorageContext(){
+  if(!window.ShikePortableExportV1)throw new Error('portable_export_unavailable');
+  var entities=[];
+  var envelope=null;
+  if(window.ShikeIndexedDb){
+    try{
+      entities=await ShikeIndexedDb.getAll('portable_records');
+      envelope=await ShikeIndexedDb.get('portable_envelopes','portable-envelope-current');
+    }catch(error){entities=[];envelope=null;}
+  }
+  var currentBundle=await ShikePortableExportV1.buildBundle({records:records,settings:settings,portableEntities:entities,envelope:envelope,appVersion:APP_VERSION});
+  var byId=new Map();
+  entities.forEach(function(entity){if(entity&&entity.id)byId.set(entity.id,entity);});
+  currentBundle.records.forEach(function(record){
+    var legacy=record.data&&record.data.legacyRecord;
+    byId.set(record.portableId,ShikePortableExportV1.entityFromRecord(record,legacy&&legacy.id||''));
+  });
+  return {entities:entities,envelope:envelope,currentBundle:currentBundle,currentEntities:Array.from(byId.values())};
+}
+async function exportPortableFile(){
+  try{
+    var context=await portableStorageContext();
+    downloadTextFile('shike-portable-export-'+ymdForFile(new Date())+'.json',JSON.stringify(context.currentBundle,null,2),'application/json;charset=utf-8');
+    showToast(t('portableExported'),'success');
+  }catch(error){showToast(t('exportFailed'),'error');}
+}
+function portablePreviewRows(prepared){
+  var preview=prepared.preview||{};
+  return [
+    [t('portableSourcePlatform'),prepared.bundle&&prepared.bundle.sourcePlatform||'--'],
+    [t('portableCreate'),preview.create||0],
+    [t('portableUpdate'),preview.update||0],
+    [t('portableUnchanged'),preview.unchanged||0],
+    [t('portableConflict'),preview.conflict||0],
+    [t('portableUnsupported'),preview.unsupported||0],
+    [t('portableInvalid'),preview.invalid||0]
+  ];
+}
+function renderPortableImportPreview(payload){
+  pendingPortableImport=payload||null;
+  var card=$('portableImportPreviewCard');
+  if(!card)return;
+  if(!payload){card.classList.add('hidden');card.innerHTML='';return;}
+  var prepared=payload.prepared;
+  var rows=portablePreviewRows(prepared).map(function(row){return '<div class="detail-row"><span class="detail-label">'+escHtml(row[0])+'</span><span class="detail-value">'+escHtml(String(row[1]))+'</span></div>';}).join('');
+  var preview=prepared.preview||{};
+  var status='';
+  if(preview.invalid)status='<p style="font-size:12px;color:#b5433a;margin:10px 0 0;">'+escHtml(t('portableInvalidFile'))+'</p>';
+  else if(preview.conflict)status='<p style="font-size:12px;color:#b5433a;margin:10px 0 0;">'+escHtml(t('portableConflictBlocked'))+'</p>';
+  var confirmButton=preview.canImport?'<button class="import-btn" onclick="confirmPortableImport()">'+escHtml(t('confirmPortableImport'))+'</button>':'';
+  card.classList.remove('hidden');
+  card.innerHTML='<div class="draft-item-title">'+escHtml(t('portablePreviewTitle'))+'</div>'+rows+status+'<div style="display:flex;gap:8px;margin-top:10px;">'+confirmButton+'<button class="import-btn" onclick="cancelPortableImport()">'+escHtml(t('cancelPortableImport'))+'</button></div>';
+}
+function cancelPortableImport(){
+  pendingPortableImport=null;
+  renderPortableImportPreview(null);
+  var input=$('portableFileInput');if(input)input.value='';
+}
+async function confirmPortableImport(){
+  if(!pendingPortableImport||!pendingPortableImport.prepared.preview.canImport)return;
+  var pending=pendingPortableImport;
+  pendingPortableImport=null;
+  try{
+    if(!window.ShikeIndexedDb||!ShikeIndexedDb.importPortable)throw new Error('indexeddb_required');
+    var plan=ShikePortableExportV1.buildImportPlan(pending.prepared,records,pending.context.currentEntities);
+    plan.businessRecords.forEach(function(record){migrateRecord(record);});
+    await ShikeIndexedDb.importPortable(plan);
+    records=plan.businessRecords;
+    ShikeLegacyStorage.setJson(STORAGE_KEY,records);
+    saveLastGoodRecords(records);
+    renderPortableImportPreview(null);
+    renderCurrent();
+    renderMy();
+    showToast(t('portableImported'),'success');
+  }catch(error){
+    renderPortableImportPreview(pending);
+    showToast(t('portableStorageRequired'),'error');
+  }
+}
+async function handlePortableFileInput(e){
+  var file=e.target.files&&e.target.files[0];if(!file)return;
+  if(!window.ShikePortableExportV1||file.size>ShikePortableExportV1.MAX_INPUT_BYTES){showToast(t('portableInvalidFile'),'error');e.target.value='';return;}
+  var reader=new FileReader();
+  reader.onload=async function(event){
+    try{
+      var context=await portableStorageContext();
+      var prepared=await ShikePortableExportV1.prepareImport(event.target.result,context.currentEntities);
+      renderPortableImportPreview({prepared:prepared,context:context});
+    }catch(error){showToast(t('portableInvalidFile'),'error');}
+    e.target.value='';
+  };
+  reader.onerror=function(){showToast(t('portableInvalidFile'),'error');e.target.value='';};
+  reader.readAsText(file);
 }
 function exportQuarantinedData(){
   if(!window.ShikeLocalFirst)return;
@@ -3621,6 +3747,13 @@ function applyLanguage(lang){
     var key=el.getAttribute('data-i18n');
     if(key==='appName'&&el.classList.contains('brand-name')){el.textContent=t('appName');return;}
     if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'){return;}
+    var fileInput=el.tagName==='LABEL'&&el.querySelector('input[type="file"]');
+    if(fileInput){
+      var labelNode=Array.from(el.childNodes).find(function(node){return node.nodeType===3&&node.nodeValue.trim();});
+      if(labelNode)labelNode.nodeValue=t(key)+'\n            ';
+      else el.insertBefore(document.createTextNode(t(key)+' '),fileInput);
+      return;
+    }
     el.textContent=t(key);
   });
   // Update placeholders
@@ -3940,6 +4073,8 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   });
   b('exportBtn','click',exportBackupFile);
   b('exportBackupBtnMy','click',exportBackupFile);
+  b('exportPortableBtn','click',exportPortableFile);
+  b('portableFileInput','change',handlePortableFileInput);
   b('exportQuarantineBtn','click',exportQuarantinedData);
   b('exportIcsBtn','click',exportIcsFile);
   function handleBackupFileInput(e){

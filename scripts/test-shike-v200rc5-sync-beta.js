@@ -17,7 +17,7 @@ const ver = readSafe(path.join(V,'src/config/version.js'));
 
 console.log('[1] Version');
 assert(ver && ver.includes('v2.2.0-alpha3'), 'APP_VERSION is v2.2.0-alpha3');
-assert(sw && sw.includes('shike-v220alpha3-v63'), 'CACHE_NAME is shike-v220alpha3-v63');
+assert(sw && sw.includes('shike-v220alpha3-v64'), 'CACHE_NAME is shike-v220alpha3-v64');
 
 console.log('\n[2] Parser integrity');
 const crypto = require('crypto');

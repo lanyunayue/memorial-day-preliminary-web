@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 1,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:07:00.000Z",
+  "timezone": "Asia/Shanghai",
+  "records": [
+    {
+      "type": "load-snapshot",
+      "portableId": "00000000-0000-4000-8000-000000000007",
+      "sourcePlatformId": "source-7",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-08T07:07:00.000Z",
+      "updatedAt": "2026-07-08T07:07:00.000Z",
+      "state": "DELETED",
+      "data": {
+        "title": "固定样例 7 · load-snapshot",
+        "note": "",
+        "localDate": "2026-07-08",
+        "localTime": "07:07",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 7
+        }
+      },
+      "futureRecordField": "preserve-7"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-7"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 7
+  },
+  "recordCount": 1,
+  "checksum": "sha256:07b37851fa345481368076d0995eb893b76685d46264bd2e69bcb7e3eb8419a4"
+}

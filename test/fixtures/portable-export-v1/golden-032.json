@@ -1,0 +1,64 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 5,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:32:00.000Z",
+  "timezone": "UTC",
+  "records": [
+    {
+      "type": "commitment",
+      "portableId": "00000000-0000-4000-8000-000000000020",
+      "sourcePlatformId": "source-32",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-15T08:32:00.000Z",
+      "updatedAt": "2026-07-15T08:32:00.000Z",
+      "state": "ACTIVE",
+      "data": {
+        "title": "固定样例 32 · commitment",
+        "note": "",
+        "localDate": "2026-07-15",
+        "localTime": "08:32",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 32
+        }
+      },
+      "futureRecordField": "preserve-32"
+    },
+    {
+      "type": "waiting-for",
+      "portableId": "00000000-0000-4000-8000-000000000084",
+      "sourcePlatformId": "source-132",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-07T12:12:00.000Z",
+      "updatedAt": "2026-07-07T12:12:00.000Z",
+      "state": "DEFERRED",
+      "data": {
+        "title": "固定样例 132 · waiting-for",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-07",
+        "localTime": "12:12",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 132
+        }
+      },
+      "futureRecordField": "preserve-132"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "ja-JP",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-32"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 32
+  },
+  "recordCount": 2,
+  "checksum": "sha256:7472c0f9c64de17d7c8c3f7d6eb1e5ccb04c0370c399b8727204c9a42b211e79"
+}

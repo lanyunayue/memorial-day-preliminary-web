@@ -293,6 +293,17 @@
             <input type="file" accept=".json" id="restoreFileInputMy" style="display:none">
           </label>
         </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--ink-line);">
+          <div class="card-section-title" style="font-size:13px;margin-bottom:6px;" data-i18n="portableExportTitle">Portable Export</div>
+          <p style="font-size:12px;color:var(--ink-mute);line-height:1.6;margin:0 0 10px;" data-i18n="portableExportHint">用于在 Web、Android 和 HarmonyOS 之间迁移。文件包含私人记录，请妥善保管。</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="import-btn" id="exportPortableBtn" data-i18n="exportPortable">导出 Portable Export</button>
+            <label class="import-btn" style="cursor:pointer;" data-i18n="importPortable">导入 Portable Export
+              <input type="file" accept=".json" id="portableFileInput" style="display:none">
+            </label>
+          </div>
+          <div id="portableImportPreviewCard" class="draft-item hidden" style="margin-top:12px;"></div>
+        </div>
         
         <details style="margin-top:12px;">
           <summary style="cursor:pointer;font-size:13px;color:var(--ink-soft);" data-i18n="trashTitle">回收站</summary>
@@ -566,6 +577,7 @@
 <script src="./src/storage/legacy-storage.js"></script>
 <script src="./src/storage/data-integrity.js"></script>
 <script src="./src/storage/indexeddb-storage.js"></script>
+<script src="./src/storage/portable-export-v1.js"></script>
 <script src="./src/storage/local-first-bridge.js"></script>
 <script src="./src/intelligence/temporal-domain.js"></script>
 <script src="./src/intelligence/temporal-validator.js"></script>

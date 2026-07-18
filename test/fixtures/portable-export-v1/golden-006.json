@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 7,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:06:00.000Z",
+  "timezone": "Australia/Sydney",
+  "records": [
+    {
+      "type": "load-item",
+      "portableId": "00000000-0000-4000-8000-000000000006",
+      "sourcePlatformId": "source-6",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-07T06:06:00.000Z",
+      "updatedAt": "2026-07-07T06:06:00.000Z",
+      "state": "ARCHIVED",
+      "data": {
+        "title": "固定样例 6 · load-item",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-07",
+        "localTime": "06:06",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 6
+        }
+      },
+      "futureRecordField": "preserve-6"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "en-US",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-6"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 6
+  },
+  "recordCount": 1,
+  "checksum": "sha256:ca536adff1412e28c0de5ea6fa40d2e39685914cd4d8587af25b8e26ae349c4d"
+}

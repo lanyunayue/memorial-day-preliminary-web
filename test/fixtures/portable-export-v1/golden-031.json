@@ -1,0 +1,64 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 4,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:31:00.000Z",
+  "timezone": "Asia/Shanghai",
+  "records": [
+    {
+      "type": "task",
+      "portableId": "00000000-0000-4000-8000-00000000001f",
+      "sourcePlatformId": "source-31",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-14T07:31:00.000Z",
+      "updatedAt": "2026-07-14T07:31:00.000Z",
+      "state": "DELETED",
+      "data": {
+        "title": "固定样例 31 · task",
+        "note": "",
+        "localDate": "2026-07-14",
+        "localTime": "07:31",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 31
+        }
+      },
+      "futureRecordField": "preserve-31"
+    },
+    {
+      "type": "commitment",
+      "portableId": "00000000-0000-4000-8000-000000000083",
+      "sourcePlatformId": "source-131",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-06T11:11:00.000Z",
+      "updatedAt": "2026-07-06T11:11:00.000Z",
+      "state": "CANCELLED",
+      "data": {
+        "title": "固定样例 131 · commitment",
+        "note": "",
+        "localDate": "2026-07-06",
+        "localTime": "11:11",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 131
+        }
+      },
+      "futureRecordField": "preserve-131"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-31"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 31
+  },
+  "recordCount": 2,
+  "checksum": "sha256:5d774bdb86b7fa13376c87a3447ddc5d18754bc91951a99ee53c1cbdcb35094e"
+}

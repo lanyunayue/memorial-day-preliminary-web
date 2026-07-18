@@ -6,12 +6,13 @@ const listMatch=sw.match(/var PRECACHE_URLS\s*=\s*\[([\s\S]*?)\];/);
 const assets=listMatch?[...listMatch[1].matchAll(/['"]([^'"]+)['"]/g)].map((match)=>match[1]):[];
 const missing=assets.filter((asset)=>asset!=='./'&&!fs.existsSync(path.join(root,asset.replace(/^\.\//,''))));
 const checks=[
-  ['cache version is v2.2.0-alpha3',sw.includes("shike-v220alpha3-v63")],
+  ['cache version is v2.2.0-alpha3',sw.includes("shike-v220alpha3-v64")],
   ['precache list exists',!!listMatch],
   ['root and index are precached',assets.includes('./')&&assets.includes('./index.html')],
   ['manifest is precached',assets.includes('./manifest.json')],
   ['stylesheet is precached',assets.includes('./assets/styles/app.css')],
   ['legacy runtime is precached',assets.includes('./src/legacy-app.js')],
+  ['Portable Export runtime is precached',assets.includes('./src/storage/portable-export-v1.js')],
   ['module entry is precached',assets.includes('./src/app.js')],
   ['module dependencies are precached',assets.includes('./src/storage/repository.js')&&assets.includes('./src/parser/parser-adapter.js')],
   ['all precache assets resolve',missing.length===0],

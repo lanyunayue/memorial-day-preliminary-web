@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 4,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:17:00.000Z",
+  "timezone": "Asia/Tokyo",
+  "records": [
+    {
+      "type": "commitment",
+      "portableId": "00000000-0000-4000-8000-000000000011",
+      "sourcePlatformId": "source-17",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-18T17:17:00.000Z",
+      "updatedAt": "2026-07-18T17:17:00.000Z",
+      "state": "IN_PROGRESS",
+      "data": {
+        "title": "固定样例 17 · commitment",
+        "note": "",
+        "localDate": "2026-07-18",
+        "localTime": "17:17",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 17
+        }
+      },
+      "futureRecordField": "preserve-17"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-CN",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-17"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 17
+  },
+  "recordCount": 1,
+  "checksum": "sha256:f753f4de91ac1cd164a220621b39209f33026368d7aeecf2ddef15715b8f95bc"
+}

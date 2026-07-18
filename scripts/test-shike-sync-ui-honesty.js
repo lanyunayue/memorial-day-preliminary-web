@@ -23,7 +23,7 @@
   assert(version.includes("v2.2.0-alpha3"), 'version shows rc5.1');
 
   // 3. Cache is rc52
-  assert(sw.includes("shike-v220alpha3-v63"), 'cache name is rc52');
+  assert(sw.includes("shike-v220alpha3-v64"), 'cache name is alpha3 v64');
 
   // 4. Sync disabled by default
   assert(client.includes("isEnabled = function(){ return false; }") || client.includes("isEnabled=function(){return false}"), 'sync reports disabled');

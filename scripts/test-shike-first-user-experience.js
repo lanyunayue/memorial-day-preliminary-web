@@ -40,7 +40,7 @@ assert((html && html.includes('v2.2.0-alpha3')) || (versionJs && versionJs.inclu
 
 // 6. Cache
 console.log('\n[6] Cache');
-assert(sw && sw.includes('shike-v220alpha3-v63'), 'CACHE_NAME is shike-v220alpha3-v63');
+assert(sw && sw.includes('shike-v220alpha3-v64'), 'CACHE_NAME is shike-v220alpha3-v64');
 
 // 7. Watch center empty state
 console.log('\n[7] Watch center empty state');
