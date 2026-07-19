@@ -5,15 +5,14 @@ const delay=(ms)=>new Promise((resolve)=>setTimeout(resolve,ms));
 
 async function main(){
   if(!EXPECTED_VERSION)throw new Error('SHIKE_EXPECTED_VERSION is required');
-  let page=null;
-  try{const response=await fetch(`${CDP_URL}/json/new?${encodeURIComponent(APP_URL)}`,{method:'PUT'});if(response.ok)page=await response.json();}catch(error){}
-  if(!page){const targets=await fetch(`${CDP_URL}/json`).then((response)=>response.json());page=targets.find((target)=>target.type==='page');}
+  const targets=await fetch(`${CDP_URL}/json`).then((response)=>response.json());
+  const page=targets.find((target)=>target.type==='page');
   if(!page)throw new Error('no CDP page target');
   const ws=new WebSocket(page.webSocketDebuggerUrl);
   const pending=new Map();let id=0;
   await new Promise((resolve,reject)=>{ws.addEventListener('open',resolve,{once:true});ws.addEventListener('error',reject,{once:true});});
   ws.addEventListener('message',(event)=>{const message=JSON.parse(event.data);if(message.id&&pending.has(message.id)){const pair=pending.get(message.id);pending.delete(message.id);message.error?pair.reject(new Error(message.error.message)):pair.resolve(message.result||{});}});
-  const send=(method,params={})=>new Promise((resolve,reject)=>{const callId=++id;pending.set(callId,{resolve,reject});ws.send(JSON.stringify({id:callId,method,params}));setTimeout(()=>{if(pending.has(callId)){pending.delete(callId);reject(new Error(`${method} timed out`));}},30000);});
+  const send=(method,params={})=>new Promise((resolve,reject)=>{const callId=++id;pending.set(callId,{resolve,reject});ws.send(JSON.stringify({id:callId,method,params}));setTimeout(()=>{if(pending.has(callId)){pending.delete(callId);reject(new Error(`${method} timed out`));}},30000).unref();});
   const evaluate=async(expression)=>{const result=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(result.exceptionDetails)throw new Error(result.exceptionDetails.text);return result.result.value;};
 
   await send('Page.enable');await send('Runtime.enable');await send('Network.enable');

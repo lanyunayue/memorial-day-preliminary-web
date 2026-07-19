@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3 Unified Composer Tests
+ * v2.2.0-alpha3.1 Unified Composer Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -28,6 +28,7 @@ const cls = readSafe(path.join(V,'src/composer/composer-classifier.js'));
 assert(cls && cls.includes('ShikeComposerClassifier'), 'ShikeComposerClassifier exported');
 const view = readSafe(path.join(V,'src/composer/composer-view.js'));
 assert(view && view.includes('ShikeComposerView'), 'ShikeComposerView exported');
+const legacy = readSafe(path.join(V,'src/legacy-app.js'));
 
 // 3. State management
 console.log('\n[3] State management');
@@ -38,6 +39,10 @@ assert(state && state.includes('cancelDraft'), 'cancelDraft function (Esc)');
 assert(state && state.includes('restoreDraft'), 'restoreDraft function');
 assert(state && state.includes('canSubmit'), 'canSubmit function (anti-duplicate)');
 assert(state && state.includes('markSubmitting'), 'markSubmitting function');
+assert(state && state.includes('candidate === previous'), 'debounce blocks the same text without dropping a new draft');
+assert(ctrl && ctrl.includes('state.canSubmit(trimmed)'), 'controller checks duplicate protection against submitted text');
+assert(view && view.includes('state.canSubmit(text)'), 'view checks duplicate protection against current input');
+assert(state && state.includes("state.processingState === 'done'") && state.includes("state.processingState = 'idle'"), 'new draft leaves completed state');
 assert(state && state.includes('sessionStorage'), 'sessionStorage persistence');
 assert(state && state.includes('shike_composer_draft'), 'draft key defined');
 
@@ -46,6 +51,9 @@ console.log('\n[4] Controller');
 assert(ctrl && ctrl.includes('submit'), 'submit function');
 assert(ctrl && ctrl.includes('empty_input'), 'empty input check');
 assert(ctrl && ctrl.includes('processing'), 'processing state');
+assert(ctrl && ctrl.includes('await global.persistRecordsDurably()'), 'record creation waits for durable persistence');
+assert(ctrl && ctrl.includes('savedIndex') && ctrl.includes('global.records.splice'), 'failed durable persistence rolls back the new record');
+assert(legacy && legacy.includes('saveRecords({skipLocalFirst:true})'), 'durable persistence avoids duplicate IndexedDB writes');
 
 // 5. Classifier
 console.log('\n[5] Classifier');

@@ -1,4 +1,4 @@
-// v2.2.0-alpha3 Sync Quarantine Test
+// v2.2.0-alpha3.1 Sync Quarantine Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
@@ -23,8 +23,8 @@
   assert(clientSrc.match(/enable\s*=\s*function\(\)\s*{\s*return false;?\s*}/),'enable returns false');
   assert(!htmlSrc.includes('id="page-sync"'),'page-sync section removed from HTML');
   assert(!htmlSrc.includes('syncContainer'),'syncContainer div removed from HTML');
-  assert(versionSrc.includes("v2.2.0-alpha3"),'APP_VERSION is v2.2.0-alpha3');
-  assert(swSrc.includes("shike-v220alpha3-v63"),'CACHE_NAME is shike-v220alpha3-v63');
+  assert(versionSrc.includes("v2.2.0-alpha3.1"),'APP_VERSION is v2.2.0-alpha3.1');
+  assert(swSrc.includes("shike-v220alpha31-v64"),'CACHE_NAME is shike-v220alpha31-v64');
 
   // sync-status must show quarantine
   var quarantineMsg = statusSrc.includes('syncQuarantine') ||

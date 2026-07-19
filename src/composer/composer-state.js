@@ -87,6 +87,10 @@
 
   function setDraft(text){
     state.draft = String(text || '');
+    if(state.processingState === 'done'){
+      state.processingState = 'idle';
+      state.lastResult = null;
+    }
     saveDraftToStorage();
     notify();
   }
@@ -162,10 +166,12 @@
    *   - Same text submitted again within the debounce window
    * @returns {boolean}
    */
-  function canSubmit(){
+  function canSubmit(text){
     if(state.processingState === 'processing') return false;
     var now = Date.now();
-    if(now - state.lastSubmitTime < DEBOUNCE_MS) return false;
+    var candidate = String(text == null ? state.draft : text).trim();
+    var previous = String(state.lastSubmitText || '').trim();
+    if(now - state.lastSubmitTime < DEBOUNCE_MS && (!candidate || candidate === previous)) return false;
     return true;
   }
 

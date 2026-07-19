@@ -710,18 +710,18 @@ function migrateRecord(r){
   }
   return r;
 }
-function saveRecords(){
+function saveRecords(options){
   try{
     ensureUniqueRecordIds(records);
     if(!ShikeLegacyStorage.setJson(STORAGE_KEY,records))throw new Error('records_write_failed');
     saveLastGoodRecords(records);
-    if(window.ShikeLocalFirst)window.ShikeLocalFirst.persist(records).catch(function(){});
+    if(window.ShikeLocalFirst&&!(options&&options.skipLocalFirst))window.ShikeLocalFirst.persist(records).catch(function(){});
     return true;
   }
   catch(e){showToast(t('storageError')||'存储空间已满','error');return false;}
 }
 async function persistRecordsDurably(){
-  if(!saveRecords())throw new Error('records_cache_write_failed');
+  if(!saveRecords({skipLocalFirst:true}))throw new Error('records_cache_write_failed');
   if(!window.ShikeLocalFirst)return true;
   var result=await window.ShikeLocalFirst.persist(records);
   if(result&&result.fallback)throw new Error('records_indexeddb_write_unavailable');

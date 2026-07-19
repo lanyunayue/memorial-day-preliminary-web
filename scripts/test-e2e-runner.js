@@ -1,5 +1,5 @@
 // E2E test runner - runs Playwright-style tests or local Edge CDP checks.
-const { execSync, spawn } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const http = require('http');
 const os = require('os');
@@ -17,39 +17,10 @@ const configuredArtifactDir = artifactArg
   ? path.resolve(V, artifactArg.slice('--artifact-dir='.length))
   : process.env.SHIKE_ARTIFACT_DIR;
 
-// Check if playwright is available
-let hasPlaywright = false;
-try {
-  require.resolve('@playwright/test');
-  hasPlaywright = true;
-} catch(e) {}
-
-if (hasPlaywright) {
-  const artifactDir = configuredArtifactDir || path.join(V, 'artifacts', 'playwright');
-  fs.mkdirSync(artifactDir, { recursive: true });
-  try {
-    execSync('npx playwright test --project=chromium', { stdio: 'inherit', cwd: V });
-    fs.writeFileSync(path.join(artifactDir, 'e2e-runner-result.json'), JSON.stringify({
-      classification: 'PASS',
-      mode: 'playwright',
-      generatedAt: new Date().toISOString()
-    }, null, 2));
-    console.log('E2E tests passed');
-  } catch(e) {
-    fs.writeFileSync(path.join(artifactDir, 'e2e-runner-result.json'), JSON.stringify({
-      classification: 'FAIL',
-      mode: 'playwright',
-      generatedAt: new Date().toISOString()
-    }, null, 2));
-    console.log('E2E tests failed');
-    process.exit(1);
-  }
-} else {
-  runLocalCdpFallback().catch((error) => {
-    console.error(error.stack || error.message || String(error));
-    process.exit(1);
-  });
-}
+runLocalCdpFallback().catch((error) => {
+  console.error(error.stack || error.message || String(error));
+  process.exit(1);
+});
 
 function findEdge() {
   const explicitPath = process.env.SHIKE_BROWSER_PATH;
@@ -224,7 +195,7 @@ async function writeBrowserMetadata(cdpUrl, appUrl, artifactDir) {
 }
 
 async function runLocalCdpFallback() {
-  console.log('Playwright not installed - running CDP E2E validation when available');
+  console.log('Running required CDP E2E validation when a browser is available');
   if (typeof WebSocket === 'undefined') {
     throw new Error('WebSocket global is not available. Node.js 22+ is required for CDP browser tests.');
   }
@@ -246,7 +217,7 @@ async function runLocalCdpFallback() {
   }
   const edge = findEdge();
   if (!edge) {
-    skip('no Playwright or Edge/Chromium executable found');
+    skip('no Edge/Chromium executable found');
     return;
   }
   const browserVersion = getBrowserVersion(edge);

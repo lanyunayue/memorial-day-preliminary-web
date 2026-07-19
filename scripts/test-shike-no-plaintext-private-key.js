@@ -1,4 +1,4 @@
-// v2.2.0-alpha3 No Plaintext Private Key Test
+// v2.2.0-alpha3.1 No Plaintext Private Key Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}

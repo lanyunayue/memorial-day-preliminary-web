@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3 Permission Center Tests
+ * v2.2.0-alpha3.1 Permission Center Tests
  */
 const fs = require('fs');
 const path = require('path');

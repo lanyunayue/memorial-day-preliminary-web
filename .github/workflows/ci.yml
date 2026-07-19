@@ -19,6 +19,8 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm run ci:install
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
       - name: Detect browser
         id: browser_detect
         run: |
@@ -73,6 +75,8 @@ jobs:
         run: npm run test:ci-gates
       - name: Test integrity
         run: npm run test:integrity
+      - name: Playwright product truth
+        run: npm run test:browser
       - name: Browser E2E
         id: browser_e2e
         run: npm run test:e2e:ci

@@ -1,4 +1,4 @@
-// v2.2.0-alpha3 No Plaintext Sync Queue Test
+// v2.2.0-alpha3.1 No Plaintext Sync Queue Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}

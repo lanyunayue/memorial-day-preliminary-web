@@ -45,6 +45,15 @@ add('index references manifest and theme metadata', () => {
   assert(indexHtml.includes('apple-mobile-web-app-capable'), 'index should include iOS web app capable meta');
 });
 
+add('public metadata supports search, sharing, and iOS installation', () => {
+  assert(/<meta name="description" content="[^"]+">/.test(indexHtml), 'index should include a description');
+  assert(indexHtml.includes('<link rel="canonical" href="https://lanyunayue.github.io/memorial-day-preliminary-web/">'), 'index should include the production canonical URL');
+  assert(indexHtml.includes('<meta property="og:title"'), 'index should include an Open Graph title');
+  assert(indexHtml.includes('<meta property="og:description"'), 'index should include an Open Graph description');
+  assert(indexHtml.includes('<meta property="og:url"'), 'index should include an Open Graph URL');
+  assert(indexHtml.includes('<link rel="apple-touch-icon"'), 'index should include an Apple touch icon');
+});
+
 add('app version and service worker cache version align', () => {
   const appVersion = matchOne(script, /var APP_VERSION='(v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)'/, 'APP_VERSION should be present');
   const swCache = matchOne(sw, /CACHE_NAME\s*=\s*'shike-(v[0-9a-z]+)-v(\d+)'/, 'CACHE_NAME should be present');

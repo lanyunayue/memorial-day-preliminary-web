@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3 Reminder Scheduler Tests
+ * v2.2.0-alpha3.1 Reminder Scheduler Tests
  */
 const fs = require('fs');
 const path = require('path');

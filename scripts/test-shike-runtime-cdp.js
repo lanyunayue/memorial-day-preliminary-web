@@ -95,7 +95,7 @@ class CdpClient {
           this.pending.delete(id);
           reject(new Error(`${method} timed out`));
         }
-      }, 30000);
+      }, 30000).unref();
     });
   }
 

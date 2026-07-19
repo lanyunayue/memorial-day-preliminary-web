@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3 Storage Persistence Tests
+ * v2.2.0-alpha3.1 Storage Persistence Tests
  */
 const fs = require('fs');
 const path = require('path');

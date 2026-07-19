@@ -90,6 +90,26 @@
     if(typeof global.saveParsedRecord === 'function'){
       var saved = safeCall(global.saveParsedRecord, parsed, sourceText);
       if(saved){
+        try{
+          if(global.ShikeLocalFirst && typeof global.persistRecordsDurably !== 'function'){
+            throw new Error('durable_persistence_unavailable');
+          }
+          if(typeof global.persistRecordsDurably === 'function'){
+            await global.persistRecordsDurably();
+          }
+        }catch(error){
+          if(Array.isArray(global.records)){
+            var savedIndex = global.records.findIndex(function(record){ return record && record.id === saved.id; });
+            if(savedIndex >= 0) global.records.splice(savedIndex, 1);
+          }
+          safeCall(global.saveRecords);
+          return {
+            ok: false,
+            category: 'A',
+            message: '记录没有安全保存，请稍后重试。',
+            error: error && error.message || 'durable_persistence_failed'
+          };
+        }
         // Trigger UI re-render
         if(typeof global.renderCurrent === 'function'){
           safeCall(global.renderCurrent);
@@ -315,7 +335,7 @@
     }
 
     // --- Debounce / duplicate submit check ---
-    if(!state.canSubmit()){
+    if(!state.canSubmit(trimmed)){
       return { ok: false, message: '正在处理中，请稍候。', code: 'processing' };
     }
 

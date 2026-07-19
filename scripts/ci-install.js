@@ -30,8 +30,9 @@ function main() {
     return;
   }
 
-  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  const result = spawnSync(npm, ['ci'], { cwd: root, stdio: 'inherit' });
+  const command = process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : 'npm';
+  const args = process.platform === 'win32' ? ['/d', '/s', '/c', 'npm ci'] : ['ci'];
+  const result = spawnSync(command, args, { cwd: root, stdio: 'inherit' });
   if (result.error) throw result.error;
   if (result.status !== 0) {
     throw new Error(`npm ci failed with exit code ${result.status}`);

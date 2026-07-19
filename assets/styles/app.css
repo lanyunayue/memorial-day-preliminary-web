@@ -21,6 +21,8 @@
 [data-theme="night"]{--bg:#1a1a1f;--bg-elev:#232329;--bg-soft:#2c2c33;--ink:#eae8e3;--ink-soft:#a8a59d;--ink-mute:#72706a;--ink-line:#3a3a42;--accent:#d8b872;--anniv:#d8b872;--habit:#8aaa7a;--note:#9a9080;--accent-bg:rgba(216,184,114,.10);--card-shadow:0 1px 3px rgba(0,0,0,.20),0 4px 14px rgba(0,0,0,.15);--hero-shadow:0 4px 18px rgba(0,0,0,.30),0 12px 40px rgba(0,0,0,.20);}
 [data-theme="sakura"]{--bg:#f8f0f2;--bg-elev:#fdf6f7;--bg-soft:#f0dde2;--ink:#3d2528;--ink-soft:#7a5c62;--ink-mute:#b89aa0;--ink-line:#e6cfd5;--accent:#c77b8b;--anniv:#c77b8b;--habit:#8a9a7a;--note:#b08890;--accent-bg:rgba(199,123,139,.08);}
 
+[hidden]{display:none!important;}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;overscroll-behavior-y:none;}
 body{

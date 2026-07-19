@@ -301,7 +301,7 @@
 
     // Check debounce / processing
     var state = getState();
-    if(state && !state.canSubmit()){
+    if(state && !state.canSubmit(text)){
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
