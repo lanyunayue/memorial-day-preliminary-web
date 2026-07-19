@@ -79,9 +79,10 @@ jobs:
         run: npm run test:browser
       - name: Browser E2E
         id: browser_e2e
-        run: npm run test:e2e:ci
+        run: npm run test:cdp
         env:
           SHIKE_BROWSER_PATH: ${{ steps.browser_detect.outputs.browser_path }}
+          SHIKE_ARTIFACT_DIR: artifacts/ci-e2e
       - name: IndexedDB quota and stress
         id: stress_e2e
         run: node scripts/test-e2e-runner.js --required --autostart --stress-only --artifact-dir=artifacts/chronos-alpha2/stress

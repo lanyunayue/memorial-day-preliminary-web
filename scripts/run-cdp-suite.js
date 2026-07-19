@@ -5,14 +5,20 @@ const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const EDGE = process.env.SHIKE_EDGE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
+const EDGE = process.env.SHIKE_EDGE_PATH
+  || process.env.SHIKE_BROWSER_PATH
+  || (process.platform === 'win32'
+    ? 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    : '/usr/bin/google-chrome');
 const PORT = Number(process.env.SHIKE_TEST_PORT || 8090);
 const BASE_CDP_PORT = Number(process.env.SHIKE_CDP_PORT || 9224);
 const APP_URL = `http://127.0.0.1:${PORT}/index.html`;
 const versionSource = fs.readFileSync(path.join(ROOT, 'src', 'config', 'version.js'), 'utf8');
 const versionMatch = versionSource.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
 const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || (versionMatch && versionMatch[1]);
-const ARTIFACT_DIR = path.join(ROOT, 'artifacts', 'cdp');
+const ARTIFACT_DIR = process.env.SHIKE_ARTIFACT_DIR
+  ? path.resolve(ROOT, process.env.SHIKE_ARTIFACT_DIR)
+  : path.join(ROOT, 'artifacts', 'cdp');
 const ALL_TESTS = [
   'test-shike-agent-runtime-cdp.js',
   'test-shike-experience-runtime-cdp.js',
@@ -106,7 +112,7 @@ async function main() {
       const initialUrl = script === 'test-shike-storage-runtime-cdp.js' ? 'about:blank' : APP_URL;
       fs.mkdirSync(profile, { recursive: true });
       console.log(`\n[CDP ${index + 1}/${tests.length}] ${script}`);
-      const edge = spawn(EDGE, [
+      const browserArgs = [
         '--headless=new',
         '--disable-gpu',
         '--no-first-run',
@@ -114,7 +120,9 @@ async function main() {
         `--remote-debugging-port=${cdpPort}`,
         `--user-data-dir=${profile}`,
         initialUrl,
-      ], { stdio: 'ignore', windowsHide: true });
+      ];
+      if (process.platform !== 'win32') browserArgs.push('--no-sandbox');
+      const edge = spawn(EDGE, browserArgs, { stdio: 'ignore', windowsHide: true });
 
       try {
         await waitFor(`${cdpUrl}/json`, 20000);
