@@ -95,7 +95,7 @@ add('bottom navigation targets existing pages', () => {
   const pageIds = new Set(matches(/\sid=["']page-([^"']+)["']/g, html).map((m) => m[1]));
   const navPages = unique(matches(/\sdata-page=["']([^"']+)["']/g, html).map((m) => m[1]));
   const missing = navPages.filter((page) => !pageIds.has(page));
-  assert(navPages.length === 4, 'expected exactly 4 bottom navigation page entries (home/calendar/all/my), got ' + navPages.length);
+  assert(navPages.length === 5, 'expected exactly 5 bottom navigation page entries (today/all/spirit/review/my), got ' + navPages.length);
   assert(missing.length === 0, `missing page targets: ${missing.join(', ')}`);
 });
 

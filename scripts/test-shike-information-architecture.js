@@ -17,9 +17,9 @@ const leg = readSafe(path.join(V,'src/legacy-app.js'));
 console.log('[1] Navigation items');
 const navItems = (html && html.match(/class="nav-item/g)) || [];
 console.log('  Found ' + navItems.length + ' nav items');
-assert(navItems.length === 4, 'exactly 4 nav items (home/calendar/all/my), found ' + navItems.length);
+assert(navItems.length === 5, 'exactly 5 nav items (today/all/spirit/review/my), found ' + navItems.length);
 const navPageMatches = (html && html.match(/data-page="([^"]+)"/g)) || [];
-assert(navPageMatches.length === 4, 'exactly 4 data-page nav attributes');
+assert(navPageMatches.length === 5, 'exactly 5 data-page nav attributes');
 
 // 2. Required pages
 console.log('\n[2] Required pages');
