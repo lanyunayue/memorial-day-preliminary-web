@@ -2405,9 +2405,409 @@ function switchPage(page){
   else if(page==='all')renderAll();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
+  else if(page==='review')renderReview();
+  else if(page==='spirit')renderSpirit();
   renderTimeSprite();
+  wireUpPlayfulCapture();
+  wireUpSpiritPage();
+  wireUpDeloadEntry();
+  wireUpEndDay();
+  wireUpReviewExport();
   window.scrollTo(0,0);
 }
+
+/* ========== Review Page ========== */
+function renderReview(){
+  var today=0,overdue=0,waiting=0,tomorrow=0;
+  var now=new Date();
+  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  var tomorrowStart=todayStart+86400000;
+  var dayAfterTomorrow=tomorrowStart+86400000;
+  records.forEach(function(r){
+    if(r.deleted)return;
+    var ts=r.timestamp||0;
+    var kind=r.recordKind;
+    if(r.intelligenceFlags&&r.intelligenceFlags.isWaitingFor){
+      waiting++;
+      return;
+    }
+    if(r.intelligenceFlags&&r.intelligenceFlags.isCommitment){
+      if(ts>0&&ts<todayStart)overdue++;
+      else if(ts>=todayStart&&ts<tomorrowStart)today++;
+      else if(ts>=tomorrowStart&&ts<dayAfterTomorrow)tomorrow++;
+      return;
+    }
+    if(ts>0&&ts<todayStart&&!isCompleted(r))overdue++;
+    else if(ts>=todayStart&&ts<tomorrowStart)today++;
+    else if(ts>=tomorrowStart&&ts<dayAfterTomorrow)tomorrow++;
+  });
+  var rv=function(id,v){var el=$(id);if(el)el.textContent=v;};
+  rv('reviewToday',today);
+  rv('reviewOverdue',overdue);
+  rv('reviewWaiting',waiting);
+  rv('reviewTomorrow',tomorrow);
+}
+
+/* ========== Spirit Page ========== */
+function renderSpirit(){
+  var avatar=$('spiritPageAvatar');
+  if(avatar){
+    avatar.style.background='var(--accent)';
+  }
+  var status=$('spiritStatus');
+  if(status){
+    var count=records.filter(function(r){return !r.deleted;}).length;
+    if(count>0){
+      status.textContent='已记录 '+count+' 件事，随时帮你回顾和减负';
+    }
+  }
+}
+
+/* ========== Playful Header Update ========== */
+function updatePlayfulHeader(){
+  var dateEl=$('playfulDate');
+  var greetEl=$('playfulGreeting');
+  var badgeEl=$('playfulLoadBadge');
+  if(!dateEl)return;
+  var now=new Date();
+  var days=['日','一','二','三','四','五','六'];
+  var months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  dateEl.textContent=months[now.getMonth()]+' '+now.getDate()+'日 星期'+days[now.getDay()];
+  var hour=now.getHours();
+  var greeting='你好';
+  if(hour<6)greeting='夜深了';
+  else if(hour<11)greeting='早上好';
+  else if(hour<14)greeting='中午好';
+  else if(hour<18)greeting='下午好';
+  else if(hour<22)greeting='晚上好';
+  else greeting='夜深了';
+  var username=(typeof getUserDisplayName==='function')?getUserDisplayName():'';
+  if(username)greeting+=', '+username;
+  if(greetEl)greetEl.textContent=greeting;
+  // Load calculation
+  var load=0;
+  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  var tomorrowStart=todayStart+86400000;
+  records.forEach(function(r){
+    if(r.deleted)return;
+    var ts=r.timestamp||0;
+    if(ts>0&&ts<=tomorrowStart&&!isCompleted(r))load++;
+  });
+  if(badgeEl){
+    badgeEl.classList.remove('low','medium','high');
+    if(load<=3){badgeEl.textContent='今天还有空间';badgeEl.classList.add('low');}
+    else if(load<=6){badgeEl.textContent='今天安排得比较满';badgeEl.classList.add('medium');}
+    else{badgeEl.textContent='今天可能需要减一减';badgeEl.classList.add('high');}
+  }
+}
+
+/* ========== Load Board Update ========== */
+function updateLoadBoard(){
+  var now=new Date();
+  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  var tomorrowStart=todayStart+86400000;
+  var dayAfter=tomorrowStart+86400000;
+  var today=0,overdue=0,waiting=0,tomorrow=0;
+  records.forEach(function(r){
+    if(r.deleted)return;
+    if(r.intelligenceFlags&&r.intelligenceFlags.isWaitingFor){waiting++;return;}
+    var ts=r.timestamp||0;
+    if(ts>0&&ts<todayStart&&!isCompleted(r))overdue++;
+    else if(ts>=todayStart&&ts<tomorrowStart)today++;
+    else if(ts>=tomorrowStart&&ts<dayAfter)tomorrow++;
+  });
+  var set=function(id,v){var el=$(id);if(el){el.textContent=v;if(v===0)el.parentElement.classList.add('zero');else el.parentElement.classList.remove('zero');}};
+  set('loadToday',today);
+  set('loadOverdue',overdue);
+  set('loadWaiting',waiting);
+  set('loadTomorrow',tomorrow);
+}
+
+/* ========== Commitment Section Update ========== */
+function updateCommitmentSection(){
+  var section=$('commitmentSection');
+  if(!section)return;
+  var commitments=records.filter(function(r){
+    return !r.deleted&&r.intelligenceFlags&&r.intelligenceFlags.isCommitment;
+  }).slice(0,3);
+  if(commitments.length===0){
+    var empty=$('commitmentEmpty');
+    if(empty)empty.style.display='';
+    return;
+  }
+  var empty=$('commitmentEmpty');
+  if(empty)empty.style.display='none';
+  var html='<div class="commitment-card">';
+  commitments.forEach(function(c){
+    var to=c.intelligenceFlags&&c.intelligenceFlags.commitmentTo?c.intelligenceFlags.commitmentTo:'';
+    var due=c.timestamp?formatDate(c.timestamp):'';
+    html+='<div class="commitment-card">'+
+      '<div class="commitment-header">'+
+        '<span class="commitment-type-badge">承诺</span>'+
+        '<span class="commitment-title">'+escapeHtml(c.title||c.text||'')+'</span>'+
+      '</div>'+
+      (to?'<div class="commitment-meta">对象: '+escapeHtml(to)+'</div>':'')+
+      (due?'<div class="commitment-meta">到期: '+due+'</div>':'')+
+      '<div class="commitment-actions">'+
+        '<button class="commitment-action" data-commitment-id="'+c.id+'" data-action="complete">完成</button>'+
+        '<button class="commitment-action" data-commitment-id="'+c.id+'" data-action="defer">延期</button>'+
+        '<button class="commitment-action danger" data-commitment-id="'+c.id+'" data-action="renegotiate">重新协商</button>'+
+      '</div>'+
+    '</div>';
+  });
+  section.innerHTML=html;
+}
+
+/* ========== Waiting Section Update ========== */
+function updateWaitingSection(){
+  var section=$('waitingSection');
+  if(!section)return;
+  var waitings=records.filter(function(r){
+    return !r.deleted&&r.intelligenceFlags&&r.intelligenceFlags.isWaitingFor;
+  }).slice(0,3);
+  if(waitings.length===0){
+    var empty=$('waitingEmpty');
+    if(empty)empty.style.display='';
+    return;
+  }
+  var empty=$('waitingEmpty');
+  if(empty)empty.style.display='none';
+  var html='';
+  waitings.forEach(function(w){
+    var who=w.intelligenceFlags&&w.intelligenceFlags.waitingForWho?w.intelligenceFlags.waitingForWho:'';
+    var start=w.timestamp||w.createdAt||0;
+    var days=Math.floor((Date.now()-start)/86400000);
+    var dur=days>0?days+'天':'今天';
+    html+='<div class="waiting-card">'+
+      '<div class="waiting-header">'+
+        '<span class="waiting-type-badge">等待</span>'+
+        '<span class="waiting-duration">'+dur+'</span>'+
+      '</div>'+
+      '<div style="font-weight:600;font-size:14px;margin-bottom:4px;">'+escapeHtml(w.title||w.text||'')+'</div>'+
+      (who?'<div class="commitment-meta">等待: '+escapeHtml(who)+'</div>':'')+
+      '<div class="commitment-actions">'+
+        '<button class="commitment-action" data-waiting-id="'+w.id+'" data-action="received">标记已收到</button>'+
+        '<button class="commitment-action" data-waiting-id="'+w.id+'" data-action="followup">跟进</button>'+
+      '</div>'+
+    '</div>';
+  });
+  section.innerHTML=html;
+}
+
+/* ========== Helper: isCompleted ========== */
+function isCompleted(r){
+  return r.status==='completed'||r.status==='done'||r.completedAt!=null;
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+/* ========== Wire Up Playful Quick Capture ========== */
+function wireUpPlayfulCapture(){
+  var newInput=$('quickCaptureInput');
+  var newSaveBtn=$('quickCaptureSaveBtn');
+  if(!newInput||!newSaveBtn)return;
+  var oldInput=$('quickInput');
+  function doSave(){
+    var text=newInput.value.trim();
+    if(!text)return;
+    if(oldInput){
+      oldInput.value=text;
+      var saveBtn=$('saveBtn');
+      if(saveBtn){
+        try{saveBtn.click();}catch(e){}
+      }
+    }
+    newInput.value='';
+  }
+  newSaveBtn.addEventListener('click',doSave);
+  newInput.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){
+      e.preventDefault();
+      doSave();
+    }
+  });
+}
+
+/* ========== Wire Up Spirit Page Buttons ========== */
+function wireUpSpiritPage(){
+  var writeBtn=$('spiritWriteBtn');
+  if(writeBtn){
+    writeBtn.addEventListener('click',function(){
+      switchPage('home');
+      setTimeout(function(){
+        var input=$('quickCaptureInput');
+        if(input){input.focus();}
+      },300);
+    });
+  }
+  var todayBtn=$('spiritTodayBtn');
+  if(todayBtn){
+    todayBtn.addEventListener('click',function(){switchPage('home');});
+  }
+  var loadBtn=$('spiritLoadBtn');
+  if(loadBtn){
+    loadBtn.addEventListener('click',function(){
+      switchPage('home');
+      setTimeout(function(){
+        var board=$('loadBoard');
+        if(board){board.scrollIntoView({behavior:'smooth',block:'center'});}
+      },300);
+    });
+  }
+  var deloadBtn=$('spiritDeloadBtn');
+  if(deloadBtn){
+    deloadBtn.addEventListener('click',function(){
+      var deloadEntry=$('deloadEntryBtn');
+      if(deloadEntry){
+        deloadEntry.click();
+      }else{
+        switchPage('home');
+        setTimeout(function(){
+          var entry=$('deloadEntryBtn');
+          if(entry){entry.scrollIntoView({behavior:'smooth',block:'center'});}
+        },300);
+      }
+    });
+  }
+  var reviewBtn=$('spiritReviewBtn');
+  if(reviewBtn){
+    reviewBtn.addEventListener('click',function(){switchPage('review');});
+  }
+  var exportBtn=$('spiritExportBtn');
+  if(exportBtn){
+    exportBtn.addEventListener('click',function(){
+      var exportBtnEl=$('exportBtn');
+      if(exportBtnEl){exportBtnEl.click();}
+    });
+  }
+}
+
+/* ========== Wire Up DeLoad Entry ========== */
+function wireUpDeloadEntry(){
+  var entry=$('deloadEntryBtn');
+  if(!entry)return;
+  entry.addEventListener('click',function(){
+    showToast('减负功能即将打开...','info');
+    setTimeout(function(){
+      var deloadMsg='选择一个动作来减轻今天的负荷:\n\n'+
+        '1. 取消 — 改为已取消，保留历史\n'+
+        '2. 延期 — 选择新日期\n'+
+        '3. 降低标准 — 修改完成标准\n'+
+        '4. 重新协商 — 生成沟通草稿\n'+
+        '5. 只保留一件 — 创建今晚焦点\n'+
+        '6. 结束今天 — 保存今天然后休息\n\n'+
+        '请输入数字 (1-6):';
+      var choice=prompt(deloadMsg,'6');
+      if(!choice)return;
+      var action='';
+      switch(choice.trim()){
+        case'1':action='CANCEL';break;
+        case'2':action='DEFER';break;
+        case'3':action='LOWER_STANDARD';break;
+        case'4':action='RENEGOTIATE';break;
+        case'5':action='KEEP_ONLY_ONE';break;
+        case'6':action='SAVE_AND_END_DAY';break;
+        default:return;
+      }
+      handleDeLoadAction(action);
+    },500);
+  });
+}
+
+function handleDeLoadAction(action){
+  var now=new Date();
+  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  var tomorrowStart=todayStart+86400000;
+  var todayRecords=records.filter(function(r){
+    if(r.deleted)return false;
+    var ts=r.timestamp||0;
+    if(ts>0&&ts>=todayStart&&ts<tomorrowStart)return true;
+    if(ts===0&&!isCompleted(r))return true;
+    return false;
+  });
+  if(action==='SAVE_AND_END_DAY'){
+    var dayEndRecord={
+      id:'dayend-'+Date.now(),
+      type:'dayend',
+      title:'今日结束 - '+now.toLocaleDateString('zh-CN'),
+      timestamp:Date.now(),
+      createdAt:Date.now(),
+      dayEndActions:[],
+      dayEndSummary:{todayCount:todayRecords.length,endedAt:now.toISOString()}
+    };
+    if(typeof records!=='undefined'){
+      records.push(dayEndRecord);
+      if(typeof persist==='function'){persist();}
+      if(typeof renderHome==='function'){renderHome();}
+    }
+    showToast('今天已保存，好好休息','success');
+    return;
+  }
+  if(action==='KEEP_ONLY_ONE'){
+    if(todayRecords.length===0){
+      showToast('今天还没有记录','info');
+      return;
+    }
+    var focusRecord=todayRecords[0];
+    var tonightFocus={
+      id:'tonight-'+Date.now(),
+      type:'tonightfocus',
+      title:'今晚只做: '+(focusRecord.title||focusRecord.text||''),
+      timestamp:Date.now(),
+      createdAt:Date.now(),
+      focusRecordId:focusRecord.id
+    };
+    if(typeof records!=='undefined'){
+      records.push(tonightFocus);
+      if(typeof persist==='function'){persist();}
+    }
+    showToast('已创建今晚焦点','success');
+    return;
+  }
+  if(action==='CANCEL'){
+    showToast('已取消模式: 选择要取消的记录','info');
+    return;
+  }
+  if(action==='DEFER'){
+    showToast('已延期模式: 选择要延期的记录','info');
+    return;
+  }
+  if(action==='LOWER_STANDARD'){
+    showToast('已降低标准模式: 选择要降标的记录','info');
+    return;
+  }
+  if(action==='RENEGOTIATE'){
+    showToast('已重新协商模式: 生成沟通草稿','info');
+    return;
+  }
+}
+
+/* ========== Wire Up End Day Button ========== */
+function wireUpEndDay(){
+  var btn=$('endDayBtn');
+  if(!btn)return;
+  btn.addEventListener('click',function(){
+    handleDeLoadAction('SAVE_AND_END_DAY');
+  });
+}
+
+/* ========== Wire Up Review Export Buttons ========== */
+function wireUpReviewExport(){
+  var jsonBtn=$('reviewExportJsonBtn');
+  if(jsonBtn){
+    jsonBtn.addEventListener('click',function(){
+      var exportBtn=$('exportBtn');
+      if(exportBtn){exportBtn.click();}
+    });
+  }
+  var icsBtn=$('reviewExportIcsBtn');
+  if(icsBtn){
+    icsBtn.addEventListener('click',function(){
+      var exportIcsBtn=$('exportIcsBtn');
+      if(exportIcsBtn){exportIcsBtn.click();}
+    });
+  }
+}
+
 
 /* ========== Has records state ========== */
 function hasAnyRecord(){return records.length>0;}
@@ -2612,6 +3012,10 @@ function initSwipeActions(){
 
 /* ========== Render: Home ========== */
 function renderHome(){
+  updatePlayfulHeader();
+  updateLoadBoard();
+  updateCommitmentSection();
+  updateWaitingSection();
   // Hero greeting
   var hg=$('heroGreeting');if(hg){
     var days=getUsageDays();
