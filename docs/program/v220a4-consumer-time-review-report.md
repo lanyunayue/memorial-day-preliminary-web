@@ -103,6 +103,8 @@ All four projects passed phone and desktop review scenarios. The product-truth s
 
 - Phone, Edge, `375x812`: `docs/program/screenshots/v220a4-consumer-review/consumer-review-edge-375.png`
 - Desktop, WebKit, `1366x768`: `docs/program/screenshots/v220a4-consumer-review/consumer-review-webkit-1366.png`
+- Public site, Edge, `375x812`: `docs/program/screenshots/v220a4-consumer-review/consumer-review-online-edge-375.png`
+- Public site, Edge, `1366x768`: `docs/program/screenshots/v220a4-consumer-review/consumer-review-online-edge-1366.png`
 
 Manual inspection confirmed readable metrics, stable action sizing, intact bottom navigation, no horizontal overflow, no overlap with the desktop sprite workbench, and no departure from the current Shike style.
 
@@ -114,6 +116,15 @@ Manual inspection confirmed readable metrics, stable action sizing, intact botto
 - Ubuntu Chromium/Firefox/WebKit job: success
 - Overall conclusion: success
 
+## Deployment Verification
+
+- Main was fast-forwarded without conflict to `d188394af3ff7a7f1af2e2ebb7aabd90e3268bcc`.
+- GitHub Pages run `29683351064`: success.
+- The formal root URL, `index.html`, `version.js`, `sw.js`, `manifest.json`, review CSS, and review panel module all returned HTTP 200 without a query-string override.
+- The public root reported `v2.2.0-alpha4`; the public Service Worker reported `shike-v220alpha4-v65`.
+- A clean online Edge session at `375x812` split one mixed sentence into two drafts, persisted two records, showed due-today and waiting metrics, completed one recommended record with keyboard `Enter`, remained Service Worker controlled, produced no console errors, and had no horizontal overflow.
+- A clean online Edge session at `1366x768` rendered the English panel with four metric columns, no horizontal overflow, no console errors, and no overlap with the sprite workbench.
+
 ## Known Boundary
 
 The panel chrome is translated into all four product languages. A generated next-action reason still uses the language produced by the existing temporal intelligence engine. This candidate does not rewrite that engine or its record semantics.
@@ -122,6 +133,6 @@ The panel chrome is translated into all four product languages. A generated next
 
 Risk is limited to the Me-page presentation and delegation to existing suggestion actions. The candidate can be rolled back by reverting product commit `affd09598f87b91d0bd677983dfc1d2d9b49dd34`. Existing records require no migration or cleanup.
 
-## Release Recommendation
+## Release Status
 
-Merge and deploy only after both remote CI jobs succeed and the remote main branch is confirmed to remain a fast-forward ancestor. After deployment, verify the public version, Service Worker cache rotation, first-class review placement, keyboard completion, and phone/desktop layout before declaring the release complete.
+Both remote CI jobs passed, main remained a fast-forward ancestor, and the release was deployed and verified at the formal public root. The candidate is accepted as the current `v2.2.0-alpha4` public release.
