@@ -213,6 +213,8 @@
       var review=modules.weekly.generate({records:api.getRecords(),graph:graph,waiting:waiting,corrections:corrections,now:new Date()});state.lastReview={daily:dailyBrief,weekly:review,corrections:corrections};modules.reviewView.render(reviewContainer(),state.lastReview,{action:handleReviewAction});
     }
     async function handleReviewAction(action){
+      var recordId=arguments[1];
+      if(['detail','complete','later'].includes(action)){await handleSuggestionAction(action,recordId);return;}
       if(action==='daily'){api.download('shike-daily-brief.txt',modules.daily.exportText(state.lastReview.daily),'text/plain;charset=utf-8');return;}
       if(action==='weekly'){api.download('shike-weekly-review.json',modules.weekly.exportJson(state.lastReview.weekly),'application/json;charset=utf-8');return;}
       if(action==='corrections'){api.download('shike-corrections.json',JSON.stringify(await correctionStore.exportData(),null,2),'application/json;charset=utf-8');return;}

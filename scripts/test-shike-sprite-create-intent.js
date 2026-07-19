@@ -1,5 +1,5 @@
 // test-shike-sprite-create-intent.js
-// Runtime tests for sprite create intent normalization (v2.2.0-alpha3.1)
+// Runtime tests for sprite create intent normalization (v2.2.0-alpha4)
 const fs = require('fs');
 const path = require('path');
 
@@ -204,9 +204,9 @@ add('parser-adapter.js hash unchanged', () => {
   assert(hash === 'EFBFF968EFD518E26970BAC24AD35396DF8482A32BA56011C6670167D58C4B58', 'parser-adapter hash matches expected');
 });
 
-  add('Version is v2.2.0-alpha3.1', () => {
+  add('Version is v2.2.0-alpha4', () => {
   const version = fs.readFileSync(path.join(root, 'src/config/version.js'), 'utf8');
-    assert(version.includes("v2.2.0-alpha3.1"), 'version.js has v2.2.0-alpha3.1');
+    assert(version.includes("v2.2.0-alpha4"), 'version.js has v2.2.0-alpha4');
 });
 
 add('Structured confirmation UI is complete and safe', () => {

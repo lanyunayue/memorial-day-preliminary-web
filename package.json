@@ -1,6 +1,6 @@
 {
   "name": "shike-web",
-  "version": "2.2.0-alpha3.1",
+  "version": "2.2.0-alpha4",
   "description": "时刻 - 你的贴心记事助手 (Release Candidate)",
   "private": true,
   "scripts": {

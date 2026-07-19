@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3.1 Release Candidate Test Suite
+ * v2.2.0-alpha4 Release Candidate Test Suite
  * Tests engineering infrastructure, security hardening, and release readiness
  */
 const fs = require('fs');
@@ -11,14 +11,14 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.2.0-alpha3.1 Release Candidate Tests ===\n');
+console.log('=== v2.2.0-alpha4 Release Candidate Tests ===\n');
 
 // 1. Version and cache
 console.log('[1] Version and cache');
 const vjs = readSafe(path.join(V, 'src/config/version.js'));
-assert(vjs && vjs.includes('v2.2.0-alpha3.1'), 'APP_VERSION is v2.2.0-alpha3.1');
+assert(vjs && vjs.includes('v2.2.0-alpha4'), 'APP_VERSION is v2.2.0-alpha4');
 const sw = readSafe(path.join(V, 'sw.js'));
-assert(sw && sw.includes('shike-v220alpha31-v64'), 'CACHE_NAME is shike-v220alpha31-v64');
+assert(sw && sw.includes('shike-v220alpha4-v65'), 'CACHE_NAME is shike-v220alpha4-v65');
 
 // 2. Parser integrity
 console.log('\n[2] Parser integrity');
@@ -140,14 +140,14 @@ assert(!html.includes('id="page-watch"'), 'page-watch removed in navigation cons
 assert(html && html.includes('agentWorkbench'), 'agent workbench exists');
 assert(html && html.includes('timeSprite'), 'time sprite exists');
 const verJs = readSafe(path.join(V, 'src/config/version.js'));
-assert((html && html.includes('v2.2.0-alpha3.1')) || (verJs && verJs.includes('v2.2.0-alpha3.1')), 'v2.2.0-alpha3.1 referenced');
+assert((html && html.includes('v2.2.0-alpha4')) || (verJs && verJs.includes('v2.2.0-alpha4')), 'v2.2.0-alpha4 referenced');
 
 // 13. All test scripts preserved
 console.log('\n[13] Test scripts');
 const testFiles = fs.readdirSync(path.join(V, 'scripts')).filter(f => f.startsWith('test-shike-'));
 assert(testFiles.length >= 55, 'At least 55 test scripts present (found ' + testFiles.length + ')');
 
-// 14. Release center has v2.2.0-alpha3.1
+// 14. Release center has v2.2.0-alpha4
 console.log('\n[14] Release center');
 const leg = readSafe(path.join(V, 'src/legacy-app.js'));
 assert(leg && leg.includes('releaseCenterV200rc1'), 'releaseCenterV200rc1 in i18n');
@@ -180,7 +180,7 @@ assert(V && fs.existsSync(V), 'project root exists at ' + V);
 
 // Summary
 console.log('\n========================================');
-console.log('v2.2.0-alpha3.1 release candidate tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.2.0-alpha4 release candidate tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) {
   console.log(failed + ' TESTS FAILED');
   process.exit(1);

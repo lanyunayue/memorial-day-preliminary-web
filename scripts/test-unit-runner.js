@@ -21,6 +21,7 @@ const unitTests = [
   'test-shike-action-intelligence.js',
   'test-shike-chronos-vertical.js',
   'test-shike-temporal-review-memory.js',
+  'test-shike-consumer-review.js',
   'test-shike-temporal-corpus.js',
   'test-shike-temporal-property.js',
   'test-chronos-fault-recovery.js',

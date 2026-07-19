@@ -13,9 +13,9 @@ const checks = [];
 const failures = [];
 function add(name, run) { checks.push({ name, run }); }
 
-add('version and cache are v2.2.0-alpha3.1', () => {
-  assert(script.includes("APP_VERSION='v2.2.0-alpha3.1'"), 'APP_VERSION should be v2.2.0-alpha3.1');
-  assert(sw.includes("shike-v220alpha31-v64"), 'sw cache should be shike-v220alpha31-v64');
+add('version and cache are v2.2.0-alpha4', () => {
+  assert(script.includes("APP_VERSION='v2.2.0-alpha4'"), 'APP_VERSION should be v2.2.0-alpha4');
+  assert(sw.includes("shike-v220alpha4-v65"), 'sw cache should be shike-v220alpha4-v65');
 });
 
 add('release center section exists', () => {
@@ -25,7 +25,7 @@ add('release center section exists', () => {
 });
 
 add('recent version list is visible', () => {
-  ['v2.2.0-alpha3.1', 'v1.4.1', 'v1.4.0', 'v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
+  ['v2.2.0-alpha4', 'v1.4.1', 'v1.4.0', 'v1.3.0', 'v1.2.0', 'v1.1.0', 'v1.0.0', 'v0.9.8', 'v0.9.7', 'v0.9.6', 'v0.9.5', 'v0.9.4', 'v0.9.3'].forEach((version) => {
     assert((html+script).includes(version), `${version} missing from release center`);
   });
 });

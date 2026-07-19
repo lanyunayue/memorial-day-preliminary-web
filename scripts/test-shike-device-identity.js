@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3.1 Device Identity Tests
+ * v2.2.0-alpha4 Device Identity Tests
  */
 const fs = require('fs');
 const path = require('path');

@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha3.1 Information Architecture Tests
+ * v2.2.0-alpha4 Information Architecture Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -56,7 +56,7 @@ assert(leg && leg.includes('capabilityV200rc2'), 'capabilityV200rc2 flag');
 // 7. Version in HTML
 console.log('\n[7] Version');
 const versionJs = readSafe(path.join(V,'src/config/version.js'));
-assert((html && html.includes('v2.2.0-alpha3.1')) || (versionJs && versionJs.includes('v2.2.0-alpha3.1')), 'v2.2.0-alpha3.1 referenced');
+assert((html && html.includes('v2.2.0-alpha4')) || (versionJs && versionJs.includes('v2.2.0-alpha4')), 'v2.2.0-alpha4 referenced');
 
 // 8. Release center
 console.log('\n[8] Release center');

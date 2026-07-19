@@ -131,31 +131,109 @@
   text-align: right;
 }
 
-.temporal-review-grid {
-  display: grid;
+.temporal-review {
+  min-width: 0;
+}
+
+.temporal-review-head,
+.temporal-review-head > div,
+.temporal-review-focus,
+.temporal-review-focus-actions,
+.temporal-review-details summary {
+  display: flex;
+  align-items: center;
+}
+
+.temporal-review-head,
+.temporal-review-focus,
+.temporal-review-details summary {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.temporal-review-head > div {
   gap: 8px;
 }
 
-.temporal-review-grid > div {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+.temporal-review-head strong {
+  font-size: 15px;
+}
+
+.temporal-review-head span,
+.temporal-review-details small,
+.temporal-review-focus-copy span,
+.temporal-review-focus-copy small,
+.temporal-review-quiet span {
+  color: var(--text-secondary, #766f67);
   font-size: 12px;
 }
 
-.temporal-review-grid strong {
-  min-width: 72px;
+.temporal-review-load {
+  padding: 3px 7px;
+  border: 1px solid var(--border, rgba(80, 68, 54, 0.16));
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
-.temporal-review-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.temporal-review-load[data-band="high"] {
+  color: var(--danger, #a14f45);
+}
+
+.temporal-review-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 10px;
+  border-top: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+  border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
 }
 
+.temporal-review-metric {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 10px 8px;
+  border-right: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+}
+
+.temporal-review-metric:last-child {
+  border-right: 0;
+}
+
+.temporal-review-metric span {
+  color: var(--text-secondary, #766f67);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.temporal-review-metric strong {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.temporal-review-focus,
+.temporal-review-quiet {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+}
+
+.temporal-review-focus-copy,
+.temporal-review-quiet {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.temporal-review-focus-copy strong,
+.temporal-review-focus-copy small {
+  overflow-wrap: anywhere;
+}
+
+.temporal-review-focus-actions {
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.temporal-review-focus-actions button,
 .temporal-review-buttons button {
   min-height: 34px;
   padding: 6px 10px;
@@ -163,6 +241,40 @@
   border-radius: 6px;
   background: transparent;
   color: inherit;
+}
+
+.temporal-review-focus-actions button[data-review="complete"] {
+  background: var(--accent, #76624c);
+  color: #fff;
+}
+
+.temporal-review-details {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+}
+
+.temporal-review-details summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.temporal-review-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.temporal-review-details[open] summary {
+  margin-bottom: 8px;
+}
+
+.temporal-review-details .temporal-review-metrics {
+  margin-top: 0;
+}
+
+.temporal-review-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 @media (max-width: 420px) {
@@ -179,6 +291,31 @@
   .temporal-draft-fields input {
     width: 100%;
     max-width: none;
+  }
+
+  .temporal-review-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .temporal-review-metric:nth-child(2) {
+    border-right: 0;
+  }
+
+  .temporal-review-metric:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border, rgba(80, 68, 54, 0.12));
+  }
+
+  .temporal-review-focus {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .temporal-review-focus-actions {
+    width: 100%;
+  }
+
+  .temporal-review-focus-actions button {
+    flex: 1 1 0;
   }
 }
 

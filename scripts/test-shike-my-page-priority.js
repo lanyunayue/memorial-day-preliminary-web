@@ -38,8 +38,8 @@ add('No duplicate feedbackSection', () => { const c=(mySection.match(/id="feedba
 add('No duplicate dataBackupSection', () => { const c=(mySection.match(/id="dataBackupSection"/g)||[]).length; assert(c===1,`expected 1 dataBackupSection, got ${c}`); });
 add('No undefined visible', () => { assert(!mySection.includes('>undefined<'),'undefined visible'); assert(!mySection.includes('>null<'),'null visible'); });
 add('No garbled chars', () => { assert(!mySection.includes('\uFFFD'),'replacement char found'); });
-add('APP_VERSION = v2.2.0-alpha3.1', () => { assert(script.includes("APP_VERSION='v2.2.0-alpha3.1'"),'APP_VERSION not v2.2.0-alpha3.1'); });
-add('SW cache = shike-v220alpha31-v64', () => { assert(sw.includes('shike-v220alpha31-v64'),'cache not v62'); assert(!sw.includes('shike-v141-v53'),'old cache still present'); });
+add('APP_VERSION = v2.2.0-alpha4', () => { assert(script.includes("APP_VERSION='v2.2.0-alpha4'"),'APP_VERSION not v2.2.0-alpha4'); });
+add('SW cache = shike-v220alpha4-v65', () => { assert(sw.includes('shike-v220alpha4-v65'),'cache not v62'); assert(!sw.includes('shike-v141-v53'),'old cache still present'); });
 add('Featured CSS classes exist', () => { assert(html.includes('setting-group-featured'),'setting-group-featured missing'); assert(html.includes('feature-chips'),'feature-chips missing'); assert(html.includes('feature-chip'),'feature-chip missing'); });
 add('Personalize description exists', () => { assert(mySection.includes('data-i18n="personalizeDesc"'),'personalizeDesc missing'); assert(mySection.includes('让时刻更像你的助手'),'desc text missing'); });
 add('Feature chips cover 4 areas', () => { assert(mySection.includes('data-i18n="chipTheme"'),'chipTheme missing'); assert(mySection.includes('data-i18n="chipLanguage"'),'chipLanguage missing'); assert(mySection.includes('data-i18n="chipSprite"'),'chipSprite missing'); assert(mySection.includes('data-i18n="chipDisplay"'),'chipDisplay missing'); });
