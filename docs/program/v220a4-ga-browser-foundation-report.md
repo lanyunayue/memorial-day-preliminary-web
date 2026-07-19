@@ -11,6 +11,7 @@ This candidate turns the existing single-browser Playwright run into an explicit
 - Worktree: `E:\lifetime-web-v220a4-ga-foundation`
 - Branch: `program-v220a4-ga-foundation`
 - Base: `53df9c6520d281c13cfc100061596f9ea167370a`
+- Implementation commit: `972eda2a9c8cd7b10bfa5c4fb384a90c3b4dda70`
 - Public product baseline: `66df442c93aaa27e491c543bdeac4317b9c611f9`
 - Product version: `v2.2.0-alpha3.1` (unchanged)
 - Public URL: `https://lanyunayue.github.io/memorial-day-preliminary-web/` (unchanged)
@@ -125,12 +126,20 @@ Required CDP validation generated phone, tablet, desktop, and wide-desktop scree
 
 The Ubuntu job installs and requires Chromium, Firefox, and WebKit. A separate Windows job requires the system Microsoft Edge channel. Edge failure traces and screenshots are uploaded as CI artifacts. The existing CDP, stress, static asset, and Service Worker checks remain in place.
 
+Remote branch validation completed successfully:
+
+- Actions run: `29681804142`
+- Run URL: https://github.com/lanyunayue/memorial-day-preliminary-web/actions/runs/29681804142
+- Windows `edge` job: success
+- Ubuntu `test` job: success
+- Overall conclusion: success
+
 ## Risk And Rollback
 
 Risk is limited to test and CI infrastructure. No application byte changed. The candidate can be rolled back by reverting its single commit or deleting the isolated branch/worktree before merge.
 
 ## Release Recommendation
 
-Keep this branch as the GA browser-foundation candidate. It is suitable for review and remote CI validation. Do not change the public product version or deploy solely for this test-infrastructure change. Merge only after the remote Linux portable-browser job and Windows Edge job both pass.
+Keep this branch as the GA browser-foundation candidate. It has passed both the remote Linux portable-browser job and the Windows Edge job. Do not change the public product version or deploy solely for this test-infrastructure change. It is now eligible for a controlled merge after review.
 
-No push, merge, deployment, main-branch modification, or public-site modification was performed while producing this report.
+The candidate branch was pushed for remote CI validation. No merge, deployment, main-branch modification, or public-site modification was performed.
