@@ -7,6 +7,7 @@
 - Recovery commit: `24fbb3b222757871ed83d0c1d3eb3f283ca1342f`
 - Product integrity commit: `0c9b518735c706c121222e2cef2fcadb40bcfc0d`
 - CI gate alignment commit: `b4f52f4ba5ec57badd4e513d52df2143a6de2bd7`
+- Isolated browser CI commit: `66df442c93aaa27e491c543bdeac4317b9c611f9`
 - Service Worker cache: `shike-v220alpha31-v64`
 - Production URL: `https://lanyunayue.github.io/memorial-day-preliminary-web/`
 - Rollback tag: `rollback-before-v220-alpha3-1-production-recovery`
@@ -37,12 +38,12 @@ The release also closes two product-truth defects. Composer success now waits fo
 | CDP responsive | `12/12` |
 | Dependency audit | `0` vulnerabilities after clean lockfile install |
 
-The CDP runner exits non-zero on any failed group. Playwright and CDP are separate mandatory layers; neither silently substitutes for the other.
+The CDP runner exits non-zero on any failed group. Each of its seven groups now receives an independent browser profile and CDP port on Windows and Linux. Playwright and CDP are separate mandatory layers; neither silently substitutes for the other.
 
 ## Remote and Production Evidence
 
-- GitHub CI run `29673436595`: success.
-- GitHub Pages run `29673436241`: success.
+- Final GitHub CI run `29674186028`: success.
+- Final GitHub Pages run `29674185636`: success.
 - Production root: HTTP 200.
 - Production release identity: `v2.2.0-alpha3.1`.
 - Conflict markers: `0`.

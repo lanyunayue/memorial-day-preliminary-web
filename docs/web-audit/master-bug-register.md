@@ -5,7 +5,7 @@
 - Product: Shike Web/PWA
 - Audited release: `v2.2.0-alpha3.1`
 - Production URL: `https://lanyunayue.github.io/memorial-day-preliminary-web/`
-- Verified `main`: `b4f52f4ba5ec57badd4e513d52df2143a6de2bd7`
+- Verified `main`: `66df442c93aaa27e491c543bdeac4317b9c611f9`
 - Product recovery commit: `0c9b518735c706c121222e2cef2fcadb40bcfc0d`
 - Rollback tag: `rollback-before-v220-alpha3-1-production-recovery`
 
@@ -16,7 +16,7 @@ The CSV beside this document is the field-level source of truth. This summary do
 | Severity | Discovered | Fixed or closed | Accepted | Open blocker |
 | --- | ---: | ---: | ---: | ---: |
 | P0 | 1 | 1 | 0 | 0 |
-| P1 | 9 | 9 | 0 | 0 |
+| P1 | 10 | 10 | 0 | 0 |
 | P2 | 6 | 5 | 1 | 0 |
 
 `TRAE-P2-012` is the only accepted residual risk. Google Fonts is optional, asynchronous, and has a tested system-font fallback, but universal mainland-China availability has not been proven. It is not a release blocker for this alpha.
@@ -28,7 +28,8 @@ The CSV beside this document is the field-level source of truth. This summary do
 3. A successful capture now means IndexedDB persistence completed; failures roll back in-memory state.
 4. Double-clicking cannot create duplicate records, while a different next draft remains actionable.
 5. Static, unit, browser, PWA, offline, migration, multi-tab, accessibility, security, format, and lint gates are hard failures.
-6. Web production has no remaining P0 or P1 finding in this register.
+6. Required CDP groups now run in independent browser profiles and ports on local and GitHub CI environments.
+7. Web production has no remaining P0 or P1 finding in this register.
 
 ## TRAE Evidence Boundary
 
