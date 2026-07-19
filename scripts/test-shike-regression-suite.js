@@ -7,7 +7,7 @@ const tests = [
   {
     name: 'PWA assets',
     script: 'test-shike-pwa-assets.js',
-    expected: 'PWA asset regression passed: 8/8'
+    expected: 'PWA asset regression passed: 9/9'
   },
   {
     name: 'HTML integrity',
