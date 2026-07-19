@@ -2686,31 +2686,47 @@ function wireUpDeloadEntry(){
   var entry=$('deloadEntryBtn');
   if(!entry)return;
   entry.addEventListener('click',function(){
-    showToast('减负功能即将打开...','info');
-    setTimeout(function(){
-      var deloadMsg='选择一个动作来减轻今天的负荷:\n\n'+
-        '1. 取消 — 改为已取消，保留历史\n'+
-        '2. 延期 — 选择新日期\n'+
-        '3. 降低标准 — 修改完成标准\n'+
-        '4. 重新协商 — 生成沟通草稿\n'+
-        '5. 只保留一件 — 创建今晚焦点\n'+
-        '6. 结束今天 — 保存今天然后休息\n\n'+
-        '请输入数字 (1-6):';
-      var choice=prompt(deloadMsg,'6');
-      if(!choice)return;
-      var action='';
-      switch(choice.trim()){
-        case'1':action='CANCEL';break;
-        case'2':action='DEFER';break;
-        case'3':action='LOWER_STANDARD';break;
-        case'4':action='RENEGOTIATE';break;
-        case'5':action='KEEP_ONLY_ONE';break;
-        case'6':action='SAVE_AND_END_DAY';break;
-        default:return;
-      }
-      handleDeLoadAction(action);
-    },500);
+    showDeloadSheet();
   });
+  // Wire up action sheet items
+  var overlay=$('deloadSheetOverlay');
+  if(overlay){
+    var items=overlay.querySelectorAll('[data-deload-action]');
+    items.forEach(function(item){
+      item.addEventListener('click',function(){
+        var action=this.getAttribute('data-deload-action');
+        hideDeloadSheet();
+        setTimeout(function(){handleDeLoadAction(action);},200);
+      });
+    });
+    var cancelBtn=$('deloadSheetCancel');
+    if(cancelBtn){
+      cancelBtn.addEventListener('click',hideDeloadSheet);
+    }
+    overlay.addEventListener('click',function(e){
+      if(e.target===overlay){hideDeloadSheet();}
+    });
+  }
+}
+
+function showDeloadSheet(){
+  var overlay=$('deloadSheetOverlay');
+  if(!overlay)return;
+  overlay.style.display='flex';
+  // Focus first item for accessibility
+  setTimeout(function(){
+    var firstItem=overlay.querySelector('[data-deload-action]');
+    if(firstItem){firstItem.focus();}
+  },100);
+}
+
+function hideDeloadSheet(){
+  var overlay=$('deloadSheetOverlay');
+  if(!overlay)return;
+  overlay.style.display='none';
+  // Return focus to deload entry button
+  var entry=$('deloadEntryBtn');
+  if(entry){entry.focus();}
 }
 
 function handleDeLoadAction(action){
@@ -2719,11 +2735,13 @@ function handleDeLoadAction(action){
   var tomorrowStart=todayStart+86400000;
   var todayRecords=records.filter(function(r){
     if(r.deleted)return false;
+    if(r.type==='dayend'||r.type==='tonightfocus')return false;
     var ts=r.timestamp||0;
     if(ts>0&&ts>=todayStart&&ts<tomorrowStart)return true;
     if(ts===0&&!isCompleted(r))return true;
     return false;
   });
+
   if(action==='SAVE_AND_END_DAY'){
     var dayEndRecord={
       id:'dayend-'+Date.now(),
@@ -2732,16 +2750,19 @@ function handleDeLoadAction(action){
       timestamp:Date.now(),
       createdAt:Date.now(),
       dayEndActions:[],
-      dayEndSummary:{todayCount:todayRecords.length,endedAt:now.toISOString()}
+      dayEndSummary:{todayCount:todayRecords.length,endedAt:now.toISOString()},
+      canRestore:true
     };
     if(typeof records!=='undefined'){
       records.push(dayEndRecord);
       if(typeof persist==='function'){persist();}
       if(typeof renderHome==='function'){renderHome();}
+      if(typeof renderReview==='function'){renderReview();}
     }
     showToast('今天已保存，好好休息','success');
     return;
   }
+
   if(action==='KEEP_ONLY_ONE'){
     if(todayRecords.length===0){
       showToast('今天还没有记录','info');
@@ -2754,29 +2775,114 @@ function handleDeLoadAction(action){
       title:'今晚只做: '+(focusRecord.title||focusRecord.text||''),
       timestamp:Date.now(),
       createdAt:Date.now(),
-      focusRecordId:focusRecord.id
+      focusRecordId:focusRecord.id,
+      canRestore:true
     };
     if(typeof records!=='undefined'){
       records.push(tonightFocus);
       if(typeof persist==='function'){persist();}
+      if(typeof renderHome==='function'){renderHome();}
     }
-    showToast('已创建今晚焦点','success');
+    showToast('已创建今晚焦点: '+(focusRecord.title||focusRecord.text||''),'success');
     return;
   }
+
   if(action==='CANCEL'){
-    showToast('已取消模式: 选择要取消的记录','info');
+    if(todayRecords.length===0){
+      showToast('今天没有可取消的记录','info');
+      return;
+    }
+    var cancelledCount=0;
+    var undoneCount=0;
+    todayRecords.forEach(function(r){
+      if(!isCompleted(r)&&!r.deleted){
+        r.status='CANCELLED';
+        r.cancelledAt=now.toISOString();
+        r.previousStatus=r.previousStatus||'active';
+        cancelledCount++;
+      }else{
+        undoneCount++;
+      }
+    });
+    if(typeof persist==='function'){persist();}
+    if(typeof renderHome==='function'){renderHome();}
+    showToast('已取消'+cancelledCount+'件事'+(undoneCount>0?'，'+undoneCount+'件已完成的不受影响':''),'success');
     return;
   }
+
   if(action==='DEFER'){
-    showToast('已延期模式: 选择要延期的记录','info');
+    if(todayRecords.length===0){
+      showToast('今天没有可延期的记录','info');
+      return;
+    }
+    var deferredCount=0;
+    var tomorrow=new Date(todayStart+86400000);
+    tomorrow.setHours(9,0,0,0);
+    todayRecords.forEach(function(r){
+      if(!isCompleted(r)&&!r.deleted&&r.type!=='commitment'){
+        r.previousTimestamp=r.timestamp;
+        r.previousDueDate=r.dueDate||null;
+        r.timestamp=tomorrow.getTime();
+        r.dueDate=tomorrow.toISOString().split('T')[0];
+        r.deferredAt=now.toISOString();
+        r.deferredFrom=todayStart;
+        deferredCount++;
+      }
+    });
+    if(typeof persist==='function'){persist();}
+    if(typeof renderHome==='function'){renderHome();}
+    if(typeof renderAll==='function'){renderAll();}
+    showToast('已将'+deferredCount+'件事延期到明天','success');
     return;
   }
+
   if(action==='LOWER_STANDARD'){
-    showToast('已降低标准模式: 选择要降标的记录','info');
+    if(todayRecords.length===0){
+      showToast('今天没有可调整的记录','info');
+      return;
+    }
+    var adjustedCount=0;
+    todayRecords.forEach(function(r){
+      if(!isCompleted(r)&&!r.deleted){
+        r.previousCompletionStandard=r.completionStandard||'full';
+        r.completionStandard='minimum';
+        r.standardLoweredAt=now.toISOString();
+        adjustedCount++;
+      }
+    });
+    if(typeof persist==='function'){persist();}
+    if(typeof renderHome==='function'){renderHome();}
+    showToast('已降低'+adjustedCount+'件事的完成标准','success');
     return;
   }
+
   if(action==='RENEGOTIATE'){
-    showToast('已重新协商模式: 生成沟通草稿','info');
+    var commitments=todayRecords.filter(function(r){
+      return r.type==='commitment'||r.isCommitment;
+    });
+    if(commitments.length===0){
+      showToast('今天没有需要重新协商的承诺','info');
+      return;
+    }
+    var drafts=[];
+    commitments.forEach(function(c){
+      var draft={
+        id:'draft-'+Date.now()+'-'+Math.random().toString(36).substr(2,5),
+        type:'renegotiation_draft',
+        title:'重新协商: '+(c.title||c.text||''),
+        originalRecordId:c.id,
+        originalTitle:c.title||c.text||'',
+        draftText:'关于「'+(c.title||c.text||'')+'」，可能需要更多时间。能否调整截止时间？',
+        createdAt:Date.now(),
+        notSent:true
+      };
+      drafts.push(draft);
+    });
+    if(typeof records!=='undefined'){
+      records.push.apply(records,drafts);
+      if(typeof persist==='function'){persist();}
+    }
+    showToast('已生成'+drafts.length+'份沟通草稿，未自动发送','success');
     return;
   }
 }
