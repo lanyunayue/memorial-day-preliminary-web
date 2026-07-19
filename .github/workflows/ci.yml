@@ -19,8 +19,8 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm run ci:install
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+      - name: Install portable Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
       - name: Detect browser
         id: browser_detect
         run: |
@@ -75,8 +75,8 @@ jobs:
         run: npm run test:ci-gates
       - name: Test integrity
         run: npm run test:integrity
-      - name: Playwright product truth
-        run: npm run test:browser
+      - name: Playwright portable browser truth
+        run: npm run test:browser:portable
       - name: Browser E2E
         id: browser_e2e
         run: npm run test:cdp
@@ -115,3 +115,24 @@ jobs:
       - name: Service Worker validation
         if: always()
         run: node scripts/test-shike-pwa-assets.js
+
+  edge:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm run ci:install
+      - name: Playwright Microsoft Edge truth
+        run: npm run test:browser:edge
+      - name: Upload Edge failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-playwright-failure
+          path: |
+            test-results/playwright/
+            test-results/playwright-results.json
+          if-no-files-found: warn

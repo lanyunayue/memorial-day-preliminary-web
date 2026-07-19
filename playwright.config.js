@@ -1,7 +1,5 @@
 const path = require('path');
 
-const localEdge = process.platform === 'win32' && !process.env.CI;
-
 module.exports = {
   testDir: './e2e',
   outputDir: './test-results/playwright',
@@ -21,10 +19,20 @@ module.exports = {
   },
   projects: [
     {
-      name: localEdge ? 'edge' : 'chromium',
-      use: localEdge
-        ? { browserName: 'chromium', channel: 'msedge' }
-        : { browserName: 'chromium' },
+      name: 'chromium',
+      use: { browserName: 'chromium' },
+    },
+    {
+      name: 'edge',
+      use: { browserName: 'chromium', channel: 'msedge' },
+    },
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox' },
+    },
+    {
+      name: 'webkit',
+      use: { browserName: 'webkit' },
     },
   ],
   webServer: {

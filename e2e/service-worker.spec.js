@@ -16,7 +16,7 @@ async function loadAndEnter(page) {
   });
 }
 
-test('service worker removes stale cache and launches offline', async ({ context, page }) => {
+test('service worker replaces stale caches with the current cache', async ({ page }) => {
   await loadAndEnter(page);
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.evaluate(async () => {
@@ -29,6 +29,13 @@ test('service worker removes stale cache and launches offline', async ({ context
   await page.evaluate(() => navigator.serviceWorker.ready);
   await expect.poll(() => page.evaluate(() => caches.keys())).toContain(currentCache);
   await expect.poll(() => page.evaluate(() => caches.keys())).not.toContain('shike-playwright-obsolete-cache');
+});
+
+test('service worker launches the app offline', async ({ browserName, context, page }) => {
+  test.skip(browserName === 'webkit', 'Playwright does not support WebKit service worker automation');
+
+  await loadAndEnter(page);
+  await page.evaluate(() => navigator.serviceWorker.ready);
 
   await context.setOffline(true);
   await page.reload({ waitUntil: 'domcontentloaded' });
