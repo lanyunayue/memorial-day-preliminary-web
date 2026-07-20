@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 Sync Client Tests
+ * v2.3.0-alpha2-webfix Sync Client Tests
  */
 const fs = require('fs');
 const path = require('path');

@@ -1,4 +1,4 @@
-// v2.2.0-alpha4 Sync Quarantine Migration Test
+// v2.3.0-alpha2-webfix Sync Quarantine Migration Test
 (function(){
   var passed=0,failed=0;
   function assert(c,m){if(c){passed++;console.log('[PASS]',m);}else{failed++;console.error('[FAIL]',m);}}
@@ -18,7 +18,7 @@
         setItem:function(k,v){try{fakeStorage[k]=JSON.parse(v);}catch(e){fakeStorage[k]=v;}},
         removeItem:function(k){delete fakeStorage[k];}
       },
-      ShikeVersion:{version:'v2.2.0-alpha4'},
+      ShikeVersion:{version:'v2.3.0-alpha2-webfix'},
       document:{readyState:'complete',addEventListener:function(){}},
       setTimeout:function(fn,t){/*don't auto-run in test*/},
       clearTimeout:function(){},

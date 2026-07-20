@@ -1,4 +1,4 @@
-// v2.2.0-alpha4 Sync UI Honesty Test
+// v2.3.0-alpha2-webfix Sync UI Honesty Test
 // Verifies UI doesn't show misleading sync status
 (function(){
   var passed=0,failed=0;
@@ -20,10 +20,10 @@
   assert(!html.includes('data-page="sync"'), 'no sync nav button in HTML');
 
   // 2. Version is rc5.1 (quarantine version)
-  assert(version.includes("v2.2.0-alpha4"), 'version shows rc5.1');
+  assert(version.includes("v2.3.0-alpha2-webfix"), 'version shows rc5.1');
 
   // 3. Cache is rc52
-  assert(sw.includes("shike-v220alpha4-v65"), 'cache name is rc52');
+  assert(sw.includes("shike-v230a2-webfix-v65"), 'cache name is rc52');
 
   // 4. Sync disabled by default
   assert(client.includes("isEnabled = function(){ return false; }") || client.includes("isEnabled=function(){return false}"), 'sync reports disabled');

@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 Unified Composer Tests
+ * v2.3.0-alpha2-webfix Unified Composer Tests
  */
 const fs = require('fs');
 const path = require('path');

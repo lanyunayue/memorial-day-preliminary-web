@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 Analytics Tests
+ * v2.3.0-alpha2-webfix Analytics Tests
  */
 const fs = require('fs');
 const path = require('path');

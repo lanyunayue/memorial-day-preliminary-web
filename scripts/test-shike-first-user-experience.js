@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 First User Experience Tests
+ * v2.3.0-alpha2-webfix First User Experience Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -36,11 +36,11 @@ assert(html && html.includes('placeholder'), 'input has placeholder');
 // 5. Version visible
 console.log('[5] Version visible');
 const versionJs = readSafe(path.join(V,'src/config/version.js'));
-assert((html && html.includes('v2.2.0-alpha4')) || (versionJs && versionJs.includes('v2.2.0-alpha4')), 'v2.2.0-alpha4 visible');
+assert((html && html.includes('v2.3.0-alpha2-webfix')) || (versionJs && versionJs.includes('v2.3.0-alpha2-webfix')), 'v2.3.0-alpha2-webfix visible');
 
 // 6. Cache
 console.log('\n[6] Cache');
-assert(sw && sw.includes('shike-v220alpha4-v65'), 'CACHE_NAME is shike-v220alpha4-v65');
+assert(sw && sw.includes('shike-v230a2-webfix-v65'), 'CACHE_NAME is shike-v230a2-webfix-v65');
 
 // 7. Watch center empty state
 console.log('\n[7] Watch center empty state');

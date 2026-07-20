@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 Upcoming Seven Days Tests
+ * v2.3.0-alpha2-webfix Upcoming Seven Days Tests
  */
 const fs = require('fs');
 const path = require('path');
