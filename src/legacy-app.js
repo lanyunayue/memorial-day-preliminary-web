@@ -1304,26 +1304,54 @@ function addDemoRecords(){
 }
 
 /* ========== Time Sprite ========== */
-var timeSpriteCollapsed=true;
+/* State machine: OPEN | MINIMIZED | DISMISSED */
+var timeSpritePanelState='minimized';
 var timeSpriteDragState=null;
 var timeSpriteSuppressClick=false;
 var timeSpriteManualTip='';
-function readTimeSpriteCollapsed(){
+var timeSpriteCollapsed=false; // backward-compat alias
+function readSpriteAutoOpen(){
   try{
-    var saved=localStorage.getItem(SPRITE_COLLAPSED_KEY);
-    if(saved===null)saved=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
-    if(saved==='true')return true;
-    if(saved==='false')return false;
-  }catch(e){}
-  return !!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
+    var v=localStorage.getItem(SPRITE_AUTO_OPEN_KEY);
+    if(v===null)return true;
+    return v==='true';
+  }catch(e){return true;}
 }
-function saveTimeSpriteCollapsed(value){
-  timeSpriteCollapsed=!!value;
+function saveSpriteAutoOpen(value){
+  try{localStorage.setItem(SPRITE_AUTO_OPEN_KEY,value?'true':'false');}catch(e){}
+}
+function readTimeSpritePanelState(){
   try{
-    localStorage.setItem(SPRITE_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');
-    localStorage.setItem(ASSISTANT_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');
+    var saved=localStorage.getItem(SPRITE_PANEL_STATE_KEY);
+    if(saved==='open'||saved==='minimized'||saved==='dismissed')return saved;
+    var oldCollapsed=localStorage.getItem(SPRITE_COLLAPSED_KEY);
+    if(oldCollapsed===null)oldCollapsed=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
+    if(oldCollapsed==='true')return 'minimized';
+    if(oldCollapsed==='false')return readSpriteAutoOpen()?'open':'minimized';
+  }catch(e){}
+  var isMobile=!!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
+  return isMobile?'minimized':(readSpriteAutoOpen()?'open':'minimized');
+}
+function saveTimeSpritePanelState(state){
+  timeSpritePanelState=state;
+  timeSpriteCollapsed=(state!=='open');
+  try{
+    localStorage.setItem(SPRITE_PANEL_STATE_KEY,state);
+    var collapsed=(state!=='open');
+    localStorage.setItem(SPRITE_COLLAPSED_KEY,collapsed?'true':'false');
+    localStorage.setItem(ASSISTANT_COLLAPSED_KEY,collapsed?'true':'false');
+    if(state==='dismissed'){localStorage.setItem(SPRITE_DISMISSED_AT_KEY,String(Date.now()));}
   }catch(e){}
   renderTimeSprite();
+}
+function readTimeSpriteCollapsed(){return readTimeSpritePanelState()!=='open';}
+function saveTimeSpriteCollapsed(value){
+  if(value){saveTimeSpritePanelState('minimized');}
+  else{saveTimeSpritePanelState('open');}
+}
+function restoreTimeSprite(){
+  saveTimeSpritePanelState('open');
+  showToast(t('spriteRestored')||'时刻精灵已恢复','success');
 }
 function getTimeSpriteTips(){
   return [t('spriteTip1'),t('spriteTip2'),t('spriteTip3'),t('spriteTip4'),t('spriteTip5')].filter(Boolean);
@@ -1415,8 +1443,11 @@ function formatTimeSpriteWhen(item){
 }
 function renderTimeSprite(){
   var root=$('timeSprite');if(!root)return;
-  var expanded=!timeSpriteCollapsed;
+  root.classList.remove('sprite-open','sprite-minimized','sprite-dismissed');
+  root.classList.add('sprite-'+timeSpritePanelState);
+  var expanded=(timeSpritePanelState==='open');
   root.classList.toggle('collapsed',!expanded);
+  root.classList.toggle('dismissed',timeSpritePanelState==='dismissed');
   var toggle=$('timeSpriteToggle');
   if(toggle){
     if(toggle.setAttribute){
@@ -1453,33 +1484,57 @@ function renderTimeSprite(){
   var meta=$('timeSpriteMeta');if(meta)meta.textContent=metaParts.join(' · ');
 }
 function initTimeSprite(){
-  timeSpriteCollapsed=readTimeSpriteCollapsed();
+  timeSpritePanelState=readTimeSpritePanelState();
+  timeSpriteCollapsed=(timeSpritePanelState!=='open');
   applyTimeSpritePosition(readTimeSpritePosition());
   initTimeSpriteDrag();
   b('timeSpriteToggle','click',function(){
     if(timeSpriteSuppressClick){timeSpriteSuppressClick=false;return;}
-    saveTimeSpriteCollapsed(!timeSpriteCollapsed);
-    if(!timeSpriteCollapsed)showTimeSpriteGreeting();
+    if(timeSpritePanelState==='dismissed'){
+      saveTimeSpritePanelState('open');
+      showTimeSpriteGreeting();
+      return;
+    }
+    if(timeSpritePanelState==='open'){
+      saveTimeSpritePanelState('minimized');
+    }else{
+      saveTimeSpritePanelState('open');
+      showTimeSpriteGreeting();
+    }
   });
-  b('timeSpriteClose','click',function(){saveTimeSpriteCollapsed(true);});
+  b('timeSpriteClose','click',function(){
+    saveTimeSpritePanelState('dismissed');
+    showToast(t('spriteDismissed')||'时刻精灵已隐藏，可在精灵页恢复','info');
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&timeSpritePanelState==='open'){
+      saveTimeSpritePanelState('minimized');
+    }
+  });
   b('timeSpriteInputBtn','click',function(){
-    saveTimeSpriteCollapsed(true);
+    saveTimeSpritePanelState('minimized');
     switchPage('home');
     setTimeout(function(){var inp=$('quickInput');if(inp)inp.focus();},60);
   });
   b('timeSpriteDemoBtn','click',function(){
     jumpToMySection('experienceExampleSection');
-    saveTimeSpriteCollapsed(true);
+    saveTimeSpritePanelState('minimized');
   });
-  b('timeSpriteTodayBtn','click',function(){switchPage('home');saveTimeSpriteCollapsed(true);});
-  b('timeSpriteBatchBtn','click',function(){switchPage('import');var input=$('importTextInput');if(input)setTimeout(function(){input.focus();},60);saveTimeSpriteCollapsed(true);});
-  b('timeSpriteCalendarBtn','click',function(){switchPage('calendar');saveTimeSpriteCollapsed(true);});
-  b('timeSpriteExportBtn','click',function(){jumpToMySection('calendarExportSection');saveTimeSpriteCollapsed(true);});
-  b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection');saveTimeSpriteCollapsed(true);});
-  b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true);saveTimeSpriteCollapsed(false);});
+  b('timeSpriteTodayBtn','click',function(){switchPage('home');saveTimeSpritePanelState('minimized');});
+  b('timeSpriteBatchBtn','click',function(){switchPage('import');var input=$('importTextInput');if(input)setTimeout(function(){input.focus();},60);saveTimeSpritePanelState('minimized');});
+  b('timeSpriteCalendarBtn','click',function(){switchPage('calendar');saveTimeSpritePanelState('minimized');});
+  b('timeSpriteExportBtn','click',function(){jumpToMySection('calendarExportSection');saveTimeSpritePanelState('minimized');});
+  b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection');saveTimeSpritePanelState('minimized');});
+  b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true);saveTimeSpritePanelState('open');});
+
+  // Desktop topnav
+  document.querySelectorAll('.desktop-topnav .nav-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){switchPage(tab.dataset.page);});
+  });
   b('timeSpriteResetBtn','click',resetTimeSpritePosition);
   renderTimeSprite();
 }
+
 function initTimeSpriteDrag(){
   var toggle=$('timeSpriteToggle'),root=$('timeSprite');
   if(!toggle||!root||!toggle.addEventListener)return;
@@ -2399,6 +2454,9 @@ function switchPage(page){
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.classList.toggle('active',n.dataset.page===page);
   });
+  document.querySelectorAll('.desktop-topnav .nav-tab').forEach(function(n){
+    n.classList.toggle('active',n.dataset.page===page);
+  });
   closeDrawer();
   if(page==='home')renderHome();
   else if(page==='calendar')renderCalendar();
@@ -2460,6 +2518,16 @@ function renderSpirit(){
     if(count>0){
       status.textContent='已记录 '+count+' 件事，随时帮你回顾和减负';
     }
+  }
+  // Show restore button if spirit is dismissed
+  var restoreBtn=$('spiritRestoreBtn');
+  if(restoreBtn){
+    restoreBtn.style.display=(timeSpritePanelState==='dismissed')?'block':'none';
+  }
+  // Show auto-open toggle
+  var autoOpenToggle=$('spiritAutoOpenToggle');
+  if(autoOpenToggle){
+    autoOpenToggle.checked=readSpriteAutoOpen();
   }
 }
 
@@ -2629,6 +2697,23 @@ function wireUpPlayfulCapture(){
 
 /* ========== Wire Up Spirit Page Buttons ========== */
 function wireUpSpiritPage(){
+  var restoreBtn=$('spiritRestoreBtn');
+  if(restoreBtn){
+    restoreBtn.addEventListener('click',function(){
+      restoreTimeSprite();
+      renderSpirit();
+    });
+  }
+  var autoOpenToggle=$('spiritAutoOpenToggle');
+  if(autoOpenToggle){
+    autoOpenToggle.addEventListener('change',function(){
+      saveSpriteAutoOpen(autoOpenToggle.checked);
+      if(autoOpenToggle.checked&&timeSpritePanelState==='dismissed'){
+        saveTimeSpritePanelState('minimized');
+        renderSpirit();
+      }
+    });
+  }
   var writeBtn=$('spiritWriteBtn');
   if(writeBtn){
     writeBtn.addEventListener('click',function(){

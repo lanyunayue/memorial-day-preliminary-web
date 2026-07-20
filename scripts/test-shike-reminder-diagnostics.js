@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 Reminder Diagnostics Tests
+ * v2.3.0-alpha2-webfix Reminder Diagnostics Tests
  */
 const fs = require('fs');
 const path = require('path');

@@ -1,0 +1,229 @@
+/* ==========================================================================
+   Web Visual Stabilization v2.3.0-alpha2-webfix
+   Addresses: spirit dismissal, z-index tokens, overlay governance, 
+   responsive layout, font system, card hierarchy
+   ========================================================================== */
+
+/* ---- Z-Index Tokens ---- */
+:root{
+  --z-base:1;
+  --z-sticky:50;
+  --z-navigation:60;
+  --z-popover:100;
+  --z-spirit:58;
+  --z-spirit-dismissed:-1;
+  --z-modal:200;
+  --z-modal-mask:199;
+  --z-toast:300;
+  --z-release:120;
+}
+
+/* ---- Spirit Dismissed State ---- */
+.time-sprite.dismissed,
+.time-sprite.sprite-dismissed{
+  display:none !important;
+  visibility:hidden;
+  pointer-events:none;
+}
+.time-sprite.sprite-minimized .time-sprite-panel{
+  display:none;
+}
+.time-sprite.sprite-minimized .time-sprite-orb{
+  display:flex;
+}
+
+/* ---- Spirit z-index ---- */
+.time-sprite{
+  z-index:var(--z-spirit);
+}
+.time-sprite.sprite-dismissed{
+  z-index:var(--z-spirit-dismissed);
+}
+
+/* ---- Font System ---- */
+:root{
+  --font-cn:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Noto Sans CJK SC",-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-display:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --font-serif:"Noto Serif SC",Georgia,serif;
+}
+body{
+  font-family:var(--font-cn);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+.hero-title,.brand-name,.card-section-title,.setting-group-title{
+  font-family:var(--font-display);
+  font-weight:600;
+}
+
+/* ---- Card Hierarchy ---- */
+:root{
+  --surface-0:transparent;
+  --surface-1:var(--bg);
+  --surface-2:var(--bg-elev,var(--bg));
+  --surface-3:var(--bg);
+  --shadow-sm:0 1px 3px rgba(44,37,32,.04);
+  --shadow-md:0 4px 16px rgba(44,37,32,.08);
+  --shadow-lg:0 12px 40px rgba(44,37,32,.16);
+  --border-soft:rgba(44,37,32,.06);
+  --border-card:rgba(44,37,32,.08);
+}
+.load-card,.commitment-section,.waiting-section,.quick-capture,
+.review-metric-card,.feature-hub-item,.setting-group{
+  border:1px solid var(--border-card);
+  box-shadow:var(--shadow-sm);
+  border-radius:14px;
+}
+.setting-group-featured{
+  border:1px solid var(--border-card);
+  box-shadow:var(--shadow-sm);
+}
+
+/* ---- Mobile Nav: ensure content not covered ---- */
+.app,.page{
+  padding-bottom:0;
+}
+.page.active{
+  padding-bottom:calc(72px + var(--safe-bottom) + 8px);
+}
+@media(min-width:900px){
+  .page.active{
+    padding-bottom:24px;
+  }
+  .nav{
+    display:none;
+  }
+  /* Desktop top nav */
+  .desktop-topnav{
+    display:flex !important;
+    position:sticky;
+    top:0;
+    z-index:var(--z-navigation);
+    background:var(--bg);
+    border-bottom:1px solid var(--border-card);
+    padding:8px 24px;
+    align-items:center;
+    justify-content:space-between;
+    max-width:1240px;
+    margin:0 auto;
+  }
+  .desktop-topnav .brand{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:600;
+  }
+  .desktop-topnav .nav-items{
+    display:flex;
+    gap:4px;
+  }
+  .desktop-topnav .nav-tab{
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:14px;
+    color:var(--ink-mute);
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    transition:all .18s;
+  }
+  .desktop-topnav .nav-tab:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+  .desktop-topnav .nav-tab.active{
+    background:var(--ink);
+    color:var(--bg);
+  }
+  .app{
+    max-width:1240px;
+    margin:0 auto;
+  }
+}
+.desktop-topnav{
+  display:none;
+}
+
+/* ---- Desktop: spirit positioned within max-width container ---- */
+@media(min-width:900px){
+  .time-sprite{
+    right:max(16px,calc((100vw - 1240px)/2 + 16px));
+  }
+}
+
+/* ---- Quick Capture: save button always visible ---- */
+.quick-capture-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.quick-capture-footer .save-btn{
+  flex-shrink:0;
+}
+
+/* ---- Modal governance ---- */
+.mask,.release-mask{
+  z-index:var(--z-modal-mask);
+}
+.modal,.release-box{
+  z-index:var(--z-modal);
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+body.modal-open{
+  overflow:hidden;
+}
+
+/* ---- Toast ---- */
+.toast-container{
+  z-index:var(--z-toast);
+}
+
+/* ---- Typography refinements ---- */
+.hero-subtitle{
+  font-size:15px;
+  color:var(--ink-mute);
+  font-weight:400;
+}
+.section-header{
+  margin-top:24px;
+  margin-bottom:12px;
+}
+.section-title{
+  font-size:16px;
+  font-weight:600;
+}
+.input-hint{
+  font-size:12px;
+  color:var(--ink-mute);
+  line-height:1.5;
+}
+
+/* ---- Reduce long descriptions ---- */
+.local-note{
+  font-size:12px;
+  color:var(--ink-mute);
+  line-height:1.5;
+  padding:8px 12px;
+  background:var(--bg-soft);
+  border-radius:8px;
+}
+
+/* ---- Focus visible ---- */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* ---- Reduced motion ---- */
+@media(prefers-reduced-motion:reduce){
+  *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}

@@ -1,5 +1,5 @@
 /**
- * v2.2.0-alpha4 Optional Sync Beta Release Candidate Tests
+ * v2.3.0-alpha2-webfix Optional Sync Beta Release Candidate Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +8,7 @@ let passed = 0, failed = 0;
 function assert(c, m) { if(c){passed++;console.log('  PASS: '+m);} else {failed++;console.log('  FAIL: '+m);} }
 function readSafe(p) { try { return fs.readFileSync(p, 'utf8'); } catch(e) { return null; } }
 
-console.log('=== v2.2.0-alpha4 Optional Sync Beta Tests ===\n');
+console.log('=== v2.3.0-alpha2-webfix Optional Sync Beta Tests ===\n');
 
 const html = readSafe(path.join(V,'index.html'));
 const sw = readSafe(path.join(V,'sw.js'));
@@ -16,8 +16,8 @@ const leg = readSafe(path.join(V,'src/legacy-app.js'));
 const ver = readSafe(path.join(V,'src/config/version.js'));
 
 console.log('[1] Version');
-assert(ver && ver.includes('v2.2.0-alpha4'), 'APP_VERSION is v2.2.0-alpha4');
-assert(sw && sw.includes('shike-v220alpha4-v65'), 'CACHE_NAME is shike-v220alpha4-v65');
+assert(ver && ver.includes('v2.3.0-alpha2-webfix'), 'APP_VERSION is v2.3.0-alpha2-webfix');
+assert(sw && sw.includes('shike-v230a2-webfix-v65'), 'CACHE_NAME is shike-v230a2-webfix-v65');
 
 console.log('\n[2] Parser integrity');
 const crypto = require('crypto');
@@ -75,5 +75,5 @@ assert(leg && leg.includes('syncModeLocal'), 'sync mode local text');
 assert(leg && !leg.includes('sync_beta_launched') && !leg.includes('已部署同步'), 'no fake sync deployment');
 
 console.log('\n========================================');
-console.log('v2.2.0-alpha4 Optional Sync Beta tests: ' + passed + '/' + (passed+failed) + ' passed');
+console.log('v2.3.0-alpha2-webfix Optional Sync Beta tests: ' + passed + '/' + (passed+failed) + ' passed');
 if (failed > 0) process.exit(1);
