@@ -782,6 +782,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
 </style>
 </head>
 <body data-theme="paper">
+<script>try{if(new URLSearchParams(location.search).get('demo')==='competition'){location.replace('competition.html'+location.search);}}catch(e){}</script>
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- Opening -->
@@ -817,6 +818,7 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <span class="weather-desc" id="weatherDesc"></span>
       </div>
 
+      <!-- C0 Competition Entry --><a href="competition.html" style="display:flex;align-items:center;gap:10px;margin:0 0 16px;padding:12px 14px;background:linear-gradient(135deg,var(--accent-bg),var(--bg-elev));border:1px solid var(--accent-soft);border-radius:var(--radius);text-decoration:none;color:var(--ink);opacity:0;animation:fadeUp .7s .3s forwards;"><span style="font-size:22px;line-height:1;">⛰</span><span style="display:flex;flex-direction:column;flex:1;"><strong style="font-family:var(--font-serif);font-size:15px;color:var(--accent);letter-spacing:.04em;">进入归时谷</strong><small style="font-size:12px;color:var(--ink-mute);">把记录带进一个会回应你的世界</small></span><span style="font-size:20px;color:var(--accent-soft);">›</span></a>
       <div class="input-wrap">
         <div class="input-row">
           <textarea class="quick-input" id="quickInput" rows="1" placeholder="试着写下需要记住的事情" data-i18n-ph="inputPlaceholder"></textarea>
