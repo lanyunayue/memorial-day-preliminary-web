@@ -153,7 +153,8 @@ var ACTION_LABELS = {
   split:'拆分', break_down:'拆分',
   drop:'放下', let_go:'放下', release:'放下', released:'放下', abandon:'放下',
   complete:'完成', done:'完成', finish:'完成', resolve:'完成', completed:'完成',
-  keep:'保留', hold:'保留'
+  keep:'保留', hold:'保留', seen:'已见到', acknowledged:'已安放',
+  dropToday:'今天不处理'
 };
 
 function $(id){ return document.getElementById(id); }
@@ -231,7 +232,7 @@ function renderReturnCard(){
   if(!data){ card.classList.remove('show'); card.innerHTML = ''; return; }
   var applied = isReturnApplied(data.transferId);
   card.innerHTML = '';
-  var h = document.createElement('h3'); h.textContent = '归时谷的回响'; card.appendChild(h);
+  var h = document.createElement('h3'); h.textContent = '归时谷带回了一次反馈'; card.appendChild(h);
   var meta = document.createElement('div'); meta.className = 'meta';
   meta.textContent = '交接号 ' + String(data.transferId).slice(0,18) + (applied ? ' · 已应用' : '');
   card.appendChild(meta);
