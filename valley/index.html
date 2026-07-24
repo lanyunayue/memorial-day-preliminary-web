@@ -10,7 +10,7 @@
   html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; font-family: "PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif; color: #f5f0e8; }
   #renderCanvas { width: 100%; height: 100%; touch-action: none; outline: none; display: block; }
   #loadingScreen { position: fixed; inset: 0; background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.8s ease; }
-  #loadingScreen.hidden { opacity: 0; pointer-events: none; }
+  #loadingScreen.hidden { opacity: 0 !important; pointer-events: none !important; display: none !important; }
   .loading-title { font-size: 28px; font-weight: 800; letter-spacing: 4px; margin-bottom: 8px; color: #f5d0a9; }
   .loading-sub { font-size: 14px; color: #a0a0c0; margin-bottom: 32px; }
   .loading-bar { width: 200px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
@@ -46,7 +46,7 @@
     </style>
     <!-- g1-b1-initialized -->
 
-    <script type="module" crossorigin src="./assets/index-j3Mgfxrq.js"></script>
+    <script type="module" crossorigin src="./assets/index-CxyTTDck.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/babylon-Ciwi-Ey_.js">
   </head>
 <body>
@@ -171,7 +171,7 @@
     </div>
     <button id="deloadItemCancel" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#707090;font-size:12px;cursor:pointer;pointer-events:auto;margin-top:12px;letter-spacing:2px;">返回</button>
   </div>
-
+
 
   
 
