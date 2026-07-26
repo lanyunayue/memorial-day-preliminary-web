@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="description" content="时刻：归时谷 - 轻量3D开放区域生活策略游戏">
+<title>时刻：归时谷 | Chronos Valley</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; font-family: "PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif; color: #f5f0e8; }
+  #renderCanvas { width: 100%; height: 100%; touch-action: none; outline: none; display: block; }
+  #loadingScreen { position: fixed; inset: 0; background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.8s ease; }
+  #loadingScreen.hidden { opacity: 0 !important; pointer-events: none !important; display: none !important; }
+  .loading-title { font-size: 28px; font-weight: 800; letter-spacing: 4px; margin-bottom: 8px; color: #f5d0a9; }
+  .loading-sub { font-size: 14px; color: #a0a0c0; margin-bottom: 32px; }
+  .loading-bar { width: 200px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .loading-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg,#e8a87c,#f5d0a9); border-radius: 2px; transition: width 0.3s ease; }
+  .loading-tip { font-size: 12px; color: #8080a0; margin-top: 16px; }
+</style>
+
+    <!-- G1-B1: Commercial vertical slice styles -->
+    <style>
+      .deload-action-btn { transition: all 0.2s ease; }
+      .deload-action-btn:hover { transform: translateX(4px); }
+      #spiritDialogueBox { position:absolute;bottom:12%;left:50%;transform:translateX(-50%);width:90%;max-width:560px;background:rgba(20,15,40,0.92);border:1.5px solid rgba(245,208,169,0.3);border-radius:16px;padding:20px 24px;backdrop-filter:blur(10px);z-index:250;display:none;font-family:"Microsoft YaHei","PingFang SC",sans-serif; }
+      #spiritDialogueName { font-size:11px;letter-spacing:3px;color:#f5d0a9;margin-bottom:8px; }
+      #spiritDialogueText { font-size:15px;color:#f5f0e8;line-height:1.7;min-height:28px; }
+      #spiritDialogueHint { font-size:11px;color:rgba(255,255,255,0.3);margin-top:12px;text-align:right;letter-spacing:1px;cursor:pointer;pointer-events:auto;}
+      #guideArrow { position:absolute;z-index:200;display:none;pointer-events:none;font-size:28px;animation:guideBounce 1s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(245,208,169,0.6));}
+      @keyframes guideBounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+      #epiloguePanel { position:absolute;inset:0;z-index:800;display:none;background:rgba(10,8,25,0.95);flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px;font-family:"Microsoft YaHei","PingFang SC",sans-serif;}
+      #epilogueText { font-size:20px;color:#f5d0a9;line-height:2;max-width:500px;text-shadow:0 0 20px rgba(245,208,169,0.2);}
+      #epilogueBtn { margin-top:40px;padding:14px 40px;background:linear-gradient(135deg,#e8a87c,#f5d0a9);border:none;border-radius:12px;color:#1a1535;font-size:15px;font-weight:700;cursor:pointer;pointer-events:auto;}
+      #epilogueBtn:hover { opacity:0.9; }
+      .spirit-notification { animation:spiritFadeIn 0.5s ease; }
+      @keyframes spiritFadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+      #vignette { position:absolute;inset:0;pointer-events:none;z-index:50;box-shadow:inset 0 0 150px rgba(0,0,0,0);transition:box-shadow 3s ease;}
+      #audioToggle { position:absolute;top:12px;right:60px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);width:36px;height:36px;border-radius:8px;font-size:16px;cursor:pointer;pointer-events:auto;z-index:150;display:flex;align-items:center;justify-content:center;}
+      #audioToggle:hover { background:rgba(0,0,0,0.5);color:#fff; }
+      .journal-item { transition:all 0.2s ease; }
+      .journal-item:hover { background:rgba(245,208,169,0.08);transform:translateX(2px); }
+      .btn-deload { background:transparent !important; border:1px solid rgba(167,139,250,0.4) !important; color:#a78bfa !important; }
+      .btn-deload:hover { background:rgba(167,139,250,0.15) !important; }
+      #openingOverlay { position:absolute;inset:0;z-index:1001;display:none; }
+      #deloadItemPanel { display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:420px;background:rgba(20,15,40,0.95);border:1.5px solid rgba(245,208,169,0.3);border-radius:16px;padding:24px;z-index:350;backdrop-filter:blur(10px);font-family:"Microsoft YaHei","PingFang SC",sans-serif;}
+    </style>
+    <!-- g1-b1-initialized -->
+
+    <script type="module" crossorigin src="./assets/index-CxyTTDck.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/babylon-Ciwi-Ey_.js">
+  </head>
+<body>
+<canvas id="renderCanvas"></canvas>
+
+<!-- Loading Screen -->
+<div id="loadingScreen">
+  <div class="loading-title">归时谷</div>
+  <div class="loading-sub">Chronos Valley</div>
+  <div class="loading-bar"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
+  <div class="loading-tip" id="loadingTip">正在唤醒山谷...</div>
+</div>
+
+<!-- HUD Layer -->
+<div id="hud" style="position:fixed;inset:0;pointer-events:none;z-index:100;"></div>
+
+<!-- Interaction Prompt -->
+<div id="interactionPrompt" style="display:none;position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:rgba(20,18,30,0.88);border:1.5px solid rgba(245,208,169,0.5);border-radius:12px;padding:10px 20px;color:#f5f0e8;font-size:14px;pointer-events:none;z-index:200;backdrop-filter:blur(8px);">
+  <span id="promptKey" style="display:inline-block;background:rgba(245,208,169,0.25);border:1px solid rgba(245,208,169,0.5);border-radius:6px;padding:2px 8px;margin-right:8px;font-weight:700;font-size:12px;">E</span>
+  <span id="promptText">交互</span>
+</div>
+
+<!-- DeLoad Panel -->
+<div id="deloadPanel" style="display:none;position:fixed;inset:0;background:rgba(10,8,20,0.7);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:linear-gradient(135deg,#1e1e3a,#2a2050);border:2px solid rgba(245,208,169,0.4);border-radius:20px;padding:28px;max-width:420px;width:90%;pointer-events:auto;box-shadow:0 8px 40px rgba(0,0,0,0.5);">
+    <h2 style="font-size:20px;font-weight:700;color:#f5d0a9;margin-bottom:6px;">今晚只做一件</h2>
+    <p style="font-size:13px;color:#a0a0c0;margin-bottom:20px;">选择一件今晚最重要的事，其他事项不会被删除或取消，只是暂时放下。</p>
+    <div id="deloadOptions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+    <button id="deloadCancel" style="width:100%;padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:#a0a0c0;font-size:14px;cursor:pointer;pointer-events:auto;">取消</button>
+  </div>
+</div>
+
+<!-- Day End Panel -->
+<div id="dayEndPanel" style="display:none;position:fixed;inset:0;background:rgba(5,5,15,0.85);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+  <div style="background:linear-gradient(180deg,#1a1535,#0f0f2a);border:2px solid rgba(245,208,169,0.3);border-radius:20px;padding:32px;max-width:480px;width:90%;pointer-events:auto;box-shadow:0 8px 40px rgba(0,0,0,0.6);">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:36px;margin-bottom:8px;">🔥</div>
+      <h2 style="font-size:22px;font-weight:700;color:#f5d0a9;">今天到此为止</h2>
+      <p style="font-size:13px;color:#8080a0;margin-top:4px;">篝火已燃起，好好休息</p>
+    </div>
+    <div id="dayEndContent" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
+    <button id="dayEndConfirm" style="width:100%;padding:14px;background:linear-gradient(135deg,#e8a87c,#f5d0a9);border:none;border-radius:12px;color:#1a1535;font-size:15px;font-weight:700;cursor:pointer;pointer-events:auto;">睡个好觉</button>
+  </div>
+</div>
+
+<!-- Start Overlay -->
+<div id="startOverlay" style="position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;">
+  <div style="font-size:42px;font-weight:800;letter-spacing:6px;color:#f5d0a9;margin-bottom:4px;">归时谷</div>
+  <div style="font-size:14px;color:#8080a0;letter-spacing:3px;margin-bottom:40px;">CHRONOS VALLEY</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+    <button id="startDemoBtn" style="padding:14px 48px;background:linear-gradient(135deg,#e8a87c,#f5d0a9);border:2px solid rgba(245,208,169,0.6);border-radius:12px;color:#1a1535;font-size:15px;font-weight:700;cursor:pointer;pointer-events:auto;min-width:220px;">开始演示</button>
+    <button id="startCustomBtn" style="padding:12px 48px;background:transparent;border:1.5px solid rgba(245,208,169,0.3);border-radius:12px;color:#a0a0c0;font-size:13px;cursor:pointer;pointer-events:auto;min-width:220px;">输入自定义事项</button>
+  </div>
+  <div style="font-size:11px;color:#606080;max-width:320px;text-align:center;line-height:1.7;">WASD 移动 · 鼠标转视角 · Shift 奔跑 · E 交互 · Esc 暂停<br>你的任务、承诺与等待会变成山谷中的建筑与灯火</div>
+</div>
+
+<!-- Custom Input Modal -->
+<div id="customInputModal" style="display:none;position:fixed;inset:0;background:rgba(10,8,20,0.8);z-index:600;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:#1e1e3a;border:2px solid rgba(245,208,169,0.3);border-radius:16px;padding:24px;max-width:400px;width:90%;pointer-events:auto;">
+    <h3 style="font-size:17px;font-weight:700;color:#f5d0a9;margin-bottom:6px;">写下你的事项</h3>
+    <p style="font-size:12px;color:#8080a0;margin-bottom:16px;">可以写任务、答应别人的事、或正在等待的事</p>
+    <textarea id="customInputText" rows="3" style="width:100%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px;color:#f5f0e8;font-size:14px;font-family:inherit;resize:none;margin-bottom:12px;outline:none;" placeholder="例如：明天下午交报告"></textarea>
+    <div style="display:flex;gap:8px;">
+      <button id="customInputCancel" style="flex:1;padding:10px;background:transparent;border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;color:#a0a0c0;font-size:13px;cursor:pointer;">取消</button>
+      <button id="customInputConfirm" style="flex:1;padding:10px;background:linear-gradient(135deg,#e8a87c,#f5d0a9);border:none;border-radius:10px;color:#1a1535;font-size:13px;font-weight:700;cursor:pointer;">进入山谷</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pause Menu -->
+<div id="pauseMenu" style="display:none;position:fixed;inset:0;background:rgba(10,8,20,0.8);z-index:400;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:#1e1e3a;border:2px solid rgba(245,208,169,0.3);border-radius:16px;padding:28px;min-width:240px;pointer-events:auto;">
+    <h3 style="font-size:18px;font-weight:700;color:#f5d0a9;text-align:center;margin-bottom:20px;">暂停</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <button id="pauseResume" style="padding:12px;background:linear-gradient(135deg,#e8a87c,#f5d0a9);border:none;border-radius:10px;color:#1a1535;font-size:14px;font-weight:700;cursor:pointer;">继续</button>
+      <button id="pauseExport" style="padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;color:#a0a0c0;font-size:13px;cursor:pointer;">导出存档</button>
+      <button id="pauseReset" style="padding:12px;background:transparent;border:1.5px solid rgba(232,100,100,0.3);border-radius:10px;color:#e88a8a;font-size:13px;cursor:pointer;">重新开始</button>
+    </div>
+  </div>
+</div>
+
+<!-- Camp Menu Panel -->
+<div id="campMenuPanel" style="display:none;position:fixed;inset:0;background:rgba(10,8,20,0.75);z-index:350;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+  <div id="campMenuInner" style="background:linear-gradient(135deg,#1e1e3a,#2a2050);border:2px solid rgba(245,208,169,0.4);border-radius:20px;padding:28px;max-width:420px;width:90%;pointer-events:auto;box-shadow:0 8px 40px rgba(0,0,0,0.5);"></div>
+</div>
+
+<!-- G1-B1: Opening overlay -->
+  <div id="openingOverlay"></div>
+  <!-- G1-B1: Spirit dialogue box -->
+  <div id="spiritDialogueBox">
+    <div id="spiritDialogueName"></div>
+    <div id="spiritDialogueText"></div>
+    <div id="spiritDialogueHint">点击继续 →</div>
+  </div>
+  <!-- G1-B1: Guide arrow -->
+  <div id="guideArrow">⬇</div>
+  <!-- G1-B1: Epilogue panel -->
+  <div id="epiloguePanel">
+    <div id="epilogueText"></div>
+    <button id="epilogueBtn">醒来，继续走</button>
+  </div>
+  <!-- G1-B1: Vignette overlay -->
+  <div id="vignette"></div>
+  <!-- G1-B1: Audio toggle -->
+  <button id="audioToggle" title="音效开关">🔊</button>
+  <!-- G1-B1: Item-level DeLoad panel -->
+  <div id="deloadItemPanel">
+    <div style="font-size:12px;color:#f5d0a9;margin-bottom:8px;letter-spacing:4px;text-align:center;">❖ 减负 ❖</div>
+    <div style="font-size:11px;color:#a08c70;margin-bottom:12px;text-align:center;letter-spacing:2px;">让山谷帮你承担</div>
+    <div id="deloadItemTitle" style="font-size:15px;color:#f5f0e8;font-weight:600;margin-bottom:16px;padding:12px 14px;background:rgba(245,208,169,0.06);border:1px solid rgba(245,208,169,0.15);border-radius:10px;border-left:3px solid #f5d0a9;"></div>
+    <div id="deloadItemOptions"></div>
+    <!-- Split sub-panel -->
+    <div id="splitSubPanel" style="display:none;">
+      <div class="split-parent-title" style="font-size:12px;color:#fbbf24;margin-bottom:12px;padding:10px 12px;background:rgba(251,191,36,0.06);border-radius:8px;border-left:3px solid #fbbf24;line-height:1.5;"></div>
+      <div style="font-size:12px;color:#f5d0a9;margin-bottom:10px;letter-spacing:1px;">✂️ 拆分为更小的几步：</div>
+      <div class="split-inputs"></div>
+      <div class="split-warning" style="font-size:11px;color:#a0a0c0;margin:8px 0;text-align:center;min-height:16px;"></div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="split-cancel-btn" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#a0a0c0;font-size:13px;cursor:pointer;pointer-events:auto;transition:all 0.2s;">返回</button>
+        <button class="split-confirm-btn" style="flex:1;padding:10px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border:none;border-radius:8px;color:#1a1535;font-size:13px;font-weight:700;cursor:pointer;pointer-events:auto;transition:all 0.2s;box-shadow:0 2px 12px rgba(251,191,36,0.3);">确认拆分</button>
+      </div>
+    </div>
+    <button id="deloadItemCancel" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#707090;font-size:12px;cursor:pointer;pointer-events:auto;margin-top:12px;letter-spacing:2px;">返回</button>
+  </div>
+
+
+  
+
+</body>
+</html>

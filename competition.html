@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f3ed">
+<meta name="description" content="时刻 x 归时谷 — C0 比赛体验。把现实里的事，带进一个会回应你的世界。">
+<title>时刻 x 归时谷</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b7355'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='white' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f3ed;--bg-elev:#fdfaf5;--bg-soft:#efe9df;
+  --ink:#2c2520;--ink-soft:#6b5f54;--ink-mute:#9a8e82;--ink-line:#e0d8cb;
+  --accent:#b8553f;--accent-soft:#d89682;--accent-bg:rgba(184,85,63,.08);
+  --radius:14px;--radius-lg:20px;--radius-sm:10px;
+  --font-serif:"Noto Serif SC",Georgia,"Songti SC",serif;
+  --font-sans:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --shadow:0 1px 3px rgba(44,37,32,.06),0 4px 14px rgba(44,37,32,.04);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);color:var(--ink);
+  font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;min-height:100vh;min-height:100dvh;
+  background-image:radial-gradient(circle at 15% 0%,rgba(184,85,63,.06),transparent 40%),radial-gradient(circle at 90% 18%,rgba(138,122,106,.07),transparent 45%);
+}
+.wrap{
+  width:100%;max-width:480px;margin:0 auto;
+  padding:calc(20px + var(--safe-top)) 22px calc(40px + var(--safe-bottom));
+}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
+.wordmark{font-family:var(--font-serif);font-size:18px;font-weight:600;letter-spacing:.1em;color:var(--ink);}
+.back-link{font-size:13px;color:var(--ink-mute);}
+.badge{display:none;align-items:center;gap:6px;align-self:flex-start;font-size:12px;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-soft);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+.badge.show{display:inline-flex;}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.hero{display:flex;flex-direction:column;}
+.hero h1{font-family:var(--font-serif);font-size:34px;font-weight:600;letter-spacing:.04em;margin:0 0 14px;line-height:1.2;}
+.hero h1 .x{color:var(--accent-soft);margin:0 4px;font-weight:400;}
+.main-copy{font-family:var(--font-serif);font-size:18px;font-weight:500;line-height:1.7;color:var(--ink);margin:0 0 12px;}
+.sub-copy{font-size:14px;line-height:1.75;color:var(--ink-soft);margin:0 0 28px;}
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);}
+.step-no{font-family:var(--font-serif);font-size:15px;font-weight:600;color:var(--accent);min-width:26px;}
+.step-body strong{display:block;font-size:15px;font-weight:600;margin-bottom:2px;}
+.step-body span{font-size:13px;color:var(--ink-mute);line-height:1.5;}
+.section-label{font-size:12px;letter-spacing:.12em;color:var(--ink-mute);margin:0 2px 10px;}
+.preview{background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:var(--radius);padding:6px 4px;margin-bottom:26px;box-shadow:var(--shadow);}
+.preview-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--ink-line);}
+.preview-item:last-child{border-bottom:none;}
+.preview-glyph{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.preview-glyph.task{background:rgba(184,85,63,.12);}
+.preview-glyph.commit{background:rgba(184,85,63,.20);}
+.preview-glyph.wait{background:rgba(138,122,106,.16);}
+.preview-text{flex:1;min-width:0;}
+.preview-text .t{font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.preview-text .k{font-size:11px;color:var(--ink-mute);}
+.actions{display:flex;flex-direction:column;gap:12px;margin-bottom:14px;}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;border:none;transition:transform .12s,box-shadow .2s,opacity .2s;font-family:inherit;}
+.btn:active{transform:scale(.985);}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(184,85,63,.22);}
+.btn-secondary{background:var(--bg-elev);color:var(--accent);border:1.5px solid var(--accent);}
+.btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--ink-line);min-height:44px;font-size:14px;font-weight:500;}
+.demo-zone{margin-top:20px;padding-top:20px;border-top:1px dashed var(--ink-line);}
+.demo-zone .actions{margin-bottom:0;}
+.return-card{display:none;background:linear-gradient(135deg,var(--accent-bg),var(--bg-elev));border:1.5px solid var(--accent-soft);border-radius:var(--radius-lg);padding:18px;margin-bottom:24px;animation:fadeUp .5s forwards;}
+.return-card.show{display:block;}
+.return-card h3{font-family:var(--font-serif);font-size:17px;margin:0 0 4px;color:var(--accent);}
+.return-card .meta{font-size:12px;color:var(--ink-mute);margin-bottom:12px;}
+.return-list{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-direction:column;gap:8px;}
+.return-list li{font-size:13px;background:rgba(255,255,255,.5);border:1px solid var(--ink-line);border-radius:var(--radius-sm);padding:9px 12px;display:flex;justify-content:space-between;gap:10px;align-items:center;}
+.return-list li .name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+.return-list li .act{color:var(--accent);font-weight:600;white-space:nowrap;}
+.return-summary{font-size:13px;color:var(--ink-soft);margin:0 0 14px;line-height:1.6;}
+.toast{position:fixed;left:50%;bottom:calc(28px + var(--safe-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:100;max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.foot{margin-top:28px;font-size:12px;color:var(--ink-mute);text-align:center;line-height:1.6;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{opacity:0;animation:fadeUp .6s forwards;}
+.fade-in.d1{animation-delay:.05s;}.fade-in.d2{animation-delay:.12s;}.fade-in.d3{animation-delay:.2s;}.fade-in.d4{animation-delay:.28s;}.fade-in.d5{animation-delay:.36s;}
+@media (max-width:360px){.hero h1{font-size:30px;}.main-copy{font-size:17px;}.wrap{padding-left:18px;padding-right:18px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar fade-in">
+    <a class="wordmark" href="index.html">时刻</a>
+    <a class="back-link" href="index.html">返回主站 ›</a>
+  </div>
+
+  <span class="badge" id="demoBadge"><span class="dot"></span>演示模式</span>
+
+  <section class="hero">
+    <h1 class="fade-in d1">时刻<span class="x">×</span>归时谷</h1>
+    <p class="main-copy fade-in d2">把现实里的事，带进一个会回应你的世界。</p>
+    <p class="sub-copy fade-in d3">在「时刻」记录事项，进入「归时谷」看见它们化作木牌、誓约灯与纸舟，再通过延期、拆分、放下或完成，让世界产生变化。</p>
+  </section>
+
+  <div id="returnCard" class="return-card"></div>
+
+  <div class="steps">
+    <div class="step fade-in d3"><div class="step-no">01</div><div class="step-body"><strong>记录现实事项</strong><span>在「时刻」写下要做的事、答应的话、等待的结果。</span></div></div>
+    <div class="step fade-in d4"><div class="step-no">02</div><div class="step-body"><strong>进入归时谷</strong><span>事项化作木牌、誓约灯与纸舟，出现在山谷里。</span></div></div>
+    <div class="step fade-in d5"><div class="step-no">03</div><div class="step-body"><strong>看见选择留下痕迹</strong><span>延期、拆分、放下或完成，让世界产生变化。</span></div></div>
+  </div>
+
+  <p class="section-label">将带入归时谷的事项</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="startRecordBtn">开始记录</button>
+    <button class="btn btn-secondary" id="enterValleyBtn">进入归时谷</button>
+  </div>
+
+  <div class="demo-zone">
+    <div class="actions">
+      <button class="btn btn-secondary" id="demoExpBtn">开始比赛体验</button>
+      <button class="btn btn-ghost" id="restartDemoBtn">重新开始演示</button>
+      <button class="btn btn-ghost" id="exitDemoBtn">退出演示模式</button>
+    </div>
+  </div>
+
+  <p class="foot">C0 比赛接入 · 数据通过本地 localStorage 传递，不会离开你的设备。</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  generateHandoff, writeHandoff, goToGame,
+  readReturnPayload, isReturnApplied, markReturnApplied, clearReturnPayload,
+  getDemoRecords, detectGameType
+} from './src/bridge/web-bridge.js';
+
+var RETURN_URL = '../competition.html';
+
+var TYPE_META = {
+  TASK:        { glyph: '\u{1FA91}', label: '木牌 · 任务',  cls: 'task' },
+  COMMITMENT:  { glyph: '\u{1F3EE}', label: '誓约灯 · 承诺', cls: 'commit' },
+  WAITING_FOR: { glyph: '\u{1F6F6}', label: '纸舟 · 等待',  cls: 'wait' }
+};
+
+var ACTION_LABELS = {
+  extend:'延期', postpone:'延期', delay:'延期', deferred:'延期',
+  split:'拆分', break_down:'拆分',
+  drop:'放下', let_go:'放下', release:'放下', released:'放下', abandon:'放下',
+  complete:'完成', done:'完成', finish:'完成', resolve:'完成', completed:'完成',
+  keep:'保留', hold:'保留', seen:'已见到', acknowledged:'已安放',
+  dropToday:'今天不处理'
+};
+
+function $(id){ return document.getElementById(id); }
+
+function showToast(msg){
+  var t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+
+function readRealRecords(){
+  try{
+    var raw = localStorage.getItem('shike_records_v1');
+    var arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch(e){ return []; }
+}
+
+function renderPreview(records){
+  var list = (records && records.length) ? records.slice(0,3) : getDemoRecords();
+  var el = $('preview');
+  el.innerHTML = '';
+  list.forEach(function(r){
+    var gt = detectGameType(r);
+    var meta = TYPE_META[gt] || TYPE_META.TASK;
+    var title = r.title || r.text || '未命名事项';
+    var row = document.createElement('div');
+    row.className = 'preview-item';
+    var g = document.createElement('div');
+    g.className = 'preview-glyph ' + meta.cls;
+    g.textContent = meta.glyph;
+    var tx = document.createElement('div');
+    tx.className = 'preview-text';
+    var t = document.createElement('div'); t.className = 't'; t.textContent = title;
+    var k = document.createElement('div'); k.className = 'k'; k.textContent = meta.label;
+    tx.appendChild(t); tx.appendChild(k);
+    row.appendChild(g); row.appendChild(tx);
+    el.appendChild(row);
+  });
+}
+
+function launch(records){
+  var handoff = generateHandoff(records, { returnUrl: RETURN_URL });
+  if(!writeHandoff(handoff)){
+    showToast('无法写入交接数据，请检查存储权限');
+    return;
+  }
+  goToGame('valley/');
+}
+
+$('startRecordBtn').addEventListener('click', function(){ location.href = 'index.html'; });
+$('enterValleyBtn').addEventListener('click', function(){
+  var records = readRealRecords();
+  if(records.length === 0){
+    showToast('还没有记录，请先在「时刻」记录事项，或使用「开始比赛体验」');
+    return;
+  }
+  launch(records);
+});
+$('demoExpBtn').addEventListener('click', function(){ launch(getDemoRecords()); });
+$('restartDemoBtn').addEventListener('click', function(){
+  clearReturnPayload();
+  location.reload();
+});
+$('exitDemoBtn').addEventListener('click', function(){
+  clearReturnPayload();
+  location.href = 'index.html';
+});
+
+function renderReturnCard(){
+  var data = readReturnPayload();
+  var card = $('returnCard');
+  if(!data){ card.classList.remove('show'); card.innerHTML = ''; return; }
+  var applied = isReturnApplied(data.transferId);
+  card.innerHTML = '';
+  var h = document.createElement('h3'); h.textContent = '归时谷带回了一次反馈'; card.appendChild(h);
+  var meta = document.createElement('div'); meta.className = 'meta';
+  meta.textContent = '交接号 ' + String(data.transferId).slice(0,18) + (applied ? ' · 已应用' : '');
+  card.appendChild(meta);
+  var results = data.actions || data.results || data.records || [];
+  if(Array.isArray(results) && results.length){
+    var ul = document.createElement('ul'); ul.className = 'return-list';
+    results.forEach(function(it){
+      var li = document.createElement('li');
+      var name = document.createElement('span'); name.className = 'name';
+      name.textContent = it.summary || it.title || it.sourceRecordId || '事项';
+      var act = it.action || it.outcome || '';
+      var label = ACTION_LABELS[String(act).toLowerCase()] || act || '处理';
+      var actSpan = document.createElement('span'); actSpan.className = 'act'; actSpan.textContent = label;
+      li.appendChild(name); li.appendChild(actSpan); ul.appendChild(li);
+    });
+    card.appendChild(ul);
+  }else{
+    var p = document.createElement('p'); p.className = 'return-summary';
+    p.textContent = data.summary || '归时谷已记录你在山谷里做出的选择。';
+    card.appendChild(p);
+  }
+  var btn = document.createElement('button');
+  btn.className = 'btn ' + (applied ? 'btn-ghost' : 'btn-secondary');
+  btn.style.minHeight = '44px';
+  btn.textContent = applied ? '清除回响' : '应用并清除';
+  btn.addEventListener('click', function(){
+    if(!applied) markReturnApplied(data.transferId);
+    clearReturnPayload();
+    card.classList.remove('show'); card.innerHTML = '';
+    showToast(applied ? '已清除回响' : '已记录反馈');
+    var fresh = readRealRecords();
+    renderPreview(fresh.length ? fresh : null);
+  });
+  card.appendChild(btn);
+  card.classList.add('show');
+}
+
+(function init(){
+  var params = new URLSearchParams(location.search);
+  var isDemo = params.get('demo') === 'competition';
+  if(isDemo){ $('demoBadge').classList.add('show'); }
+  var initRecords = readRealRecords();
+  if(isDemo || initRecords.length === 0){ initRecords = getDemoRecords(); }
+  renderPreview(initRecords);
+  renderReturnCard();
+})();
+</script>
+</body>
+</html>
