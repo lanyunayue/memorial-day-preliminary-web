@@ -1,0 +1,60 @@
+{
+  "1920": {
+    "resolution": "1920",
+    "before_brightness": {
+      "r": 52,
+      "g": 46,
+      "b": 65,
+      "avg": 54
+    },
+    "response_1s_brightness": {
+      "r": 57,
+      "g": 51,
+      "b": 69,
+      "avg": 59
+    },
+    "response_3s_brightness": {
+      "r": 83,
+      "g": 77,
+      "b": 57,
+      "avg": 72
+    },
+    "pixel_diff_1s": 6.68,
+    "pixel_diff_3s": 32.9,
+    "warm_light_increase_1s": 5,
+    "warm_light_increase_3s": 31,
+    "brightness_change_1s": 5,
+    "brightness_change_3s": 18,
+    "visual_change_detected": true,
+    "warm_light_detected": true
+  },
+  "1366": {
+    "resolution": "1366",
+    "before_brightness": {
+      "r": 47,
+      "g": 41,
+      "b": 60,
+      "avg": 49
+    },
+    "response_1s_brightness": {
+      "r": 55,
+      "g": 48,
+      "b": 66,
+      "avg": 56
+    },
+    "response_3s_brightness": {
+      "r": 80,
+      "g": 74,
+      "b": 55,
+      "avg": 70
+    },
+    "pixel_diff_1s": 10.99,
+    "pixel_diff_3s": 34.03,
+    "warm_light_increase_1s": 8,
+    "warm_light_increase_3s": 33,
+    "brightness_change_1s": 7,
+    "brightness_change_3s": 21,
+    "visual_change_detected": true,
+    "warm_light_detected": true
+  }
+}

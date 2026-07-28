@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "transferId": "handoff_1785141344780_cbzatn",
+  "returnedAt": 1785141386068,
+  "source": "chronos-valley",
+  "actions": [
+    {
+      "sourceRecordId": "demo_task_1",
+      "action": "split",
+      "gameType": "TASK",
+      "summary": "已拆分为3步",
+      "title": "完成比赛演示视频",
+      "children": [
+        "整理录制素材",
+        "完成第一版剪辑",
+        "导出并检查最终视频"
+      ]
+    },
+    {
+      "sourceRecordId": "demo_commit_1",
+      "action": "seen",
+      "gameType": "COMMITMENT",
+      "summary": "已在归时谷中见到「答应团队今晚完成最终检查」",
+      "title": "答应团队今晚完成最终检查",
+      "children": null
+    },
+    {
+      "sourceRecordId": "demo_wait_1",
+      "action": "acknowledged",
+      "gameType": "WAITING_FOR",
+      "summary": "已在候信亭安放，顺其自然",
+      "title": "等待比赛材料审核结果",
+      "children": null
+    }
+  ]
+}

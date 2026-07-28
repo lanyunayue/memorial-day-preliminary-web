@@ -807,8 +807,8 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   <div class="page active" id="page-home">
     <div class="home-hero" id="homeHero">
       <div class="hero-greeting" id="heroGreeting"></div>
-      <h1 class="hero-title" data-i18n="appName">时刻</h1>
-      <p class="hero-subtitle" data-i18n="tagline">你的贴心记事助手</p>
+      <h1 class="hero-title" style="font-size:28px;line-height:1.4;">把现实里的事，<br>带进一个会回应你的世界。</h1>
+      <p class="hero-subtitle" style="font-size:13px;line-height:1.7;margin-bottom:20px;">在“时刻”记录任务、承诺和等待，进入归时谷，把过大的事拆分，把暂时做不到的事延期，把不再需要承担的事放下。</p>
       <div class="home-clock-big" id="homeClockBig"></div>
 
       <!-- Weather -->
@@ -818,7 +818,16 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
         <span class="weather-desc" id="weatherDesc"></span>
       </div>
 
-      <!-- C0 Competition Entry --><a href="competition.html" style="display:flex;align-items:center;gap:10px;margin:0 0 16px;padding:12px 14px;background:linear-gradient(135deg,var(--accent-bg),var(--bg-elev));border:1px solid var(--accent-soft);border-radius:var(--radius);text-decoration:none;color:var(--ink);opacity:0;animation:fadeUp .7s .3s forwards;"><span style="font-size:22px;line-height:1;">⛰</span><span style="display:flex;flex-direction:column;flex:1;"><strong style="font-family:var(--font-serif);font-size:15px;color:var(--accent);letter-spacing:.04em;">进入归时谷</strong><small style="font-size:12px;color:var(--ink-mute);">把记录带进一个会回应你的世界</small></span><span style="font-size:20px;color:var(--accent-soft);">›</span></a>
+      <!-- C1.1 Competition Entry -->
+      <div style="opacity:0;animation:fadeUp .7s .3s forwards;margin-bottom:18px;">
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+          <div style="display:flex;gap:12px;align-items:center;padding:10px 14px;background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:12px;"><span style="font-family:var(--font-serif);font-weight:600;color:var(--accent);font-size:14px;min-width:20px;">01</span><span style="font-size:13px;color:var(--ink-soft);">记录现实事项</span></div>
+          <div style="display:flex;gap:12px;align-items:center;padding:10px 14px;background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:12px;"><span style="font-family:var(--font-serif);font-weight:600;color:var(--accent);font-size:14px;min-width:20px;">02</span><span style="font-size:13px;color:var(--ink-soft);">在归时谷重新处理</span></div>
+          <div style="display:flex;gap:12px;align-items:center;padding:10px 14px;background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:12px;"><span style="font-family:var(--font-serif);font-weight:600;color:var(--accent);font-size:14px;min-width:20px;">03</span><span style="font-size:13px;color:var(--ink-soft);">把选择带回现实</span></div>
+        </div>
+        <a href="competition.html?demo=competition" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:50px;background:var(--accent);color:#fff;border-radius:14px;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(184,85,63,.22);margin-bottom:10px;">开始2分钟体验</a>
+        <a href="competition.html" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;background:var(--bg-elev);color:var(--accent);border:1.5px solid var(--accent);border-radius:14px;font-size:14px;font-weight:500;text-decoration:none;">继续使用时刻</a>
+      </div>
       <div class="input-wrap">
         <div class="input-row">
           <textarea class="quick-input" id="quickInput" rows="1" placeholder="试着写下需要记住的事情" data-i18n-ph="inputPlaceholder"></textarea>
