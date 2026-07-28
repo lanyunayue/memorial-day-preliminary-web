@@ -1,0 +1,41 @@
+{
+  "resolution": "1366x768",
+  "deload": {
+    "visible": true,
+    "top": -55,
+    "bottom": 823,
+    "viewportHeight": 768,
+    "belowFold": true,
+    "actionButtons": [
+      "📅延期不是今天必须做的，改天再说",
+      "✂️拆分 推荐拆成更小的步骤",
+      "🌙今天不处理今天就到这里，明天再看",
+      "🍃放下这件事其实已经不需要了"
+    ],
+    "hasAllButtons": true,
+    "hasSplit": true,
+    "hasDefer": true,
+    "hasDropToday": true,
+    "hasLetGo": true
+  },
+  "split": {
+    "visible": true,
+    "top": 231,
+    "bottom": 537,
+    "viewportHeight": 768,
+    "belowFold": false,
+    "stepCount": 3,
+    "stepValues": [
+      "整理录制素材",
+      "完成第一版剪辑",
+      "导出并检查最终视频"
+    ],
+    "hasConfirm": true,
+    "hasCancel": true,
+    "confirmVisible": true
+  },
+  "issues": [
+    "DELOAD_PANEL_BELOW_FOLD"
+  ],
+  "status": "DELOAD_VISIBILITY_ISSUE"
+}

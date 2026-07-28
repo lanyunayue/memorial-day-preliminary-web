@@ -1,0 +1,32 @@
+{
+  "resolution": "1366x768",
+  "positions": {
+    "heroTitle": {
+      "top": 58,
+      "bottom": 137,
+      "height": 78,
+      "text": "把现实里的事，带进一个会回应你的世界。"
+    },
+    "heroSub": {
+      "top": 137,
+      "bottom": 181,
+      "text": "在“时刻”记录任务、承诺和等待，进入归时谷，把过大的事拆分，把暂时做不到的事延期，把不再需要承担的事"
+    },
+    "steps": 0,
+    "startBtn": {
+      "top": 406,
+      "bottom": 456,
+      "text": "开始2分钟体验"
+    },
+    "input": {
+      "top": 537,
+      "bottom": 581
+    },
+    "viewportHeight": 768,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasHorizontalScroll": false
+  },
+  "issues": [],
+  "status": "OK"
+}

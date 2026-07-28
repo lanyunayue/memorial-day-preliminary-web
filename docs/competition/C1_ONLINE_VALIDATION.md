@@ -1,51 +1,42 @@
 # C1 Online Validation Report
 
-## Deployment Information
-- **Deployment Commit**: b755719 (main branch)
-- **Deployment Time**: 2026-07-27
-- **Public Base URL**: https://lanyunayue.github.io/memorial-day-preliminary-web/
+## Deployment
+- **Commit**: 106adf6 (main)
+- **Date**: 2026-07-27
+- **URL**: https://lanyunayue.github.io/memorial-day-preliminary-web/competition.html?demo=competition
+- **Cache**: shike-c1-v42
+- **Bundle**: index-CxyTTDck.js + babylon-Ciwi-Ey_.js
 
-## Validation Environment
-- **Browser**: Chromium (Playwright incognito)
-- **Resolution**: 1920x1080
-- **Loading Duration**: 156.2s
-- **Cache Version**: shike-c1-v42
-- **Bundle Hash**: CxyTTDck
-
-## Test Results
+## Full Flow Results
 | Step | Result |
 |------|--------|
-| Entry page loaded | PASS |
-| Demo button clicked | PASS |
-| Valley navigation | PARTIAL |
-| Game to FREE_PLAY | not_ready |
-| DeLoad open | SKIP |
-| Action performed | False |
-| Return to web | PARTIAL |
-| Feedback visible | True |
+| Entry page (HTTP 200) | PASS |
+| 3 demo records visible | 3 |
+| Navigate to /valley/ | PASS |
+| COMPETITION_INTRO -> FREE_PLAY | PASS |
+| Spirit dialogue dismissed | PASS |
+| DeLoad opens on item click | PASS |
+| Split option selected | PASS |
+| Split sub-panel shown | PASS |
+| Split confirmed | True |
+| World response (5s wait) | PASS |
+| DeLoad closed | PASS |
+| Return button found | True |
+| Return JS click dispatched | True |
+| Navigated back to competition.html | PASS |
+| Feedback card | True |
+| Apply button | True |
+| Refresh records | 3 |
+| Total duration | 50.5s |
 
-## URL Status Check
-- `/`: ERROR
-- `/competition.html`: 200 (15289 bytes)
-- `/competition.html?demo=competition`: 200 (15289 bytes)
-- `/valley/`: ERROR
-- `/valley/index.html`: ERROR
-- `/sw.js`: ERROR
+## URL Status
+- `/`: 200 (72,402 bytes)
+- `/competition.html`: 200 (20,104 bytes)
+- `/competition.html?demo=competition`: 200 (20,104 bytes)
+- `/valley/`: 200 (15,611 bytes)
+- `/sw.js`: 200 (1,594 bytes)
 
-## Console Errors/Warnings
+## Console Errors
 ```
-error: Failed to load resource: the server responded with a status of 404 ()
+None
 ```
-
-## Network Errors
-```
-GET https://lanyunayue.github.io/memorial-day-preliminary-web/src/bridge/web-bridge.js - net::ERR_ABORTED
-```
-
-## Screenshots
-- ONLINE_01_ENTRY.png - Competition entry page
-- ONLINE_01b_DEMO_STARTED.png - After clicking demo experience
-- ONLINE_02_GAME.png - Game in FREE_PLAY
-- ONLINE_03_DELOAD_OPEN.png - DeLoad panel open
-- ONLINE_04_SPLIT.png - Action performed
-- ONLINE_05_RETURN.png - Return feedback page

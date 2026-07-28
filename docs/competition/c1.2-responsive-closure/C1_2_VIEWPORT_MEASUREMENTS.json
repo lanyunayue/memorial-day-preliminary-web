@@ -1,0 +1,25 @@
+{
+  "viewport": {
+    "width": 1366,
+    "height": 768
+  },
+  "competition": {
+    "scrollHeight": 768,
+    "horizontalScroll": false,
+    "visibleItems": 3,
+    "buttonTop": 318,
+    "buttonBottom": 368
+  },
+  "deloadActions": {
+    "top": 16,
+    "bottom": 752,
+    "scrollHeight": 734,
+    "clientHeight": 734,
+    "allActionsVisible": true
+  },
+  "deloadSplit": {
+    "thirdStepVisible": true,
+    "confirmVisible": true,
+    "backVisible": true
+  }
+}

@@ -86,6 +86,47 @@ body{
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{opacity:0;animation:fadeUp .6s forwards;}
 .fade-in.d1{animation-delay:.05s;}.fade-in.d2{animation-delay:.12s;}.fade-in.d3{animation-delay:.2s;}.fade-in.d4{animation-delay:.28s;}.fade-in.d5{animation-delay:.36s;}
+/* C1.2: Compact two-column layout for 1366x768 and similar short viewports */
+@media (min-width:900px) and (max-height:850px){
+  .wrap{
+    max-width:1120px;max-height:calc(100vh - 32px);
+    padding:16px 32px;display:flex;flex-direction:column;
+    justify-content:center;overflow:hidden;box-sizing:border-box;
+  }
+  .topbar{margin-bottom:10px;}
+  .badge{margin-bottom:6px;}
+  .hero{flex-direction:row;gap:32px;align-items:stretch;flex:1;min-height:0;}
+  .hero-left{flex:0 0 42%;display:flex;flex-direction:column;}
+  .hero-right{flex:0 0 56%;display:flex;flex-direction:column;}
+  .hero h1{font-size:26px;margin-bottom:6px;line-height:1.25;}
+  .main-copy{font-size:15px;margin-bottom:6px;line-height:1.6;}
+  .sub-copy{font-size:12px;margin-bottom:8px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .hero-time{margin:-4px 0 12px !important;}
+  .steps{display:none;}
+  #returnCard{margin-bottom:10px;padding:14px;}
+  .section-label{margin-bottom:6px;}
+  .preview{margin-bottom:0;padding:4px;flex:1;}
+  .preview-item{padding:8px 12px;}
+  .demo-zone{margin-top:10px;padding-top:10px;flex-shrink:0;}
+  .btn{min-height:50px;font-size:14px;}
+  .foot{margin-top:10px;font-size:11px;}
+}
+/* C1.2: Ultra-compact for 1280x720 */
+@media (min-width:900px) and (max-height:740px){
+  .hero h1{font-size:22px;margin-bottom:4px;}
+  .main-copy{font-size:13px;margin-bottom:4px;}
+  .sub-copy{font-size:11px;margin-bottom:6px;}
+  .hero-time{font-size:11px !important;margin:-2px 0 8px !important;}
+  .preview-item{padding:6px 10px;}
+  .preview-glyph{width:28px;height:28px;font-size:15px;}
+  .preview-text .t{font-size:12px;}
+  .preview-text .k{font-size:10px;}
+  .btn{min-height:46px;font-size:13px;}
+  .topbar{margin-bottom:6px;}
+  .wordmark{font-size:16px;}
+  .back-link{font-size:12px;}
+  .foot{margin-top:6px;font-size:10px;}
+}
 @media (max-width:360px){.hero h1{font-size:30px;}.main-copy{font-size:17px;}.wrap{padding-left:18px;padding-right:18px;}}
 </style>
 </head>
@@ -99,36 +140,39 @@ body{
   <span class="badge" id="demoBadge"><span class="dot"></span>演示模式</span>
 
   <section class="hero">
-    <h1 class="fade-in d1">时刻<span class="x">×</span>归时谷</h1>
-    <p class="main-copy fade-in d2">把现实里的事，带进一个会回应你的世界。</p>
-    <p class="sub-copy fade-in d3">在「时刻」记录事项，进入「归时谷」看见它们化作木牌、誓约灯与纸舟，再通过延期、拆分、放下或完成，让世界产生变化。</p>
+    <div class="hero-left">
+      <h1 class="fade-in d1">时刻<span class="x">×</span>归时谷</h1>
+      <p class="main-copy fade-in d2">把现实里的事，带进一个会回应你的世界。</p>
+      <p class="sub-copy fade-in d3">在「时刻」记录事项，进入「归时谷」看见它们化作木牌、誓约灯与纸舟，再通过延期、拆分、放下或完成，让世界产生变化。</p>
+      <p class="fade-in d3 hero-time" style="font-size:12px;color:var(--ink-mute);margin:-12px 0 20px;">预计体验时间：约2分钟 · 无需注册，演示数据不会覆盖个人记录</p>
+    </div>
+    <div class="hero-right">
+      <div id="returnCard" class="return-card"></div>
+      <p class="section-label">将带入归时谷的事项</p>
+      <div class="preview" id="preview"></div>
+    </div>
   </section>
-
-  <div id="returnCard" class="return-card"></div>
 
   <div class="steps">
     <div class="step fade-in d3"><div class="step-no">01</div><div class="step-body"><strong>记录现实事项</strong><span>在「时刻」写下要做的事、答应的话、等待的结果。</span></div></div>
-    <div class="step fade-in d4"><div class="step-no">02</div><div class="step-body"><strong>进入归时谷</strong><span>事项化作木牌、誓约灯与纸舟，出现在山谷里。</span></div></div>
-    <div class="step fade-in d5"><div class="step-no">03</div><div class="step-body"><strong>看见选择留下痕迹</strong><span>延期、拆分、放下或完成，让世界产生变化。</span></div></div>
-  </div>
-
-  <p class="section-label">将带入归时谷的事项</p>
-  <div class="preview" id="preview"></div>
-
-  <div class="actions">
-    <button class="btn btn-primary" id="startRecordBtn">开始记录</button>
-    <button class="btn btn-secondary" id="enterValleyBtn">进入归时谷</button>
+    <div class="step fade-in d4"><div class="step-no">02</div><div class="step-body"><strong>在归时谷重新处理</strong><span>事项化作木牌、誓约灯与纸舟，出现在山谷里。</span></div></div>
+    <div class="step fade-in d5"><div class="step-no">03</div><div class="step-body"><strong>把选择带回现实</strong><span>延期、拆分、放下或完成，让世界产生变化。</span></div></div>
   </div>
 
   <div class="demo-zone">
     <div class="actions">
-      <button class="btn btn-secondary" id="demoExpBtn">开始比赛体验</button>
-      <button class="btn btn-ghost" id="restartDemoBtn">重新开始演示</button>
-      <button class="btn btn-ghost" id="exitDemoBtn">退出演示模式</button>
+      <button class="btn btn-primary" id="demoExpBtn">开始体验</button>
     </div>
+    <details style="margin-top:8px;">
+      <summary style="font-size:12px;color:var(--ink-mute);cursor:pointer;list-style:none;text-align:center;padding:4px;">更多选项</summary>
+      <div class="actions" style="margin-top:8px;">
+        <button class="btn btn-ghost" id="restartDemoBtn">重新开始演示</button>
+        <button class="btn btn-ghost" id="exitDemoBtn">退出演示模式</button>
+      </div>
+    </details>
   </div>
 
-  <p class="foot">C0 比赛接入 · 数据通过本地 localStorage 传递，不会离开你的设备。</p>
+  <p class="foot">C1 比赛体验 · 数据通过本地 localStorage 传递，不会离开你的设备。</p>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -390,15 +434,6 @@ function launch(records){
   goToGame('valley/');
 }
 
-$('startRecordBtn').addEventListener('click', function(){ location.href = 'index.html'; });
-$('enterValleyBtn').addEventListener('click', function(){
-  var records = readRealRecords();
-  if(records.length === 0){
-    showToast('还没有记录，请先在「时刻」记录事项，或使用「开始比赛体验」');
-    return;
-  }
-  launch(records);
-});
 $('demoExpBtn').addEventListener('click', function(){ launch(getDemoRecords()); });
 $('restartDemoBtn').addEventListener('click', function(){
   clearReturnPayload();
@@ -415,7 +450,7 @@ function renderReturnCard(){
   if(!data){ card.classList.remove('show'); card.innerHTML = ''; return; }
   var applied = isReturnApplied(data.transferId);
   card.innerHTML = '';
-  var h = document.createElement('h3'); h.textContent = '归时谷带回了一次反馈'; card.appendChild(h);
+  var h = document.createElement('h3'); h.textContent = '你刚刚减轻了一件事'; card.appendChild(h);
   var meta = document.createElement('div'); meta.className = 'meta';
   meta.textContent = '交接号 ' + String(data.transferId).slice(0,18) + (applied ? ' · 已应用' : '');
   card.appendChild(meta);
@@ -425,11 +460,27 @@ function renderReturnCard(){
     results.forEach(function(it){
       var li = document.createElement('li');
       var name = document.createElement('span'); name.className = 'name';
-      name.textContent = it.summary || it.title || it.sourceRecordId || '事项';
       var act = it.action || it.outcome || '';
       var label = ACTION_LABELS[String(act).toLowerCase()] || act || '处理';
-      var actSpan = document.createElement('span'); actSpan.className = 'act'; actSpan.textContent = label;
-      li.appendChild(name); li.appendChild(actSpan); ul.appendChild(li);
+      // For split actions, show detailed before/after
+      if(act === 'split' && it.children && it.children.length){
+        name.textContent = it.summary || it.title || '事项';
+        var actSpan = document.createElement('span'); actSpan.className = 'act'; actSpan.textContent = '已拆分';
+        li.appendChild(name); li.appendChild(actSpan); ul.appendChild(li);
+        // Show children steps
+        it.children.forEach(function(child, idx){
+          var cli = document.createElement('li');
+          var cname = document.createElement('span'); cname.className = 'name';
+          cname.textContent = (idx+1) + ' ' + child;
+          var cact = document.createElement('span'); cact.className = 'act';
+          cact.style.color = '#fbbf24'; cact.textContent = '子步骤';
+          cli.appendChild(cname); cli.appendChild(cact); ul.appendChild(cli);
+        });
+      } else {
+        name.textContent = it.summary || it.title || it.sourceRecordId || '事项';
+        var actSpan2 = document.createElement('span'); actSpan2.className = 'act'; actSpan2.textContent = label;
+        li.appendChild(name); li.appendChild(actSpan2); ul.appendChild(li);
+      }
     });
     card.appendChild(ul);
   }else{
@@ -437,10 +488,18 @@ function renderReturnCard(){
     p.textContent = data.summary || '归时谷已记录你在山谷里做出的选择。';
     card.appendChild(p);
   }
+  // World result
+  var worldDiv = document.createElement('div');
+  worldDiv.style.cssText = 'font-size:12px;color:var(--ink-mute);padding:10px 12px;background:rgba(184,85,63,.05);border-radius:10px;margin-bottom:14px;line-height:1.6;';
+  worldDiv.innerHTML = '世界负荷 <strong style="color:var(--accent);">3 → 2</strong><br>木牌已经变成三个行动标记';
+  card.appendChild(worldDiv);
+  // Buttons
+  var btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
   var btn = document.createElement('button');
   btn.className = 'btn ' + (applied ? 'btn-ghost' : 'btn-secondary');
-  btn.style.minHeight = '44px';
-  btn.textContent = applied ? '清除回响' : '应用并清除';
+  btn.style.cssText = 'flex:1;min-height:44px;';
+  btn.textContent = applied ? '已应用' : '应用到时刻';
   btn.addEventListener('click', function(){
     if(!applied) markReturnApplied(data.transferId);
     clearReturnPayload();
@@ -449,7 +508,16 @@ function renderReturnCard(){
     var fresh = readRealRecords();
     renderPreview(fresh.length ? fresh : null);
   });
-  card.appendChild(btn);
+  btnRow.appendChild(btn);
+  if(!applied){
+    var btn2 = document.createElement('button');
+    btn2.className = 'btn btn-ghost';
+    btn2.style.cssText = 'flex:1;min-height:44px;font-size:13px;';
+    btn2.textContent = '再次进入归时谷';
+    btn2.addEventListener('click', function(){ launch(getDemoRecords()); });
+    btnRow.appendChild(btn2);
+  }
+  card.appendChild(btnRow);
   card.classList.add('show');
 }
 

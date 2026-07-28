@@ -1,0 +1,25 @@
+{
+  "resolution": "1366x768",
+  "positions": {
+    "hero": {
+      "top": 75,
+      "bottom": 276,
+      "text": "\n    时刻×归时谷\n    把现实里的事，带进一个会回应你的世界。\n    在「时刻」记录事项，"
+    },
+    "itemCount": 3,
+    "itemsVisible": 2,
+    "hasTimeText": true,
+    "startBtn": {
+      "top": 847,
+      "bottom": 897,
+      "text": "开始体验"
+    },
+    "viewportHeight": 768,
+    "scrollWidth": 1366,
+    "hasHorizontalScroll": false
+  },
+  "issues": [
+    "START_BUTTON_BELOW_FOLD"
+  ],
+  "status": "COMPETITION_ABOVE_FOLD_FAILED"
+}
