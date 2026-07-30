@@ -23,14 +23,15 @@ test('time review is first-class, readable, and actionable', async ({ page }, te
   await page.locator('#temporalInboxBlock .temporal-confirm-all').click();
   await expect.poll(() => page.evaluate(() => window.records.length)).toBe(2);
 
-  await page.locator('[data-page="my"]').click();
-  const section = page.locator('#temporalReviewSection');
+  await page.locator('[data-page="review"]').click();
+  const section = page.locator('#page-review');
   await expect(section).toBeVisible();
   await expect(section).toContainText('今天处理');
   await expect(section).toContainText('等待他人');
   await expect(section.locator('.temporal-review-focus')).toBeVisible();
   await expect(section.locator('[data-review="complete"]')).toBeVisible();
-  expect(await page.locator('#dataBackupSection #temporalReviewBlock').count()).toBe(0);
+  await expect(section.locator('#temporalReviewBlock')).toBeVisible();
+  expect(await page.locator('#page-my #temporalReviewBlock').count()).toBe(0);
   await section.scrollIntoViewIfNeeded();
   await page.screenshot({ path: testInfo.outputPath('consumer-review-375.png') });
 
@@ -47,7 +48,8 @@ test('time review follows the selected language', async ({ page }, testInfo) => 
   await openCleanApp(page);
   await page.locator('[data-page="my"]').click();
   await page.locator('#langGroup [data-lang="en"]').click();
-  const section = page.locator('#temporalReviewSection');
+  await page.locator('[data-page="review"]').click();
+  const section = page.locator('#page-review');
   await expect(section).toContainText('Time review');
   await expect(section).toContainText('Due today');
   await expect(section).toContainText('Weekly review');

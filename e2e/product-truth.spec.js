@@ -65,7 +65,7 @@ test('runtime starts clean and hidden UI stays hidden', async ({ page }) => {
   await expect(page.locator('#agentPlan')).toBeHidden();
   await expect.poll(() => page.locator('#agentPlan').evaluate((element) => getComputedStyle(element).display))
     .toBe('none');
-  await expect(page.locator('.nav-item')).toHaveCount(4);
+  await expect(page.locator('.nav-item')).toHaveCount(5);
   await expect.poll(() => errors).toEqual([]);
 });
 
@@ -93,7 +93,8 @@ test('durable consecutive submissions save once and remain searchable', async ({
   await page.locator('[data-page="all"]').click();
   await page.locator('#allSearchInput').fill('作业');
   await expect(page.locator('#allList')).toContainText('作业');
-  await page.locator('[data-page="calendar"]').click();
+  await page.locator('#timeSpriteCalendarBtn').click();
+  await expect(page.locator('#page-calendar')).toBeVisible();
   await expect(page.locator('#page-calendar .cal-dot')).not.toHaveCount(0);
 
   await page.reload({ waitUntil: 'domcontentloaded' });
