@@ -913,7 +913,7 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
   .time-sprite{right:max(32px,calc((100vw - 1080px)/2 + 32px));}
 }
 @media (max-width:767px){
-  .time-sprite-orb{width:50px;height:50px;}
+  .time-sprite-orb{width:50px;height:50px;animation:none;}
   .time-sprite-bear{width:35px;height:34px;}
   .time-sprite-panel{width:min(280px,calc(100vw - 28px));}
 }
@@ -972,13 +972,20 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
 
 @media (max-width:767px){
   .time-sprite-panel{
-    right:0;left:0;bottom:calc(74px + var(--safe-bottom));width:100%;max-height:calc(100dvh - 98px);
+    right:0;left:0;bottom:calc(74px + var(--safe-bottom));width:100%;
+    max-height:calc(100dvh - 160px - var(--safe-top) - var(--safe-bottom));
+    overflow-y:auto;overscroll-behavior:contain;
+    background:var(--bg-elev);backdrop-filter:none;-webkit-backdrop-filter:none;
     border-radius:16px 16px 0 0;padding:14px 16px calc(14px + var(--safe-bottom));
     box-shadow:0 -12px 34px rgba(44,37,32,.18);
   }
+  .time-sprite-head{
+    position:sticky;top:0;z-index:3;margin:0 0 7px;padding:0 0 8px;
+    background:var(--bg-elev);
+  }
   .time-sprite.collapsed .time-sprite-panel{transform:translateY(16px);}
   .agent-conversation{max-height:min(32dvh,260px);}
-  .agent-workbench[open]{min-height:min(520px,calc(100dvh - 235px));}
+  .agent-workbench[open]{min-height:0;}
   .sprite-settings-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .agent-overview-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
 }

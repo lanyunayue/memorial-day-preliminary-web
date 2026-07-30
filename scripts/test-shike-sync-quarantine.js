@@ -24,7 +24,7 @@
   assert(!htmlSrc.includes('id="page-sync"'),'page-sync section removed from HTML');
   assert(!htmlSrc.includes('syncContainer'),'syncContainer div removed from HTML');
   assert(versionSrc.includes("v2.2.0-alpha4"),'APP_VERSION is v2.2.0-alpha4');
-  assert(swSrc.includes("shike-v220alpha4-v65"),'CACHE_NAME is shike-v220alpha4-v65');
+  assert(swSrc.includes("shike-v220alpha4-v66"),'CACHE_NAME is shike-v220alpha4-v66');
 
   var quarantineMsg=statusSrc.includes('安全重构')||statusSrc.includes('仅使用本地模式')||statusSrc.includes("'disabled'")||statusSrc.includes('quarantined');
   assert(quarantineMsg,'sync-status shows quarantine/disabled state');
