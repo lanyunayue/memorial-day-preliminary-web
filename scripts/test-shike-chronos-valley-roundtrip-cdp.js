@@ -92,9 +92,18 @@ class CdpClient {
     throw new Error(`Timed out waiting for ${label}`);
   }
 
-  async navigate(url, timeout = 30000) {
-    await this.send('Page.navigate', { url });
-    await this.waitFor(`document.readyState === 'complete'`, timeout, `navigation to ${url}`);
+  async navigate(url, timeout = /^https:/i.test(url) ? 120000 : 30000) {
+    const result = await this.send('Page.navigate', { url });
+    if (result.errorText) throw new Error(`Navigation to ${url} failed: ${result.errorText}`);
+    // Public hosts may keep optional font/analytics requests open. The product
+    // readiness assertions below are stronger than the load event, so wait for
+    // DOM readiness here instead of coupling the flow to every optional asset.
+    try {
+      await this.waitFor(`document.readyState !== 'loading'`, timeout, `navigation to ${url}`);
+    } catch (error) {
+      const state = await this.evaluate(`({href:location.href,ready:document.readyState,title:document.title})`).catch(() => null);
+      throw new Error(`${error.message}: ${JSON.stringify(state)}`);
+    }
   }
 
   async screenshot(filename) {
@@ -186,10 +195,10 @@ async function main() {
     exists:!!document.getElementById('chronosValleyEntry'),
     href:document.getElementById('chronosValleyEntry')&&document.getElementById('chronosValleyEntry').href
   })`);
-  add('the usable product exposes the real valley entry', entry.exists && /competition\.html$/.test(entry.href), JSON.stringify(entry));
+  add('the usable product exposes the real valley entry', entry.exists && /\/competition(?:\.html)?\/?$/.test(entry.href), JSON.stringify(entry));
 
   await client.evaluate(`document.getElementById('chronosValleyEntry').click()`);
-  await client.waitFor(`location.pathname.endsWith('/competition.html') && !!document.getElementById('demoExpBtn')`, 30000, 'competition entry');
+  await client.waitFor(`/\\/competition(?:\\.html)?\\/?$/.test(location.pathname) && !!document.getElementById('demoExpBtn')`, 30000, 'competition entry');
   try {
     await client.waitFor(`document.getElementById('preview').innerText.includes('完成可实际使用的参赛作品')`, 30000, 'real record preview');
   } catch (error) {
@@ -248,7 +257,7 @@ async function main() {
   add('a real decision can be committed inside the 3D valley', true);
 
   await client.evaluate(`document.getElementById('returnToShikeBtn').click()`);
-  await client.waitFor(`location.pathname.endsWith('/competition.html') && document.getElementById('returnCard').classList.contains('show')`, 30000, 'return result card');
+  await client.waitFor(`/\\/competition(?:\\.html)?\\/?$/.test(location.pathname) && document.getElementById('returnCard').classList.contains('show')`, 30000, 'return result card');
   const returnState = await client.evaluate(`({
     text:document.getElementById('returnCard').innerText,
     payload:JSON.parse(localStorage.getItem('chronos_game_return_v1')||'null')
@@ -260,7 +269,7 @@ async function main() {
   );
 
   await client.evaluate(`document.querySelector('#returnCard .btn').click()`);
-  await client.waitFor(`location.pathname.endsWith('/index.html') && !!window.ShikeLocalFirst && window.ShikeLocalFirst.getStatus().ready`, 30000, 'durable return to app');
+  await client.waitFor(`(/\\/index(?:\\.html)?\\/?$/.test(location.pathname) || location.pathname.endsWith('/')) && !!window.ShikeLocalFirst && window.ShikeLocalFirst.getStatus().ready`, 30000, 'durable return to app');
   await client.waitFor(
     `(async function(){var list=await ShikeIndexedDb.getAll('records');var item=list.find(function(record){return record.id==='chronos_e2e_real_1';});return !!(item&&item.archived&&item.chronosResult&&item.chronosResult.action==='released');})()`,
     30000,

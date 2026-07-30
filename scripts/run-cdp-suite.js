@@ -12,7 +12,9 @@ const EDGE = process.env.SHIKE_EDGE_PATH
     : '/usr/bin/google-chrome');
 const PORT = Number(process.env.SHIKE_TEST_PORT || 8090);
 const BASE_CDP_PORT = Number(process.env.SHIKE_CDP_PORT || 9224);
-const APP_URL = `http://127.0.0.1:${PORT}/index.html`;
+const LOCAL_APP_URL = `http://127.0.0.1:${PORT}/index.html`;
+const APP_URL = process.env.SHIKE_APP_URL || LOCAL_APP_URL;
+const USE_LOCAL_SERVER = !process.env.SHIKE_APP_URL;
 const versionSource = fs.readFileSync(path.join(ROOT, 'src', 'config', 'version.js'), 'utf8');
 const versionMatch = versionSource.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
 const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || (versionMatch && versionMatch[1]);
@@ -95,12 +97,14 @@ async function main() {
     process.exit(2);
   }
   fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
-  const server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'serve-static.js')], {
-    cwd: ROOT,
-    env: { ...process.env, PORT: String(PORT) },
-    stdio: 'inherit',
-    windowsHide: true,
-  });
+  const server = USE_LOCAL_SERVER
+    ? spawn(process.execPath, [path.join(ROOT, 'scripts', 'serve-static.js')], {
+      cwd: ROOT,
+      env: { ...process.env, PORT: String(PORT) },
+      stdio: 'inherit',
+      windowsHide: true,
+    })
+    : null;
   const failures = [];
 
   try {
@@ -141,7 +145,7 @@ async function main() {
       }
     }
   } finally {
-    stopTree(server);
+    if (server) stopTree(server);
   }
 
   if (failures.length) {
