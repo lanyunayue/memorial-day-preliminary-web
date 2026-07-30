@@ -1,0 +1,64 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 1,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:35:00.000Z",
+  "timezone": "Asia/Tokyo",
+  "records": [
+    {
+      "type": "sleep-log",
+      "portableId": "00000000-0000-4000-8000-000000000023",
+      "sourcePlatformId": "source-35",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-18T11:35:00.000Z",
+      "updatedAt": "2026-07-18T11:35:00.000Z",
+      "state": "CANCELLED",
+      "data": {
+        "title": "固定样例 35 · sleep-log",
+        "note": "",
+        "localDate": "2026-07-18",
+        "localTime": "11:35",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 35
+        }
+      },
+      "futureRecordField": "preserve-35"
+    },
+    {
+      "type": "load-item",
+      "portableId": "00000000-0000-4000-8000-000000000087",
+      "sourcePlatformId": "source-135",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-10T15:15:00.000Z",
+      "updatedAt": "2026-07-10T15:15:00.000Z",
+      "state": "DELETED",
+      "data": {
+        "title": "固定样例 135 · load-item",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-10",
+        "localTime": "15:15",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 135
+        }
+      },
+      "futureRecordField": "preserve-135"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": false,
+    "highContrast": true,
+    "futureSetting": "preserve-35"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 35
+  },
+  "recordCount": 2,
+  "checksum": "sha256:8e1b163df613ea8bc929c7471963039dcae75e31a3966146675182925a933b78"
+}

@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 3,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:09:00.000Z",
+  "timezone": "America/Los_Angeles",
+  "records": [
+    {
+      "type": "recovery-suggestion",
+      "portableId": "00000000-0000-4000-8000-000000000009",
+      "sourcePlatformId": "source-9",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-10T09:09:00.000Z",
+      "updatedAt": "2026-07-10T09:09:00.000Z",
+      "state": "IN_PROGRESS",
+      "data": {
+        "title": "固定样例 9 · recovery-suggestion",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-10",
+        "localTime": "09:09",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 9
+        }
+      },
+      "futureRecordField": "preserve-9"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-CN",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-9"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 9
+  },
+  "recordCount": 1,
+  "checksum": "sha256:89ff1e4542077e784ba9ed969a97990b657a1ccec33156f9b6c1ac1cba3763f4"
+}

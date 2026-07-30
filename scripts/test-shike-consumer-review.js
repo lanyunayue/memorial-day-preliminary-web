@@ -77,10 +77,10 @@ check('retains safe escaped action text', container.innerHTML.includes('&lt;scri
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const legacy = fs.readFileSync(path.join(root, 'src', 'legacy-app.js'), 'utf8');
-const sectionStart = html.indexOf('id="temporalReviewSection"');
-check('review is a first-class setting section', sectionStart > 0);
+const sectionStart = html.indexOf('id="page-review"');
+check('review is a first-class destination', sectionStart > 0);
 check('review is outside data backup', sectionStart < html.indexOf('id="dataBackupSection"'));
-check('review appears before feature hub', sectionStart < html.indexOf('id="featureHubSection"'));
+check('review appears before the my page', sectionStart < html.indexOf('id="page-my"'));
 check('review container is unique', (html.match(/id="temporalReviewBlock"/g) || []).length === 1);
 check('all four locales define review title', (legacy.match(/temporalReviewTitle:/g) || []).length === 4);
 check('all four locales define next-step copy', (legacy.match(/reviewNextAction:/g) || []).length === 4);

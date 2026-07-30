@@ -13,6 +13,9 @@ const captureLayout = args.has('--layout') || process.env.SHIKE_E2E_LAYOUT === '
 const chronosStress = args.has('--chronos-stress') || process.env.SHIKE_CHRONOS_STRESS === '1';
 const stressOnly = args.has('--stress-only') || process.env.SHIKE_CHRONOS_STRESS_ONLY === '1';
 const validationOnly = args.has('--validation-only') || process.env.SHIKE_VALIDATION_ONLY === '1';
+const portableOnly = args.has('--portable-only') || process.env.SHIKE_PORTABLE_ONLY === '1';
+const multiTabOnly = args.has('--multi-tab-only') || process.env.SHIKE_MULTI_TAB_ONLY === '1';
+const runtimeOnly = args.has('--runtime-only') || process.env.SHIKE_RUNTIME_ONLY === '1';
 const configuredArtifactDir = artifactArg
   ? path.resolve(V, artifactArg.slice('--artifact-dir='.length))
   : process.env.SHIKE_ARTIFACT_DIR;
@@ -97,7 +100,9 @@ function mimeType(file) {
 function startServer() {
   const server = http.createServer((req, res) => {
     const cleanPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    const normalized = cleanPath === '/' ? '/index.html' : cleanPath;
+    const normalized = cleanPath === '/'
+      ? '/index.html'
+      : `${cleanPath}${cleanPath.endsWith('/') ? 'index.html' : ''}`;
     const target = path.normalize(path.join(V, normalized));
     const relativeTarget = path.relative(V, target);
     if (relativeTarget.startsWith('..') || path.isAbsolute(relativeTarget)) {
@@ -194,6 +199,23 @@ async function writeBrowserMetadata(cdpUrl, appUrl, artifactDir) {
   return metadata;
 }
 
+async function resetPageTarget(cdpUrl, appUrl) {
+  const targets = await waitForJson(`${cdpUrl}/json`, 10000);
+  const previousPages = targets.filter((target) => target.type === 'page');
+  const created = await fetch(`${cdpUrl}/json/new?${encodeURIComponent(appUrl)}`, {
+    method: 'PUT'
+  });
+  if (!created.ok) {
+    throw new Error(`Could not create isolated CDP page: ${created.status}`);
+  }
+  const freshPage = await created.json();
+  await Promise.all(previousPages.map(async (target) => {
+    if (target.id === freshPage.id) return;
+    await fetch(`${cdpUrl}/json/close/${encodeURIComponent(target.id)}`).catch(() => {});
+  }));
+  await waitForJson(`${cdpUrl}/json`, 10000);
+}
+
 async function runLocalCdpFallback() {
   console.log('Running required CDP E2E validation when a browser is available');
   if (typeof WebSocket === 'undefined') {
@@ -272,11 +294,23 @@ async function runCdpScripts(env, artifactDir) {
       env: {}
     },
     {
+      name: 'test-shike-portable-export-runtime-cdp.js',
+      env: {}
+    },
+    {
+      name: 'test-shike-deload-runtime-cdp.js',
+      env: {}
+    },
+    {
       name: 'test-product-validation-runtime-cdp.js',
       env: {}
     },
     {
       name: 'test-shike-multi-tab-runtime-cdp.js',
+      env: {}
+    },
+    {
+      name: 'test-shike-chronos-valley-roundtrip-cdp.js',
       env: {}
     },
     {
@@ -286,12 +320,16 @@ async function runCdpScripts(env, artifactDir) {
   ];
   const stressScripts = [{name:'test-chronos-indexeddb-stress-cdp.js',env:{}}];
   const validationScripts=regularScripts.filter((script)=>script.name==='test-product-validation-runtime-cdp.js');
-  const scripts = validationOnly ? validationScripts : stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
+  const portableScripts=regularScripts.filter((script)=>script.name==='test-shike-portable-export-runtime-cdp.js');
+  const multiTabScripts=regularScripts.filter((script)=>script.name==='test-shike-multi-tab-runtime-cdp.js');
+  const runtimeScripts=regularScripts.filter((script)=>script.name==='test-shike-runtime-cdp.js');
+  const scripts = portableOnly ? portableScripts : validationOnly ? validationScripts : multiTabOnly ? multiTabScripts : runtimeOnly ? runtimeScripts : stressOnly ? stressScripts : chronosStress ? regularScripts.concat(stressScripts) : regularScripts;
   for (let index = 0; index < scripts.length; index++) {
     const script = scripts[index];
     if (index > 0) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
+    await resetPageTarget(env.SHIKE_CDP_URL, env.SHIKE_APP_URL);
     const result = await runScript(script.name, Object.assign({}, env, script.env));
     if (result.skipped) {
       failed++;

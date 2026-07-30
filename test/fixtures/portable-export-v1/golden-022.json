@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 2,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:22:00.000Z",
+  "timezone": "Europe/Paris",
+  "records": [
+    {
+      "type": "load-snapshot",
+      "portableId": "00000000-0000-4000-8000-000000000016",
+      "sourcePlatformId": "source-22",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-05T22:22:00.000Z",
+      "updatedAt": "2026-07-05T22:22:00.000Z",
+      "state": "ARCHIVED",
+      "data": {
+        "title": "固定样例 22 · load-snapshot",
+        "note": "",
+        "localDate": "2026-07-05",
+        "localTime": "22:22",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 22
+        }
+      },
+      "futureRecordField": "preserve-22"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "en-US",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-22"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 22
+  },
+  "recordCount": 1,
+  "checksum": "sha256:5ce8d6aa3c4ce981ddacddbab1c4223bd27b1074460265390e2959868767b0e9"
+}

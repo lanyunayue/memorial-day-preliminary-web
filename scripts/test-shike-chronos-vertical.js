@@ -25,14 +25,15 @@ function createHarness(){
   const waitingRepository=waitingRepositoryApi.create(waitingRepositoryApi.memoryDriver());
   const controller=controllerApi.create({temporalRepository,graphRepository,waitingRepository});
   let sequence=0;
+  let refreshCount=0;
   const api={
     getRecords:()=>records,
     saveRecord:(draft,forcedId)=>{const record=intelligence.toRecord(draft,()=>forcedId||`record_${++sequence}`);records.push(record);return record;},
     removeRecord:(id)=>{const index=records.findIndex((record)=>record.id===id);if(index>=0)records.splice(index,1);},
     updateRecord:(id,changes)=>{const record=records.find((item)=>item.id===id);if(!record)return false;Object.assign(record,changes);return true;},
-    clearInput:()=>{},openDetail:()=>{},notify:()=>{},refresh:()=>{}
+    clearInput:()=>{},openDetail:()=>{},notify:()=>{},refresh:()=>{refreshCount++;}
   };
-  return {records,controller,api,graphRepository,waitingRepository};
+  return {records,controller,api,graphRepository,waitingRepository,getRefreshCount:()=>refreshCount};
 }
 
 (async function(){
@@ -44,6 +45,7 @@ function createHarness(){
   await first.controller.confirmAll();
   const confirmed=await first.controller.diagnostics();
   check('confirm all writes five legacy records',first.records.length===5);
+  check('confirm all refreshes product surfaces once',first.getRefreshCount()===1,`refreshes=${first.getRefreshCount()}`);
   check('confirmed drafts leave the pending inbox',confirmed.pendingDrafts===0);
   check('confirmation builds a local graph',confirmed.graph.nodes.length>5&&confirmed.graph.edges.length>5);
   check('Waiting For is persisted',confirmed.waiting.length===1);

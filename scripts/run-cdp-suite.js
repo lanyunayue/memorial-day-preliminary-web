@@ -21,6 +21,7 @@ const ARTIFACT_DIR = process.env.SHIKE_ARTIFACT_DIR
   : path.join(ROOT, 'artifacts', 'cdp');
 const ALL_TESTS = [
   'test-shike-agent-runtime-cdp.js',
+  'test-shike-chronos-valley-roundtrip-cdp.js',
   'test-shike-experience-runtime-cdp.js',
   'test-shike-offline-runtime-cdp.js',
   'test-shike-runtime-cdp.js',

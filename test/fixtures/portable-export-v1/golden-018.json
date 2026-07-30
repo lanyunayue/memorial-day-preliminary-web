@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 5,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:18:00.000Z",
+  "timezone": "Australia/Sydney",
+  "records": [
+    {
+      "type": "waiting-for",
+      "portableId": "00000000-0000-4000-8000-000000000012",
+      "sourcePlatformId": "source-18",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-01T18:18:00.000Z",
+      "updatedAt": "2026-07-01T18:18:00.000Z",
+      "state": "COMPLETED",
+      "data": {
+        "title": "固定样例 18 · waiting-for",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-01",
+        "localTime": "18:18",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 18
+        }
+      },
+      "futureRecordField": "preserve-18"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "en-US",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-18"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 18
+  },
+  "recordCount": 1,
+  "checksum": "sha256:a7d14289cb02186909ea7e56bb9da2531c8c1b328746677a939ba8da283095bc"
+}

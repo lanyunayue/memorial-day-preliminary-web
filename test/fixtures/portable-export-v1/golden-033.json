@@ -1,0 +1,64 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 6,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:33:00.000Z",
+  "timezone": "America/Los_Angeles",
+  "records": [
+    {
+      "type": "waiting-for",
+      "portableId": "00000000-0000-4000-8000-000000000021",
+      "sourcePlatformId": "source-33",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-16T09:33:00.000Z",
+      "updatedAt": "2026-07-16T09:33:00.000Z",
+      "state": "IN_PROGRESS",
+      "data": {
+        "title": "固定样例 33 · waiting-for",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-16",
+        "localTime": "09:33",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 33
+        }
+      },
+      "futureRecordField": "preserve-33"
+    },
+    {
+      "type": "daily-check-in",
+      "portableId": "00000000-0000-4000-8000-000000000085",
+      "sourcePlatformId": "source-133",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-08T13:13:00.000Z",
+      "updatedAt": "2026-07-08T13:13:00.000Z",
+      "state": "PARKED",
+      "data": {
+        "title": "固定样例 133 · daily-check-in",
+        "note": "",
+        "localDate": "2026-07-08",
+        "localTime": "13:13",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 133
+        }
+      },
+      "futureRecordField": "preserve-133"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-CN",
+    "reducedMotion": true,
+    "highContrast": false,
+    "futureSetting": "preserve-33"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 33
+  },
+  "recordCount": 2,
+  "checksum": "sha256:4ec45da5073070bc1461c9f8d67452770be67f71af4739abd29d2029814169b3"
+}

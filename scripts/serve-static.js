@@ -20,7 +20,9 @@ const MIME = {
 
 function resolveRequestPath(rawUrl) {
   const pathname = decodeURIComponent(new URL(rawUrl, `http://${HOST}:${PORT}`).pathname);
-  const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+  const relative = pathname === '/'
+    ? 'index.html'
+    : `${pathname.replace(/^\/+/, '')}${pathname.endsWith('/') ? 'index.html' : ''}`;
   const target = path.resolve(ROOT, relative);
   return target === ROOT || target.startsWith(`${ROOT}${path.sep}`) ? target : null;
 }

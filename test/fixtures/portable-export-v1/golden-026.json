@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 6,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:26:00.000Z",
+  "timezone": "UTC",
+  "records": [
+    {
+      "type": "intervention-preference",
+      "portableId": "00000000-0000-4000-8000-00000000001a",
+      "sourcePlatformId": "source-26",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-09T02:26:00.000Z",
+      "updatedAt": "2026-07-09T02:26:00.000Z",
+      "state": "COMPLETED",
+      "data": {
+        "title": "固定样例 26 · intervention-preference",
+        "note": "",
+        "localDate": "2026-07-09",
+        "localTime": "02:26",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 26
+        }
+      },
+      "futureRecordField": "preserve-26"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "en-US",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-26"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 26
+  },
+  "recordCount": 1,
+  "checksum": "sha256:35a26ac6ea39e900dc9981f53066f66fc5344c6b23614dd3c6a652fc1fd4d5fb"
+}

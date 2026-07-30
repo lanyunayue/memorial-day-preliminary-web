@@ -64,12 +64,14 @@ add('app version and service worker cache version align', () => {
 });
 
 add('manifest required fields are stable', () => {
-  assertEqual(manifest.name, '\u65f6\u523b - \u4f60\u7684\u8d34\u5fc3\u8bb0\u4e8b\u52a9\u624b', 'manifest name');
+  assertEqual(manifest.name, '\u65f6\u523b\u00b7\u4e2a\u4eba\u8d1f\u8377\u4e0e\u6062\u590d\u52a9\u624b', 'manifest name');
   assertEqual(manifest.short_name, '\u65f6\u523b', 'manifest short_name');
-  assertEqual(manifest.description, '\u968f\u624b\u8bb0\uff0c\u6309\u65f6\u63d0\u9192', 'manifest description');
+  assert(manifest.description.includes('\u8d1f\u8377') && manifest.description.includes('\u51cf\u5c11'), 'manifest description should match the load and recovery position');
+  assertEqual(manifest.id, './', 'manifest id');
   assertEqual(manifest.start_url, './', 'manifest start_url');
+  assertEqual(manifest.scope, './', 'manifest scope');
   assertEqual(manifest.display, 'standalone', 'manifest display');
-  assertEqual(manifest.orientation, 'portrait', 'manifest orientation');
+  assert(!Object.prototype.hasOwnProperty.call(manifest, 'orientation'), 'manifest should not force portrait on desktop installs');
 });
 
 add('manifest colors align with default app theme', () => {
@@ -80,20 +82,20 @@ add('manifest colors align with default app theme', () => {
   assertEqual(parseColor(manifest.background_color), defaultBg, 'manifest background_color should match default --bg');
 });
 
-add('manifest icons include valid 192 and 512 SVG data uris', () => {
+add('manifest icons include valid 192 and 512 PNG files', () => {
   assert(Array.isArray(manifest.icons), 'manifest icons should be an array');
   const sizes = new Set(manifest.icons.map((icon) => icon.sizes));
   assert(sizes.has('192x192'), 'manifest should include 192x192 icon');
   assert(sizes.has('512x512'), 'manifest should include 512x512 icon');
   manifest.icons.forEach((icon) => {
-    assertEqual(icon.type, 'image/svg+xml', `icon ${icon.sizes} type`);
-    assert(icon.src.startsWith('data:image/svg+xml,'), `icon ${icon.sizes} should be SVG data URI`);
-    const svg = decodeURIComponent(icon.src.slice('data:image/svg+xml,'.length));
-    assert(svg.includes('<svg'), `icon ${icon.sizes} should contain <svg`);
-    assert(svg.includes('</svg>'), `icon ${icon.sizes} should contain closing svg tag`);
-    assert(svg.includes('\u65f6'), `icon ${icon.sizes} should include app glyph`);
-    assert(/viewBox=['"]0 0 100 100['"]/.test(svg), `icon ${icon.sizes} should include viewBox`);
+    assertEqual(icon.type, 'image/png', `icon ${icon.sizes} type`);
+    assert(!icon.src.startsWith('data:'), `icon ${icon.sizes} should use a real file`);
+    const file = path.join(root, icon.src.replace(/^\.\//, ''));
+    assert(fs.existsSync(file), `icon ${icon.sizes} should exist`);
+    const png = fs.readFileSync(file);
+    assertEqual(`${png.readUInt32BE(16)}x${png.readUInt32BE(20)}`, icon.sizes, `icon ${icon.sizes} dimensions`);
   });
+  assert(manifest.icons.some((icon) => String(icon.purpose).includes('maskable')), 'manifest should include a maskable icon');
 });
 
 add('service worker registration uses versioned URL and updateViaCache none', () => {

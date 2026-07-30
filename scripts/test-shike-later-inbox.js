@@ -53,7 +53,10 @@ add('keep undated clears date without fake date', () => {
 
 add('later inbox matches timeline undated logic', () => {
   assert(script.includes('function getUndatedRecords()'), 'getUndatedRecords missing');
-  assert(script.includes('return records.filter(function(r){return !r.dateKey;}'), 'undated logic should use missing dateKey');
+  assert(
+    script.includes('return getVisibleRecords().filter(function(r){return !r.dateKey;}'),
+    'undated logic should use visible records with a missing dateKey'
+  );
   assert(script.includes('groups.undated.push(r)'), 'timeline should also use undated group');
 });
 

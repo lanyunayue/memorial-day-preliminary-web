@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "harmonyos",
+  "sourceSchemaVersion": 2,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:15:00.000Z",
+  "timezone": "America/Los_Angeles",
+  "records": [
+    {
+      "type": "day-end-record",
+      "portableId": "00000000-0000-4000-8000-00000000000f",
+      "sourcePlatformId": "source-15",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-16T15:15:00.000Z",
+      "updatedAt": "2026-07-16T15:15:00.000Z",
+      "state": "DELETED",
+      "data": {
+        "title": "固定样例 15 · day-end-record",
+        "note": "包含中文、emoji 和特殊字符：恢复 🌙 <&>",
+        "localDate": "2026-07-16",
+        "localTime": "15:15",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 15
+        }
+      },
+      "futureRecordField": "preserve-15"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": true,
+    "highContrast": true,
+    "futureSetting": "preserve-15"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 15
+  },
+  "recordCount": 1,
+  "checksum": "sha256:7fd95a14996508b3553fbe6892b15001f16bd8a7547da02dae35af094f08289e"
+}

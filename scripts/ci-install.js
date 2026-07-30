@@ -31,7 +31,7 @@ function main() {
   }
 
   const command = process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : 'npm';
-  const args = process.platform === 'win32' ? ['/d', '/s', '/c', 'npm ci'] : ['ci'];
+  const args = process.platform === 'win32' ? ['/d', '/s', '/c', 'npm.cmd ci'] : ['ci'];
   const result = spawnSync(command, args, { cwd: root, stdio: 'inherit' });
   if (result.error) throw result.error;
   if (result.status !== 0) {

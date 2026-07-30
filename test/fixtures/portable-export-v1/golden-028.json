@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 1,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:28:00.000Z",
+  "timezone": "Europe/Paris",
+  "records": [
+    {
+      "type": "operation-journal",
+      "portableId": "00000000-0000-4000-8000-00000000001c",
+      "sourcePlatformId": "source-28",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-11T04:28:00.000Z",
+      "updatedAt": "2026-07-11T04:28:00.000Z",
+      "state": "DEFERRED",
+      "data": {
+        "title": "固定样例 28 · operation-journal",
+        "note": "",
+        "localDate": "2026-07-11",
+        "localTime": "04:28",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 28
+        }
+      },
+      "futureRecordField": "preserve-28"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "ja-JP",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-28"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 28
+  },
+  "recordCount": 1,
+  "checksum": "sha256:76d4e446cbab277b0858a487dda1a73c3a16bc2c7678effdf6848b31ceaaa00b"
+}

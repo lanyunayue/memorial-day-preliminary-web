@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">Shike</title>
+  <desc id="description">A quiet clock mark for the Shike load and recovery assistant.</desc>
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="#2c2520"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="#7a8c6f" stroke-width="14" stroke-linecap="round" stroke-dasharray="214 905" transform="rotate(30 256 256)"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="#b8553f" stroke-width="14" stroke-linecap="round" stroke-dasharray="124 995" transform="rotate(218 256 256)"/>
+  <circle cx="256" cy="256" r="132" fill="none" stroke="#f7f3ed" stroke-width="28"/>
+  <path d="M256 166v90l86 34" fill="none" stroke="#f7f3ed" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="256" cy="256" r="22" fill="#b8553f"/>
+</svg>

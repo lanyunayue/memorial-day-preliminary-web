@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 3,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:23:00.000Z",
+  "timezone": "Asia/Tokyo",
+  "records": [
+    {
+      "type": "deload-plan",
+      "portableId": "00000000-0000-4000-8000-000000000017",
+      "sourcePlatformId": "source-23",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-06T23:23:00.000Z",
+      "updatedAt": "2026-07-06T23:23:00.000Z",
+      "state": "DELETED",
+      "data": {
+        "title": "固定样例 23 · deload-plan",
+        "note": "",
+        "localDate": "2026-07-06",
+        "localTime": "23:23",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 23
+        }
+      },
+      "futureRecordField": "preserve-23"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-23"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 23
+  },
+  "recordCount": 1,
+  "checksum": "sha256:c2f325ad6ce900243484fd01f2098ad2105bc8d9401b09cfc9cb7c5225db8b90"
+}

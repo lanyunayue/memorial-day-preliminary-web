@@ -34,7 +34,7 @@ async function main(){
   if(!page){const targets=await json(`${CDP_URL}/json`);page=targets.find((target)=>target.type==='page');}
   assert(page,'page target missing');const client=new Client(page.webSocketDebuggerUrl);await client.connect();
   await client.send('Page.enable');await client.send('Runtime.enable');await client.send('Network.enable');
-  await waitFor(client,"document.readyState==='complete'&&!!window.ShikeProductValidation&&!!document.getElementById('researchPanel')&&!!window.ShikeChronosWeb",'validation mode bootstrap');
+  await waitFor(client,"document.readyState==='complete'&&!!window.ShikeProductValidation&&!!document.getElementById('researchPanel')&&!!window.ShikeChronosWeb&&typeof records!=='undefined'&&typeof saveRecords==='function'",'validation mode bootstrap');
   await client.evaluate(`(async()=>{ShikeResearchDataCleaner.clearResearchData({includeConsent:true});ShikeResearchSession.reset();records=[];saveRecords();await ShikeLocalFirst.persist([]);renderHome();})()`);
   const firstUse=await client.evaluate(`(()=>({mode:document.body.classList.contains('product-validation-mode'),title:document.querySelector('.validation-intro h2').textContent,brand:document.querySelector('.hero-subtitle').textContent,example:document.querySelector('.input-hint').textContent,inputTop:document.getElementById('quickInput').getBoundingClientRect().top,viewport:innerHeight,opening:getComputedStyle(document.getElementById('opening')).display}))()`);
   assert(firstUse.mode&&firstUse.title.includes('可追踪的承诺、等待和下一步行动'),'product explanation is not visible');
@@ -51,6 +51,7 @@ async function main(){
   await waitFor(client,"document.querySelectorAll('#temporalInboxBlock .temporal-draft').length===5",'real Chronos draft preview');
   await client.evaluate(`(()=>{const first=document.querySelector('.temporal-type');first.value='note';first.dispatchEvent(new Event('change',{bubbles:true}));})()`);
   await waitFor(client,"ShikeResearchEventLog.list().some((event)=>event.eventType==='type_corrected')",'user correction event');
+  await waitFor(client,"!!document.querySelector('.temporal-confirm-all:not([disabled])')",'confirm all enabled');
   await client.evaluate(`(()=>{const all=document.querySelector('.temporal-confirm-all');all.click();all.click();})()`);
   await waitFor(client,"records.length===5&&document.querySelectorAll('.temporal-draft').length===0",'duplicate-safe confirmation');
   const captured=await client.evaluate(`(()=>{const events=ShikeResearchEventLog.list();const raw=localStorage.getItem(ShikeResearchEventLog.STORAGE_KEY)||'';const payload=ShikeFeedbackExporter.build();return {records:records.length,unique:new Set(records.map((record)=>record.id)).size,firstInput:events.filter((event)=>event.eventType==='first_input').length,confirmed:events.filter((event)=>event.eventType==='draft_confirmed').length,waiting:events.filter((event)=>event.eventType==='waiting_for_created').length,hasRaw:raw.includes(${JSON.stringify(source)}),schema:payload.schema,containsRawUserText:payload.containsRawUserText,exportPayload:payload};})()`);

@@ -1,13 +1,17 @@
 const CDP_URL=process.env.SHIKE_CDP_URL||'http://127.0.0.1:9224';
 const APP_URL=process.env.SHIKE_APP_URL||'http://127.0.0.1:8090/index.html';
 const EXPECTED_VERSION=process.env.SHIKE_EXPECTED_VERSION;
+const ARTIFACT_DIR=process.env.SHIKE_ARTIFACT_DIR||'';
+const fs=require('fs');
+const path=require('path');
 const delay=(ms)=>new Promise((resolve)=>setTimeout(resolve,ms));
 
 async function main(){
   if(!EXPECTED_VERSION)throw new Error('SHIKE_EXPECTED_VERSION is required');
-  const targets=await fetch(`${CDP_URL}/json`).then((response)=>response.json());
-  const page=targets.find((target)=>target.type==='page');
-  if(!page)throw new Error('no CDP page target');
+  const page=await fetch(`${CDP_URL}/json/new?${encodeURIComponent(APP_URL)}`,{method:'PUT'}).then((response)=>{
+    if(!response.ok)throw new Error(`cannot create isolated CDP page: ${response.status}`);
+    return response.json();
+  });
   const ws=new WebSocket(page.webSocketDebuggerUrl);
   const pending=new Map();let id=0;
   await new Promise((resolve,reject)=>{ws.addEventListener('open',resolve,{once:true});ws.addEventListener('error',reject,{once:true});});
@@ -26,8 +30,15 @@ async function main(){
   await send('Page.navigate',{url:APP_URL});await delay(1500);
   for(let index=0;index<100;index++){if(await evaluate(`document.readyState==='complete'`))break;await delay(100);}
   const offline=await evaluate(`({ready:document.readyState,version:window.APP_VERSION,modules:!!window.ShikeModules,body:document.body&&document.body.textContent.length})`);
+  if(ARTIFACT_DIR){
+    await send('Emulation.setDeviceMetricsOverride',{width:375,height:812,deviceScaleFactor:1,mobile:true});
+    const capture=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+    fs.mkdirSync(ARTIFACT_DIR,{recursive:true});
+    fs.writeFileSync(path.join(ARTIFACT_DIR,'offline-375x812.png'),Buffer.from(capture.data,'base64'));
+  }
   await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
   ws.close();
+  await fetch(`${CDP_URL}/json/close/${encodeURIComponent(page.id)}`).catch(()=>{});
   if(offline.ready!=='complete'||offline.version!==EXPECTED_VERSION||!offline.modules||offline.body<20)throw new Error(`offline launch failed: ${JSON.stringify(offline)}`);
   console.log('Offline runtime CDP acceptance passed: 3/3');
 }

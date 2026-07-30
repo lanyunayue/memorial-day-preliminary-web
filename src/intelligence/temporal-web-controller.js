@@ -59,7 +59,7 @@
     }
     function logCorrection(input){if(correctionStore)correctionStore.record(input).then(refreshAdaptationRules).catch(function(){});}
     function renderPreview(){modules.inboxView.render(previewContainer(),state,{confirm:confirmDraft,confirmAll:confirmAll,update:updateDraft,updateTime:updateDraftTime,cancel:cancelDraft,dismiss:dismiss});}
-    function removeDraftFromState(id){state.drafts=state.drafts.filter(function(draft){return draft.id!==id;});if(!state.drafts.length){state.rejected=[];api.clearInput(state.sourceText);state.sourceText='';}renderPreview();}
+    function removeDraftFromState(id,deferRender){state.drafts=state.drafts.filter(function(draft){return draft.id!==id;});if(!state.drafts.length){state.rejected=[];api.clearInput(state.sourceText);state.sourceText='';}if(!deferRender)renderPreview();}
     function dismiss(){state.drafts=[];state.rejected=[];state.error='';api.clearInput(state.sourceText);state.sourceText='';renderPreview();}
     function shouldCapture(result){return result.rejected.length>0||result.drafts.length>1||result.drafts.some(function(draft){return ['commitment','waiting_for','goal','anniversary','habit','thought'].includes(draft.type);});}
     function captureIfNeeded(text){
@@ -132,7 +132,7 @@
     function createSnapshotRestorePlan(operationId,snapshotId){return {operationId:operationId,operationType:'restore_snapshot',resourceId:snapshotId,payload:{snapshotId:snapshotId},pendingSteps:['sidecars'],steps:[{name:'sidecars',status:'sidecars_written',run:function(){return restoreSnapshotSidecarRaw(snapshotId);}}]};}
     function createBatchPlan(operationId,draftIds){
       var payload={draftIds:draftIds.slice()};var steps=[{name:'stage',status:'prepared',run:function(){return stagePayload(operationId,payload);}}];
-      draftIds.forEach(function(draftId,index){steps.push({name:'draft_'+index,status:'record_written',run:async function(){var draft=state.drafts.find(function(item){return item.id===draftId;});if(!draft){var stored=await temporalRepository.getDraft(draftId);if(stored&&stored.status==='confirmed')return true;throw new Error('batch_draft_unavailable');}if(!await confirmDraft(draftId))throw new Error('batch_draft_failed');return true;}});});
+      draftIds.forEach(function(draftId,index){steps.push({name:'draft_'+index,status:'record_written',run:async function(){var draft=state.drafts.find(function(item){return item.id===draftId;});if(!draft){var stored=await temporalRepository.getDraft(draftId);if(stored&&stored.status==='confirmed')return true;throw new Error('batch_draft_unavailable');}if(!await confirmDraft(draftId,{batch:true}))throw new Error('batch_draft_failed');return true;}});});
       steps.push({name:'cleanup',status:'sidecars_written',run:function(){return clearPayload(operationId);}});return {operationId:operationId,operationType:'confirm_batch',resourceId:payloadId(operationId),payload:payload,pendingSteps:steps.map(function(step){return step.name;}),steps:steps};
     }
     async function resolveRecoveryPlan(operation){
@@ -166,19 +166,20 @@
     async function rebuildConsistency(){
       if(!initialized)return null;var operationId=nextOperationId('rebuild_graph','temporal_graph');await operationCoordinator.execute(createRebuildPlan(operationId));return copy(state.lastConsistency);
     }
-    async function confirmDraft(id){
+    async function confirmDraft(id,options){
+      options=options||{};
       var draft=state.drafts.find(function(item){return item.id===id;});if(!draft||state.persisting||state.error||state.saving.has(id))return false;
       var operationId='create:'+draft.id;var existingOperation=await operationJournal.get(operationId);if(!existingOperation&&modules.legacyAdapter.isDuplicate(draft,api.getRecords())){notify('这条记录已存在，未重复保存。','warn');return false;}
-      state.saving.add(id);renderPreview();var recordId=existingOperation&&existingOperation.recordId||api.createRecordId();
+      state.saving.add(id);if(!options.batch)renderPreview();var recordId=existingOperation&&existingOperation.recordId||(api.createRecordIdForDraft?api.createRecordIdForDraft(draft.id):api.createRecordId());
       try{
-        await operationCoordinator.execute(createPlan(draft,recordId));researchTrack('draft_confirmed',{draftType:draft.type});if(draft.type==='waiting_for')researchTrack('waiting_for_created',{});state.saving.delete(id);state.error='';removeDraftFromState(id);api.refresh();await renderInsights(api.getRecords());await runConsistencyAudit();return true;
+        var execution=await operationCoordinator.execute(createPlan(draft,recordId));state.saving.delete(id);state.error='';removeDraftFromState(id,options.batch);if(execution&&execution.duplicate){if(!options.batch)api.refresh();return false;}researchTrack('draft_confirmed',{draftType:draft.type});if(draft.type==='waiting_for')researchTrack('waiting_for_created',{});if(!options.batch){api.refresh();await renderInsights(api.getRecords());await runConsistencyAudit();}return true;
       }catch(error){
-        state.saving.delete(id);state.error='记录写入被中断，恢复日志已保留；重新打开页面会安全恢复。';renderPreview();notify(state.error,'error');return false;
+        state.saving.delete(id);if(error&&error.code==='TEMPORAL_OPERATION_LOCKED'){state.error='';renderPreview();notify('另一页面正在处理这条记录，请稍后刷新。','warn');return false;}state.error='记录写入被中断，恢复日志已保留；重新打开页面会安全恢复。';renderPreview();notify(state.error,'error');return false;
       }
     }
     async function confirmAll(){
-      var ids=state.drafts.map(function(draft){return draft.id;});if(!ids.length||state.batchSaving)return false;state.batchSaving=true;
-      var operationId=nextOperationId('confirm_batch',ids[0]+'_'+ids.length);try{await operationCoordinator.execute(createBatchPlan(operationId,ids));state.batchSaving=false;return true;}catch(error){state.batchSaving=false;return false;}
+      var ids=state.drafts.map(function(draft){return draft.id;});if(!ids.length||state.persisting||state.error||state.batchSaving)return false;state.batchSaving=true;renderPreview();
+      var operationId=nextOperationId('confirm_batch',ids[0]+'_'+ids.length);try{await operationCoordinator.execute(createBatchPlan(operationId,ids));state.batchSaving=false;renderPreview();api.refresh();await renderInsights(api.getRecords());await runConsistencyAudit();return true;}catch(error){state.batchSaving=false;renderPreview();return false;}
     }
     async function auditGraph(){
       var graph=await graphRepository.snapshot();var result=modules.graphIntegrity.audit(graph);if(result.valid)return graph;

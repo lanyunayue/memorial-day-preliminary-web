@@ -5,7 +5,7 @@
 /* ========== i18n ========== */
 var I18N={
   'zh-CN':{
-    appName:'时刻',tagline:'你的贴心记事助手',save:'保存',cancel:'取消',delete:'删除',edit:'编辑',
+    appName:'时刻',tagline:'个人负荷与恢复助手',save:'保存',cancel:'取消',delete:'删除',edit:'编辑',
     inputPlaceholder:'试着写下需要记住的事情',inputHint:'可识别时间、重复和纪念日，保存后自动进入日历',
     demoPrefix:'不知道写什么？',demoAction:'体验示例',demoAlready:'示例已经在这里了',
     demoAdded:'已添加 {n} 条示例记录，可以在首页、全部和日历查看',
@@ -25,7 +25,7 @@ var I18N={
     spriteQuietMessage:'我会在这里帮你留意最近的时刻。',
     spriteTodayLine:'今日 {n} 条',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以帮你把一句话变成时刻。',spriteTip2:'今天有什么安排，可以先看看首页。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要记录记得导出备份。',spriteTip5:'有日期的记录可以导出到系统日历。',
-    navHome:'首页',navCal:'日历',navAll:'全部',navImport:'整理',navMy:'我的',navToday:'今天',navSpirit:'时刻精灵',navReview:'回顾',
+    navHome:'今天',navCal:'日历',navAll:'全部',navAgent:'时刻精灵',navReview:'回顾',navImport:'整理',navMy:'我的',
     allRecords:'全部记录',searchRecords:'搜索记录',noSearchResult:'没有找到相关记录',
     all:'全部',reminder:'提醒',anniversary:'纪念',habit:'习惯',note:'备忘',
     close:'关闭',confirm:'确定',details:'详情',setLarge:'大卡片',setNormal:'普通',setBg:'换背景',
@@ -49,7 +49,7 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 条',batchSavedResult:'已保存 {saved} 条，跳过 {skipped} 条重复',batchSkippedOnly:'没有新增，已跳过 {skipped} 条重复',
     exampleRecordsTitle:'示例记录',exampleRecordsText:'首次体验时可一键生成 5 条示例记录，不覆盖真实数据。',
     feedbackTitle:'建议与反馈',feedbackText:'遇到问题或有建议，可以发邮件告诉我。',writeEmail:'写邮件',copyEmail:'复制',feedbackCopied:'邮箱已复制',copyFeedbackTemplate:'复制反馈模板',feedbackTemplateCopied:'反馈模板已复制',feedbackTemplateLabel:'反馈时可以带上这些信息：',feedbackTemplateText:'遇到的问题：\n使用场景：\n浏览器/设备：\n希望改进：',feedbackNoUpload:'这里不接表单后端，也不会上传你的本地数据。',copyRecord:'复制',recordCopied:'记录已复制',moreActions:'更多',
-    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',futurePlan1:'更主动的助手能力。',futurePlan2:'更好的日历衔接。',futurePlan3:'更丰富的提醒方式。',futurePlan4:'更安全的数据保护。',futurePlan5:'多设备体验探索。',productPositionTitle:'产品定位',productPositionText:'时刻不是替代日历，而是帮你把聊天、通知和脑子里的一句话，先整理成有时间感的记录，再连接日历导出、备份和提醒说明。',capabilityChecklistTitle:'产品能力清单',capabilityChecklistText:'当前版本主要能力集中在本地记录、整理、导出和演示路径上。',capabilityOneSentence:'一句话输入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 备份',capabilityIcsExport:'.ics 导出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保护',capabilitySprite:'小熊助手',capabilityRecordActions:'记录快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'反馈入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',releaseCenterTitle:'更新记录',releaseCenterText:'最近版本变化集中放在这里，首次打开时仍会弹出本次更新。',releaseCenterV220a4:'消费级时间回顾',releaseCenterV141:'登记确认与离线修复',releaseCenterV200rc1:'发布候选',releaseCenterV200rc2:'产品救援',releaseCenterV140:'关注中心',releaseCenterV130:'本地 Agent Core',releaseCenterV120:'本地优先数据',releaseCenterV110:'模块化架构',releaseCenterV100rc:'正式稳定版',releaseCenterV098:'更新中心与反馈闭环',releaseCenterV097:'记录卡片操作增强',releaseCenterV096:'首页精简与功能中心',releaseCenterV095:'时刻精灵 2.0',releaseCenterV094:'个性化前置',releaseCenterV093:'产品体验打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
+    futurePlanTitle:'未来计划',futurePlanText:'会继续探索更主动的助手能力、更丰富的提醒方式、更好的日历衔接和更稳定的数据保护。',futurePlan1:'更主动的助手能力。',futurePlan2:'更好的日历衔接。',futurePlan3:'更丰富的提醒方式。',futurePlan4:'更安全的数据保护。',futurePlan5:'多设备体验探索。',productPositionTitle:'产品定位',productPositionText:'时刻不是替代日历，而是帮你把聊天、通知和脑子里的一句话，先整理成有时间感的记录，再连接日历导出、备份和提醒说明。',capabilityChecklistTitle:'产品能力清单',capabilityChecklistText:'当前版本主要能力集中在本地记录、整理、导出和演示路径上。',capabilityOneSentence:'一句话输入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 备份',capabilityIcsExport:'.ics 导出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保护',capabilitySprite:'小熊助手',capabilityRecordActions:'记录快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'反馈入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、备份、日历和反馈入口收在这里。',featureHubDemo:'体验示例',featureHubDemoSub:'生成 5 条示例',featureHubRoute:'演示路线',featureHubRouteSub:'从输入到导出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次变化',featureHubSafety:'数据安全',featureHubSafetySub:'JSON 备份',featureHubCalendar:'日历导出',featureHubCalendarSub:'导出 .ics',featureHubFeedback:'建议反馈',featureHubFeedbackSub:'邮件联系',featureHubFuture:'未来计划',featureHubFutureSub:'能力预告',releaseCenterTitle:'更新记录',releaseCenterText:'最近版本变化集中放在这里，首次打开时仍会弹出本次更新。',releaseCenterV141:'登记确认与离线修复',releaseCenterV200rc1:'发布候选',releaseCenterV200rc2:'产品救援',releaseCenterV140:'关注中心',releaseCenterV130:'本地 Agent Core',releaseCenterV120:'本地优先数据',releaseCenterV110:'模块化架构',releaseCenterV100rc:'正式稳定版',releaseCenterV098:'更新中心与反馈闭环',releaseCenterV097:'记录卡片操作增强',releaseCenterV096:'首页精简与功能中心',releaseCenterV095:'时刻精灵 2.0',releaseCenterV094:'个性化前置',releaseCenterV093:'产品体验打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'调整主题、语言和时刻精灵，让时刻更像你的助手。',chipTheme:'主题',chipLanguage:'语言',chipSprite:'小精灵',chipDisplay:'显示偏好',
     releaseTitle:'更新说明',releaseOk:'我知道了',releaseMeta:'当前版本 {version} · {time}',
     releaseNote1:'精灵登记前会清楚显示事项、日期、时间和类型。',releaseNote2:'确认卡新增修改入口，确认、修改、取消都不会提前写入。',releaseNote3:'确认按钮增加提交锁，连续点击只会保存一次。',releaseNote4:'修复关注中心页面位置和 Service Worker 缓存脚本。',releaseNote5:'本次不修改 NLP parser 与本地数据结构。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日历',spriteExportAction:'导出日历',spriteBackupAction:'备份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'时刻精灵助手已就绪。探索更多能力，正在规划中的功能也将在设置中开放。',
@@ -115,7 +115,7 @@ var I18N={
     noRecordsToday:'今日暂无记录',eventsToday:'今日有 {n} 件事',calQuickAddPh:'为这一天添加记录',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'提醒设置',reminderSettingsHint:'网页版提醒依赖浏览器环境。页面关闭后提醒不一定可靠，重要日程建议导出 .ics 到系统日历。',defaultLeadTime:'默认提前时间',atEventTime:'准时',permissionSettings:'权限设置',permissionSettingsHint:'查看和管理时刻使用的浏览器权限',microphonePerm:'麦克风',pwaInstallStatus:'PWA 安装',requestMic:'请求麦克风权限',requestStoragePersist:'请求持久化存储',dataBackup:'数据与备份',storagePersist:'持久化存储'},
   'zh-TW':{
-    appName:'時刻',tagline:'你的貼心記事助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
+    appName:'時刻',tagline:'個人負荷與恢復助手',save:'儲存',cancel:'取消',delete:'刪除',edit:'編輯',
     inputPlaceholder:'試著寫下需要記住的事情',inputHint:'可識別時間、重複和紀念日，儲存後自動進入日曆',
     demoPrefix:'不知道寫什麼？',demoAction:'體驗示例',demoAlready:'示例已經在這裡了',
     demoAdded:'已新增 {n} 條示例記錄，可以在首頁、全部和日曆查看',
@@ -135,7 +135,7 @@ var I18N={
     spriteQuietMessage:'我會在這裡幫你留意最近的時刻。',
     spriteTodayLine:'今日 {n} 條',spriteNextLine:'最近：{title} · {when}',
     spriteTip1:'我可以幫你把一句話變成時刻。',spriteTip2:'今天有什麼安排，可以先看看首頁。',spriteTip3:'一段聊天也可以批量整理。',spriteTip4:'重要記錄記得匯出備份。',spriteTip5:'有日期的記錄可以匯出到系統日曆。',
-    navHome:'首頁',navCal:'日曆',navAll:'全部',navImport:'整理',navMy:'我的',navToday:'今天',navSpirit:'時刻精靈',navReview:'回顧',
+    navHome:'今天',navCal:'日曆',navAll:'全部',navAgent:'時刻精靈',navReview:'回顧',navImport:'整理',navMy:'我的',
     allRecords:'全部記錄',searchRecords:'搜尋記錄',noSearchResult:'沒有找到相關記錄',
     all:'全部',reminder:'提醒',anniversary:'紀念',habit:'習慣',note:'備忘',
     close:'關閉',confirm:'確定',details:'詳情',setLarge:'大卡片',setNormal:'普通',setBg:'換背景',
@@ -159,7 +159,7 @@ var I18N={
     batchSavedOnly:'已保存 {saved} 條',batchSavedResult:'已保存 {saved} 條，略過 {skipped} 條重複',batchSkippedOnly:'沒有新增，已略過 {skipped} 條重複',
     exampleRecordsTitle:'示例記錄',exampleRecordsText:'首次體驗時可一鍵生成 5 條示例記錄，不覆蓋真實資料。',
     feedbackTitle:'建議與回饋',feedbackText:'遇到問題或有建議，可以發郵件告訴我。',writeEmail:'寫郵件',copyEmail:'複製',feedbackCopied:'郵箱已複製',copyFeedbackTemplate:'複製回饋模板',feedbackTemplateCopied:'回饋模板已複製',feedbackTemplateLabel:'回饋時可以帶上這些資訊：',feedbackTemplateText:'遇到的問題：\n使用場景：\n瀏覽器/裝置：\n希望改進：',feedbackNoUpload:'這裡不接表單後端，也不會上傳你的本地資料。',copyRecord:'複製',recordCopied:'記錄已複製',moreActions:'更多',
-    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',futurePlan1:'更主動的助手能力。',futurePlan2:'更好的日曆銜接。',futurePlan3:'更豐富的提醒方式。',futurePlan4:'更安全的資料保護。',futurePlan5:'多裝置體驗探索。',productPositionTitle:'產品定位',productPositionText:'時刻不是替代日曆，而是幫你把聊天、通知和腦子裡的一句話，先整理成有時間感的記錄，再連接日曆匯出、備份和提醒說明。',capabilityChecklistTitle:'產品能力清單',capabilityChecklistText:'目前版本主要能力集中在本地記錄、整理、匯出和演示路徑上。',capabilityOneSentence:'一句話輸入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 備份',capabilityIcsExport:'.ics 匯出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保護',capabilitySprite:'小熊助手',capabilityRecordActions:'記錄快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'回饋入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、備份、日曆和回饋入口收在這裡。',featureHubDemo:'體驗示例',featureHubDemoSub:'生成 5 條示例',featureHubRoute:'演示路線',featureHubRouteSub:'從輸入到匯出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次變化',featureHubSafety:'資料安全',featureHubSafetySub:'JSON 備份',featureHubCalendar:'日曆匯出',featureHubCalendarSub:'匯出 .ics',featureHubFeedback:'建議回饋',featureHubFeedbackSub:'郵件聯絡',featureHubFuture:'未來計劃',featureHubFutureSub:'能力預告',releaseCenterTitle:'更新記錄',releaseCenterText:'最近版本變化集中放在這裡，首次打開時仍會彈出本次更新。',releaseCenterV220a4:'消費級時間回顧',releaseCenterV141:'登記確認與離線修復',releaseCenterV200rc1:'發布候選',releaseCenterV200rc2:'產品救援',releaseCenterV140:'關注中心',releaseCenterV130:'本地 Agent Core',releaseCenterV120:'本地優先資料',releaseCenterV110:'模組化架構',releaseCenterV100rc:'正式穩定版',releaseCenterV098:'更新中心與回饋閉環',releaseCenterV097:'記錄卡片操作增強',releaseCenterV096:'首頁精簡與功能中心',releaseCenterV095:'時刻精靈 2.0',releaseCenterV094:'個人化前置',releaseCenterV093:'產品體驗打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
+    futurePlanTitle:'未來計劃',futurePlanText:'會繼續探索更主動的助手能力、更豐富的提醒方式、更好的日曆銜接和更穩定的資料保護。',futurePlan1:'更主動的助手能力。',futurePlan2:'更好的日曆銜接。',futurePlan3:'更豐富的提醒方式。',futurePlan4:'更安全的資料保護。',futurePlan5:'多裝置體驗探索。',productPositionTitle:'產品定位',productPositionText:'時刻不是替代日曆，而是幫你把聊天、通知和腦子裡的一句話，先整理成有時間感的記錄，再連接日曆匯出、備份和提醒說明。',capabilityChecklistTitle:'產品能力清單',capabilityChecklistText:'目前版本主要能力集中在本地記錄、整理、匯出和演示路徑上。',capabilityOneSentence:'一句話輸入',capabilityLocalSave:'本地保存',capabilityJsonBackup:'JSON 備份',capabilityIcsExport:'.ics 匯出',capabilityBatchOrganize:'批量整理',capabilityDedupe:'去重保護',capabilitySprite:'小熊助手',capabilityRecordActions:'記錄快捷操作',capabilityUpdateCenter:'更新中心',capabilityFeedback:'回饋入口',featureHubTitle:'功能中心',featureHubText:'把示例、演示、更新、備份、日曆和回饋入口收在這裡。',featureHubDemo:'體驗示例',featureHubDemoSub:'生成 5 條示例',featureHubRoute:'演示路線',featureHubRouteSub:'從輸入到匯出',featureHubUpdates:'版本更新',featureHubUpdatesSub:'查看本次變化',featureHubSafety:'資料安全',featureHubSafetySub:'JSON 備份',featureHubCalendar:'日曆匯出',featureHubCalendarSub:'匯出 .ics',featureHubFeedback:'建議回饋',featureHubFeedbackSub:'郵件聯絡',featureHubFuture:'未來計劃',featureHubFutureSub:'能力預告',releaseCenterTitle:'更新記錄',releaseCenterText:'最近版本變化集中放在這裡，首次打開時仍會彈出本次更新。',releaseCenterV141:'登記確認與離線修復',releaseCenterV200rc1:'發布候選',releaseCenterV200rc2:'產品救援',releaseCenterV140:'關注中心',releaseCenterV130:'本地 Agent Core',releaseCenterV120:'本地優先資料',releaseCenterV110:'模組化架構',releaseCenterV100rc:'正式穩定版',releaseCenterV098:'更新中心與回饋閉環',releaseCenterV097:'記錄卡片操作增強',releaseCenterV096:'首頁精簡與功能中心',releaseCenterV095:'時刻精靈 2.0',releaseCenterV094:'個人化前置',releaseCenterV093:'產品體驗打磨',viewCurrentRelease:'查看本次更新',personalizeDesc:'調整主題、語言和時刻精靈，讓時刻更像你的助手。',chipTheme:'主題',chipLanguage:'語言',chipSprite:'小精靈',chipDisplay:'顯示偏好',
     releaseTitle:'更新說明',releaseOk:'我知道了',releaseMeta:'目前版本 {version} · {time}',
     releaseNote1:'精靈登記前會清楚顯示事項、日期、時間和類型。',releaseNote2:'確認卡新增修改入口，確認、修改、取消都不會提前寫入。',releaseNote3:'確認按鈕增加提交鎖，連續點擊只會保存一次。',releaseNote4:'修復關注中心頁面位置和 Service Worker 快取腳本。',releaseNote5:'本次不修改 NLP parser 與本地資料結構。',
     spriteTodayAction:'看今天',spriteBatchAction:'整理一段',spriteCalendarAction:'看日曆',spriteExportAction:'匯出日曆',spriteBackupAction:'備份',spriteUpdateAction:'更新',spriteResetAction:'重置位置',spriteFutureHint:'時刻精靈助手已就緒。探索更多能力，正在規劃中的功能也將在設定中開放。',
@@ -207,7 +207,7 @@ var I18N={
     noRecordsToday:'今日暫無記錄',eventsToday:'今日有 {n} 件事',calQuickAddPh:'為這一天新增記錄',
     jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',oct:'10月',nov:'11月',dec:'12月',reminderSettings:'提醒設定',reminderSettingsHint:'網頁版提醒依賴瀏覽器環境。頁面關閉後提醒不一定可靠，重要日程建議匯出 .ics 到系統日曆。',defaultLeadTime:'默認提前時間',atEventTime:'準時',permissionSettings:'權限設定',permissionSettingsHint:'查看和管理時刻使用的瀏覽器權限',microphonePerm:'麥克風',pwaInstallStatus:'PWA 安裝',requestMic:'請求麥克風權限',requestStoragePersist:'請求持久化存儲',dataBackup:'數據與備份',storagePersist:'持久化存儲'},
   'en':{
-    appName:'Shike',tagline:'Your personal time keeper',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
+    appName:'Shike',tagline:'Personal load and recovery assistant',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
     inputPlaceholder:'Write what you need to remember',inputHint:'Times, repeats, and anniversaries are detected automatically.',
     demoPrefix:'Not sure what to add?',demoAction:'Try examples',demoAlready:'The examples are already here',
     demoAdded:'Added {n} example records. View them on Home, All, and Calendar.',
@@ -227,7 +227,7 @@ var I18N={
     spriteQuietMessage:'I will keep an eye on your upcoming moments here.',
     spriteTodayLine:'Today {n}',spriteNextLine:'Next: {title} · {when}',
     spriteTip1:'I can turn one sentence into a Shike moment.',spriteTip2:'Start with Home to see what is due today.',spriteTip3:'A paragraph of chat can be organized in batch.',spriteTip4:'Export backups for important records.',spriteTip5:'Dated records can be exported to your system calendar.',
-    navHome:'Home',navCal:'Calendar',navAll:'All',navImport:'Organize',navMy:'Me',navToday:'Today',navSpirit:'Spirit',navReview:'Review',
+    navHome:'Today',navCal:'Calendar',navAll:'All',navAgent:'Shike Agent',navReview:'Review',navImport:'Organize',navMy:'Me',
     allRecords:'All records',searchRecords:'Search records',noSearchResult:'No matching records',
     all:'All',reminder:'Reminder',anniversary:'Anniversary',habit:'Habit',note:'Note',
     close:'Close',confirm:'OK',details:'Details',setLarge:'Large Card',setNormal:'Normal',setBg:'Background',
@@ -251,7 +251,7 @@ var I18N={
     batchSavedOnly:'Saved {saved}',batchSavedResult:'Saved {saved}, skipped {skipped} duplicates',batchSkippedOnly:'Nothing new, skipped {skipped} duplicates',
     exampleRecordsTitle:'Example records',exampleRecordsText:'Create 5 example records for first-time review without overwriting real data.',
     feedbackTitle:'Feedback',feedbackText:'If you find an issue or have an idea, send an email.',writeEmail:'Email',copyEmail:'Copy',feedbackCopied:'Email copied',copyFeedbackTemplate:'Copy feedback template',feedbackTemplateCopied:'Feedback template copied',feedbackTemplateLabel:'Useful details to include:',feedbackTemplateText:'Issue:\nUse case:\nBrowser/device:\nWhat you hope improves:',feedbackNoUpload:'No backend form is connected here, and your local data is not uploaded.',copyRecord:'Copy',recordCopied:'Record copied',moreActions:'More',
-    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',futurePlan1:'More proactive assistant abilities.',futurePlan2:'Better calendar handoff.',futurePlan3:'Richer reminder options.',futurePlan4:'Safer data protection.',futurePlan5:'Multi-device experience exploration.',productPositionTitle:'Product position',productPositionText:'Shike is not a calendar replacement. It helps turn one sentence from chat, notifications, or your mind into time-aware records, then connects them to calendar export, backup, and reminder notes.',capabilityChecklistTitle:'Product capability checklist',capabilityChecklistText:'This version focuses on local records, organization, export, and the demo path.',capabilityOneSentence:'One-sentence input',capabilityLocalSave:'Local save',capabilityJsonBackup:'JSON backup',capabilityIcsExport:'.ics export',capabilityBatchOrganize:'Batch organize',capabilityDedupe:'Dedupe protection',capabilitySprite:'Bear assistant',capabilityRecordActions:'Record quick actions',capabilityUpdateCenter:'Update center',capabilityFeedback:'Feedback entry',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',releaseCenterTitle:'Update history',releaseCenterText:'Recent version changes live here. First open still shows the current release note.',releaseCenterV220a4:'Consumer time review',releaseCenterV141:'Confirmation and offline fixes',releaseCenterV200rc1:'Release Candidate',releaseCenterV200rc2:'Product Rescue',releaseCenterV140:'Watch Center',releaseCenterV130:'Local Agent Core',releaseCenterV120:'Local-first data',releaseCenterV110:'Modular architecture',releaseCenterV100rc:'Stable release',releaseCenterV098:'Update center and feedback loop',releaseCenterV097:'Record card action polish',releaseCenterV096:'Home cleanup and feature hub',releaseCenterV095:'Time sprite 2.0',releaseCenterV094:'Personalization moved forward',releaseCenterV093:'Product experience polish',viewCurrentRelease:'View this update',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
+    futurePlanTitle:'Future plans',futurePlanText:'We will keep exploring more proactive assistance, richer reminders, better calendar handoff, and stronger data protection.',futurePlan1:'More proactive assistant abilities.',futurePlan2:'Better calendar handoff.',futurePlan3:'Richer reminder options.',futurePlan4:'Safer data protection.',futurePlan5:'Multi-device experience exploration.',productPositionTitle:'Product position',productPositionText:'Shike is not a calendar replacement. It helps turn one sentence from chat, notifications, or your mind into time-aware records, then connects them to calendar export, backup, and reminder notes.',capabilityChecklistTitle:'Product capability checklist',capabilityChecklistText:'This version focuses on local records, organization, export, and the demo path.',capabilityOneSentence:'One-sentence input',capabilityLocalSave:'Local save',capabilityJsonBackup:'JSON backup',capabilityIcsExport:'.ics export',capabilityBatchOrganize:'Batch organize',capabilityDedupe:'Dedupe protection',capabilitySprite:'Bear assistant',capabilityRecordActions:'Record quick actions',capabilityUpdateCenter:'Update center',capabilityFeedback:'Feedback entry',featureHubTitle:'Feature hub',featureHubText:'Examples, demo route, updates, backup, calendar, and feedback live here.',featureHubDemo:'Try examples',featureHubDemoSub:'Create 5 examples',featureHubRoute:'Demo route',featureHubRouteSub:'Input to export',featureHubUpdates:'Updates',featureHubUpdatesSub:'What changed',featureHubSafety:'Data safety',featureHubSafetySub:'JSON backup',featureHubCalendar:'Calendar export',featureHubCalendarSub:'Export .ics',featureHubFeedback:'Feedback',featureHubFeedbackSub:'Email contact',featureHubFuture:'Future plans',featureHubFutureSub:'Roadmap preview',releaseCenterTitle:'Update history',releaseCenterText:'Recent version changes live here. First open still shows the current release note.',releaseCenterV141:'Confirmation and offline fixes',releaseCenterV200rc1:'Release Candidate',releaseCenterV200rc2:'Product Rescue',releaseCenterV140:'Watch Center',releaseCenterV130:'Local Agent Core',releaseCenterV120:'Local-first data',releaseCenterV110:'Modular architecture',releaseCenterV100rc:'Stable release',releaseCenterV098:'Update center and feedback loop',releaseCenterV097:'Record card action polish',releaseCenterV096:'Home cleanup and feature hub',releaseCenterV095:'Time sprite 2.0',releaseCenterV094:'Personalization moved forward',releaseCenterV093:'Product experience polish',viewCurrentRelease:'View this update',personalizeDesc:'Adjust theme, language and the time sprite to make Shike yours.',chipTheme:'Theme',chipLanguage:'Language',chipSprite:'Sprite',chipDisplay:'Display',
     releaseTitle:'What changed',releaseOk:'Got it',releaseMeta:'Current version {version} · {time}',
     releaseNote1:'The assistant now previews the item, date, time, and type before saving.',releaseNote2:'The confirmation card supports modify and cancel without writing early.',releaseNote3:'A submission lock prevents repeated confirmation from creating duplicates.',releaseNote4:'This patch fixes Watch Center placement and the Service Worker cache script.',releaseNote5:'The NLP parser and local data schema are unchanged.',
     spriteTodayAction:'Today',spriteBatchAction:'Organize',spriteCalendarAction:'Calendar',spriteExportAction:'Export calendar',spriteBackupAction:'Backup',spriteUpdateAction:'Updates',spriteResetAction:'Reset position',spriteFutureHint:'Time sprite assistant is ready. Explore more abilities, features being planned will be available in settings.',
@@ -308,7 +308,7 @@ var I18N={
     noRecordsToday:'Nothing today',eventsToday:'{n} events today',calQuickAddPh:'Add a record for this day',
     jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec',reminderSettings:'Reminder Settings',reminderSettingsHint:'Web reminders depend on the browser environment. Reminders may not be reliable when the page is closed. Export important schedules as .ics to your system calendar.',defaultLeadTime:'Default Lead Time',atEventTime:'At event time',permissionSettings:'Permissions',permissionSettingsHint:'View and manage browser permissions used by Shike',microphonePerm:'Microphone',pwaInstallStatus:'PWA Install',requestMic:'Request Microphone',requestStoragePersist:'Request Persistent Storage',dataBackup:'Data & Backup',storagePersist:'Persistent Storage'},
   'ja':{
-    appName:'時刻',tagline:'あなたの大切な時間を記録',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
+    appName:'時刻',tagline:'個人の負荷と回復を支えるアシスタント',save:'保存',cancel:'キャンセル',delete:'削除',edit:'編集',
     inputPlaceholder:'覚えておきたいことを書いてください',inputHint:'時間・繰り返し・記念日を自動で認識します',
     demoPrefix:'何を書くか迷ったら',demoAction:'例を試す',demoAlready:'例はすでに追加されています',
     demoAdded:'{n} 件のサンプル記録を追加しました。ホーム・一覧・カレンダーで確認できます',
@@ -328,7 +328,7 @@ var I18N={
     spriteQuietMessage:'ここで近い時刻をそっと見守ります。',
     spriteTodayLine:'今日 {n} 件',spriteNextLine:'次：{title} · {when}',
     spriteTip1:'一文を時刻に変えるお手伝いができます。',spriteTip2:'今日の予定はまずホームで確認できます。',spriteTip3:'チャットの一段落もまとめて整理できます。',spriteTip4:'大事な記録はバックアップを書き出しましょう。',spriteTip5:'日付付き記録はシステムカレンダーへ書き出せます。',
-    navHome:'ホーム',navCal:'カレンダー',navAll:'すべて',navImport:'整理',navMy:'マイ',navToday:'今日',navSpirit:'スピリット',navReview:'レビュー',
+    navHome:'今日',navCal:'カレンダー',navAll:'すべて',navAgent:'時刻精霊',navReview:'振り返り',navImport:'整理',navMy:'マイ',
     allRecords:'すべての記録',searchRecords:'記録を検索',noSearchResult:'一致する記録がありません',
     all:'すべて',reminder:'リマインド',anniversary:'記念日',habit:'習慣',note:'メモ',
     close:'閉じる',confirm:'OK',details:'詳細',setLarge:'大カード',setNormal:'通常',setBg:'背景',
@@ -352,7 +352,7 @@ var I18N={
     batchSavedOnly:'{saved} 件を保存しました',batchSavedResult:'{saved} 件を保存し、重複 {skipped} 件をスキップしました',batchSkippedOnly:'新規なし、重複 {skipped} 件をスキップしました',
     exampleRecordsTitle:'サンプル記録',exampleRecordsText:'初回確認用に 5 件のサンプルを作成できます。実データは上書きしません。',
     feedbackTitle:'提案とフィードバック',feedbackText:'問題や提案があればメールで教えてください。',writeEmail:'メール',copyEmail:'コピー',feedbackCopied:'メールをコピーしました',copyFeedbackTemplate:'テンプレートをコピー',feedbackTemplateCopied:'フィードバックテンプレートをコピーしました',feedbackTemplateLabel:'送るときはこの情報が役立ちます：',feedbackTemplateText:'問題：\n利用場面：\nブラウザ/端末：\n改善してほしいこと：',feedbackNoUpload:'ここではフォームのバックエンドに接続せず、ローカルデータもアップロードしません。',copyRecord:'コピー',recordCopied:'記録をコピーしました',moreActions:'その他',
-    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',futurePlan1:'より能動的な助手機能。',futurePlan2:'よりよいカレンダー連携。',futurePlan3:'より豊かなリマインド方式。',futurePlan4:'より安全なデータ保護。',futurePlan5:'複数端末体験の探索。',productPositionTitle:'製品の位置づけ',productPositionText:'時刻はカレンダーの代替ではありません。チャット、通知、頭の中の一文を時間感のある記録に整え、カレンダー出力、バックアップ、リマインド説明につなげます。',capabilityChecklistTitle:'製品能力チェックリスト',capabilityChecklistText:'この版はローカル記録、整理、出力、デモ経路に集中しています。',capabilityOneSentence:'一文入力',capabilityLocalSave:'ローカル保存',capabilityJsonBackup:'JSON バックアップ',capabilityIcsExport:'.ics 出力',capabilityBatchOrganize:'一括整理',capabilityDedupe:'重複保護',capabilitySprite:'くま助手',capabilityRecordActions:'記録クイック操作',capabilityUpdateCenter:'更新センター',capabilityFeedback:'フィードバック入口',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',releaseCenterTitle:'更新履歴',releaseCenterText:'最近の版の変更をここにまとめます。初回表示では今回の更新も表示されます。',releaseCenterV220a4:'コンシューマー向け時間レビュー',releaseCenterV141:'確認とオフライン修正',releaseCenterV200rc1:'リリース候補',releaseCenterV200rc2:'プロダクトレスキュー',releaseCenterV140:'ウォッチセンター',releaseCenterV130:'ローカル Agent Core',releaseCenterV120:'ローカル優先データ',releaseCenterV110:'モジュール化構成',releaseCenterV100rc:'正式安定版',releaseCenterV098:'更新センターとフィードバック',releaseCenterV097:'記録カード操作の強化',releaseCenterV096:'ホーム整理と機能センター',releaseCenterV095:'時刻スプライト 2.0',releaseCenterV094:'カスタマイズを前面へ',releaseCenterV093:'製品体験の調整',viewCurrentRelease:'今回の更新を見る',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
+    futurePlanTitle:'今後の予定',futurePlanText:'より能動的な助手機能、豊かなリマインド、日程連携、安定したデータ保護を探ります。',futurePlan1:'より能動的な助手機能。',futurePlan2:'よりよいカレンダー連携。',futurePlan3:'より豊かなリマインド方式。',futurePlan4:'より安全なデータ保護。',futurePlan5:'複数端末体験の探索。',productPositionTitle:'製品の位置づけ',productPositionText:'時刻はカレンダーの代替ではありません。チャット、通知、頭の中の一文を時間感のある記録に整え、カレンダー出力、バックアップ、リマインド説明につなげます。',capabilityChecklistTitle:'製品能力チェックリスト',capabilityChecklistText:'この版はローカル記録、整理、出力、デモ経路に集中しています。',capabilityOneSentence:'一文入力',capabilityLocalSave:'ローカル保存',capabilityJsonBackup:'JSON バックアップ',capabilityIcsExport:'.ics 出力',capabilityBatchOrganize:'一括整理',capabilityDedupe:'重複保護',capabilitySprite:'くま助手',capabilityRecordActions:'記録クイック操作',capabilityUpdateCenter:'更新センター',capabilityFeedback:'フィードバック入口',featureHubTitle:'機能センター',featureHubText:'サンプル、デモ、更新、バックアップ、カレンダー、フィードバックをまとめました。',featureHubDemo:'サンプル',featureHubDemoSub:'5件を作成',featureHubRoute:'デモルート',featureHubRouteSub:'入力から出力へ',featureHubUpdates:'更新',featureHubUpdatesSub:'変更を見る',featureHubSafety:'データ保護',featureHubSafetySub:'JSON バックアップ',featureHubCalendar:'カレンダー出力',featureHubCalendarSub:'.ics 出力',featureHubFeedback:'フィードバック',featureHubFeedbackSub:'メール連絡',featureHubFuture:'今後の予定',featureHubFutureSub:'能力予告',releaseCenterTitle:'更新履歴',releaseCenterText:'最近の版の変更をここにまとめます。初回表示では今回の更新も表示されます。',releaseCenterV141:'確認とオフライン修正',releaseCenterV200rc1:'リリース候補',releaseCenterV200rc2:'プロダクトレスキュー',releaseCenterV140:'ウォッチセンター',releaseCenterV130:'ローカル Agent Core',releaseCenterV120:'ローカル優先データ',releaseCenterV110:'モジュール化構成',releaseCenterV100rc:'正式安定版',releaseCenterV098:'更新センターとフィードバック',releaseCenterV097:'記録カード操作の強化',releaseCenterV096:'ホーム整理と機能センター',releaseCenterV095:'時刻スプライト 2.0',releaseCenterV094:'カスタマイズを前面へ',releaseCenterV093:'製品体験の調整',viewCurrentRelease:'今回の更新を見る',personalizeDesc:'テーマ、言語、時刻スプライトを調整して、あなただけのアシスタントに。',chipTheme:'テーマ',chipLanguage:'言語',chipSprite:'スプライト',chipDisplay:'表示設定',
       releaseTitle:'更新内容',releaseOk:'わかりました',releaseMeta:'現在の版 {version} · {time}',
     releaseNote1:'保存前に項目、日付、時刻、種類を確認できるようになりました。',releaseNote2:'確認カードから変更またはキャンセルでき、事前に書き込みません。',releaseNote3:'送信ロックにより連続確認でも一度だけ保存します。',releaseNote4:'ウォッチセンターの配置と Service Worker キャッシュを修正しました。',releaseNote5:'NLP parser とローカルデータ構造は変更していません。',
     spriteTodayAction:'今日を見る',spriteBatchAction:'整理する',spriteCalendarAction:'カレンダー',spriteExportAction:'カレンダー出力',spriteBackupAction:'バックアップ',spriteUpdateAction:'更新',spriteResetAction:'位置をリセット',spriteFutureHint:'時刻スプライト助手は準備完了です。探索してさらに有効化できます。計画中の機能も設定で利用可能になります。',
@@ -514,6 +514,37 @@ var DEMO_ROUTE_I18N={
 Object.keys(I18N).forEach(function(lang){
   Object.assign(I18N[lang],DEMO_ROUTE_I18N[lang]||DEMO_ROUTE_I18N['zh-CN']);
 });
+var PORTABLE_EXPORT_I18N={
+  'zh-CN':{
+    portableExportTitle:'Portable Export',portableExportHint:'用于在 Web、Android 和 HarmonyOS 之间迁移。文件包含私人记录，请妥善保管。',
+    exportPortable:'导出 Portable Export',importPortable:'导入 Portable Export',portablePreviewTitle:'Portable Export 导入预览',
+    portableSourcePlatform:'来源客户端',portableCreate:'新增',portableUpdate:'更新',portableUnchanged:'不变',portableConflict:'冲突',portableUnsupported:'仅保留',portableInvalid:'无效',
+    confirmPortableImport:'确认导入',cancelPortableImport:'取消',portableExported:'Portable Export 已导出',portableImported:'Portable Export 已导入',
+    portableInvalidFile:'文件校验失败，未写入任何数据',portableConflictBlocked:'存在冲突，未写入任何数据',portableStorageRequired:'当前浏览器无法安全导入 Portable Export'
+  },
+  'zh-TW':{
+    portableExportTitle:'Portable Export',portableExportHint:'用於在 Web、Android 與 HarmonyOS 之間遷移。檔案包含私人記錄，請妥善保管。',
+    exportPortable:'匯出 Portable Export',importPortable:'匯入 Portable Export',portablePreviewTitle:'Portable Export 匯入預覽',
+    portableSourcePlatform:'來源用戶端',portableCreate:'新增',portableUpdate:'更新',portableUnchanged:'不變',portableConflict:'衝突',portableUnsupported:'僅保留',portableInvalid:'無效',
+    confirmPortableImport:'確認匯入',cancelPortableImport:'取消',portableExported:'Portable Export 已匯出',portableImported:'Portable Export 已匯入',
+    portableInvalidFile:'檔案驗證失敗，未寫入任何資料',portableConflictBlocked:'存在衝突，未寫入任何資料',portableStorageRequired:'目前瀏覽器無法安全匯入 Portable Export'
+  },
+  en:{
+    portableExportTitle:'Portable Export',portableExportHint:'Move data between Web, Android, and HarmonyOS. This file contains private records; store it securely.',
+    exportPortable:'Export Portable Export',importPortable:'Import Portable Export',portablePreviewTitle:'Portable Export import preview',
+    portableSourcePlatform:'Source client',portableCreate:'Create',portableUpdate:'Update',portableUnchanged:'Unchanged',portableConflict:'Conflicts',portableUnsupported:'Preserve only',portableInvalid:'Invalid',
+    confirmPortableImport:'Confirm import',cancelPortableImport:'Cancel',portableExported:'Portable Export created',portableImported:'Portable Export imported',
+    portableInvalidFile:'File validation failed. No data was written.',portableConflictBlocked:'Conflicts found. No data was written.',portableStorageRequired:'This browser cannot safely import Portable Export.'
+  },
+  ja:{
+    portableExportTitle:'Portable Export',portableExportHint:'Web、Android、HarmonyOS 間の移行に使用します。個人記録を含むため、安全に保管してください。',
+    exportPortable:'Portable Export を出力',importPortable:'Portable Export を取込',portablePreviewTitle:'Portable Export 取込プレビュー',
+    portableSourcePlatform:'移行元',portableCreate:'新規',portableUpdate:'更新',portableUnchanged:'変更なし',portableConflict:'競合',portableUnsupported:'保持のみ',portableInvalid:'無効',
+    confirmPortableImport:'取込を確認',cancelPortableImport:'キャンセル',portableExported:'Portable Export を出力しました',portableImported:'Portable Export を取り込みました',
+    portableInvalidFile:'ファイル検証に失敗しました。データは書き込まれていません。',portableConflictBlocked:'競合があります。データは書き込まれていません。',portableStorageRequired:'このブラウザでは Portable Export を安全に取り込めません。'
+  }
+};
+Object.keys(I18N).forEach(function(lang){Object.assign(I18N[lang],PORTABLE_EXPORT_I18N[lang]||PORTABLE_EXPORT_I18N['zh-CN']);});
 var LANG='zh-CN';
 function t(key){var d=I18N[LANG]||I18N['zh-CN'];return d[key]||key;}
 function tf(key,vars){var s=t(key);if(vars){for(var k in vars){s=s.replace('{'+k+'}',vars[k]);}}return s;}
@@ -714,18 +745,18 @@ function migrateRecord(r){
   }
   return r;
 }
-function saveRecords(options){
+function saveRecords(){
   try{
     ensureUniqueRecordIds(records);
     if(!ShikeLegacyStorage.setJson(STORAGE_KEY,records))throw new Error('records_write_failed');
     saveLastGoodRecords(records);
-    if(window.ShikeLocalFirst&&!(options&&options.skipLocalFirst))window.ShikeLocalFirst.persist(records).catch(function(){});
+    if(window.ShikeLocalFirst)window.ShikeLocalFirst.persist(records).catch(function(){});
     return true;
   }
   catch(e){showToast(t('storageError')||'存储空间已满','error');return false;}
 }
 async function persistRecordsDurably(){
-  if(!saveRecords({skipLocalFirst:true}))throw new Error('records_cache_write_failed');
+  if(!saveRecords())throw new Error('records_cache_write_failed');
   if(!window.ShikeLocalFirst)return true;
   var result=await window.ShikeLocalFirst.persist(records);
   if(result&&result.fallback)throw new Error('records_indexeddb_write_unavailable');
@@ -942,6 +973,101 @@ function exportBackupFile(){
     showToast(t('exportDone'),'success');
     }).catch(function(){showToast(t('importFailed'),'error');});
   }catch(e){showToast(t('importFailed'),'error');}
+}
+var pendingPortableImport=null;
+async function portableStorageContext(){
+  if(!window.ShikePortableExportV1)throw new Error('portable_export_unavailable');
+  var entities=[];
+  var envelope=null;
+  if(window.ShikeIndexedDb){
+    try{
+      entities=await ShikeIndexedDb.getAll('portable_records');
+      envelope=await ShikeIndexedDb.get('portable_envelopes','portable-envelope-current');
+    }catch(error){entities=[];envelope=null;}
+  }
+  var currentBundle=await ShikePortableExportV1.buildBundle({records:records,settings:settings,portableEntities:entities,envelope:envelope,appVersion:APP_VERSION});
+  var byId=new Map();
+  entities.forEach(function(entity){if(entity&&entity.id)byId.set(entity.id,entity);});
+  currentBundle.records.forEach(function(record){
+    var legacy=record.data&&record.data.legacyRecord;
+    byId.set(record.portableId,ShikePortableExportV1.entityFromRecord(record,legacy&&legacy.id||''));
+  });
+  return {entities:entities,envelope:envelope,currentBundle:currentBundle,currentEntities:Array.from(byId.values())};
+}
+async function exportPortableFile(){
+  try{
+    var context=await portableStorageContext();
+    downloadTextFile('shike-portable-export-'+ymdForFile(new Date())+'.json',JSON.stringify(context.currentBundle,null,2),'application/json;charset=utf-8');
+    showToast(t('portableExported'),'success');
+  }catch(error){showToast(t('exportFailed'),'error');}
+}
+function portablePreviewRows(prepared){
+  var preview=prepared.preview||{};
+  return [
+    [t('portableSourcePlatform'),prepared.bundle&&prepared.bundle.sourcePlatform||'--'],
+    [t('portableCreate'),preview.create||0],
+    [t('portableUpdate'),preview.update||0],
+    [t('portableUnchanged'),preview.unchanged||0],
+    [t('portableConflict'),preview.conflict||0],
+    [t('portableUnsupported'),preview.unsupported||0],
+    [t('portableInvalid'),preview.invalid||0]
+  ];
+}
+function renderPortableImportPreview(payload){
+  pendingPortableImport=payload||null;
+  var card=$('portableImportPreviewCard');
+  if(!card)return;
+  if(!payload){card.classList.add('hidden');card.innerHTML='';return;}
+  var prepared=payload.prepared;
+  var rows=portablePreviewRows(prepared).map(function(row){return '<div class="detail-row"><span class="detail-label">'+escHtml(row[0])+'</span><span class="detail-value">'+escHtml(String(row[1]))+'</span></div>';}).join('');
+  var preview=prepared.preview||{};
+  var status='';
+  if(preview.invalid)status='<p style="font-size:12px;color:#b5433a;margin:10px 0 0;">'+escHtml(t('portableInvalidFile'))+'</p>';
+  else if(preview.conflict)status='<p style="font-size:12px;color:#b5433a;margin:10px 0 0;">'+escHtml(t('portableConflictBlocked'))+'</p>';
+  var confirmButton=preview.canImport?'<button class="import-btn" onclick="confirmPortableImport()">'+escHtml(t('confirmPortableImport'))+'</button>':'';
+  card.classList.remove('hidden');
+  card.innerHTML='<div class="draft-item-title">'+escHtml(t('portablePreviewTitle'))+'</div>'+rows+status+'<div style="display:flex;gap:8px;margin-top:10px;">'+confirmButton+'<button class="import-btn" onclick="cancelPortableImport()">'+escHtml(t('cancelPortableImport'))+'</button></div>';
+}
+function cancelPortableImport(){
+  pendingPortableImport=null;
+  renderPortableImportPreview(null);
+  var input=$('portableFileInput');if(input)input.value='';
+}
+async function confirmPortableImport(){
+  if(!pendingPortableImport||!pendingPortableImport.prepared.preview.canImport)return;
+  var pending=pendingPortableImport;
+  pendingPortableImport=null;
+  try{
+    if(!window.ShikeIndexedDb||!ShikeIndexedDb.importPortable)throw new Error('indexeddb_required');
+    var plan=ShikePortableExportV1.buildImportPlan(pending.prepared,records,pending.context.currentEntities);
+    plan.businessRecords.forEach(function(record){migrateRecord(record);});
+    await ShikeIndexedDb.importPortable(plan);
+    records=plan.businessRecords;
+    ShikeLegacyStorage.setJson(STORAGE_KEY,records);
+    saveLastGoodRecords(records);
+    renderPortableImportPreview(null);
+    renderCurrent();
+    renderMy();
+    showToast(t('portableImported'),'success');
+  }catch(error){
+    renderPortableImportPreview(pending);
+    showToast(t('portableStorageRequired'),'error');
+  }
+}
+async function handlePortableFileInput(e){
+  var file=e.target.files&&e.target.files[0];if(!file)return;
+  if(!window.ShikePortableExportV1||file.size>ShikePortableExportV1.MAX_INPUT_BYTES){showToast(t('portableInvalidFile'),'error');e.target.value='';return;}
+  var reader=new FileReader();
+  reader.onload=async function(event){
+    try{
+      var context=await portableStorageContext();
+      var prepared=await ShikePortableExportV1.prepareImport(event.target.result,context.currentEntities);
+      renderPortableImportPreview({prepared:prepared,context:context});
+    }catch(error){showToast(t('portableInvalidFile'),'error');}
+    e.target.value='';
+  };
+  reader.onerror=function(){showToast(t('portableInvalidFile'),'error');e.target.value='';};
+  reader.readAsText(file);
 }
 function exportQuarantinedData(){
   if(!window.ShikeLocalFirst)return;
@@ -1304,54 +1430,26 @@ function addDemoRecords(){
 }
 
 /* ========== Time Sprite ========== */
-/* State machine: OPEN | MINIMIZED | DISMISSED */
-var timeSpritePanelState='minimized';
+var timeSpriteCollapsed=true;
 var timeSpriteDragState=null;
 var timeSpriteSuppressClick=false;
 var timeSpriteManualTip='';
-var timeSpriteCollapsed=false; // backward-compat alias
-function readSpriteAutoOpen(){
+function readTimeSpriteCollapsed(){
   try{
-    var v=localStorage.getItem(SPRITE_AUTO_OPEN_KEY);
-    if(v===null)return true;
-    return v==='true';
-  }catch(e){return true;}
-}
-function saveSpriteAutoOpen(value){
-  try{localStorage.setItem(SPRITE_AUTO_OPEN_KEY,value?'true':'false');}catch(e){}
-}
-function readTimeSpritePanelState(){
-  try{
-    var saved=localStorage.getItem(SPRITE_PANEL_STATE_KEY);
-    if(saved==='open'||saved==='minimized'||saved==='dismissed')return saved;
-    var oldCollapsed=localStorage.getItem(SPRITE_COLLAPSED_KEY);
-    if(oldCollapsed===null)oldCollapsed=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
-    if(oldCollapsed==='true')return 'minimized';
-    if(oldCollapsed==='false')return readSpriteAutoOpen()?'open':'minimized';
+    var saved=localStorage.getItem(SPRITE_COLLAPSED_KEY);
+    if(saved===null)saved=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
+    if(saved==='true')return true;
+    if(saved==='false')return false;
   }catch(e){}
-  var isMobile=!!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
-  return isMobile?'minimized':(readSpriteAutoOpen()?'open':'minimized');
+  return !!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
 }
-function saveTimeSpritePanelState(state){
-  timeSpritePanelState=state;
-  timeSpriteCollapsed=(state!=='open');
+function saveTimeSpriteCollapsed(value){
+  timeSpriteCollapsed=!!value;
   try{
-    localStorage.setItem(SPRITE_PANEL_STATE_KEY,state);
-    var collapsed=(state!=='open');
-    localStorage.setItem(SPRITE_COLLAPSED_KEY,collapsed?'true':'false');
-    localStorage.setItem(ASSISTANT_COLLAPSED_KEY,collapsed?'true':'false');
-    if(state==='dismissed'){localStorage.setItem(SPRITE_DISMISSED_AT_KEY,String(Date.now()));}
+    localStorage.setItem(SPRITE_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');
+    localStorage.setItem(ASSISTANT_COLLAPSED_KEY,timeSpriteCollapsed?'true':'false');
   }catch(e){}
   renderTimeSprite();
-}
-function readTimeSpriteCollapsed(){return readTimeSpritePanelState()!=='open';}
-function saveTimeSpriteCollapsed(value){
-  if(value){saveTimeSpritePanelState('minimized');}
-  else{saveTimeSpritePanelState('open');}
-}
-function restoreTimeSprite(){
-  saveTimeSpritePanelState('open');
-  showToast(t('spriteRestored')||'时刻精灵已恢复','success');
 }
 function getTimeSpriteTips(){
   return [t('spriteTip1'),t('spriteTip2'),t('spriteTip3'),t('spriteTip4'),t('spriteTip5')].filter(Boolean);
@@ -1422,7 +1520,7 @@ function getTimeSpriteRecordDate(r){
 }
 function getTimeSpriteUpcomingItems(){
   var nowTs=new Date().getTime();
-  return records.map(function(r){
+  return getVisibleRecords().map(function(r){
     var d=getTimeSpriteRecordDate(r);
     return d?{record:r,date:d,time:d.getTime()}:null;
   }).filter(function(item){return item&&item.time>=nowTs-60000;})
@@ -1430,7 +1528,7 @@ function getTimeSpriteUpcomingItems(){
 }
 function getTimeSpriteTodayCount(){
   var today=setHoursZero(new Date()).getTime();
-  return records.filter(function(r){
+  return getVisibleRecords().filter(function(r){
     var d=getTimeSpriteRecordDate(r);
     return d&&setHoursZero(d).getTime()===today;
   }).length;
@@ -1443,11 +1541,8 @@ function formatTimeSpriteWhen(item){
 }
 function renderTimeSprite(){
   var root=$('timeSprite');if(!root)return;
-  root.classList.remove('sprite-open','sprite-minimized','sprite-dismissed');
-  root.classList.add('sprite-'+timeSpritePanelState);
-  var expanded=(timeSpritePanelState==='open');
+  var expanded=!timeSpriteCollapsed;
   root.classList.toggle('collapsed',!expanded);
-  root.classList.toggle('dismissed',timeSpritePanelState==='dismissed');
   var toggle=$('timeSpriteToggle');
   if(toggle){
     if(toggle.setAttribute){
@@ -1484,57 +1579,33 @@ function renderTimeSprite(){
   var meta=$('timeSpriteMeta');if(meta)meta.textContent=metaParts.join(' · ');
 }
 function initTimeSprite(){
-  timeSpritePanelState=readTimeSpritePanelState();
-  timeSpriteCollapsed=(timeSpritePanelState!=='open');
+  timeSpriteCollapsed=readTimeSpriteCollapsed();
   applyTimeSpritePosition(readTimeSpritePosition());
   initTimeSpriteDrag();
   b('timeSpriteToggle','click',function(){
     if(timeSpriteSuppressClick){timeSpriteSuppressClick=false;return;}
-    if(timeSpritePanelState==='dismissed'){
-      saveTimeSpritePanelState('open');
-      showTimeSpriteGreeting();
-      return;
-    }
-    if(timeSpritePanelState==='open'){
-      saveTimeSpritePanelState('minimized');
-    }else{
-      saveTimeSpritePanelState('open');
-      showTimeSpriteGreeting();
-    }
+    saveTimeSpriteCollapsed(!timeSpriteCollapsed);
+    if(!timeSpriteCollapsed)showTimeSpriteGreeting();
   });
-  b('timeSpriteClose','click',function(){
-    saveTimeSpritePanelState('dismissed');
-    showToast(t('spriteDismissed')||'时刻精灵已隐藏，可在精灵页恢复','info');
-  });
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'&&timeSpritePanelState==='open'){
-      saveTimeSpritePanelState('minimized');
-    }
-  });
+  b('timeSpriteClose','click',function(){saveTimeSpriteCollapsed(true);});
   b('timeSpriteInputBtn','click',function(){
-    saveTimeSpritePanelState('minimized');
+    saveTimeSpriteCollapsed(true);
     switchPage('home');
     setTimeout(function(){var inp=$('quickInput');if(inp)inp.focus();},60);
   });
   b('timeSpriteDemoBtn','click',function(){
     jumpToMySection('experienceExampleSection');
-    saveTimeSpritePanelState('minimized');
+    saveTimeSpriteCollapsed(true);
   });
-  b('timeSpriteTodayBtn','click',function(){switchPage('home');saveTimeSpritePanelState('minimized');});
-  b('timeSpriteBatchBtn','click',function(){switchPage('import');var input=$('importTextInput');if(input)setTimeout(function(){input.focus();},60);saveTimeSpritePanelState('minimized');});
-  b('timeSpriteCalendarBtn','click',function(){switchPage('calendar');saveTimeSpritePanelState('minimized');});
-  b('timeSpriteExportBtn','click',function(){jumpToMySection('calendarExportSection');saveTimeSpritePanelState('minimized');});
-  b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection');saveTimeSpritePanelState('minimized');});
-  b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true);saveTimeSpritePanelState('open');});
-
-  // Desktop topnav
-  document.querySelectorAll('.desktop-topnav .nav-tab').forEach(function(tab){
-    tab.addEventListener('click',function(){switchPage(tab.dataset.page);});
-  });
+  b('timeSpriteTodayBtn','click',function(){switchPage('home');saveTimeSpriteCollapsed(true);});
+  b('timeSpriteBatchBtn','click',function(){switchPage('import');var input=$('importTextInput');if(input)setTimeout(function(){input.focus();},60);saveTimeSpriteCollapsed(true);});
+  b('timeSpriteCalendarBtn','click',function(){switchPage('calendar');saveTimeSpriteCollapsed(true);});
+  b('timeSpriteExportBtn','click',function(){jumpToMySection('calendarExportSection');saveTimeSpriteCollapsed(true);});
+  b('timeSpriteBackupBtn','click',function(){jumpToMySection('dataBackupSection');saveTimeSpriteCollapsed(true);});
+  b('timeSpriteUpdateBtn','click',function(){showReleaseNotes(true);saveTimeSpriteCollapsed(false);});
   b('timeSpriteResetBtn','click',resetTimeSpritePosition);
   renderTimeSprite();
 }
-
 function initTimeSpriteDrag(){
   var toggle=$('timeSpriteToggle'),root=$('timeSprite');
   if(!toggle||!root||!toggle.addEventListener)return;
@@ -1999,7 +2070,7 @@ function getTodayOverviewData(){
   var todayCount=0;
   var upcoming=[];
   var anniversaries=[];
-  records.forEach(function(r){
+  getVisibleRecords().forEach(function(r){
     var d=getNextVisibleDate(r);
     if(d&&setHoursZero(d).getTime()===today.getTime())todayCount++;
     if(d&&r.recordKind!=='anniversary'&&setHoursZero(d).getTime()>=today.getTime())upcoming.push({record:r,date:d});
@@ -2011,7 +2082,7 @@ function getTodayOverviewData(){
 }
 function renderTodayOverview(){
   var el=$('todayOverviewBlock');if(!el)return;
-  if(!records.length){
+  if(!getVisibleRecords().length){
     el.innerHTML='<div class="today-overview">'+
       '<div class="today-overview-title"><span class="today-overview-kicker">'+t('todayOverview')+'</span><span class="today-overview-count">0</span></div>'+
       '<div class="today-overview-lines"><div class="today-overview-line"><span class="today-overview-value">'+t('overviewEmpty')+'</span></div>'+
@@ -2113,7 +2184,7 @@ function getTimelineGroups(){
   var groups={
     today:[],tomorrow:[],week:[],future:[],undated:[]
   };
-  records.forEach(function(r){
+  getVisibleRecords().forEach(function(r){
     var d=getNextVisibleDate(r);
     if(!d){groups.undated.push(r);return;}
     var day=setHoursZero(d);
@@ -2158,7 +2229,7 @@ function renderTimeline(){
   var el=$('timelineBlock');if(!el)return;
   var g=getTimelineGroups();
   el.innerHTML='<div class="timeline-panel" id="timeJourney">'+
-    '<div class="timeline-head"><div><div class="timeline-title">'+t('timelineTitle')+'</div><div class="timeline-sub">'+t('timelineSub')+'</div></div><div class="card-section-count">'+records.length+'</div></div>'+
+    '<div class="timeline-head"><div><div class="timeline-title">'+t('timelineTitle')+'</div><div class="timeline-sub">'+t('timelineSub')+'</div></div><div class="card-section-count">'+getVisibleRecords().length+'</div></div>'+
     '<div class="timeline-groups">'+
       renderTimelineGroup('today',t('timelineToday'),'timelineTodayCopy','timelineEmptyToday',g.today)+
       renderTimelineGroup('tomorrow',t('timelineTomorrow'),'timelineTomorrowCopy','timelineEmptyTomorrow',g.tomorrow)+
@@ -2334,7 +2405,7 @@ function useExampleChip(text){
   inp.focus();
 }
 function getUndatedRecords(){
-  return records.filter(function(r){return !r.dateKey;}).sort(function(a,b){return(b.updatedAt||b.createdAt||0)-(a.updatedAt||a.createdAt||0);});
+  return getVisibleRecords().filter(function(r){return !r.dateKey;}).sort(function(a,b){return(b.updatedAt||b.createdAt||0)-(a.updatedAt||a.createdAt||0);});
 }
 function setRecordDateQuick(id,mode){
   var r=records.find(function(x){return x.id===id;});if(!r)return;
@@ -2448,560 +2519,94 @@ function updatePermStatus(){
 /* ========== Page navigation ========== */
 var currentPage='home';
 function switchPage(page){
+  var collapseSprite=page!=='agent'&&window.matchMedia&&window.matchMedia('(max-width:767px)').matches;
+  var spriteRoot=collapseSprite?$('timeSprite'):null;
+  if(spriteRoot)spriteRoot.classList.add('instant-collapse');
+  if(collapseSprite)saveTimeSpriteCollapsed(true);
   currentPage=page;
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   var pg=$('page-'+page);if(pg)pg.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.classList.toggle('active',n.dataset.page===page);
   });
-  document.querySelectorAll('.desktop-topnav .nav-tab').forEach(function(n){
-    n.classList.toggle('active',n.dataset.page===page);
-  });
   closeDrawer();
   if(page==='home')renderHome();
   else if(page==='calendar')renderCalendar();
   else if(page==='all')renderAll();
+  else if(page==='agent')renderAgentPage();
+  else if(page==='review')renderReviewPage();
   else if(page==='my')renderMy();
   else if(page==='import')renderImport();
-  else if(page==='review')renderReview();
-  else if(page==='spirit')renderSpirit();
   renderTimeSprite();
-  wireUpPlayfulCapture();
-  wireUpSpiritPage();
-  wireUpDeloadEntry();
-  wireUpEndDay();
-  wireUpReviewExport();
+  if(spriteRoot)setTimeout(function(){spriteRoot.classList.remove('instant-collapse');},50);
   window.scrollTo(0,0);
 }
 
-/* ========== Review Page ========== */
-function renderReview(){
-  var today=0,overdue=0,waiting=0,tomorrow=0;
-  var now=new Date();
-  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-  var tomorrowStart=todayStart+86400000;
-  var dayAfterTomorrow=tomorrowStart+86400000;
-  records.forEach(function(r){
-    if(r.deleted)return;
-    var ts=r.timestamp||0;
-    var kind=r.recordKind;
-    if(r.intelligenceFlags&&r.intelligenceFlags.isWaitingFor){
-      waiting++;
-      return;
-    }
-    if(r.intelligenceFlags&&r.intelligenceFlags.isCommitment){
-      if(ts>0&&ts<todayStart)overdue++;
-      else if(ts>=todayStart&&ts<tomorrowStart)today++;
-      else if(ts>=tomorrowStart&&ts<dayAfterTomorrow)tomorrow++;
-      return;
-    }
-    if(ts>0&&ts<todayStart&&!isCompleted(r))overdue++;
-    else if(ts>=todayStart&&ts<tomorrowStart)today++;
-    else if(ts>=tomorrowStart&&ts<dayAfterTomorrow)tomorrow++;
-  });
-  var rv=function(id,v){var el=$(id);if(el)el.textContent=v;};
-  rv('reviewToday',today);
-  rv('reviewOverdue',overdue);
-  rv('reviewWaiting',waiting);
-  rv('reviewTomorrow',tomorrow);
+function renderAgentPage(){
+  saveTimeSpriteCollapsed(false);
+  var workbench=$('agentWorkbench');if(workbench)workbench.open=true;
 }
-
-/* ========== Spirit Page ========== */
-function renderSpirit(){
-  var avatar=$('spiritPageAvatar');
-  if(avatar){
-    avatar.style.background='var(--accent)';
+function renderReviewPage(){
+  var summary=$('reviewLoadSummary');
+  if(summary&&window.ShikeDeLoad){
+    var model=ShikeDeLoad.preview(records,new Date());
+    summary.innerHTML='<div><span>当前负荷</span><strong>'+escHtml(model.band)+'</strong><small>按今天到期数量判断</small></div>'+
+      '<div><span>今天及逾期</span><strong>'+model.count+'</strong><small>未自动改动任何状态</small></div>'+
+      '<div><span>其中逾期</span><strong>'+model.overdue+'</strong><small>逾期不等于完成</small></div>';
   }
-  var status=$('spiritStatus');
-  if(status){
-    var count=records.filter(function(r){return !r.deleted;}).length;
-    if(count>0){
-      status.textContent='已记录 '+count+' 件事，随时帮你回顾和减负';
-    }
-  }
-  // Show restore button if spirit is dismissed
-  var restoreBtn=$('spiritRestoreBtn');
-  if(restoreBtn){
-    restoreBtn.style.display=(timeSpritePanelState==='dismissed')?'block':'none';
-  }
-  // Show auto-open toggle
-  var autoOpenToggle=$('spiritAutoOpenToggle');
-  if(autoOpenToggle){
-    autoOpenToggle.checked=readSpriteAutoOpen();
-  }
+  if(window.ShikeChronosWeb)ShikeChronosWeb.renderReviews();
 }
-
-/* ========== Playful Header Update ========== */
-function updatePlayfulHeader(){
-  var dateEl=$('playfulDate');
-  var greetEl=$('playfulGreeting');
-  var badgeEl=$('playfulLoadBadge');
-  if(!dateEl)return;
-  var now=new Date();
-  var days=['日','一','二','三','四','五','六'];
-  var months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  dateEl.textContent=months[now.getMonth()]+' '+now.getDate()+'日 星期'+days[now.getDay()];
-  var hour=now.getHours();
-  var greeting='你好';
-  if(hour<6)greeting='夜深了';
-  else if(hour<11)greeting='早上好';
-  else if(hour<14)greeting='中午好';
-  else if(hour<18)greeting='下午好';
-  else if(hour<22)greeting='晚上好';
-  else greeting='夜深了';
-  var username=(typeof getUserDisplayName==='function')?getUserDisplayName():'';
-  if(username)greeting+=', '+username;
-  if(greetEl)greetEl.textContent=greeting;
-  // Load calculation
-  var load=0;
-  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-  var tomorrowStart=todayStart+86400000;
-  records.forEach(function(r){
-    if(r.deleted)return;
-    var ts=r.timestamp||0;
-    if(ts>0&&ts<=tomorrowStart&&!isCompleted(r))load++;
-  });
-  if(badgeEl){
-    badgeEl.classList.remove('low','medium','high');
-    if(load<=3){badgeEl.textContent='今天还有空间';badgeEl.classList.add('low');}
-    else if(load<=6){badgeEl.textContent='今天安排得比较满';badgeEl.classList.add('medium');}
-    else{badgeEl.textContent='今天可能需要减一减';badgeEl.classList.add('high');}
-  }
+function deLoadConfirmCopy(action){
+  var messages={
+    CANCEL:'确认取消这条记录？取消与删除不同，记录会保留。',
+    DEFER:'确认把这条记录延期到明天？只有这次明确选择会改变日期。',
+    LOWER_STANDARD:'确认把完成标准调整为“够用即可”？记录不会被标记完成。',
+    RENEGOTIATE:'确认标记为需要重新协商？记录仍保持未完成。',
+    KEEP_ONLY_ONE:'确认今晚只保留这一项？其他到期记录只会标记为“今晚不做”，不会取消。',
+    SAVE_AND_END_DAY:'确认保存并结束今天？未完成记录不会被批量标记完成。'
+  };
+  return messages[action]||'确认执行这个降载动作？';
 }
-
-/* ========== Load Board Update ========== */
-function updateLoadBoard(){
-  var now=new Date();
-  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-  var tomorrowStart=todayStart+86400000;
-  var dayAfter=tomorrowStart+86400000;
-  var today=0,overdue=0,waiting=0,tomorrow=0;
-  records.forEach(function(r){
-    if(r.deleted)return;
-    if(r.intelligenceFlags&&r.intelligenceFlags.isWaitingFor){waiting++;return;}
-    var ts=r.timestamp||0;
-    if(ts>0&&ts<todayStart&&!isCompleted(r))overdue++;
-    else if(ts>=todayStart&&ts<tomorrowStart)today++;
-    else if(ts>=tomorrowStart&&ts<dayAfter)tomorrow++;
-  });
-  var set=function(id,v){var el=$(id);if(el){el.textContent=v;if(v===0)el.parentElement.classList.add('zero');else el.parentElement.classList.remove('zero');}};
-  set('loadToday',today);
-  set('loadOverdue',overdue);
-  set('loadWaiting',waiting);
-  set('loadTomorrow',tomorrow);
+function openDeLoad(){
+  if(!window.ShikeDeLoad){showToast('降载模块暂时不可用','warn');return;}
+  var model=ShikeDeLoad.preview(records,new Date());
+  var body='<div class="deload-overview"><div><span>当前负荷</span><strong>'+escHtml(model.band)+'</strong></div><div><span>今天及逾期</span><strong>'+model.count+'</strong></div><div><span>其中逾期</span><strong>'+model.overdue+'</strong></div></div>';
+  if(!model.candidates.length){body+='<div class="deload-empty">今天没有需要降载的到期记录。这里不会用默认值替你制造负荷。</div>';}
+  else{
+    body+='<div class="deload-candidates">'+model.candidates.slice(0,8).map(function(record){return '<div class="deload-candidate"><div class="deload-candidate-title">'+escHtml(record.title||record.rawText||record.note||'未命名记录')+'</div><div class="deload-candidate-meta">'+escHtml(record.dateKey||'')+'</div><div class="deload-candidate-actions"><button type="button" data-deload-action="KEEP_ONLY_ONE" data-record-id="'+escAttr(record.id)+'">今晚只留这项</button><button type="button" data-deload-action="DEFER" data-record-id="'+escAttr(record.id)+'">明天再处理</button><button type="button" data-deload-action="LOWER_STANDARD" data-record-id="'+escAttr(record.id)+'">降低标准</button><button type="button" data-deload-action="RENEGOTIATE" data-record-id="'+escAttr(record.id)+'">重新协商</button><button type="button" data-deload-action="CANCEL" data-record-id="'+escAttr(record.id)+'">取消事项</button></div></div>';}).join('')+'</div>';
+  }
+  var footer=model.candidates.length?'<button class="btn-cancel" type="button" id="deLoadCloseBtn">返回</button><button class="btn-primary" type="button" id="deLoadEndDayBtn">保存并结束今天</button>':'<button class="btn-primary" type="button" id="deLoadCloseBtn">关闭</button>';
+  openDrawer('一键降载',body,footer);
+  document.querySelectorAll('[data-deload-action]').forEach(function(button){button.addEventListener('click',function(){requestDeLoadAction(button.dataset.deloadAction,button.dataset.recordId);});});
+  b('deLoadCloseBtn','click',closeDrawer);
+  b('deLoadEndDayBtn','click',function(){requestDeLoadAction('SAVE_AND_END_DAY','');});
 }
-
-/* ========== Commitment Section Update ========== */
-function updateCommitmentSection(){
-  var section=$('commitmentSection');
-  if(!section)return;
-  var commitments=records.filter(function(r){
-    return !r.deleted&&r.intelligenceFlags&&r.intelligenceFlags.isCommitment;
-  }).slice(0,3);
-  if(commitments.length===0){
-    var empty=$('commitmentEmpty');
-    if(empty)empty.style.display='';
-    return;
-  }
-  var empty=$('commitmentEmpty');
-  if(empty)empty.style.display='none';
-  var html='<div class="commitment-card">';
-  commitments.forEach(function(c){
-    var to=c.intelligenceFlags&&c.intelligenceFlags.commitmentTo?c.intelligenceFlags.commitmentTo:'';
-    var due=c.timestamp?formatDate(c.timestamp):'';
-    html+='<div class="commitment-card">'+
-      '<div class="commitment-header">'+
-        '<span class="commitment-type-badge">承诺</span>'+
-        '<span class="commitment-title">'+escapeHtml(c.title||c.text||'')+'</span>'+
-      '</div>'+
-      (to?'<div class="commitment-meta">对象: '+escapeHtml(to)+'</div>':'')+
-      (due?'<div class="commitment-meta">到期: '+due+'</div>':'')+
-      '<div class="commitment-actions">'+
-        '<button class="commitment-action" data-commitment-id="'+c.id+'" data-action="complete">完成</button>'+
-        '<button class="commitment-action" data-commitment-id="'+c.id+'" data-action="defer">延期</button>'+
-        '<button class="commitment-action danger" data-commitment-id="'+c.id+'" data-action="renegotiate">重新协商</button>'+
-      '</div>'+
-    '</div>';
-  });
-  section.innerHTML=html;
+function requestDeLoadAction(action,targetId){
+  showConfirm('确认降载动作',deLoadConfirmCopy(action),'确认执行','返回',function(){executeDeLoadAction(action,targetId);});
 }
-
-/* ========== Waiting Section Update ========== */
-function updateWaitingSection(){
-  var section=$('waitingSection');
-  if(!section)return;
-  var waitings=records.filter(function(r){
-    return !r.deleted&&r.intelligenceFlags&&r.intelligenceFlags.isWaitingFor;
-  }).slice(0,3);
-  if(waitings.length===0){
-    var empty=$('waitingEmpty');
-    if(empty)empty.style.display='';
-    return;
-  }
-  var empty=$('waitingEmpty');
-  if(empty)empty.style.display='none';
-  var html='';
-  waitings.forEach(function(w){
-    var who=w.intelligenceFlags&&w.intelligenceFlags.waitingForWho?w.intelligenceFlags.waitingForWho:'';
-    var start=w.timestamp||w.createdAt||0;
-    var days=Math.floor((Date.now()-start)/86400000);
-    var dur=days>0?days+'天':'今天';
-    html+='<div class="waiting-card">'+
-      '<div class="waiting-header">'+
-        '<span class="waiting-type-badge">等待</span>'+
-        '<span class="waiting-duration">'+dur+'</span>'+
-      '</div>'+
-      '<div style="font-weight:600;font-size:14px;margin-bottom:4px;">'+escapeHtml(w.title||w.text||'')+'</div>'+
-      (who?'<div class="commitment-meta">等待: '+escapeHtml(who)+'</div>':'')+
-      '<div class="commitment-actions">'+
-        '<button class="commitment-action" data-waiting-id="'+w.id+'" data-action="received">标记已收到</button>'+
-        '<button class="commitment-action" data-waiting-id="'+w.id+'" data-action="followup">跟进</button>'+
-      '</div>'+
-    '</div>';
-  });
-  section.innerHTML=html;
-}
-
-/* ========== Helper: isCompleted ========== */
-function isCompleted(r){
-  return r.status==='completed'||r.status==='done'||r.completedAt!=null;
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-
-/* ========== Wire Up Playful Quick Capture ========== */
-function wireUpPlayfulCapture(){
-  var newInput=$('quickCaptureInput');
-  var newSaveBtn=$('quickCaptureSaveBtn');
-  if(!newInput||!newSaveBtn)return;
-  var oldInput=$('quickInput');
-  function doSave(){
-    var text=newInput.value.trim();
-    if(!text)return;
-    if(oldInput){
-      oldInput.value=text;
-      var saveBtn=$('saveBtn');
-      if(saveBtn){
-        try{saveBtn.click();}catch(e){}
-      }
-    }
-    newInput.value='';
-  }
-  newSaveBtn.addEventListener('click',doSave);
-  newInput.addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&!e.shiftKey){
-      e.preventDefault();
-      doSave();
-    }
-  });
-}
-
-/* ========== Wire Up Spirit Page Buttons ========== */
-function wireUpSpiritPage(){
-  var restoreBtn=$('spiritRestoreBtn');
-  if(restoreBtn){
-    restoreBtn.addEventListener('click',function(){
-      restoreTimeSprite();
-      renderSpirit();
-    });
-  }
-  var autoOpenToggle=$('spiritAutoOpenToggle');
-  if(autoOpenToggle){
-    autoOpenToggle.addEventListener('change',function(){
-      saveSpriteAutoOpen(autoOpenToggle.checked);
-      if(autoOpenToggle.checked&&timeSpritePanelState==='dismissed'){
-        saveTimeSpritePanelState('minimized');
-        renderSpirit();
-      }
-    });
-  }
-  var writeBtn=$('spiritWriteBtn');
-  if(writeBtn){
-    writeBtn.addEventListener('click',function(){
-      switchPage('home');
-      setTimeout(function(){
-        var input=$('quickCaptureInput');
-        if(input){input.focus();}
-      },300);
-    });
-  }
-  var todayBtn=$('spiritTodayBtn');
-  if(todayBtn){
-    todayBtn.addEventListener('click',function(){switchPage('home');});
-  }
-  var loadBtn=$('spiritLoadBtn');
-  if(loadBtn){
-    loadBtn.addEventListener('click',function(){
-      switchPage('home');
-      setTimeout(function(){
-        var board=$('loadBoard');
-        if(board){board.scrollIntoView({behavior:'smooth',block:'center'});}
-      },300);
-    });
-  }
-  var deloadBtn=$('spiritDeloadBtn');
-  if(deloadBtn){
-    deloadBtn.addEventListener('click',function(){
-      var deloadEntry=$('deloadEntryBtn');
-      if(deloadEntry){
-        deloadEntry.click();
-      }else{
-        switchPage('home');
-        setTimeout(function(){
-          var entry=$('deloadEntryBtn');
-          if(entry){entry.scrollIntoView({behavior:'smooth',block:'center'});}
-        },300);
-      }
-    });
-  }
-  var reviewBtn=$('spiritReviewBtn');
-  if(reviewBtn){
-    reviewBtn.addEventListener('click',function(){switchPage('review');});
-  }
-  var exportBtn=$('spiritExportBtn');
-  if(exportBtn){
-    exportBtn.addEventListener('click',function(){
-      var exportBtnEl=$('exportBtn');
-      if(exportBtnEl){exportBtnEl.click();}
-    });
-  }
-}
-
-/* ========== Wire Up DeLoad Entry ========== */
-function wireUpDeloadEntry(){
-  var entry=$('deloadEntryBtn');
-  if(!entry)return;
-  entry.addEventListener('click',function(){
-    showDeloadSheet();
-  });
-  // Wire up action sheet items
-  var overlay=$('deloadSheetOverlay');
-  if(overlay){
-    var items=overlay.querySelectorAll('[data-deload-action]');
-    items.forEach(function(item){
-      item.addEventListener('click',function(){
-        var action=this.getAttribute('data-deload-action');
-        hideDeloadSheet();
-        setTimeout(function(){handleDeLoadAction(action);},200);
-      });
-    });
-    var cancelBtn=$('deloadSheetCancel');
-    if(cancelBtn){
-      cancelBtn.addEventListener('click',hideDeloadSheet);
-    }
-    overlay.addEventListener('click',function(e){
-      if(e.target===overlay){hideDeloadSheet();}
-    });
-  }
-}
-
-function showDeloadSheet(){
-  var overlay=$('deloadSheetOverlay');
-  if(!overlay)return;
-  overlay.style.display='flex';
-  // Focus first item for accessibility
-  setTimeout(function(){
-    var firstItem=overlay.querySelector('[data-deload-action]');
-    if(firstItem){firstItem.focus();}
-  },100);
-}
-
-function hideDeloadSheet(){
-  var overlay=$('deloadSheetOverlay');
-  if(!overlay)return;
-  overlay.style.display='none';
-  // Return focus to deload entry button
-  var entry=$('deloadEntryBtn');
-  if(entry){entry.focus();}
-}
-
-function handleDeLoadAction(action){
-  var now=new Date();
-  var todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-  var tomorrowStart=todayStart+86400000;
-  var todayRecords=records.filter(function(r){
-    if(r.deleted)return false;
-    if(r.type==='dayend'||r.type==='tonightfocus')return false;
-    var ts=r.timestamp||0;
-    if(ts>0&&ts>=todayStart&&ts<tomorrowStart)return true;
-    if(ts===0&&!isCompleted(r))return true;
-    return false;
-  });
-
-  if(action==='SAVE_AND_END_DAY'){
-    var dayEndRecord={
-      id:'dayend-'+Date.now(),
-      type:'dayend',
-      title:'今日结束 - '+now.toLocaleDateString('zh-CN'),
-      timestamp:Date.now(),
-      createdAt:Date.now(),
-      dayEndActions:[],
-      dayEndSummary:{todayCount:todayRecords.length,endedAt:now.toISOString()},
-      canRestore:true
+async function executeDeLoadAction(action,targetId){
+  try{
+    if(!window.ShikeIndexedDb||typeof ShikeIndexedDb.applyDeLoad!=='function')throw new Error('deload_storage_unavailable');
+    var status=window.ShikeLocalFirst&&ShikeLocalFirst.getStatus();
+    if(status&&status.mode!=='indexeddb')throw new Error('deload_storage_not_ready');
+    var commit=async function(){
+      var result=ShikeDeLoad.apply(records,action,targetId||null,new Date());
+      await ShikeIndexedDb.applyDeLoad({records:result.recordsToPersist,portableEntities:result.portableEntities,operationId:result.operationId,action:action,targetRecordIds:result.affectedRecordIds});
+      records=result.records;
+      ShikeLegacyStorage.setJson(STORAGE_KEY,records);saveLastGoodRecords(records);
+      closeDrawer();renderCurrent();showToast('降载选择已保存','success');
     };
-    if(typeof records!=='undefined'){
-      records.push(dayEndRecord);
-      if(typeof persist==='function'){persist();}
-      if(typeof renderHome==='function'){renderHome();}
-      if(typeof renderReview==='function'){renderReview();}
-    }
-    showToast('今天已保存，好好休息','success');
-    return;
-  }
-
-  if(action==='KEEP_ONLY_ONE'){
-    if(todayRecords.length===0){
-      showToast('今天还没有记录','info');
-      return;
-    }
-    var focusRecord=todayRecords[0];
-    var tonightFocus={
-      id:'tonight-'+Date.now(),
-      type:'tonightfocus',
-      title:'今晚只做: '+(focusRecord.title||focusRecord.text||''),
-      timestamp:Date.now(),
-      createdAt:Date.now(),
-      focusRecordId:focusRecord.id,
-      canRestore:true
-    };
-    if(typeof records!=='undefined'){
-      records.push(tonightFocus);
-      if(typeof persist==='function'){persist();}
-      if(typeof renderHome==='function'){renderHome();}
-    }
-    showToast('已创建今晚焦点: '+(focusRecord.title||focusRecord.text||''),'success');
-    return;
-  }
-
-  if(action==='CANCEL'){
-    if(todayRecords.length===0){
-      showToast('今天没有可取消的记录','info');
-      return;
-    }
-    var cancelledCount=0;
-    var undoneCount=0;
-    todayRecords.forEach(function(r){
-      if(!isCompleted(r)&&!r.deleted){
-        r.status='CANCELLED';
-        r.cancelledAt=now.toISOString();
-        r.previousStatus=r.previousStatus||'active';
-        cancelledCount++;
-      }else{
-        undoneCount++;
-      }
-    });
-    if(typeof persist==='function'){persist();}
-    if(typeof renderHome==='function'){renderHome();}
-    showToast('已取消'+cancelledCount+'件事'+(undoneCount>0?'，'+undoneCount+'件已完成的不受影响':''),'success');
-    return;
-  }
-
-  if(action==='DEFER'){
-    if(todayRecords.length===0){
-      showToast('今天没有可延期的记录','info');
-      return;
-    }
-    var deferredCount=0;
-    var tomorrow=new Date(todayStart+86400000);
-    tomorrow.setHours(9,0,0,0);
-    todayRecords.forEach(function(r){
-      if(!isCompleted(r)&&!r.deleted&&r.type!=='commitment'){
-        r.previousTimestamp=r.timestamp;
-        r.previousDueDate=r.dueDate||null;
-        r.timestamp=tomorrow.getTime();
-        r.dueDate=tomorrow.toISOString().split('T')[0];
-        r.deferredAt=now.toISOString();
-        r.deferredFrom=todayStart;
-        deferredCount++;
-      }
-    });
-    if(typeof persist==='function'){persist();}
-    if(typeof renderHome==='function'){renderHome();}
-    if(typeof renderAll==='function'){renderAll();}
-    showToast('已将'+deferredCount+'件事延期到明天','success');
-    return;
-  }
-
-  if(action==='LOWER_STANDARD'){
-    if(todayRecords.length===0){
-      showToast('今天没有可调整的记录','info');
-      return;
-    }
-    var adjustedCount=0;
-    todayRecords.forEach(function(r){
-      if(!isCompleted(r)&&!r.deleted){
-        r.previousCompletionStandard=r.completionStandard||'full';
-        r.completionStandard='minimum';
-        r.standardLoweredAt=now.toISOString();
-        adjustedCount++;
-      }
-    });
-    if(typeof persist==='function'){persist();}
-    if(typeof renderHome==='function'){renderHome();}
-    showToast('已降低'+adjustedCount+'件事的完成标准','success');
-    return;
-  }
-
-  if(action==='RENEGOTIATE'){
-    var commitments=todayRecords.filter(function(r){
-      return r.type==='commitment'||r.isCommitment;
-    });
-    if(commitments.length===0){
-      showToast('今天没有需要重新协商的承诺','info');
-      return;
-    }
-    var drafts=[];
-    commitments.forEach(function(c){
-      var draft={
-        id:'draft-'+Date.now()+'-'+Math.random().toString(36).substr(2,5),
-        type:'renegotiation_draft',
-        title:'重新协商: '+(c.title||c.text||''),
-        originalRecordId:c.id,
-        originalTitle:c.title||c.text||'',
-        draftText:'关于「'+(c.title||c.text||'')+'」，可能需要更多时间。能否调整截止时间？',
-        createdAt:Date.now(),
-        notSent:true
-      };
-      drafts.push(draft);
-    });
-    if(typeof records!=='undefined'){
-      records.push.apply(records,drafts);
-      if(typeof persist==='function'){persist();}
-    }
-    showToast('已生成'+drafts.length+'份沟通草稿，未自动发送','success');
-    return;
-  }
+    if(navigator.locks&&typeof navigator.locks.request==='function')await navigator.locks.request('shike-deload-write',commit);
+    else await commit();
+  }catch(error){showToast('降载未执行，请确认本地数据仓库可用','error');}
 }
-
-/* ========== Wire Up End Day Button ========== */
-function wireUpEndDay(){
-  var btn=$('endDayBtn');
-  if(!btn)return;
-  btn.addEventListener('click',function(){
-    handleDeLoadAction('SAVE_AND_END_DAY');
-  });
-}
-
-/* ========== Wire Up Review Export Buttons ========== */
-function wireUpReviewExport(){
-  var jsonBtn=$('reviewExportJsonBtn');
-  if(jsonBtn){
-    jsonBtn.addEventListener('click',function(){
-      var exportBtn=$('exportBtn');
-      if(exportBtn){exportBtn.click();}
-    });
-  }
-  var icsBtn=$('reviewExportIcsBtn');
-  if(icsBtn){
-    icsBtn.addEventListener('click',function(){
-      var exportIcsBtn=$('exportIcsBtn');
-      if(exportIcsBtn){exportIcsBtn.click();}
-    });
-  }
-}
-
 
 /* ========== Has records state ========== */
-function hasAnyRecord(){return records.length>0;}
+function isVisibleRecord(record){
+  return !!(record&&!record.archived&&!record.deletedAt&&record.recordState!=='completed');
+}
+function getVisibleRecords(){return records.filter(isVisibleRecord);}
+function hasAnyRecord(){return getVisibleRecords().length>0;}
 function updateLayoutState(){
   var app=$('app');
   if(hasAnyRecord())app.classList.add('has-records');
@@ -3203,10 +2808,6 @@ function initSwipeActions(){
 
 /* ========== Render: Home ========== */
 function renderHome(){
-  updatePlayfulHeader();
-  updateLoadBoard();
-  updateCommitmentSection();
-  updateWaitingSection();
   // Hero greeting
   var hg=$('heroGreeting');if(hg){
     var days=getUsageDays();
@@ -3214,7 +2815,7 @@ function renderHome(){
     if(uname){
       hg.textContent=tf('userDaysText',{name:uname,n:days});
     }else{
-      hg.textContent=records.length===0?t('emptyGreeting'):tf('daysText',{n:days});
+      hg.textContent=getVisibleRecords().length===0?t('emptyGreeting'):tf('daysText',{n:days});
     }
   }
   updateLayoutState();
@@ -3223,7 +2824,7 @@ function renderHome(){
   renderParsePreview();
   renderTodayOverview();
 
-  var list=records.slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
+  var list=getVisibleRecords().slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   // Hero cards: pinned or cardStyle==='large' or anniversary
   var heroCandidates=list.filter(function(r){return r.pinned||r.cardStyle==='large'||r.recordKind==='anniversary';});
   var nowTs=Date.now();
@@ -3298,7 +2899,7 @@ function renderWeekStrip(){
   var start=new Date(today);start.setDate(today.getDate()-curWd);
   var wdNames=[t('sun'),t('mon'),t('tue'),t('wed'),t('thu'),t('fri'),t('sat')];
   var html='';
-  var recordDates={};records.forEach(function(r){if(r.dateKey)recordDates[r.dateKey]=true;});
+  var recordDates={};getVisibleRecords().forEach(function(r){if(r.dateKey)recordDates[r.dateKey]=true;});
   for(var i=0;i<7;i++){
     var d=new Date(start);d.setDate(start.getDate()+i);
     var key=d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
@@ -3329,7 +2930,7 @@ function renderCalendar(){
     monthTitle=ml[m]+' '+y;
   }else monthTitle=y+' '+t('mon_fmt').replace('{m}',m+1);
   $('calMonthTitle').textContent=monthTitle;
-  var recordDates={};records.forEach(function(r){if(r.dateKey)recordDates[r.dateKey]=true;});
+  var recordDates={};getVisibleRecords().forEach(function(r){if(r.dateKey)recordDates[r.dateKey]=true;});
   var grid=$('calGrid');
   var html='';
   var wkLabels=[t('sun'),t('mon'),t('tue'),t('wed'),t('thu'),t('fri'),t('sat')];
@@ -3377,7 +2978,7 @@ function renderCalendarDay(){
   var detail=$('calDayDetail');if(!detail)return;
   if(!calSelectedDate){detail.innerHTML='';return;}
   var key=calSelectedDate.getFullYear()+'-'+pad2(calSelectedDate.getMonth()+1)+'-'+pad2(calSelectedDate.getDate());
-  var dayRecords=records.filter(function(r){return r.dateKey===key;});
+  var dayRecords=getVisibleRecords().filter(function(r){return r.dateKey===key;});
   var holi=getHolidayInfo(calSelectedDate);
   var lunarTxt=settings.calendarMode==='lunar'?(solarToLunar(calSelectedDate)||''):'';
   var html='<div class="card-section" style="margin-top:8px;">';
@@ -3447,7 +3048,7 @@ function recordMatchesAllSearch(r,q){
   return text.indexOf(q.toLowerCase())>=0;
 }
 function renderAll(){
-  var list=records.slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
+  var list=getVisibleRecords().slice().sort(function(a,b){return(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt);});
   if(allFilter!=='all')list=list.filter(function(r){return r.recordKind===allFilter;});
   if(allSearchQuery)list=list.filter(function(r){return recordMatchesAllSearch(r,allSearchQuery);});
   $('allCount').textContent=list.length;
@@ -3602,10 +3203,11 @@ function renderMy(){
   $('myGreeting').textContent=greet;
   $('myDays').textContent=new Date().getFullYear()+'年'+(new Date().getMonth()+1)+'月'+new Date().getDate()+'日';
   // Stats
-  var stat=records.length;
-  var rem=records.filter(function(r){return r.recordKind==='reminder';}).length;
-  var ann=records.filter(function(r){return r.recordKind==='anniversary';}).length;
-  var hab=records.filter(function(r){return r.recordKind==='habit';}).length;
+  var visible=getVisibleRecords();
+  var stat=visible.length;
+  var rem=visible.filter(function(r){return r.recordKind==='reminder';}).length;
+  var ann=visible.filter(function(r){return r.recordKind==='anniversary';}).length;
+  var hab=visible.filter(function(r){return r.recordKind==='habit';}).length;
   $('myStats').innerHTML=
     '<div class="stat-card"><div class="stat-num">'+stat+'</div><div class="stat-label">'+t('allRecords')+'</div></div>'+
     '<div class="stat-card"><div class="stat-num">'+rem+'</div><div class="stat-label">'+t('reminder')+'</div></div>'+
@@ -3895,6 +3497,8 @@ function renderCurrent(){
   if(currentPage==='home')renderHome();
   else if(currentPage==='all')renderAll();
   else if(currentPage==='calendar')renderCalendar();
+  else if(currentPage==='agent')renderAgentPage();
+  else if(currentPage==='review')renderReviewPage();
   else if(currentPage==='my')renderMy();
   renderTimeSprite();
 }
@@ -4220,6 +3824,13 @@ function applyLanguage(lang){
     var key=el.getAttribute('data-i18n');
     if(key==='appName'&&el.classList.contains('brand-name')){el.textContent=t('appName');return;}
     if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'){return;}
+    var fileInput=el.tagName==='LABEL'&&el.querySelector('input[type="file"]');
+    if(fileInput){
+      var labelNode=Array.from(el.childNodes).find(function(node){return node.nodeType===3&&node.nodeValue.trim();});
+      if(labelNode)labelNode.nodeValue=t(key)+'\n            ';
+      else el.insertBefore(document.createTextNode(t(key)+' '),fileInput);
+      return;
+    }
     el.textContent=t(key);
   });
   // Update placeholders
@@ -4403,6 +4014,11 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(){switchPage(n.dataset.page);});
   });
+  b('deLoadEntryBtn','click',openDeLoad);
+  b('reviewDeLoadBtn','click',openDeLoad);
+  b('agentPrimaryDeLoadBtn','click',openDeLoad);
+  b('timeSpriteDeLoadBtn','click',openDeLoad);
+  b('agentPrimaryInputBtn','click',function(){saveTimeSpriteCollapsed(false);var input=$('agentInput');if(input)setTimeout(function(){input.focus();},60);});
   // Calendar nav
   b('calPrev','click',function(){calViewDate.setMonth(calViewDate.getMonth()-1);renderCalendar();});
   b('calNext','click',function(){calViewDate.setMonth(calViewDate.getMonth()+1);renderCalendar();});
@@ -4539,6 +4155,8 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   });
   b('exportBtn','click',exportBackupFile);
   b('exportBackupBtnMy','click',exportBackupFile);
+  b('exportPortableBtn','click',exportPortableFile);
+  b('portableFileInput','change',handlePortableFileInput);
   b('exportQuarantineBtn','click',exportQuarantinedData);
   b('exportIcsBtn','click',exportIcsFile);
   function handleBackupFileInput(e){
@@ -4620,6 +4238,7 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
     ShikeChronosWeb.init({
       getRecords:function(){return records;},
       createRecordId:function(){return genId();},
+      createRecordIdForDraft:function(draftId){return 'record_'+String(draftId||'').replace(/[^a-zA-Z0-9_-]/g,'_');},
       prepareRecord:function(draft,id){return normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,function(){return id||genId();}));},
       saveRecord:function(draft,forcedId){
         var item=normalizeRecord(ShikeTemporalIntelligence.toRecord(draft,function(){return forcedId||genId();}));
@@ -4680,7 +4299,23 @@ function showUpdateHint(){
 }
 window.addEventListener('DOMContentLoaded',function(){
   if(!window.ShikeLocalFirst){init();return;}
-  ShikeLocalFirst.bootstrap().then(function(result){window.ShikePreloadedRecords=result.records;init();}).catch(function(){init();});
+  ShikeLocalFirst.bootstrap().then(async function(result){
+    var chronosResult=null;
+    if(window.ShikeChronosReturn){
+      try{
+        chronosResult=await window.ShikeChronosReturn.consume(result.records);
+        if(chronosResult&&Array.isArray(chronosResult.records))result.records=chronosResult.records;
+      }catch(error){
+        console.warn('Chronos return could not be applied:',error&&error.message||error);
+      }
+    }
+    window.ShikePreloadedRecords=result.records;
+    init();
+    if(chronosResult&&chronosResult.applied){
+      showToast('归时谷的选择已安全写回，共更新 '+chronosResult.changedCount+' 件事项','success');
+      try{history.replaceState(null,'',location.pathname+location.hash);}catch(error){}
+    }
+  }).catch(function(){init();});
 });
 window.addEventListener('error',function(e){
   // Silent catch for non-critical errors

@@ -57,8 +57,8 @@ check(!sw.includes('watch-storage.js'),'SW no watch-storage');
 check(!fs.existsSync(path.join(root,'src/watch')),'src/watch deleted');
 const navMatches=html.match(/data-page="[^"]+"/g)||[];
 const navPages=[...new Set(navMatches.map(m=>m.match(/data-page="([^"]+)"/)[1]))];
-check(navPages.length===4,'exactly 4 nav items: '+navPages.join(','));
-['home','calendar','all','my'].forEach(p=>check(navPages.includes(p),'nav includes '+p));
+check(navPages.length===5,'exactly 5 primary nav items: '+navPages.join(','));
+['home','all','agent','review','my'].forEach(p=>check(navPages.includes(p),'nav includes '+p));
 ['reminderSection','permissionSection','dataBackupSection','trashList','snapshotList'].forEach(id=>{
   check(html.includes('id="'+id+'"'),'migrated section #'+id+' exists');
 });
