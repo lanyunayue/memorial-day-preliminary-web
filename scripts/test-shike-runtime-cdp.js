@@ -8,7 +8,7 @@ const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || ((APP_SOURCE.scri
 const ARTIFACT_DIR = process.env.SHIKE_ARTIFACT_DIR || '';
 const CAPTURE_SCREENSHOTS = process.env.SHIKE_CAPTURE_SCREENSHOTS === '1';
 const VIEWPORTS = [375, 390, 414, 768, 1024, 1366, 1440];
-const PAGES = ['home', 'all', 'calendar', 'import', 'my'];
+const PAGES = ['home', 'all', 'agent', 'review', 'my', 'calendar', 'import'];
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -209,7 +209,9 @@ async function main() {
         hasInput: !!document.getElementById('quickInput'),
         hasToday: !!document.getElementById('todayOverviewBlock')
       };
-      records=[{id:'r1',title:'明天下午三点开会',dateText:'明天',dateKey:'2026-07-10',timeText:'15:00',recordKind:'reminder',repeat:'none',rawText:'明天下午三点开会',createdAt:Date.now(),updatedAt:Date.now()}];
+      const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+      const tomorrowKey=tomorrow.getFullYear()+'-'+String(tomorrow.getMonth()+1).padStart(2,'0')+'-'+String(tomorrow.getDate()).padStart(2,'0');
+      records=[{id:'r1',title:'明天下午三点开会',dateText:'明天',dateKey:tomorrowKey,timeText:'15:00',recordKind:'reminder',repeat:'none',rawText:'明天下午三点开会',createdAt:Date.now(),updatedAt:Date.now()}];
       renderAll();
       const swipe = {
         hasWrapper: !!document.querySelector('.record-swipe'),
@@ -246,6 +248,7 @@ async function main() {
   await client.evaluate(`saveTimeSpriteCollapsed(true);switchPage('home');window.scrollTo(0,0);`);
   const overflows = [];
   const viewportEvidence = [];
+  const visualEvidence = [];
   for (const width of VIEWPORTS) {
     const height = width >= 768 ? 900 : 812;
     await client.send('Emulation.setDeviceMetricsOverride', {
@@ -266,19 +269,21 @@ async function main() {
       `);
       if (result.overflow > 1) overflows.push(result);
     }
-    let screenshot = null;
+    const screenshots = [];
     if (CAPTURE_SCREENSHOTS && ARTIFACT_DIR) {
-      await client.evaluate(`switchPage('home');window.scrollTo(0,0);`);
-      await delay(80);
-      const capture = await client.send('Page.captureScreenshot', {
-        format: 'png',
-        captureBeyondViewport: false
-      });
-      screenshot = `home-${width}x${height}.png`;
       fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
-      fs.writeFileSync(path.join(ARTIFACT_DIR, screenshot), Buffer.from(capture.data, 'base64'));
+      const capturePages = width === 375 || width === 1366 ? PAGES : ['home'];
+      for (const pageName of capturePages) {
+        await client.evaluate(`switchPage('${pageName}');window.scrollTo(0,0);`);
+        await delay(80);
+        const capture = await client.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+        const screenshot = `${pageName}-${width}x${height}.png`;
+        fs.writeFileSync(path.join(ARTIFACT_DIR, screenshot), Buffer.from(capture.data, 'base64'));
+        screenshots.push(screenshot);
+        visualEvidence.push(screenshot);
+      }
     }
-    viewportEvidence.push({ width, height, screenshot });
+    viewportEvidence.push({ width, height, screenshots });
   }
   add('all requested viewports and pages avoid horizontal overflow', overflows.length === 0, JSON.stringify(overflows));
 
@@ -368,6 +373,63 @@ async function main() {
   `);
   add('night theme weather background and language switch remain stable', surface.spriteReadable && surface.backgroundOk && surface.weatherOk && surface.enTitle === 'Demo route' && surface.zhTitle === '演示路线', JSON.stringify(surface));
 
+  if (CAPTURE_SCREENSHOTS && ARTIFACT_DIR) {
+    await client.send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
+    await delay(280);
+    await client.evaluate(`
+      (()=>{
+        saveTimeSpriteCollapsed(false);switchPage('my');
+      })()
+    `);
+    const mobileSpriteClose = await client.evaluate(`
+      (()=>{
+        const root=document.getElementById('timeSprite');
+        const panel=document.getElementById('timeSpritePanel');
+        return {collapsed:root.classList.contains('collapsed'),visibility:getComputedStyle(panel).visibility};
+      })()
+    `);
+    add('mobile navigation closes the expanded agent panel', mobileSpriteClose.collapsed && mobileSpriteClose.visibility === 'hidden', JSON.stringify(mobileSpriteClose));
+    await client.evaluate(`
+      (()=>{
+        applyTheme('paper');switchPage('home');
+        const toastContainer=document.getElementById('toastContainer');if(toastContainer)toastContainer.innerHTML='';
+        const now=new Date();const prior=new Date(now);prior.setDate(prior.getDate()-1);
+        const key=prior.getFullYear()+'-'+String(prior.getMonth()+1).padStart(2,'0')+'-'+String(prior.getDate()).padStart(2,'0');
+        records=[{id:'visual-deload',title:'准备明天的汇报',recordKind:'reminder',dateKey:key,dateText:key,timeText:'15:00',recordState:'active',createdAt:Date.now(),updatedAt:Date.now()}];
+        renderCurrent();openDeLoad();
+      })()
+    `);
+    await delay(100);
+    const deloadCapture = await client.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+    fs.writeFileSync(path.join(ARTIFACT_DIR, 'deload-375x812.png'), Buffer.from(deloadCapture.data, 'base64'));
+    visualEvidence.push('deload-375x812.png');
+    await client.evaluate(`closeDrawer();applyTheme('night');switchPage('my');window.scrollTo(0,0);`);
+    await delay(100);
+    const nightCapture = await client.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+    fs.writeFileSync(path.join(ARTIFACT_DIR, 'my-night-375x812.png'), Buffer.from(nightCapture.data, 'base64'));
+    visualEvidence.push('my-night-375x812.png');
+    await client.evaluate(`applyTheme('paper');`);
+  }
+
+  const syncQuarantine = await client.evaluate(`
+    (async()=>{
+      localStorage.setItem('shike_sync_endpoint','https://untrusted.example');
+      const pushed=await ShikeSyncClient.push([{private:'must-not-send'}]);
+      const pulled=await ShikeSyncClient.pull();
+      const enableResult=ShikeSyncClient.enable();
+      const endpointResult=ShikeSyncClient.setEndpoint('https://untrusted.example');
+      return {
+        pushed:pushed.status,
+        pulled:pulled.status,
+        enableResult,
+        endpointResult,
+        endpoint:localStorage.getItem('shike_sync_endpoint'),
+        status:ShikeSyncClient.getStatus()
+      };
+    })()
+  `);
+  add('remote sync global API remains security quarantined', syncQuarantine.pushed === 'sync_security_quarantined' && syncQuarantine.pulled === 'sync_security_quarantined' && syncQuarantine.enableResult === false && syncQuarantine.endpointResult === false && syncQuarantine.endpoint === null && syncQuarantine.status.status === 'security-quarantined', JSON.stringify(syncQuarantine));
+
   await delay(300);
   const allErrors = client.consoleErrors.concat(client.runtimeErrors).concat(client.logErrors, client.networkErrors)
     .filter(Boolean)
@@ -383,6 +445,7 @@ async function main() {
       expectedVersion: EXPECTED_VERSION,
       viewports: viewportEvidence,
       pages: PAGES,
+      visualEvidence,
       checks,
       errors: allErrors
     }, null, 2));

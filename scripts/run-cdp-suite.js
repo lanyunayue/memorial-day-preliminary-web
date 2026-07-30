@@ -12,15 +12,18 @@ const EDGE = process.env.SHIKE_EDGE_PATH
     : '/usr/bin/google-chrome');
 const PORT = Number(process.env.SHIKE_TEST_PORT || 8090);
 const BASE_CDP_PORT = Number(process.env.SHIKE_CDP_PORT || 9224);
-const APP_URL = `http://127.0.0.1:${PORT}/index.html`;
+const LOCAL_APP_URL = `http://127.0.0.1:${PORT}/index.html`;
+const APP_URL = process.env.SHIKE_APP_URL || LOCAL_APP_URL;
+const USE_LOCAL_SERVER = !process.env.SHIKE_APP_URL;
 const versionSource = fs.readFileSync(path.join(ROOT, 'src', 'config', 'version.js'), 'utf8');
 const versionMatch = versionSource.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
 const EXPECTED_VERSION = process.env.SHIKE_EXPECTED_VERSION || (versionMatch && versionMatch[1]);
 const ARTIFACT_DIR = process.env.SHIKE_ARTIFACT_DIR
   ? path.resolve(ROOT, process.env.SHIKE_ARTIFACT_DIR)
   : path.join(ROOT, 'artifacts', 'cdp');
-const ALL_TESTS = [
+const SUPPORTED_TESTS = [
   'test-shike-agent-runtime-cdp.js',
+  'test-shike-chronos-valley-roundtrip-cdp.js',
   'test-shike-experience-runtime-cdp.js',
   'test-shike-offline-runtime-cdp.js',
   'test-shike-runtime-cdp.js',
@@ -28,11 +31,21 @@ const ALL_TESTS = [
   'test-shike-v150-network-cdp.js',
   'test-shike-v150-responsive-cdp.js',
 ];
+// The v1.4/v1.5 scripts remain available for historical diagnostics, but they
+// assert retired Watch Center and legacy floating-workbench contracts. Current
+// release truth is covered by Playwright plus the maintained CDP flows below.
+const DEFAULT_TESTS = [
+  'test-shike-agent-runtime-cdp.js',
+  'test-shike-chronos-valley-roundtrip-cdp.js',
+  'test-shike-offline-runtime-cdp.js',
+  'test-shike-runtime-cdp.js',
+  'test-shike-storage-runtime-cdp.js',
+];
 const requestedTests = process.argv.slice(2);
-const tests = requestedTests.length ? requestedTests : ALL_TESTS;
+const tests = requestedTests.length ? requestedTests : DEFAULT_TESTS;
 
 for (const script of tests) {
-  if (!ALL_TESTS.includes(script)) throw new Error(`Unknown CDP test: ${script}`);
+  if (!SUPPORTED_TESTS.includes(script)) throw new Error(`Unknown CDP test: ${script}`);
 }
 if (!EXPECTED_VERSION) throw new Error('Unable to read APP_VERSION');
 
@@ -94,12 +107,14 @@ async function main() {
     process.exit(2);
   }
   fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
-  const server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'serve-static.js')], {
-    cwd: ROOT,
-    env: { ...process.env, PORT: String(PORT) },
-    stdio: 'inherit',
-    windowsHide: true,
-  });
+  const server = USE_LOCAL_SERVER
+    ? spawn(process.execPath, [path.join(ROOT, 'scripts', 'serve-static.js')], {
+      cwd: ROOT,
+      env: { ...process.env, PORT: String(PORT) },
+      stdio: 'inherit',
+      windowsHide: true,
+    })
+    : null;
   const failures = [];
 
   try {
@@ -140,7 +155,7 @@ async function main() {
       }
     }
   } finally {
-    stopTree(server);
+    if (server) stopTree(server);
   }
 
   if (failures.length) {

@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 6,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:05:00.000Z",
+  "timezone": "Asia/Tokyo",
+  "records": [
+    {
+      "type": "sleep-log",
+      "portableId": "00000000-0000-4000-8000-000000000005",
+      "sourcePlatformId": "source-5",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-06T05:05:00.000Z",
+      "updatedAt": "2026-07-06T05:05:00.000Z",
+      "state": "PARKED",
+      "data": {
+        "title": "固定样例 5 · sleep-log",
+        "note": "",
+        "localDate": "2026-07-06",
+        "localTime": "05:05",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 5
+        }
+      },
+      "futureRecordField": "preserve-5"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-CN",
+    "reducedMotion": false,
+    "highContrast": true,
+    "futureSetting": "preserve-5"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 5
+  },
+  "recordCount": 1,
+  "checksum": "sha256:dbaf058330b39322e4dd7bb4fa05c19af3b13c15bfe88191a80de9dbd916d507"
+}

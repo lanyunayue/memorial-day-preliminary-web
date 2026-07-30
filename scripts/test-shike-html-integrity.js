@@ -95,7 +95,8 @@ add('bottom navigation targets existing pages', () => {
   const pageIds = new Set(matches(/\sid=["']page-([^"']+)["']/g, html).map((m) => m[1]));
   const navPages = unique(matches(/\sdata-page=["']([^"']+)["']/g, html).map((m) => m[1]));
   const missing = navPages.filter((page) => !pageIds.has(page));
-  assert(navPages.length === 5, 'expected exactly 5 bottom navigation page entries (today/all/spirit/review/my), got ' + navPages.length);
+  assert(navPages.length === 5, 'expected exactly 5 primary navigation entries (home/all/agent/review/my), got ' + navPages.length);
+  assert(JSON.stringify(navPages) === JSON.stringify(['home','all','agent','review','my']), 'primary navigation order does not match the product contract: '+navPages.join(','));
   assert(missing.length === 0, `missing page targets: ${missing.join(', ')}`);
 });
 

@@ -5,11 +5,25 @@
   'use strict';
   var STORE='temporal_operations';var QUARANTINE='temporal_operation_quarantine';
   function copy(value){return value===undefined?undefined:JSON.parse(JSON.stringify(value));}
-  function browserDriver(){if(!globalThis.ShikeIndexedDb)throw new Error('operation_journal_unavailable');return {get:function(id){return globalThis.ShikeIndexedDb.get(STORE,id);},list:function(){return globalThis.ShikeIndexedDb.getAll(STORE);},put:function(value){return globalThis.ShikeIndexedDb.put(STORE,value);},putQuarantine:function(value){return globalThis.ShikeIndexedDb.put(QUARANTINE,value);},remove:function(id){return globalThis.ShikeIndexedDb.remove(STORE,id);}};}
+  function browserDriver(){
+    if(!globalThis.ShikeIndexedDb)throw new Error('operation_journal_unavailable');
+    var driver={
+      get:function(id){return globalThis.ShikeIndexedDb.get(STORE,id);},
+      list:function(){return globalThis.ShikeIndexedDb.getAll(STORE);},
+      put:function(value){return globalThis.ShikeIndexedDb.put(STORE,value);},
+      putQuarantine:function(value){return globalThis.ShikeIndexedDb.put(QUARANTINE,value);},
+      remove:function(id){return globalThis.ShikeIndexedDb.remove(STORE,id);}
+    };
+    if(typeof globalThis.ShikeIndexedDb.putIfAbsent==='function'){
+      driver.putIfAbsent=function(value){return globalThis.ShikeIndexedDb.putIfAbsent(STORE,value);};
+    }
+    return driver;
+  }
   function memoryDriver(initial){
     var values=new Map((initial||[]).map(function(item){return [item.id,copy(item)];}));var quarantined=new Map();
     return {
       async get(id){return copy(values.get(id));},async list(){return [...values.values()].map(copy);},
+      async putIfAbsent(value){var current=values.get(value.id);if(current)return {created:false,value:copy(current)};values.set(value.id,copy(value));return {created:true,value:copy(value)};},
       async put(value){values.set(value.id,copy(value));return copy(value);},
       async putQuarantine(value){quarantined.set(value.id,copy(value));return copy(value);},
       async remove(id){values.delete(id);return true;},async quarantined(){return [...quarantined.values()].map(copy);}
@@ -21,7 +35,24 @@
     async function quarantineNow(current,reason){var next=operation.transition(current,'quarantined',null,reason);var item={id:'quarantine:'+next.operationId,operationId:next.operationId,operationType:next.operationType,recordId:next.recordId,draftId:next.draftId,payloadChecksum:next.payloadChecksum,reason:operation.cleanError(reason),retryCount:next.retryCount,quarantinedAt:new Date().toISOString(),schemaVersion:1};await driver.putQuarantine(item);await driver.put(next);return next;}
     async function prepare(input){
       var payloadChecksum=input.payloadChecksum||await operation.checksum(input.payload||{});
-      return serial(async function(){var current=await driver.get(input.operationId);if(current){if(current.payloadChecksum!==payloadChecksum){await quarantineNow(current,'payload_checksum_mismatch');throw new Error('operation_checksum_mismatch');}return current;}var next=operation.create(Object.assign({},input,{payloadChecksum:payloadChecksum}));await driver.put(next);return next;});
+      return serial(async function(){
+        var current=await driver.get(input.operationId);
+        if(current){
+          if(current.payloadChecksum!==payloadChecksum){
+            await quarantineNow(current,'payload_checksum_mismatch');throw new Error('operation_checksum_mismatch');
+          }
+          return current;
+        }
+        var next=operation.create(Object.assign({},input,{payloadChecksum:payloadChecksum}));
+        if(driver.putIfAbsent){
+          var inserted=await driver.putIfAbsent(next);current=inserted.value;
+          if(current.payloadChecksum!==payloadChecksum){
+            await quarantineNow(current,'payload_checksum_mismatch');throw new Error('operation_checksum_mismatch');
+          }
+          return current;
+        }
+        await driver.put(next);return next;
+      });
     }
     async function get(id){await queue;return driver.get(id);}
     function mark(id,status,step,error){return serial(async function(){var current=await driver.get(id);if(!current)throw new Error('operation_not_found');var next=operation.transition(current,status,step,error);await driver.put(next);return next;});}

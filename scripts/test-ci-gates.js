@@ -26,8 +26,8 @@ function check(name, condition, detail) {
 
 const currentInstall = run('ci-install.js');
 check(
-  'locked dependencies install reproducibly',
-  currentInstall.status === 0 && /npm ci completed using package-lock\.json/.test(currentInstall.stdout),
+  'dependency install follows the zero-dependency lockfile policy',
+  currentInstall.status === 0 && /(no dependencies declared|npm ci completed)/.test(currentInstall.stdout),
   currentInstall.stderr || currentInstall.stdout
 );
 

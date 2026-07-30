@@ -1,5 +1,5 @@
 /**
- * v2.3.0-alpha2-webfix Information Architecture Tests
+ * v2.2.0-alpha4 Information Architecture Tests
  */
 const fs = require('fs');
 const path = require('path');
@@ -13,11 +13,11 @@ console.log('=== Information Architecture Tests ===\n');
 const html = readSafe(path.join(V,'index.html'));
 const leg = readSafe(path.join(V,'src/legacy-app.js'));
 
-// 1. Navigation items (consolidated to 4: home/calendar/all/my)
+// 1. Navigation items (product contract: today/all/agent/review/mine)
 console.log('[1] Navigation items');
 const navItems = (html && html.match(/class="nav-item/g)) || [];
 console.log('  Found ' + navItems.length + ' nav items');
-assert(navItems.length === 5, 'exactly 5 nav items (today/all/spirit/review/my), found ' + navItems.length);
+assert(navItems.length === 5, 'exactly 5 nav items (home/all/agent/review/my), found ' + navItems.length);
 const navPageMatches = (html && html.match(/data-page="([^"]+)"/g)) || [];
 assert(navPageMatches.length === 5, 'exactly 5 data-page nav attributes');
 
@@ -26,6 +26,8 @@ console.log('\n[2] Required pages');
 assert(html && html.includes('page-home'), 'page-home exists');
 assert(html && html.includes('page-calendar') || html.includes('page-cal'), 'page-calendar exists');
 assert(html && html.includes('page-all'), 'page-all exists');
+assert(html && html.includes('page-agent'), 'page-agent exists');
+assert(html && html.includes('page-review'), 'page-review exists');
 assert(html && html.includes('page-import'), 'page-import exists');
 assert(html && html.includes('page-my'), 'page-my exists');
 assert(!html.includes('id="page-watch"'), 'page-watch removed');
@@ -41,6 +43,8 @@ assert(html && html.includes('page-my') || html.includes('page-me'), 'my/me page
 console.log('\n[4] Agent workbench');
 assert(html && html.includes('agentWorkbench'), 'agentWorkbench exists');
 assert(html && html.includes('agentInput'), 'agentInput exists');
+assert(html && html.includes('agentPrimaryDeLoadBtn'), 'agent page exposes one-step DeLoad');
+assert(html && html.includes('deLoadEntryBtn'), 'today page exposes one-step DeLoad');
 
 // 5. Quick input
 console.log('\n[5] Quick input');
@@ -56,7 +60,7 @@ assert(leg && leg.includes('capabilityV200rc2'), 'capabilityV200rc2 flag');
 // 7. Version in HTML
 console.log('\n[7] Version');
 const versionJs = readSafe(path.join(V,'src/config/version.js'));
-assert((html && html.includes('v2.3.0-alpha2-webfix')) || (versionJs && versionJs.includes('v2.3.0-alpha2-webfix')), 'v2.3.0-alpha2-webfix referenced');
+assert((html && html.includes('v2.2.0-alpha4')) || (versionJs && versionJs.includes('v2.2.0-alpha4')), 'v2.2.0-alpha4 referenced');
 
 // 8. Release center
 console.log('\n[8] Release center');

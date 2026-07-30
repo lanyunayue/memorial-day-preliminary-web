@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f3ed">
 <meta name="description" content="时刻 x 归时谷 — C0 比赛体验。把现实里的事，带进一个会回应你的世界。">
+<link rel="icon" href="data:,">
 <title>时刻 x 归时谷</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b7355'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='white' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
   --font-sans:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
-  --shadow:0 1px 3px rgba(44,37,32,.06),0 4px 14px rgba(44,37,32,.04);
+  --shadow:0 1px 3px rgba(44,37,32,.06),0 12px 34px rgba(44,37,32,.07);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;}
@@ -56,10 +56,10 @@ body{
 .preview{background:var(--bg-elev);border:1px solid var(--ink-line);border-radius:var(--radius);padding:6px 4px;margin-bottom:26px;box-shadow:var(--shadow);}
 .preview-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--ink-line);}
 .preview-item:last-child{border-bottom:none;}
-.preview-glyph{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.preview-glyph.task{background:rgba(184,85,63,.12);}
-.preview-glyph.commit{background:rgba(184,85,63,.20);}
-.preview-glyph.wait{background:rgba(138,122,106,.16);}
+.preview-glyph{width:5px;height:38px;border-radius:999px;display:block;flex-shrink:0;}
+.preview-glyph.task{background:#bd5943;}
+.preview-glyph.commit{background:#d6a257;}
+.preview-glyph.wait{background:#78afbd;}
 .preview-text{flex:1;min-width:0;}
 .preview-text .t{font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .preview-text .k{font-size:11px;color:var(--ink-mute);}
@@ -71,7 +71,7 @@ body{
 .btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--ink-line);min-height:44px;font-size:14px;font-weight:500;}
 .demo-zone{margin-top:20px;padding-top:20px;border-top:1px dashed var(--ink-line);}
 .demo-zone .actions{margin-bottom:0;}
-.return-card{display:none;background:linear-gradient(135deg,var(--accent-bg),var(--bg-elev));border:1.5px solid var(--accent-soft);border-radius:var(--radius-lg);padding:18px;margin-bottom:24px;animation:fadeUp .5s forwards;}
+.return-card{display:none;background:linear-gradient(135deg,#fff5ef,var(--bg-elev));border:1.5px solid var(--accent-soft);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px;animation:fadeUp .35s forwards;box-shadow:0 18px 46px rgba(184,85,63,.1);}
 .return-card.show{display:block;}
 .return-card h3{font-family:var(--font-serif);font-size:17px;margin:0 0 4px;color:var(--accent);}
 .return-card .meta{font-size:12px;color:var(--ink-mute);margin-bottom:12px;}
@@ -84,8 +84,11 @@ body{
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .foot{margin-top:28px;font-size:12px;color:var(--ink-mute);text-align:center;line-height:1.6;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.fade-in{opacity:0;animation:fadeUp .6s forwards;}
-.fade-in.d1{animation-delay:.05s;}.fade-in.d2{animation-delay:.12s;}.fade-in.d3{animation-delay:.2s;}.fade-in.d4{animation-delay:.28s;}.fade-in.d5{animation-delay:.36s;}
+.fade-in{opacity:0;animation:fadeUp .38s forwards;}
+.fade-in.d1{animation-delay:.03s;}.fade-in.d2{animation-delay:.06s;}.fade-in.d3{animation-delay:.09s;}.fade-in.d4{animation-delay:.12s;}.fade-in.d5{animation-delay:.15s;}
+.hero-visual{margin:18px 0 26px;border-radius:20px;overflow:hidden;position:relative;aspect-ratio:16/9;border:1px solid rgba(44,37,32,.12);box-shadow:0 22px 56px rgba(44,37,32,.16);background:#132039;}
+.hero-visual img{width:100%;height:100%;display:block;object-fit:cover;}
+.hero-visual figcaption{position:absolute;left:14px;bottom:12px;color:#fff;font-size:11px;letter-spacing:.08em;background:rgba(7,15,27,.6);backdrop-filter:blur(10px);padding:6px 9px;border-radius:999px;}
 /* C1.2: Compact two-column layout for 1366x768 and similar short viewports */
 @media (min-width:900px) and (max-height:850px){
   .wrap{
@@ -128,16 +131,27 @@ body{
   .foot{margin-top:6px;font-size:10px;}
 }
 @media (max-width:360px){.hero h1{font-size:30px;}.main-copy{font-size:17px;}.wrap{padding-left:18px;padding-right:18px;}}
+@media (min-width:900px) and (min-height:851px){
+  .wrap{max-width:1120px;padding:30px 34px 60px;}
+  .topbar{margin-bottom:34px;}
+  .hero{display:grid;grid-template-columns:minmax(0,.95fr) minmax(400px,1.05fr);gap:54px;align-items:start;}
+  .hero h1{font-size:46px;}
+  .hero-visual{margin:26px 0 0;aspect-ratio:16/10;}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:38px;}
+  .demo-zone{max-width:520px;margin:26px auto 0;}
+}
+@media (min-width:900px) and (max-height:850px){.hero-visual{display:none;}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.fade-in{opacity:1}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar fade-in">
-    <a class="wordmark" href="index.html">时刻</a>
-    <a class="back-link" href="index.html">返回主站 ›</a>
+    <a class="wordmark" href="showcase.html">时刻</a>
+    <a class="back-link" href="showcase.html">返回官网 ›</a>
   </div>
 
-  <span class="badge" id="demoBadge"><span class="dot"></span>演示模式</span>
+      <span class="badge show" id="demoBadge"><span class="dot"></span><span id="modeLabel">正在读取真实事项</span></span>
 
   <section class="hero">
     <div class="hero-left">
@@ -145,6 +159,10 @@ body{
       <p class="main-copy fade-in d2">把现实里的事，带进一个会回应你的世界。</p>
       <p class="sub-copy fade-in d3">在「时刻」记录事项，进入「归时谷」看见它们化作木牌、誓约灯与纸舟，再通过延期、拆分、放下或完成，让世界产生变化。</p>
       <p class="fade-in d3 hero-time" style="font-size:12px;color:var(--ink-mute);margin:-12px 0 20px;">预计体验时间：约2分钟 · 无需注册，演示数据不会覆盖个人记录</p>
+      <figure class="hero-visual fade-in d4">
+<img src="assets/chronos/chronos-valley-hero-v1.webp" alt="蓝色山谷中的木牌、誓约灯和纸舟顺着发光的溪流通向营火">
+        <figcaption>现实事项，在山谷里获得新的位置</figcaption>
+      </figure>
     </div>
     <div class="hero-right">
       <div id="returnCard" class="return-card"></div>
@@ -177,202 +195,27 @@ body{
 
 <div class="toast" id="toast"></div>
 
-<script>
-// === Web Bridge (inlined for GitHub Pages reliability) ===
-/**
- * Web Bridge - C0 Competition Integration
- *
- * Generates handoff for Chronos Valley game, and reads return payload.
- * Uses localStorage for same-origin communication.
- */
-
-var BRIDGE_VERSION = 1;
-const HANDOFF_KEY = 'chronos_game_handoff_v1';
-const RETURN_KEY = 'chronos_game_return_v1';
-const BRIDGE_STATE_KEY = 'chronos_game_bridge_state_v1';
-
-// Wait-for keywords for type detection
-const WAITING_KEYWORDS = ['等待', '等回复', '等消息', '等结果', '等通知', '等快递', '等审批'];
-const COMMITMENT_KEYWORDS = ['答应', '承诺', '必须', '保证', '一定', '约定'];
-
-/**
- * Detect game type from a record.
- * @param {Object} record - Web端 record
- * @returns {string} 'TASK' | 'COMMITMENT' | 'WAITING_FOR'
- */
-function detectGameType(record) {
-  const title = (record.title || record.text || '').toLowerCase();
-
-  // Check waiting keywords first
-  for (const kw of WAITING_KEYWORDS) {
-    if (title.includes(kw.toLowerCase())) return 'WAITING_FOR';
-  }
-
-  // Check commitment keywords
-  for (const kw of COMMITMENT_KEYWORDS) {
-    if (title.includes(kw.toLowerCase())) return 'COMMITMENT';
-  }
-
-  // Map by sourceKind
-  if (record.type === 'habit' || record.sourceKind === 'habit') return 'COMMITMENT';
-  if (record.type === 'anniversary' || record.sourceKind === 'anniversary') return 'COMMITMENT';
-
-  // Default: TASK
-  return 'TASK';
-}
-
-/**
- * Generate handoff payload for game.
- * Takes up to 3 records and maps them to game types.
- *
- * @param {Array} records - Web端 records
- * @param {Object} [opts] - options
- * @param {string} [opts.returnUrl] - URL to return to (default: '../')
- * @returns {Object} handoff payload
- */
-function generateHandoff(records, opts = {}) {
-  const selected = records.slice(0, 3);
-
-  return {
-    version: BRIDGE_VERSION,
-    transferId: 'handoff_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
-    createdAt: Date.now(),
-    source: 'shike-web',
-    returnUrl: opts.returnUrl || '../',
-    records: selected.map(r => ({
-      sourceRecordId: String(r.id || ''),
-      title: String(r.title || r.text || '').slice(0, 200),
-      sourceKind: String(r.type || r.kind || ''),
-      gameType: detectGameType(r),
-      dateKey: String(r.dateKey || r.date || ''),
-      timeText: String(r.timeText || r.time || '')
-    }))
-  };
-}
-
-/**
- * Write handoff to localStorage.
- * @param {Object} handoff
- */
-function writeHandoff(handoff) {
-  try {
-    localStorage.setItem(HANDOFF_KEY, JSON.stringify(handoff));
-    return true;
-  } catch (e) {
-    console.error('[WebBridge] Failed to write handoff:', e.message);
-    return false;
-  }
-}
-
-/**
- * Read return payload from game.
- * @returns {Object|null} return payload or null
- */
-function readReturnPayload() {
-  try {
-    const raw = localStorage.getItem(RETURN_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (data.version !== BRIDGE_VERSION) return null;
-    if (!data.transferId) return null;
-    return data;
-  } catch (e) {
-    console.warn('[WebBridge] Failed to read return:', e.message);
-    return null;
-  }
-}
-
-/**
- * Check if return payload has been applied.
- * @param {string} transferId
- * @returns {boolean}
- */
-function isReturnApplied(transferId) {
-  try {
-    const raw = localStorage.getItem(BRIDGE_STATE_KEY);
-    if (!raw) return false;
-    const state = JSON.parse(raw);
-    return state.appliedReturns && state.appliedReturns.includes(transferId);
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Mark return payload as applied.
- * @param {string} transferId
- */
-function markReturnApplied(transferId) {
-  try {
-    const raw = localStorage.getItem(BRIDGE_STATE_KEY);
-    const state = raw ? JSON.parse(raw) : { appliedReturns: [] };
-    if (!state.appliedReturns) state.appliedReturns = [];
-    if (!state.appliedReturns.includes(transferId)) {
-      state.appliedReturns.push(transferId);
-    }
-    localStorage.setItem(BRIDGE_STATE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.warn('[WebBridge] Failed to mark applied:', e.message);
-  }
-}
-
-/**
- * Clear return payload after applying.
- */
-function clearReturnPayload() {
-  try {
-    localStorage.removeItem(RETURN_KEY);
-  } catch {
-    // ignore
-  }
-}
-
-/**
- * Navigate to the game.
- * @param {string} valleyPath - path to valley/index.html (default: 'valley/')
- */
-function goToGame(valleyPath = 'valley/') {
-  window.location.href = valleyPath;
-}
-
-/**
- * Generate competition demo records.
- * @returns {Array} 3 demo records
- */
-function getDemoRecords() {
-  return [
-    {
-      id: 'demo_task_1',
-      title: '完成比赛演示视频',
-      type: 'reminder',
-      dateKey: '',
-      timeText: ''
-    },
-    {
-      id: 'demo_commit_1',
-      title: '答应团队今晚完成最终检查',
-      type: 'note',
-      dateKey: '',
-      timeText: ''
-    },
-    {
-      id: 'demo_wait_1',
-      title: '等待比赛材料审核结果',
-      type: 'note',
-      dateKey: '',
-      timeText: ''
-    }
-  ];
-}
-
-// === End Web Bridge ===
+<script type="module">
+import {
+  clearReturnPayload,
+  detectGameType,
+  generateHandoff,
+  getDemoRecords,
+  goToGame,
+  isReturnApplied,
+  markReturnApplied,
+  readReturnPayload,
+  writeHandoff
+} from './src/bridge/web-bridge.js';
 
 var RETURN_URL = '../competition.html';
+var activeRecords = [];
+var isDemoMode = false;
 
 var TYPE_META = {
-  TASK:        { glyph: '\u{1FA91}', label: '木牌 · 任务',  cls: 'task' },
-  COMMITMENT:  { glyph: '\u{1F3EE}', label: '誓约灯 · 承诺', cls: 'commit' },
-  WAITING_FOR: { glyph: '\u{1F6F6}', label: '纸舟 · 等待',  cls: 'wait' }
+  TASK:        { glyph: '', label: '木牌 · 任务',  cls: 'task' },
+  COMMITMENT:  { glyph: '', label: '誓约灯 · 承诺', cls: 'commit' },
+  WAITING_FOR: { glyph: '', label: '纸舟 · 等待',  cls: 'wait' }
 };
 
 var ACTION_LABELS = {
@@ -381,7 +224,7 @@ var ACTION_LABELS = {
   drop:'放下', let_go:'放下', release:'放下', released:'放下', abandon:'放下',
   complete:'完成', done:'完成', finish:'完成', resolve:'完成', completed:'完成',
   keep:'保留', hold:'保留', seen:'已见到', acknowledged:'已安放',
-  dropToday:'今天不处理'
+  dropToday:'今天不处理', droptoday:'今天不处理'
 };
 
 function $(id){ return document.getElementById(id); }
@@ -403,9 +246,16 @@ function readRealRecords(){
 }
 
 function renderPreview(records){
-  var list = (records && records.length) ? records.slice(0,3) : getDemoRecords();
+  var list = (records && records.length) ? records.slice(0,3) : [];
   var el = $('preview');
   el.innerHTML = '';
+  if(!list.length){
+    var empty = document.createElement('div');
+    empty.className = 'preview-item';
+    empty.innerHTML = '<div class="preview-text"><div class="t">还没有真实事项</div><div class="k">先回到“时刻”写下一件需要处理的事</div></div>';
+    el.appendChild(empty);
+    return;
+  }
   list.forEach(function(r){
     var gt = detectGameType(r);
     var meta = TYPE_META[gt] || TYPE_META.TASK;
@@ -414,7 +264,7 @@ function renderPreview(records){
     row.className = 'preview-item';
     var g = document.createElement('div');
     g.className = 'preview-glyph ' + meta.cls;
-    g.textContent = meta.glyph;
+    g.setAttribute('aria-hidden', 'true');
     var tx = document.createElement('div');
     tx.className = 'preview-text';
     var t = document.createElement('div'); t.className = 't'; t.textContent = title;
@@ -434,7 +284,11 @@ function launch(records){
   goToGame('valley/');
 }
 
-$('demoExpBtn').addEventListener('click', function(){ launch(getDemoRecords()); });
+$('demoExpBtn').addEventListener('click', function(){
+  if(activeRecords.length){ launch(activeRecords); return; }
+  showToast('先在“时刻”记录至少一件事项');
+  setTimeout(function(){ location.href = 'index.html?capture=1'; }, 700);
+});
 $('restartDemoBtn').addEventListener('click', function(){
   clearReturnPayload();
   location.reload();
@@ -450,7 +304,7 @@ function renderReturnCard(){
   if(!data){ card.classList.remove('show'); card.innerHTML = ''; return; }
   var applied = isReturnApplied(data.transferId);
   card.innerHTML = '';
-  var h = document.createElement('h3'); h.textContent = '你刚刚减轻了一件事'; card.appendChild(h);
+  var h = document.createElement('h3'); h.textContent = '三个结果，已经从山谷返回'; card.appendChild(h);
   var meta = document.createElement('div'); meta.className = 'meta';
   meta.textContent = '交接号 ' + String(data.transferId).slice(0,18) + (applied ? ' · 已应用' : '');
   card.appendChild(meta);
@@ -491,7 +345,7 @@ function renderReturnCard(){
   // World result
   var worldDiv = document.createElement('div');
   worldDiv.style.cssText = 'font-size:12px;color:var(--ink-mute);padding:10px 12px;background:rgba(184,85,63,.05);border-radius:10px;margin-bottom:14px;line-height:1.6;';
-  worldDiv.innerHTML = '世界负荷 <strong style="color:var(--accent);">3 → 2</strong><br>木牌已经变成三个行动标记';
+  worldDiv.innerHTML = '世界负荷 <strong style="color:var(--accent);">7 → 0</strong><br>木牌成为三个行动步骤，誓约灯与纸舟也已安放。';
   card.appendChild(worldDiv);
   // Buttons
   var btnRow = document.createElement('div');
@@ -499,12 +353,19 @@ function renderReturnCard(){
   var btn = document.createElement('button');
   btn.className = 'btn ' + (applied ? 'btn-ghost' : 'btn-secondary');
   btn.style.cssText = 'flex:1;min-height:44px;';
-  btn.textContent = applied ? '已应用' : '应用到时刻';
+  btn.textContent = applied ? '已应用' : (isDemoMode ? '确认演示结果' : '应用并返回时刻');
   btn.addEventListener('click', function(){
-    if(!applied) markReturnApplied(data.transferId);
+    if(!applied && isDemoMode){
+      markReturnApplied(data.transferId);
+    }
+    if(!applied && !isDemoMode){
+      showToast('正在安全写回你的真实事项');
+      location.href = 'index.html?chronosReturn=1';
+      return;
+    }
     clearReturnPayload();
     card.classList.remove('show'); card.innerHTML = '';
-    showToast(applied ? '已清除回响' : '已记录反馈');
+    showToast(applied ? '已清除回响' : '演示结果已确认');
     var fresh = readRealRecords();
     renderPreview(fresh.length ? fresh : null);
   });
@@ -514,7 +375,11 @@ function renderReturnCard(){
     btn2.className = 'btn btn-ghost';
     btn2.style.cssText = 'flex:1;min-height:44px;font-size:13px;';
     btn2.textContent = '再次进入归时谷';
-    btn2.addEventListener('click', function(){ launch(getDemoRecords()); });
+    btn2.addEventListener('click', function(){
+      var next = isDemoMode ? getDemoRecords() : readRealRecords();
+      if(next.length) launch(next);
+      else location.href = 'index.html?capture=1';
+    });
     btnRow.appendChild(btn2);
   }
   card.appendChild(btnRow);
@@ -523,11 +388,15 @@ function renderReturnCard(){
 
 (function init(){
   var params = new URLSearchParams(location.search);
-  var isDemo = params.get('demo') === 'competition';
-  if(isDemo){ $('demoBadge').classList.add('show'); }
+  isDemoMode = params.get('demo') === 'competition';
   var initRecords = readRealRecords();
-  if(isDemo || initRecords.length === 0){ initRecords = getDemoRecords(); }
-  renderPreview(initRecords);
+  activeRecords = isDemoMode ? getDemoRecords() : initRecords.slice(0,3);
+  $('modeLabel').textContent = isDemoMode ? '演示模式' : (activeRecords.length ? '真实使用 · 本机事项' : '等待真实事项');
+  $('demoExpBtn').textContent = isDemoMode
+    ? '开始演示体验'
+    : (activeRecords.length ? '带着我的 ' + activeRecords.length + ' 件事项进入归时谷' : '先去时刻记录事项');
+  $('exitDemoBtn').textContent = isDemoMode ? '退出演示模式' : '返回时刻';
+  renderPreview(activeRecords);
   renderReturnCard();
 })();
 </script>

@@ -1,0 +1,64 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 7,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:34:00.000Z",
+  "timezone": "Europe/Paris",
+  "records": [
+    {
+      "type": "daily-check-in",
+      "portableId": "00000000-0000-4000-8000-000000000022",
+      "sourcePlatformId": "source-34",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-17T10:34:00.000Z",
+      "updatedAt": "2026-07-17T10:34:00.000Z",
+      "state": "COMPLETED",
+      "data": {
+        "title": "固定样例 34 · daily-check-in",
+        "note": "",
+        "localDate": "2026-07-17",
+        "localTime": "10:34",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 34
+        }
+      },
+      "futureRecordField": "preserve-34"
+    },
+    {
+      "type": "sleep-log",
+      "portableId": "00000000-0000-4000-8000-000000000086",
+      "sourcePlatformId": "source-134",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-09T14:14:00.000Z",
+      "updatedAt": "2026-07-09T14:14:00.000Z",
+      "state": "ARCHIVED",
+      "data": {
+        "title": "固定样例 134 · sleep-log",
+        "note": "",
+        "localDate": "2026-07-09",
+        "localTime": "14:14",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 134
+        }
+      },
+      "futureRecordField": "preserve-134"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "en-US",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-34"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 34
+  },
+  "recordCount": 2,
+  "checksum": "sha256:392fb5a369fc1330401a21f6663f649bfa9cbfd79722cf26ea8a233db700215e"
+}

@@ -14,7 +14,7 @@
     var drafts=state.drafts||[];var rejected=state.rejected||[];
     if(!drafts.length&&!rejected.length){container.innerHTML='';container.classList.add('hidden');return;}
     var html='<section class="temporal-inbox" aria-live="polite"><div class="temporal-inbox-head"><div><strong>生活收件箱</strong><span>'+drafts.length+' 条待确认</span></div>';
-    if(drafts.length>1)html+='<button type="button" class="temporal-confirm-all"'+(state.persisting?' disabled':'')+'>全部确认</button>';
+    if(drafts.length>1)html+='<button type="button" class="temporal-confirm-all"'+(state.persisting||state.batchSaving?' disabled':'')+'>'+(state.batchSaving?'保存中...':'全部确认')+'</button>';
     if(!drafts.length&&rejected.length)html+='<button type="button" class="temporal-dismiss">关闭</button>';
     html+='</div>';
     if(state.persisting)html+='<div class="temporal-state-note">正在保存本地草稿...</div>';

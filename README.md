@@ -1,102 +1,72 @@
-# 时刻 (Shike) v0.7.0
+# 时刻 Shike
 
-> 你的贴心记事助手。
+时刻是一个本地优先的个人负荷与恢复助手。它记录任务、承诺、等待与生活事件，也帮助用户在负荷过高时做出明确、可撤回、不会偷换语义的降载选择。
 
-## 产品说明
+当前 Web 候选版本：`v2.2.0-alpha4`
 
-- **用户可见产品名**：时刻
-- **副标题**：你的贴心记事助手
-- **当前版本**：v0.7.0
-- **更新日期**：2026-07-07
-- **数据存储**：浏览器 localStorage（本地保存，刷新不丢）
+## 产品结构
 
-## 在线体验地址
+主导航固定为：
 
-为保证不同网络环境下的访问稳定性，项目提供主站与备用镜像。如遇某个平台访问异常，可切换至备用地址。
+1. 今天
+2. 全部
+3. 时刻精灵
+4. 回顾
+5. 我的
 
-- **主站（GitHub Pages）**：https://lanyunayue.github.io/memorial-day-preliminary-web/
-- **海外备用（Cloudflare Workers）**：https://memorial-day-preliminary-web.308138249.workers.dev/
-- **历史镜像（Netlify）**：https://memorialdaylan.netlify.app/
+日历、导入、隐私、权限与数据安全保留为次级工作流。首页和时刻精灵均可一步进入“一键降载”。
 
-## 核心功能
+## 核心能力
 
-- **一句话记录**：首页输入框直接输入，自然语言自动整理标题、日期、时间
-- **首页极简设计**：无记录时输入框居中，首条记录保存后平滑过渡到顶部，实时日期时间
-- **中文时间解析**：支持中文数字时间（九点、三点半）、相对时间（待会、半小时后）、时间段默认今天
-- **批量整理**：粘贴多行文字，自动拆分为多条可保存草稿
-- **记录类型**：提醒、纪念、习惯、备忘
-- **通用大卡片**：所有类型记录均可切换为精美大卡片展示，支持预置渐变 / 自定义图片 / 置顶 / 主题色
-- **实时倒计时**：支持分钟/小时/天级实时倒计时，每分钟自动刷新
-- **日历视图**：完整月历，节假日高亮，支持农历/新历切换，有记录的日期有圆点标记
-- **多语言**：简体中文、繁體中文、English、日本語
-- **8 套主题**：米白、黑白、咖啡、雾蓝、玫瑰、森林、夜间、樱花
-- **天气卡片**：开启后显示当前位置天气（基于 Open-Meteo，本地缓存30分钟）
-- **系统通知**：支持 Notification API，到时间自动提醒
-- **数据持久化**：localStorage 本地保存，刷新不丢；旧数据自动迁移，向前兼容
-- **导出/导入**：支持 JSON 备份导出和导入
-- **PWA 支持**：可添加到桌面
-- **语音输入**：支持 Web Speech API 语音识别（Chrome/Edge/Safari 推荐；微信内置浏览器自动隐藏语音按钮）
-- **开场动画**：1.8秒高级品牌动画，可跳过，第二次访问不强制展示
+- 中文自然语言记录、批量拆分与逐条确认
+- 提醒、纪念、习惯和备忘等既有记录类型
+- 承诺、等待他人、长期目标和时间关系
+- 本地每日简报、下一步行动与每周回顾
+- 六种明确的 DeLoad 动作：取消、延期、降低标准、重新协商、今晚只留一项、保存并结束今天
+- IndexedDB 主存储、兼容缓存、损坏隔离和恢复
+- Shike Portable Export v1 导入导出、校验、预览、冲突处理与事务回滚
+- 多标签协调、离线 Service Worker 与 PWA 安装清单
+- 本地权限、隐私、备份、回收站和快照工具
 
-## 技术说明
+## DeLoad 语义
 
-- 纯 HTML + CSS + JavaScript 单文件应用，无外部依赖
-- localStorage key: `shike_records_v1` / `shike_settings_v1`
-- 本地规则解析时间词，未接入真实大模型
-- 响应式设计，移动端优先（375px~430px 适配）
-- Service Worker 缓存：network-first 策略（HTML 始终获取最新版本，更新提示轻量 toast）
-- 数据结构：id, title, dateText, dateKey, timeText, locationText, repeat, repeatText, note, archived, createdAt, updatedAt, recordKind, recordState, notifyMode, notifiedAt, cardStyle, coverImage, coverPreset, pinned, accentColor, displayMode, relativeMinutes
+DeLoad 不会把延期当成完成，不会把删除当成取消，不会把“今晚不做”当成取消，也不会把“结束今天”当成批量完成。每次动作均需用户确认；业务记录、Portable 侧记录和审计日志在同一笔 IndexedDB 事务中提交。
 
-## 解析支持
+## 数据与隐私
 
-- **日期**：今天、明天、后天、大后天、待会/等一下/一会儿(+30分钟)、稍后(+1小时)、马上(+10分钟)、本周X、下周X、周X、星期X、月底、月末、下个月、X月X日、YYYY年M月D日、X天后、X小时后、X分钟后
-- **时间**：早上/上午/中午/下午/晚上/今晚/凌晨/睡前、X点、X点半、X点一刻、X点三刻、X点XX分、X:XX、中文数字（一到十二点）
-- **相对时间**：待会/等一下/一会儿/一会→当前+30分钟；稍后/稍等→+1小时；马上→+10分钟；半小时后/30分钟后→+30分钟；N小时后→当前+N小时；N分钟后→当前+N分钟
-- **无日期有时间段**：默认今天（例如下午三点→今天15:00，晚上九点→今天21:00，凌晨一点→今天01:00）
-- **重复**：每天、每周X、每月X号、每年（生日/纪念日）
-- **类型自动识别**：含生日/周年/纪念/恋爱 → 纪念；含每天/每周/每月/习惯 → 习惯；有日期时间 → 提醒；其他 → 备忘
-- **标题清洗**：时间词、日期词、语气词（要、记得、别忘了）自动剥离；"明天睡觉八点钟" → 标题"睡觉"、明天08:00；"下午三点交实验报告" → 标题"交实验报告"、今天15:00
+- 业务数据默认保存在浏览器本地。
+- 用户原始私人文本不会写入 DeLoad 操作侧记录。
+- 产品验证模式需要明确同意，且不接入远程分析。
+- 浏览器通知只在页面可运行且浏览器允许时工作；不承诺浏览器关闭后的后台提醒。
+- Portable Export 的唯一语义来源位于平台控制仓库的 `contracts/data/portable-export-v1.schema.json`。
 
-## 倒计时显示规则
+## 本地验证
 
-- 距离 < 60分钟：还有 X 分钟
-- 距离 < 24小时：还有 X 小时 X 分钟
-- 距离 < 48小时：明天 HH:mm / 还有 1 天 X 小时
-- 距离 >= 48小时：还有 X 天
-- 已过：已过 X 分钟 / 已过 X 小时 / 已过 X 天
-- 纪念类：已记录 X 天 / 还有 X 天 / 今天
-- 习惯类：今天 HH:mm / 下次 HH:mm / 每天/每周/每月
+```powershell
+npm run lint
+npm run format:check
+npm run test:unit
+npm run test:legacy
+npm run test:e2e:ci
+```
 
-## 大卡片样式
+`test:e2e:ci` 会启动本机 Edge/Chromium，执行运行时、Chronos、Portable Export、DeLoad、产品验收、多标签和离线浏览器测试。普通 `test:all` 在没有浏览器连接时可能跳过 E2E，因此正式发布门禁必须单独执行 `test:e2e:ci`。
 
-- 纪念类：默认大卡片，显示倒计时/已记录天数
-- 提醒类（有明确时间）：可切换大卡片，显示实时倒计时
-- 习惯类：可切换大卡片，显示重复规则
-- 备忘类：可切换大卡片
-- 所有大卡片支持：8套预置渐变、自定义图片、移除图片、置顶、主题色
-- 首页置顶大卡片最多显示 3 张，超出折叠至全部页
+## 在线状态
 
-## 浏览器兼容
+- 官方网站：[时刻官方网站](https://shike-official.humble-anole-7628.chatgpt.site/)
+- Web 正式入口候选：[GitHub Pages](https://lanyunayue.github.io/memorial-day-preliminary-web/)
+- Android：内部测试，当前只有 Debug APK，不作为正式下载
+- HarmonyOS：内部测试，当前 HAP 未正式签名，不作为正式下载
 
-| 环境 | 语音输入 | 文字记录 | 大卡片 | 天气 | 推荐度 |
-|------|---------|---------|--------|------|--------|
-| Chrome/Edge 桌面 | ✅ | ✅ | ✅ | ✅ | 推荐 |
-| Safari iOS | ✅ | ✅ | ✅ | ✅ | 推荐 |
-| 微信内置浏览器 | 自动隐藏 | ✅ | ✅ | 定位受限提示 | 可用 |
-| Android Chrome | ✅ | ✅ | ✅ | ✅ | 推荐 |
+Web 在线入口只有在候选分支通过完整发布门禁并完成线上版本核验后，才视为当前发布版本。发布状态与产物信息以平台控制仓库的 `releases/release-manifest.json` 为准。
 
-## 部署
+## 工程边界
 
-- 源目录：`web-demo/memorial-day-champion/`
-- 部署目录：`dist/memorial-day-preliminary-web/`
-- 修改后同步两个目录再 commit + push
-- **主站（GitHub Pages）**：从 main 分支根目录自动部署（https://lanyunayue.github.io/memorial-day-preliminary-web/）
-- **海外备用（Cloudflare Workers）**：通过 `wrangler deploy` 自动部署（https://memorial-day-preliminary-web.308138249.workers.dev/）
-- **历史镜像（Netlify）**：通过 git push 自动部署（https://memorialdaylan.netlify.app/）
+- `E:\lifetime-web-v240a2-stabilization`：当前 Web 稳定化候选
+- `E:\chronos-platform-control`：产品、数据、发布与审计契约
+- `E:\lifetime-v240a2-cross-platform-parity`：Android 候选
+- `E:\lifetime-v240a2-harmony-parity`：HarmonyOS 安全副本
+- `E:\lifetime`：受保护原目录，本轮不得修改
 
-## HarmonyOS 原生端
-
-- 用户可见文案统一为"时刻"，副标题"你的贴心记事助手"
-- 版本 v0.7.0
-- 同步核心功能：首页 UX、NLP 解析、大卡片、多语言、农历节假日、天气开关、用户名/使用天数
-- 新设置项通过 PersistentStorage 持久化，不修改 RDB schema
+内部工程代号为 PROJECT CHRONOS；对外产品名称始终为“时刻 / Shike”。

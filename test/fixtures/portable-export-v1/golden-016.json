@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 3,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:16:00.000Z",
+  "timezone": "Europe/Paris",
+  "records": [
+    {
+      "type": "task",
+      "portableId": "00000000-0000-4000-8000-000000000010",
+      "sourcePlatformId": "source-16",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-17T16:16:00.000Z",
+      "updatedAt": "2026-07-17T16:16:00.000Z",
+      "state": "ACTIVE",
+      "data": {
+        "title": "固定样例 16 · task",
+        "note": "",
+        "localDate": "2026-07-17",
+        "localTime": "16:16",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 16
+        }
+      },
+      "futureRecordField": "preserve-16"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "ja-JP",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-16"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 16
+  },
+  "recordCount": 1,
+  "checksum": "sha256:0a00b4b880b0973a0102a68957774cc344b92bc4d1f5b8b6d9bcc6d576c5bbc4"
+}

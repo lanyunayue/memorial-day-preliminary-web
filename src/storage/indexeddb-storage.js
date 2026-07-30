@@ -1,6 +1,7 @@
 (function(global){
   var STORE_NAMES=[
     'records','settings','conversations','subscriptions','feed_items','migrations','audit_log','quarantined_records',
+    'portable_records','portable_envelopes',
     'temporal_drafts','temporal_nodes','temporal_edges','temporal_waiting','temporal_corrections','temporal_meta','temporal_tombstones',
     'temporal_operations','temporal_operation_quarantine','temporal_locks','temporal_adaptation_rules'
   ];
@@ -23,6 +24,13 @@
   function getAll(store){return open().then(function(db){return requestResult(db.transaction(store,'readonly').objectStore(store).getAll());});}
   function count(store){return open().then(function(db){return requestResult(db.transaction(store,'readonly').objectStore(store).count());});}
   function put(store,value){return withTransaction([store],'readwrite',function(tx){tx.objectStore(store).put(value);return value;});}
+  function putIfAbsent(store,value){
+    return open().then(function(db){return new Promise(function(resolve,reject){
+      var result=null;var tx=db.transaction(store,'readwrite');var objectStore=tx.objectStore(store);var request=objectStore.get(value.id);
+      request.onsuccess=function(){if(request.result){result={created:false,value:request.result};return;}objectStore.put(value);result={created:true,value:value};};
+      tx.oncomplete=function(){resolve(result);};tx.onerror=function(){reject(tx.error||new Error('indexeddb_put_if_absent_failed'));};tx.onabort=function(){reject(tx.error||new Error('indexeddb_put_if_absent_aborted'));};
+    });});
+  }
   function remove(store,id){return withTransaction([store],'readwrite',function(tx){tx.objectStore(store).delete(id);return true;});}
   function replaceRecords(records,quarantined){
     return withTransaction(['records','quarantined_records','audit_log'],'readwrite',function(tx){
@@ -59,5 +67,76 @@
       return {count:records.length,quarantined:(quarantined||[]).length};
     });
   }
-  global.ShikeIndexedDb=Object.freeze({open:open,get:get,getAll:getAll,count:count,put:put,remove:remove,replaceRecords:replaceRecords,migrateLegacy:migrateLegacy,stores:STORE_NAMES.slice()});
+  function importPortable(payload,options){
+    options=options||{};
+    return open().then(function(db){return new Promise(function(resolve,reject){
+      var stores=['records','portable_records','portable_envelopes','audit_log'];
+      var tx=db.transaction(stores,'readwrite');
+      var recordStore=tx.objectStore('records');
+      var portableStore=tx.objectStore('portable_records');
+      var envelopeStore=tx.objectStore('portable_envelopes');
+      var expectedRecords=payload.businessRecords||[];
+      var expectedPortable=payload.portableEntities||[];
+      var verificationFailed=false;
+      function abort(code){
+        if(verificationFailed)return;
+        verificationFailed=true;
+        try{tx.abort();}catch(error){}
+        reject(new Error(code));
+      }
+      try{
+        recordStore.clear();
+        expectedRecords.forEach(function(record){recordStore.put(record);});
+        portableStore.clear();
+        expectedPortable.forEach(function(entity){portableStore.put(entity);});
+        envelopeStore.put(payload.envelope);
+        tx.objectStore('audit_log').put(payload.journal);
+        if(options.failAfterWrite)throw new Error('portable_import_fault_injected');
+
+        var recordCount=recordStore.count();
+        recordCount.onsuccess=function(){if(recordCount.result!==expectedRecords.length)abort('portable_business_count_mismatch');};
+        var portableCount=portableStore.count();
+        portableCount.onsuccess=function(){if(portableCount.result!==expectedPortable.length)abort('portable_record_count_mismatch');};
+        var envelopeRequest=envelopeStore.get(payload.envelope.id);
+        envelopeRequest.onsuccess=function(){
+          var storedEnvelope=envelopeRequest.result;
+          if(!storedEnvelope||storedEnvelope.checksum!==payload.envelope.checksum)abort('portable_envelope_verification_failed');
+        };
+        expectedPortable.forEach(function(entity){
+          var request=portableStore.get(entity.id);
+          request.onsuccess=function(){
+            var stored=request.result;
+            if(!stored||stored.canonical!==entity.canonical||stored.updatedAt!==entity.updatedAt||stored.state!==entity.state){
+              abort('portable_post_write_verification_failed');
+            }
+          };
+        });
+      }catch(error){
+        try{tx.abort();}catch(abortError){}
+        reject(error);
+        return;
+      }
+      tx.oncomplete=function(){
+        if(!verificationFailed)resolve({recordCount:expectedRecords.length,portableCount:expectedPortable.length,operationId:payload.journal.operationId});
+      };
+      tx.onerror=function(){if(!verificationFailed)reject(tx.error||new Error('portable_import_transaction_failed'));};
+      tx.onabort=function(){if(!verificationFailed)reject(tx.error||new Error('portable_import_transaction_aborted'));};
+    });});
+  }
+  function applyDeLoad(payload){
+    payload=payload||{};
+    return withTransaction(['records','portable_records','audit_log'],'readwrite',function(tx){
+      (payload.records||[]).forEach(function(record){tx.objectStore('records').put(record);});
+      (payload.portableEntities||[]).forEach(function(entity){tx.objectStore('portable_records').put(entity);});
+      tx.objectStore('audit_log').put({
+        id:'audit_'+String(payload.operationId||Date.now().toString(36)),
+        type:'deload_commit',
+        action:String(payload.action||''),
+        targetRecordIds:(payload.targetRecordIds||[]).map(String),
+        at:new Date().toISOString()
+      });
+      return {recordCount:(payload.records||[]).length,portableCount:(payload.portableEntities||[]).length,operationId:payload.operationId};
+    });
+  }
+  global.ShikeIndexedDb=Object.freeze({open:open,get:get,getAll:getAll,count:count,put:put,putIfAbsent:putIfAbsent,remove:remove,replaceRecords:replaceRecords,migrateLegacy:migrateLegacy,importPortable:importPortable,applyDeLoad:applyDeLoad,stores:STORE_NAMES.slice()});
 })(window);

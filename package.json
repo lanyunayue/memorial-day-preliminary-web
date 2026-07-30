@@ -1,7 +1,7 @@
 {
   "name": "shike-web",
   "version": "2.2.0-alpha4",
-  "description": "时刻 - 你的贴心记事助手 (Release Candidate)",
+  "description": "时刻 - 个人负荷与恢复助手",
   "private": true,
   "scripts": {
     "dev": "node scripts/serve-static.js",
@@ -32,5 +32,6 @@
   },
   "devDependencies": {
     "@playwright/test": "1.61.1"
-  }
+  },
+  "dependencies": {}
 }

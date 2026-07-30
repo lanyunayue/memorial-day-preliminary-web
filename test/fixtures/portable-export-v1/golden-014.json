@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "android",
+  "sourceSchemaVersion": 1,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:14:00.000Z",
+  "timezone": "UTC",
+  "records": [
+    {
+      "type": "tonight-focus",
+      "portableId": "00000000-0000-4000-8000-00000000000e",
+      "sourcePlatformId": "source-14",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-15T14:14:00.000Z",
+      "updatedAt": "2026-07-15T14:14:00.000Z",
+      "state": "ARCHIVED",
+      "data": {
+        "title": "固定样例 14 · tonight-focus",
+        "note": "",
+        "localDate": "2026-07-15",
+        "localTime": "14:14",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 14
+        }
+      },
+      "futureRecordField": "preserve-14"
+    }
+  ],
+  "settings": {
+    "theme": "night",
+    "locale": "en-US",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-14"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 14
+  },
+  "recordCount": 1,
+  "checksum": "sha256:5e2bc7f9d03090c429e2f6a3b23311984cb330616e8842b47fe83f628bd580a3"
+}

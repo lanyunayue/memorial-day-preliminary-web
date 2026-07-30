@@ -1,0 +1,44 @@
+{
+  "format": "shike-portable-export",
+  "portableExportVersion": 1,
+  "sourcePlatform": "web",
+  "sourceSchemaVersion": 6,
+  "sourceAppVersion": "2.4.0-alpha2",
+  "exportedAt": "2026-07-18T00:19:00.000Z",
+  "timezone": "Asia/Shanghai",
+  "records": [
+    {
+      "type": "daily-check-in",
+      "portableId": "00000000-0000-4000-8000-000000000013",
+      "sourcePlatformId": "source-19",
+      "schemaVersion": 1,
+      "createdAt": "2026-07-02T19:19:00.000Z",
+      "updatedAt": "2026-07-02T19:19:00.000Z",
+      "state": "CANCELLED",
+      "data": {
+        "title": "固定样例 19 · daily-check-in",
+        "note": "",
+        "localDate": "2026-07-02",
+        "localTime": "19:19",
+        "extensionFromFutureClient": {
+          "preserved": true,
+          "sequence": 19
+        }
+      },
+      "futureRecordField": "preserve-19"
+    }
+  ],
+  "settings": {
+    "theme": "system",
+    "locale": "zh-Hant",
+    "reducedMotion": false,
+    "highContrast": false,
+    "futureSetting": "preserve-19"
+  },
+  "fixtureMetadata": {
+    "golden": true,
+    "sequence": 19
+  },
+  "recordCount": 1,
+  "checksum": "sha256:92dc74f5f77574059b54da26bedc7295dc2e8c47c07bb07f87b8c311fcf21341"
+}

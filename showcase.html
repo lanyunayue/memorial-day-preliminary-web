@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1424">
+  <meta name="description" content="时刻 × 归时谷：把现实的重量，变成可以继续的一步。">
+  <meta property="og:title" content="时刻 × 归时谷">
+  <meta property="og:description" content="记录现实，进入山谷，带回下一步。">
+<meta property="og:image" content="assets/chronos/chronos-valley-hero-v1.webp">
+  <link rel="icon" href="data:,">
+  <title>时刻 × 归时谷｜PROJECT CHRONOS</title>
+  <style>
+    :root{
+      --night:#0a1322;--night-2:#101e32;--paper:#f6f1e9;--paper-2:#ece4d9;
+      --ink:#241f1a;--muted:#6f655b;--line:rgba(45,38,31,.14);
+      --amber:#e6ad65;--coral:#bd5943;--blue:#8ec9d5;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+      --serif:"Noto Serif SC","Songti SC",Georgia,serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--night)}
+    body{margin:0;color:#f8f6f1;background:var(--night);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    a:focus-visible{outline:3px solid #fff;outline-offset:4px}
+    .hero{min-height:100svh;position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(6,13,24,.95) 0%,rgba(7,15,27,.78) 46%,rgba(6,13,24,.24) 100%),url("assets/chronos/chronos-valley-hero-v1.webp") center/cover no-repeat;transform:scale(1.015);animation:reveal 1.2s ease both}
+    .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 60%,var(--night) 100%)}
+    .nav{width:min(1200px,calc(100% - 40px));margin:0 auto;padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .wordmark{display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.18em;color:#e3e9f3}
+    .wordmark span{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 22px rgba(230,173,101,.8)}
+    .nav-links{display:flex;align-items:center;gap:24px;color:#c5cedc;font-size:13px}
+    .nav-links a:hover{color:#fff}
+    .nav-cta{border:1px solid rgba(255,255,255,.28);padding:9px 14px;border-radius:999px;background:rgba(7,15,27,.28);backdrop-filter:blur(12px)}
+    .hero-content{width:min(1200px,calc(100% - 40px));margin:auto;flex:1;display:flex;align-items:center;padding:70px 0 140px}
+    .hero-copy{max-width:720px}
+    .kicker{margin:0 0 20px;color:var(--amber);font-size:11px;letter-spacing:.23em;text-transform:uppercase}
+    h1{font-family:var(--serif);font-size:clamp(52px,7.4vw,96px);font-weight:600;letter-spacing:-.045em;line-height:1.04;margin:0;text-wrap:balance;text-shadow:0 3px 42px rgba(0,0,0,.34)}
+    .lead{font-family:var(--serif);font-size:clamp(18px,2vw,24px);line-height:1.75;max-width:650px;color:#dbe2ed;margin:26px 0 0}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+    .button{display:inline-flex;justify-content:center;align-items:center;min-height:50px;padding:0 22px;border-radius:14px;font-size:14px;font-weight:700;transition:transform .2s,box-shadow .2s,background .2s}
+    .button:hover{transform:translateY(-2px)}
+    .button-primary{background:linear-gradient(135deg,#f0c17a,#db9562);color:#17233a;box-shadow:0 12px 38px rgba(230,173,101,.2)}
+    .button-secondary{border:1px solid rgba(255,255,255,.26);background:rgba(8,17,31,.46);backdrop-filter:blur(14px)}
+    .proof-strip{width:min(1200px,calc(100% - 40px));margin:-62px auto 0;position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(255,255,255,.13);background:rgba(11,22,38,.78);backdrop-filter:blur(18px);border-radius:22px;overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.26)}
+    .proof{padding:25px 28px;border-right:1px solid rgba(255,255,255,.1)}
+    .proof:last-child{border:0}.proof strong{display:block;font-family:var(--serif);font-size:22px;margin-bottom:5px}.proof span{color:#aeb9ca;font-size:12px;line-height:1.6}
+    .paper{background:var(--paper);color:var(--ink);padding:140px 0}
+    .section{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .section-heading{display:grid;grid-template-columns:.72fr 1.28fr;gap:70px;align-items:end;margin-bottom:64px}
+    .section-no{font-size:11px;letter-spacing:.2em;color:var(--coral);text-transform:uppercase}
+    h2{font-family:var(--serif);font-size:clamp(36px,5vw,64px);font-weight:600;letter-spacing:-.04em;line-height:1.16;margin:10px 0 0;text-wrap:balance}
+    .section-intro{font-size:17px;line-height:1.9;color:var(--muted);margin:0;max-width:620px}
+    .types{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .type-card{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:22px;padding:28px;min-height:260px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+    .type-card::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--type-color)}
+    .type-card.task{--type-color:var(--coral)}.type-card.promise{--type-color:var(--amber)}.type-card.wait{--type-color:var(--blue)}
+    .type-card .meta{font-size:11px;letter-spacing:.14em;color:var(--muted)}
+    .type-card h3{font-family:var(--serif);font-size:25px;margin:22px 0 10px}.type-card p{font-size:14px;line-height:1.8;color:var(--muted);margin:0;flex:1}
+    .type-card b{font-size:13px;margin-top:24px;font-weight:650}
+    .night-section{background:linear-gradient(180deg,var(--night),#0d192a);padding:140px 0;color:#f8f6f1}
+    .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(255,255,255,.14);border-radius:24px;overflow:hidden;background:rgba(255,255,255,.025)}
+    .flow-step{padding:34px;min-height:285px;border-right:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column}
+    .flow-step:last-child{border:0}.flow-step small{color:var(--amber);letter-spacing:.16em}.flow-step h3{font-family:var(--serif);font-size:27px;margin:24px 0 12px}.flow-step p{color:#aeb9ca;line-height:1.8;font-size:14px;margin:0;flex:1}.flow-step span{font-size:12px;color:#e1e7ef}
+    .evidence{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:86px;align-items:center}
+.evidence-image{aspect-ratio:16/10;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:url("assets/chronos/chronos-valley-hero-v1.webp") center/cover no-repeat;box-shadow:0 28px 80px rgba(0,0,0,.25)}
+    .evidence-copy{padding:20px}.evidence-copy h3{font-family:var(--serif);font-size:36px;line-height:1.3;margin:0 0 20px}.evidence-copy p{color:#aeb9ca;line-height:1.9;margin:0 0 24px}.trust{display:grid;gap:12px}.trust div{display:flex;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.11);font-size:13px}.trust span{color:#aeb9ca}
+    .final{background:var(--paper);color:var(--ink);padding:120px 0}.final-card{width:min(1120px,calc(100% - 40px));margin:auto;border-radius:28px;padding:clamp(34px,7vw,78px);background:linear-gradient(135deg,#e8ded0,#f8f4ed);border:1px solid var(--line);display:flex;justify-content:space-between;align-items:end;gap:40px}.final-card h2{max-width:680px}.final-card p{color:var(--muted);line-height:1.8}
+    footer{background:#080f1a;color:#8d9aae;padding:28px 20px;text-align:center;font-size:11px;letter-spacing:.08em}
+    @keyframes reveal{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1.015)}}
+    @media(max-width:800px){
+.nav-links a:not(.nav-cta){display:none}.hero::before{background-image:linear-gradient(180deg,rgba(6,13,24,.68),rgba(6,13,24,.96) 76%),url("assets/chronos/chronos-valley-hero-v1.webp");background-position:62% center}
+      .hero-content{padding:60px 0 130px;align-items:end}.hero-copy{max-width:100%}h1{font-size:52px}.lead{font-size:17px}
+      .proof-strip{grid-template-columns:1fr}.proof{border-right:0;border-bottom:1px solid rgba(255,255,255,.1);padding:18px 22px}.proof:last-child{border:0}
+      .paper,.night-section{padding:100px 0}.section-heading{grid-template-columns:1fr;gap:26px}.types,.flow,.evidence{grid-template-columns:1fr}.type-card{min-height:220px}.flow-step{min-height:230px;border-right:0;border-bottom:1px solid rgba(255,255,255,.12)}
+      .evidence{margin-top:62px}.final-card{align-items:stretch;flex-direction:column}.final-card .button{width:100%}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav" aria-label="官网导航">
+      <a class="wordmark" href="showcase.html"><span aria-hidden="true"></span>PROJECT CHRONOS</a>
+      <div class="nav-links">
+        <a href="#idea">核心理念</a><a href="#flow">体验流程</a><a href="#proof">工程证明</a>
+        <a class="nav-cta" href="index.html">打开时刻</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <div class="hero-copy">
+        <p class="kicker">时刻 × 归时谷</p>
+        <h1>把现实的重量，<br>变成可以继续的一步。</h1>
+        <p class="lead">一个本地优先的时间系统：在「时刻」记录现实，进入「归时谷」重新处理，再把清晰带回生活。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="index.html?capture=1">打开时刻，开始使用</a>
+          <a class="button button-secondary" href="competition.html?demo=competition">查看两分钟演示</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="proof-strip" aria-label="产品特性">
+    <div class="proof"><strong>3 种现实重量</strong><span>任务、承诺、等待，对应三种不同的心理负荷。</span></div>
+    <div class="proof"><strong>7 种真实结果</strong><span>拆分、完成、放下、延期等选择都能回到现实记录。</span></div>
+    <div class="proof"><strong>本地优先</strong><span>比赛体验通过同源本地存储完成，不需要注册。</span></div>
+  </div>
+
+  <main>
+    <section class="paper" id="idea">
+      <div class="section">
+        <div class="section-heading">
+          <div><span class="section-no">01 · The idea</span><h2>不是管理更多，<br>而是看清重量。</h2></div>
+          <p class="section-intro">普通待办把所有事情放进同一张清单。PROJECT CHRONOS 先辨认它是什么，再给它合适的去处：要行动的、要守住的、以及暂时只能等待的。</p>
+        </div>
+        <div class="types">
+          <article class="type-card task"><span class="meta">TASK · 木牌</span><h3>任务，需要下一步</h3><p>面对过大的事项，不要求一次完成。先拆成三个可以开始的动作。</p><b>从模糊压力 → 明确行动</b></article>
+          <article class="type-card promise"><span class="meta">COMMITMENT · 誓约灯</span><h3>承诺，需要被看见</h3><p>它不只是一个截止日期，也承载着关系与责任。完成后，让承诺真正闭环。</p><b>从心中惦记 → 清楚完成</b></article>
+          <article class="type-card wait"><span class="meta">WAITING_FOR · 纸舟</span><h3>等待，需要被安放</h3><p>有些事情此刻无法推进。承认等待，让注意力不再被反复占用。</p><b>从无效内耗 → 安心等待</b></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="night-section" id="flow">
+      <div class="section">
+        <div class="section-heading">
+          <div><span class="section-no">02 · The journey</span><h2>一次完整的<br>现实—世界—现实。</h2></div>
+          <p class="section-intro" style="color:#aeb9ca">体验不是游戏化装饰，而是一条可验证的数据回路。每轮交接都有独立边界，旧结果不会混进下一轮。</p>
+        </div>
+        <div class="flow">
+          <article class="flow-step"><small>01 · 时刻</small><h3>记录真实事项</h3><p>写下要做的事、答应的话和等待的结果。系统保留你的原始身份与语义。</p><span>现实输入</span></article>
+          <article class="flow-step"><small>02 · 归时谷</small><h3>进行三次选择</h3><p>木牌被拆分，誓约灯被完成，纸舟被安放。世界负荷随着领域状态变化。</p><span>减载体验</span></article>
+          <article class="flow-step"><small>03 · 返回</small><h3>把清晰带回来</h3><p>三个顶级结果覆盖写回本轮交接；刷新、返回和下一轮都保持幂等。</p><span>行动闭环</span></article>
+        </div>
+
+        <div class="evidence" id="proof">
+          <div class="evidence-image" role="img" aria-label="归时谷中的木牌、誓约灯、纸舟与营火"></div>
+          <div class="evidence-copy">
+            <span class="section-no">03 · Built to hold</span>
+            <h3>柔软的体验，严格的边界。</h3>
+            <p>前台可以是山谷和营火，底层必须是可恢复、可验证、不会串轮的数据契约。</p>
+            <div class="trust">
+              <div><strong>五轮连续体验</strong><span>零旧 transfer 泄漏</span></div>
+              <div><strong>双浏览器验收</strong><span>Chromium + Edge</span></div>
+              <div><strong>四种视口</strong><span>桌面到 390×844</span></div>
+              <div><strong>依赖审计</strong><span>0 已知漏洞</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="final-card">
+        <div><span class="section-no">Start for real</span><h2>给一件压在心里的事，<br>一个新的位置。</h2><p>无需注册。先记录你的真实事项，再把它带进可以行走、交互与持续使用的归时谷。</p></div>
+        <a class="button button-primary" href="index.html?capture=1">开始真实使用</a>
+      </div>
+    </section>
+  </main>
+  <footer>PROJECT CHRONOS · 时刻 × 归时谷 · ORIGINAL WORK 2026</footer>
+</body>
+</html>

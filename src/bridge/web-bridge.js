@@ -1,185 +1,93 @@
-/**
- * Web Bridge - C0 Competition Integration
- *
- * Generates handoff for Chronos Valley game, and reads return payload.
- * Uses localStorage for same-origin communication.
- */
+import {
+  BridgeKeys,
+  BridgeVersion,
+  ItemType,
+  normalizeBridgeState,
+  validateReturnPayload
+} from '../contracts/chronos-contracts.js';
 
-export const BRIDGE_VERSION = 1;
-const HANDOFF_KEY = 'chronos_game_handoff_v1';
-const RETURN_KEY = 'chronos_game_return_v1';
-const BRIDGE_STATE_KEY = 'chronos_game_bridge_state_v1';
-
-// Wait-for keywords for type detection
 const WAITING_KEYWORDS = ['等待', '等回复', '等消息', '等结果', '等通知', '等快递', '等审批'];
 const COMMITMENT_KEYWORDS = ['答应', '承诺', '必须', '保证', '一定', '约定'];
 
-/**
- * Detect game type from a record.
- * @param {Object} record - Web端 record
- * @returns {string} 'TASK' | 'COMMITMENT' | 'WAITING_FOR'
- */
-export function detectGameType(record) {
-  const title = (record.title || record.text || '').toLowerCase();
-
-  // Check waiting keywords first
-  for (const kw of WAITING_KEYWORDS) {
-    if (title.includes(kw.toLowerCase())) return 'WAITING_FOR';
-  }
-
-  // Check commitment keywords
-  for (const kw of COMMITMENT_KEYWORDS) {
-    if (title.includes(kw.toLowerCase())) return 'COMMITMENT';
-  }
-
-  // Map by sourceKind
-  if (record.type === 'habit' || record.sourceKind === 'habit') return 'COMMITMENT';
-  if (record.type === 'anniversary' || record.sourceKind === 'anniversary') return 'COMMITMENT';
-
-  // Default: TASK
-  return 'TASK';
+function parse(raw) {
+  try { return raw ? JSON.parse(raw) : null; } catch { return null; }
 }
 
-/**
- * Generate handoff payload for game.
- * Takes up to 3 records and maps them to game types.
- *
- * @param {Array} records - Web端 records
- * @param {Object} [opts] - options
- * @param {string} [opts.returnUrl] - URL to return to (default: '../')
- * @returns {Object} handoff payload
- */
-export function generateHandoff(records, opts = {}) {
-  const selected = records.slice(0, 3);
+export function detectGameType(record) {
+  const title = String(record?.title || record?.text || '').toLowerCase();
+  if (WAITING_KEYWORDS.some(keyword => title.includes(keyword))) return ItemType.WAITING_FOR;
+  if (COMMITMENT_KEYWORDS.some(keyword => title.includes(keyword))) return ItemType.COMMITMENT;
+  if (['habit', 'anniversary'].includes(record?.type) || ['habit', 'anniversary'].includes(record?.sourceKind)) {
+    return ItemType.COMMITMENT;
+  }
+  return ItemType.TASK;
+}
 
+export function generateHandoff(records, options = {}) {
+  const now = Date.now();
   return {
-    version: BRIDGE_VERSION,
-    transferId: 'handoff_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
-    createdAt: Date.now(),
+    version: BridgeVersion,
+    transferId: `handoff_${now}_${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: now,
     source: 'shike-web',
-    returnUrl: opts.returnUrl || '../',
-    records: selected.map(r => ({
-      sourceRecordId: String(r.id || ''),
-      title: String(r.title || r.text || '').slice(0, 200),
-      sourceKind: String(r.type || r.kind || ''),
-      gameType: detectGameType(r),
-      dateKey: String(r.dateKey || r.date || ''),
-      timeText: String(r.timeText || r.time || '')
+    returnUrl: options.returnUrl || '../competition.html',
+    records: (records || []).slice(0, 3).map(record => ({
+      sourceRecordId: String(record.id || record.sourceRecordId || ''),
+      title: String(record.title || record.text || '').slice(0, 200),
+      sourceKind: String(record.type || record.kind || ''),
+      gameType: detectGameType(record),
+      dateKey: String(record.dateKey || record.date || ''),
+      timeText: String(record.timeText || record.time || '')
     }))
   };
 }
 
-/**
- * Write handoff to localStorage.
- * @param {Object} handoff
- */
-export function writeHandoff(handoff) {
-  try {
-    localStorage.setItem(HANDOFF_KEY, JSON.stringify(handoff));
-    return true;
-  } catch (e) {
-    console.error('[WebBridge] Failed to write handoff:', e.message);
-    return false;
-  }
+export function writeHandoff(handoff, storage = localStorage) {
+  try { storage.setItem(BridgeKeys.HANDOFF, JSON.stringify(handoff)); return true; }
+  catch (error) { console.error('[WebBridge] Failed to write handoff:', error.message); return false; }
 }
 
-/**
- * Read return payload from game.
- * @returns {Object|null} return payload or null
- */
-export function readReturnPayload() {
-  try {
-    const raw = localStorage.getItem(RETURN_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (data.version !== BRIDGE_VERSION) return null;
-    if (!data.transferId) return null;
-    return data;
-  } catch (e) {
-    console.warn('[WebBridge] Failed to read return:', e.message);
-    return null;
-  }
+export function readReturnPayload(storage = localStorage) {
+  const result = validateReturnPayload(parse(storage.getItem(BridgeKeys.RETURN)));
+  return result.success ? result.data : null;
 }
 
-/**
- * Check if return payload has been applied.
- * @param {string} transferId
- * @returns {boolean}
- */
-export function isReturnApplied(transferId) {
-  try {
-    const raw = localStorage.getItem(BRIDGE_STATE_KEY);
-    if (!raw) return false;
-    const state = JSON.parse(raw);
-    return state.appliedReturns && state.appliedReturns.includes(transferId);
-  } catch {
-    return false;
-  }
+export function readBridgeState(storage = localStorage) {
+  return normalizeBridgeState(parse(storage.getItem(BridgeKeys.STATE)));
 }
 
-/**
- * Mark return payload as applied.
- * @param {string} transferId
- */
-export function markReturnApplied(transferId) {
-  try {
-    const raw = localStorage.getItem(BRIDGE_STATE_KEY);
-    const state = raw ? JSON.parse(raw) : { appliedReturns: [] };
-    if (!state.appliedReturns) state.appliedReturns = [];
-    if (!state.appliedReturns.includes(transferId)) {
-      state.appliedReturns.push(transferId);
-    }
-    localStorage.setItem(BRIDGE_STATE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.warn('[WebBridge] Failed to mark applied:', e.message);
-  }
+export function updateBridgeState(mutator, storage = localStorage, now = Date.now()) {
+  const current = readBridgeState(storage);
+  const next = normalizeBridgeState(mutator({ ...current }) || current, now);
+  next.updatedAt = now;
+  storage.setItem(BridgeKeys.STATE, JSON.stringify(next));
+  return next;
 }
 
-/**
- * Clear return payload after applying.
- */
-export function clearReturnPayload() {
-  try {
-    localStorage.removeItem(RETURN_KEY);
-  } catch {
-    // ignore
-  }
+export function isReturnApplied(transferId, storage = localStorage) {
+  return readBridgeState(storage).appliedReturns.includes(transferId);
 }
 
-/**
- * Navigate to the game.
- * @param {string} valleyPath - path to valley/index.html (default: 'valley/')
- */
-export function goToGame(valleyPath = 'valley/') {
-  window.location.href = valleyPath;
+export function markReturnApplied(transferId, storage = localStorage) {
+  return updateBridgeState(state => ({
+    ...state,
+    appliedReturns: [...state.appliedReturns, transferId]
+  }), storage);
 }
 
-/**
- * Generate competition demo records.
- * @returns {Array} 3 demo records
- */
-export function getDemoRecords() {
+export function clearReturnPayload(storage = localStorage) {
+  try { storage.removeItem(BridgeKeys.RETURN); } catch { /* storage is best effort */ }
+}
+
+export function goToGame(path = 'valley/') {
+  window.location.href = path;
+}
+
+export function getDemoRecords(round = '') {
+  const suffix = round ? ` ${round}` : '';
   return [
-    {
-      id: 'demo_task_1',
-      title: '完成比赛演示视频',
-      type: 'reminder',
-      dateKey: '',
-      timeText: ''
-    },
-    {
-      id: 'demo_commit_1',
-      title: '答应团队今晚完成最终检查',
-      type: 'note',
-      dateKey: '',
-      timeText: ''
-    },
-    {
-      id: 'demo_wait_1',
-      title: '等待比赛材料审核结果',
-      type: 'note',
-      dateKey: '',
-      timeText: ''
-    }
+    { id: `demo_task_1${suffix}`, title: `完成比赛演示视频${suffix}`, type: 'reminder' },
+    { id: `demo_commit_1${suffix}`, title: `答应团队今晚完成最终检查${suffix}`, type: 'note' },
+    { id: `demo_wait_1${suffix}`, title: `等待比赛材料审核结果${suffix}`, type: 'note' }
   ];
 }
