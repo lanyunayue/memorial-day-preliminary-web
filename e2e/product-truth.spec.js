@@ -154,3 +154,39 @@ test('fourteen product viewports have no horizontal overflow', async ({ page }) 
     expect(layout.navigationVisible, `${viewport.width}px navigation`).toBe(true);
   }
 });
+
+test('assistant drawer stays reachable when desktop narrows to phone', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1280, height: 812 });
+  await openApp(page);
+  await page.evaluate(() => window.saveTimeSpriteCollapsed(false));
+  await expect(page.locator('#timeSprite')).not.toHaveClass(/collapsed/);
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(page.locator('#timeSprite')).toHaveClass(/collapsed/);
+  await page.locator('#timeSpriteToggle').click();
+  await expect(page.locator('#timeSpritePanel')).toBeVisible();
+
+  const layout = await page.evaluate(() => {
+    const box = (selector) => {
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      return { top: rect.top, right: rect.right, bottom: rect.bottom, left: rect.left };
+    };
+    return {
+      panel: box('#timeSpritePanel'),
+      close: box('#timeSpriteClose'),
+      nav: box('.nav'),
+      viewport: { width: innerWidth, height: innerHeight },
+    };
+  });
+  expect(layout.panel.top).toBeGreaterThanOrEqual(0);
+  expect(layout.panel.left).toBeGreaterThanOrEqual(0);
+  expect(layout.panel.right).toBeLessThanOrEqual(layout.viewport.width);
+  expect(layout.panel.bottom).toBeLessThanOrEqual(layout.nav.top);
+  expect(layout.panel.bottom - layout.panel.top).toBeLessThanOrEqual(layout.viewport.height * 0.72);
+  expect(layout.close.top).toBeGreaterThanOrEqual(layout.panel.top);
+  expect(layout.close.bottom).toBeLessThanOrEqual(layout.panel.bottom);
+  await page.screenshot({ path: testInfo.outputPath('assistant-drawer-375x812.png') });
+
+  await page.locator('#timeSpriteClose').click();
+  await expect(page.locator('#timeSpritePanel')).toBeHidden();
+});

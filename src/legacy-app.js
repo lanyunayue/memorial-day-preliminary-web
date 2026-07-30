@@ -1435,13 +1435,15 @@ var timeSpriteDragState=null;
 var timeSpriteSuppressClick=false;
 var timeSpriteManualTip='';
 function readTimeSpriteCollapsed(){
+  var narrow=!!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
+  if(narrow)return true;
   try{
     var saved=localStorage.getItem(SPRITE_COLLAPSED_KEY);
     if(saved===null)saved=localStorage.getItem(ASSISTANT_COLLAPSED_KEY);
     if(saved==='true')return true;
     if(saved==='false')return false;
   }catch(e){}
-  return !!(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches);
+  return false;
 }
 function saveTimeSpriteCollapsed(value){
   timeSpriteCollapsed=!!value;
@@ -1609,6 +1611,7 @@ function initTimeSprite(){
 function initTimeSpriteDrag(){
   var toggle=$('timeSpriteToggle'),root=$('timeSprite');
   if(!toggle||!root||!toggle.addEventListener)return;
+  var wasNarrow=!!(window.matchMedia&&window.matchMedia('(max-width:767px)').matches);
   toggle.addEventListener('pointerdown',function(e){
     if(e.button!==undefined&&e.button!==0)return;
     var rect=root.getBoundingClientRect();
@@ -1637,7 +1640,12 @@ function initTimeSpriteDrag(){
   }
   toggle.addEventListener('pointerup',endDrag);
   toggle.addEventListener('pointercancel',endDrag);
-  window.addEventListener('resize',function(){applyTimeSpritePosition(readTimeSpritePosition());});
+  window.addEventListener('resize',function(){
+    var isNarrow=!!(window.matchMedia&&window.matchMedia('(max-width:767px)').matches);
+    applyTimeSpritePosition(readTimeSpritePosition());
+    if(isNarrow&&!wasNarrow&&!timeSpriteCollapsed)saveTimeSpriteCollapsed(true);
+    wasNarrow=isNarrow;
+  });
 }
 
 /* ========== NLP Parser ========== */
