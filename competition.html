@@ -304,11 +304,12 @@ function renderReturnCard(){
   if(!data){ card.classList.remove('show'); card.innerHTML = ''; return; }
   var applied = isReturnApplied(data.transferId);
   card.innerHTML = '';
-  var h = document.createElement('h3'); h.textContent = '三个结果，已经从山谷返回'; card.appendChild(h);
+  var results = data.actions || data.results || data.records || [];
+  var resultCount = Array.isArray(results) ? results.length : 0;
+  var h = document.createElement('h3'); h.textContent = resultCount + ' 个结果，已经从山谷返回'; card.appendChild(h);
   var meta = document.createElement('div'); meta.className = 'meta';
   meta.textContent = '交接号 ' + String(data.transferId).slice(0,18) + (applied ? ' · 已应用' : '');
   card.appendChild(meta);
-  var results = data.actions || data.results || data.records || [];
   if(Array.isArray(results) && results.length){
     var ul = document.createElement('ul'); ul.className = 'return-list';
     results.forEach(function(it){
@@ -345,7 +346,9 @@ function renderReturnCard(){
   // World result
   var worldDiv = document.createElement('div');
   worldDiv.style.cssText = 'font-size:12px;color:var(--ink-mute);padding:10px 12px;background:rgba(184,85,63,.05);border-radius:10px;margin-bottom:14px;line-height:1.6;';
-  worldDiv.innerHTML = '世界负荷 <strong style="color:var(--accent);">7 → 0</strong><br>木牌成为三个行动步骤，誓约灯与纸舟也已安放。';
+  worldDiv.textContent = resultCount
+    ? '归时谷已带回 ' + resultCount + ' 个本地处理结果，等待你应用到时刻。'
+    : '归时谷已返回，当前没有可应用的事项变化。';
   card.appendChild(worldDiv);
   // Buttons
   var btnRow = document.createElement('div');

@@ -324,6 +324,10 @@ body .hero-card .hero-title{font-family:var(--font-serif);font-size:22px;font-we
   .rc-edit-btn,.rc-more-btn{display:none !important;}
   .rc-pin{display:none;}
   .record-swipe.swiped .record-card{transform:translateX(-240px);}
+  .voice-btn{width:44px;height:44px;}
+  .record-extra-actions{flex-wrap:wrap;}
+  .record-extra-actions .cover-btn{min-height:40px;padding:8px 12px !important;}
+  .confirm-btns button{min-height:44px;}
 }
 @media (prefers-reduced-motion:reduce){
   .record-card{transition:none;}
@@ -787,6 +791,16 @@ body.theme-night .bear-eye,body.theme-night .bear-nose{background:#2a241f;}
 .toast.warn{background:#8b5a3c;}
 .toast.success{background:#4f7a48;}
 .toast.error{background:#b5433a;}
+@media (max-width:767px){
+  .toast-container{
+    top:auto;
+    bottom:calc(82px + var(--safe-bottom));
+    transform:translateX(-50%) translateY(16px);
+    width:calc(100% - 32px);
+    align-items:center;
+  }
+  .toast{max-width:100%;line-height:1.45;}
+}
 
 /* Confirm */
 .confirm-box{

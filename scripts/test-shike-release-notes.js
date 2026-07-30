@@ -45,6 +45,13 @@ add('release notes have five concise bullets', () => {
 
 add('release notes show after opening and close once', () => {
   assert(script.includes('maybeShowReleaseNotes();'), 'opening flow should schedule release notes');
+  const directCalls = [...script.matchAll(/\bshowReleaseNotes\(([^)]*)\)/g)].map((match) => match[1]);
+  assert(
+    directCalls[0] === 'force'
+      && directCalls.filter((arg) => arg === 'false').length === 1
+      && directCalls.slice(1).every((arg) => arg === 'false' || arg === 'true'),
+    `release notes should only auto-open through the guarded delayed lifecycle, got: ${directCalls.join(', ')}`
+  );
   assert(script.includes("b('releaseOkBtn','click',closeReleaseNotes)"), 'OK button should close release notes');
   assert(script.includes('markReleaseNotesSeen();'), 'close should persist seen version');
 });

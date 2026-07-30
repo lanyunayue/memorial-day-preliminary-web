@@ -4240,7 +4240,6 @@ if(window.ShikePermissionCenter&&typeof window.ShikePermissionCenter.init==='fun
   // Auto-focus removed: was causing mobile keyboard pop-up and scroll jump on first load
   // User must explicitly tap the input to focus it
   startNotificationChecker();
-    if(typeof showReleaseNotes==='function')showReleaseNotes();
   // Initial render
   renderHome();
   if(window.ShikeChronosWeb){
