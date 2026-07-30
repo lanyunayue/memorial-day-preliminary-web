@@ -178,7 +178,7 @@ add('sprite css avoids bottom nav and supports collapsed state', () => {
 add('version and service worker cache are ready for v2.2.0-alpha4 candidate', () => {
   assert(script.includes("APP_VERSION='v2.2.0-alpha4'"), 'APP_VERSION should be v2.2.0-alpha4');
   assert(/APP_UPDATED_AT='\d{4}-\d{2}-\d{2} \d{2}:\d{2}'/.test(script), 'APP_UPDATED_AT should use release timestamp format');
-  assert(sw.includes("CACHE_NAME = 'shike-v220alpha4-v66'"), 'service worker cache should be v66');
+  assert(sw.includes("CACHE_NAME = 'shike-v220alpha4-v67'"), 'service worker cache should be v66');
 });
 
 add('all languages include sprite i18n keys', () => {

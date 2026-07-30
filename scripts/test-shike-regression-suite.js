@@ -12,7 +12,7 @@ const tests = [
   {
     name: 'HTML integrity',
     script: 'test-shike-html-integrity.js',
-    expected: 'HTML integrity regression passed: 7/7'
+    expected: 'HTML integrity regression passed: 8/8'
   },
   {
     name: 'A11y static',

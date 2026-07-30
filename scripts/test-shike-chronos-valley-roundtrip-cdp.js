@@ -27,6 +27,7 @@ class CdpClient {
     this.id = 0;
     this.pending = new Map();
     this.runtimeErrors = [];
+    this.networkErrors = [];
   }
 
   connect() {
@@ -50,6 +51,12 @@ class CdpClient {
     if (message.method === 'Runtime.exceptionThrown') {
       const detail = message.params && message.params.exceptionDetails;
       this.runtimeErrors.push(detail && (detail.exception && detail.exception.description || detail.text));
+    }
+    if (message.method === 'Network.responseReceived') {
+      const response = message.params && message.params.response;
+      if (response && response.status >= 400) {
+        this.networkErrors.push({ status: response.status, url: response.url });
+      }
     }
   }
 
@@ -133,6 +140,7 @@ async function main() {
   await client.connect();
   await client.send('Page.enable');
   await client.send('Runtime.enable');
+  await client.send('Network.enable');
   await client.send('Emulation.setDeviceMetricsOverride', {
     width: 1280,
     height: 800,
@@ -244,11 +252,21 @@ async function main() {
     'real record in 3D panel'
   );
   add('the 3D valley imports the real record', true);
+  const valleyAssets = await client.evaluate(`performance.getEntriesByType('resource')
+    .map(function(entry){return entry.name;})
+    .filter(function(url){return /\\/assets\\/processed\\/.*\\.glb(?:$|\\?)/.test(url);})`);
+  add(
+    'the 3D valley loads its real model assets from the project path',
+    valleyAssets.length >= 5 && valleyAssets.every(url => new URL(url).pathname.includes('/valley/assets/processed/')),
+    JSON.stringify(valleyAssets)
+  );
   await client.screenshot('chronos-real-valley.png');
 
   await client.evaluate(`document.querySelector('#compItemList > div').click()`);
   await client.waitFor(
-    `document.getElementById('deloadItemPanel').style.display === 'flex' && document.querySelectorAll('.deload-action-btn').length === 4`,
+    `document.getElementById('deloadItemPanel').style.display === 'flex'
+      && getComputedStyle(document.getElementById('deloadItemPanel')).flexDirection === 'column'
+      && document.querySelectorAll('.deload-action-btn').length === 4`,
     15000,
     'valley decision panel'
   );
@@ -264,7 +282,11 @@ async function main() {
   })`);
   add(
     'the 3D valley returns the chosen action with the source id',
-    returnState.payload && returnState.payload.actions[0].sourceRecordId === 'chronos_e2e_real_1' && returnState.payload.actions[0].action === 'released',
+    returnState.payload
+      && returnState.payload.actions[0].sourceRecordId === 'chronos_e2e_real_1'
+      && returnState.payload.actions[0].action === 'released'
+      && returnState.text.includes('1 个结果')
+      && !returnState.text.includes('三个结果'),
     JSON.stringify(returnState)
   );
 
@@ -305,6 +327,8 @@ async function main() {
 
   const relevantErrors = client.runtimeErrors.filter(Boolean).filter(error => !/ResizeObserver loop/i.test(error));
   add('the round trip has no uncaught runtime exception', relevantErrors.length === 0, JSON.stringify(relevantErrors));
+  const relevantNetworkErrors = client.networkErrors.filter(error => /^https?:/.test(error.url));
+  add('the round trip has no failed product resource', relevantNetworkErrors.length === 0, JSON.stringify(relevantNetworkErrors));
   console.log(`Chronos Valley real round trip passed: ${checks.length}/${checks.length}`);
   client.close();
   await fetch(`${CDP_URL}/json/close/${encodeURIComponent(target.id)}`).catch(() => {});

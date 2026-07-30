@@ -77,6 +77,14 @@ add('index uses external application scripts', () => {
   assert(!/<script>([\s\S]*?)<\/script>/.test(html), 'executable inline application script should not remain');
 });
 
+add('classic scripts fetch in parallel and keep module entry last', () => {
+  const scriptTags = matches(/<script\b[^>]*\bsrc=["'][^"']+["'][^>]*><\/script>/g, html).map((match) => match[0]);
+  const classicTags = scriptTags.filter((tag) => !/\btype=["']module["']/.test(tag));
+  assert(classicTags.length >= 100, 'expected the modular classic script topology');
+  assert(classicTags.every((tag) => /\bdefer\b/.test(tag)), 'every classic application script should be deferred');
+  assert(/\btype=["']module["']/.test(scriptTags[scriptTags.length - 1]), 'module entry should execute after deferred classic scripts');
+});
+
 add('html id attributes are unique', () => {
   const ids = matches(/\sid=["']([^"']+)["']/g, html).map((m) => m[1]);
   const duplicates = unique(ids.filter((id, index) => ids.indexOf(id) !== index));

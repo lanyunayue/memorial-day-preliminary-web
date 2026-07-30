@@ -32,7 +32,7 @@ add('desktop style exists', style.includes('@media (hover:hover) and (pointer:fi
 add('no horizontal overflow style preserved', style.includes('overflow:hidden') && style.includes('body{'));
 add('no visible undefined/null/mojibake', !html.includes('>undefined<') && !html.includes('>null<') && !html.includes('\uFFFD'));
 add('version is v2.2.0-alpha4', script.includes("APP_VERSION='v2.2.0-alpha4'"));
-add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v220alpha4-v66'"));
+add('service worker cache is v150', sw.includes("CACHE_NAME = 'shike-v220alpha4-v67'"));
 add('batch organize still exists', html.includes('id="page-import"') && html.includes('id="parseImportBtn"'));
 add('dedupe still exists', script.includes('draftDuplicateSkipped') || script.includes('dedupe'));
 add('ics export still exists', script.includes('function exportIcsFile'));
